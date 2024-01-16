@@ -156,19 +156,14 @@ const BidList = ({ bidInfos }: { bidInfos: IBidInfo[] }) => {
       ),
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder">
-          {bidInfos?.length > 0 ? (
-            <Table
-              rowKey="id"
-              className="forest-table"
-              columns={columns}
-              dataSource={bidInfos}
-              scroll={{ y: 300, x: 792 }}
-            />
-          ) : (
-            <div className="text-[var(--color-disable)] text-center w-full p-[24px] text-[16px] leading-[24px] font-medium;">
-              No offers yet
-            </div>
-          )}
+          <Table
+            rowKey="id"
+            className="forest-table"
+            columns={columns}
+            dataSource={bidInfos}
+            emptyText="No offers yet."
+            scroll={{ y: 300, x: 792 }}
+          />
         </div>
       ),
     },

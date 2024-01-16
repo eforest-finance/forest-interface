@@ -22,8 +22,7 @@ import { useIntersection } from 'react-use';
 import clsx from 'clsx';
 
 export default function DetailMobile() {
-  const { isFetching, elfRate, isERC721, nftBalance, nftQuantity, tokenBalance, intervalDataForBid } =
-    useInitializationDetail();
+  const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
 
   const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
 
@@ -46,7 +45,6 @@ export default function DetailMobile() {
             {intervalDataForBid?.isBidding ? (
               <div className="mt-[40px]">
                 <BidCardWrapper intervalDataForBid={intervalDataForBid} tokenBalance={new BigNumber(tokenBalance)} />
-                {/* <BidCardAndList intervalDataForBid={intervalDataForBid} tokenBalance={new BigNumber(tokenBalance)} /> */}
               </div>
             ) : (
               <>
@@ -62,7 +60,7 @@ export default function DetailMobile() {
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Listings & offers" key="listingOffers">
+            <Tabs.TabPane tab="Listings & offers" key="listingOffers" forceRender={true}>
               {!isFetching && (
                 <>
                   {intervalDataForBid?.isBidding ? (
@@ -71,13 +69,8 @@ export default function DetailMobile() {
                     </div>
                   ) : (
                     <>
-                      <Listings
-                        nftBalance={nftBalance}
-                        nftQuantity={nftQuantity}
-                        myBalance={new BigNumber(tokenBalance)}
-                        rate={elfRate}
-                      />
-                      <Offers nftBalance={nftBalance} rate={elfRate} />
+                      <Listings rate={elfRate} />
+                      <Offers rate={elfRate} />
                     </>
                   )}
                 </>

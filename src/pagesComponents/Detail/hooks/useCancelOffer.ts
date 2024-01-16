@@ -5,6 +5,7 @@ import useGetState from 'store/state/getState';
 import { ICancelOfferItemParams, IContractError, IMakeOfferParams } from 'contract/type';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
+import { UserDeniedMessage } from 'contract/formatErrorMsg';
 
 export default function useCancelOffer(chainId?: Chain) {
   const { isLogin } = useCheckLoginAndToken();
@@ -24,19 +25,20 @@ export default function useCancelOffer(chainId?: Chain) {
           cancelOfferList: parameter.cancelOfferList,
         });
         message.destroy();
-        if (result?.error) {
-          message.error(result?.errorMessage?.message || result?.error.toString() || DEFAULT_ERROR);
-        } else {
-          const { TransactionId } = result.result || result;
-          messageHTML(TransactionId!, 'success', chainId);
-        }
+        const { TransactionId } = result.result || result;
+        messageHTML(TransactionId!, 'success', chainId);
         return result;
       } catch (error) {
         const resError = error as IContractError;
+        if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
+          message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+          return Promise.reject(error);
+        }
         message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+        return 'failed';
       }
     }
-    return 'error';
+    return 'failed';
   };
   return cancelOffer;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AMOUNT_LENGTH } from 'constants/common';
 import BigNumber from 'bignumber.js';
 import { formatTokenPrice } from 'utils/format';
@@ -22,10 +22,15 @@ export interface ISetPriceProps {
   tooltip?: string;
   floorPrice?: number;
   lastSalePrice?: number;
+  bestOfferPrice?: number;
   defaultPrice?: number | string;
+  className?: string;
+  errorTip?: string | ReactNode;
+  checkValid?: (price: number) => boolean;
+  placeholder?: string;
 }
 
-export function useSetPriceService({ onChange, defaultPrice }: ISetPriceProps) {
+export function useSetPriceService({ onChange, defaultPrice, checkValid }: ISetPriceProps) {
   const [price, setPrice] = useState<number | string | undefined>(defaultPrice);
   const [token, setToken] = useState<ITokenOfPrice>({
     symbol: 'ELF',
@@ -63,7 +68,8 @@ export function useSetPriceService({ onChange, defaultPrice }: ISetPriceProps) {
   }, [price, onChange, token]);
 
   useUpdateEffect(() => {
-    const status = isNaN(Number(price)) || Number(price) <= 0 ? 'error' : '';
+    const status =
+      isNaN(Number(price)) || Number(price) <= 0 || (checkValid && !checkValid?.(Number(price))) ? 'error' : '';
     setStatus(status);
   }, [price]);
 

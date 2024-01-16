@@ -8,16 +8,16 @@ import BigNumber from 'bignumber.js';
 import { divDecimals, timesDecimals } from 'utils/calculate';
 import useGetState from 'store/state/getState';
 import Question from 'assets/images/question.svg';
-import BalanceWallet from 'assets/images/balanceWallet.svg';
 import clsx from 'clsx';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
-import styles from './index.module.css';
 import { Approve, GetAllowance } from 'contract/multiToken';
 import { PlaceBid } from 'contract/auction';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import useDetailGetState from 'store/state/detailGetState';
 import { usePathname } from 'next/navigation';
+import Balance from '../BuyNowModal/components/Balance';
+import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 
 interface IBidModalProps {
@@ -140,7 +140,7 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
     <Modal
       width={800}
       title="Place a Bid"
-      className={styles['bid-modal-custom']}
+      className={`${styles['bid-modal-custom']} ${styles['bid-modal']}`}
       onCancel={() => onCancel()}
       open={modal.visible}
       footer={
@@ -149,55 +149,50 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
           loading={placeBidBtnLoading}
           onClick={() => placeBidHandler(totalPriceObj.bidElf)}
           disabled={isHaveNoMoney || auctionInfo?.finishIdentifier === 2}
-          isFull={true}>
+          isFull={true}
+          size="ultra"
+          className="!w-[256px]">
           Place a Bid
         </Button>
       }>
-      <div className={clsx(isSmallScreen ? 'text-[14px]' : 'text-[16px]')}>
+      <div className="mt-[24px] mdTW:mt-0">
         <div className="flex flex-row items-center">
           <div className="relative">
             <Image
               src={nftInfo?.previewImage || ''}
               className="rounded-[12px]"
-              rootClassName=" w-[64px] h-[64px] rounded-[12px] bg-[#8B60F7] flex items-center "
+              rootClassName=" w-[84px] h-[84px] rounded-[8px] bg-[#8B60F7] flex items-center "
               preview={false}
               alt=""
               fallback={defaultImage}
             />
           </div>
-          <div className="ml-[16px] flex-1">
-            <div
-              className={clsx(
-                'flex justify-between pb-[4px] font-bold',
-                isSmallScreen ? 'text-[16px] leading-[24px]' : 'text-[20px] leading-[28px]',
-              )}>
-              <span>{nftInfo?.tokenName || '-'}</span>
-              <span>{fix4NotInt(formatAmount(auctionInfo?.priceAmount || auctionInfo?.currentELFPrice))}&nbsp;ELF</span>
-            </div>
-            <div className="flex justify-between">
-              <span>{auctionInfo?.collectionSymbol || '-'}</span>
-              <span>$&nbsp;{fix4NotInt(auctionInfo?.priceUsdAmount || auctionInfo?.currentUSDPrice || 0)}</span>
+          <div className="hidden flex-col ml-[16px] mdTW:flex">
+            <span className="text-secondary font-medium">{auctionInfo?.collectionSymbol || '-'}</span>
+            <span className="text-primary mt-[4px]">{nftInfo?.tokenName || '-'}</span>
+          </div>
+          <div className="flex flex-1 justify-end">
+            <div className="flex flex-col items-end">
+              <span className="text-secondary font-medium">Bid Price</span>
+              <span className="mt-[4px] text-primary">
+                {fix4NotInt(formatAmount(auctionInfo?.priceAmount || auctionInfo?.currentELFPrice))}&nbsp;ELF
+              </span>
+              <span className="mt-[4px] text-secondary">
+                $&nbsp;{fix4NotInt(auctionInfo?.priceUsdAmount || auctionInfo?.currentUSDPrice || 0)}
+              </span>
             </div>
           </div>
-        </div>
-        <div className="px-[16px] py-[20px] my-[24px] flex flex-row justify-between rounded-[6px] bg-[#F5F7F7] dark:bg-[#202423] font-medium text-[16px]">
-          <div className="flex items-center">
-            <span className="w-[20px] h-[20px] flex">
-              <BalanceWallet />
-            </span>
-            <span className="pl-[8px]">Balance</span>
-          </div>
-          <div>{fix4NotInt(divDecimals(myBalance?.valueOf(), 8).toNumber())}&nbsp;ELF</div>
         </div>
 
-        <div className="flex flex-col gap-[12px] pb-[24px]">
-          <div
-            className={clsx(
-              'flex flex-row justify-between text-[var(--text-detail-bid-modal-secondary)]',
-              isSmallScreen ? 'items-start' : 'items-center',
-            )}>
+        <div className="flex flex-col  mt-[8px] mdTW:hidden">
+          <span className="text-secondary font-medium">{auctionInfo?.collectionSymbol || '-'}</span>
+          <span className="text-primary md-[4px]">{nftInfo?.tokenName || '-'}</span>
+        </div>
+
+        <div className="flex flex-col gap-[24px] mdTW:gap-[32px] pb-[24px] mdTW:pb-[32px] mt-[32px]">
+          <div className={clsx('flex flex-row justify-between items-start')}>
             <div className="flex items-center">
-              <span className="pr-[4px]">Minimum Bid Increment</span>
+              <span className="pr-[4px] text-secondary">Minimum Bid Increment</span>
               <Tooltip
                 title={`The minimum percentage that has to be added to the current top bid: ${new BigNumber(
                   auctionInfo.calculatorMinMarkup,
@@ -209,53 +204,43 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
                 </span>
               </Tooltip>
             </div>
-            <div className={clsx(isSmallScreen && 'flex flex-col items-end')}>
-              <span className={clsx('pr-[12px] text-[16px]', isSmallScreen && '!pr-0')}>
-                {fix4NotInt(auctionInfo?.minElfPriceMarkup)}&nbsp;ELF
-              </span>
-              <span className="text-[14px]">$&nbsp;{fix4NotInt(auctionInfo?.minDollarPriceMarkup)}</span>
+            <div className="flex flex-col items-end">
+              <span className="text-secondary">{fix4NotInt(auctionInfo?.minElfPriceMarkup)}&nbsp;ELF</span>
+              <span className="text-secondary mt-[8px]">$&nbsp;{fix4NotInt(auctionInfo?.minDollarPriceMarkup)}</span>
             </div>
           </div>
 
-          <div
-            className={clsx(
-              'flex flex-row justify-between text-[var(--text-detail-bid-modal-secondary)]',
-              isSmallScreen ? 'items-start' : 'items-center',
-            )}>
-            <div>Estimated Transaction Fee</div>
-            <div className={clsx(isSmallScreen && 'flex flex-col items-end')}>
-              <span className={clsx('pr-[12px] text-[16px]', isSmallScreen && '!pr-0')}>
+          <div className={clsx('flex flex-row justify-between  items-start')}>
+            <div className="text-secondary">Estimated Transaction Fee</div>
+            <div className="flex flex-col items-end">
+              <span className={clsx('text-secondary', isSmallScreen && '!pr-0')}>
                 {fix4NotInt(priceData?.transactionFee)}&nbsp;ELF
               </span>
-              <span className="text-[14px]">$&nbsp;{fix4NotInt(priceData?.transactionFeeOfUsd)}</span>
+              <span className="text-secondary mt-[8px]">$&nbsp;{fix4NotInt(priceData?.transactionFeeOfUsd)}</span>
             </div>
           </div>
 
-          <div
-            className={clsx(
-              'flex flex-row justify-between font-medium',
-              isSmallScreen ? 'items-start' : 'items-center',
-            )}>
-            <div>Total</div>
-            <div className={clsx(isSmallScreen && 'flex flex-col items-end')}>
-              <span className={clsx('pr-[12px] text-[16px]', isSmallScreen && '!pr-0')}>
+          <div className={clsx('flex flex-row justify-between font-medium items-start')}>
+            <div className="text-primary">Total</div>
+            <div className="flex flex-col items-end">
+              <span className={clsx('text-primary', isSmallScreen && '!pr-0')}>
                 {fix4NotInt(totalPriceObj.totalElf)}&nbsp;ELF
               </span>
-              <span className="text-[14px]">$&nbsp;{fix4NotInt(totalPriceObj.totalUSD)}</span>
+              <span className="text-secondary mt-[8px]">$&nbsp;{fix4NotInt(totalPriceObj.totalUSD)}</span>
             </div>
           </div>
         </div>
-        <div
-          className={clsx(
-            'text-[var(--text11)] border-0 border-t border-dashed border-[#E6E7E9] dark:border-[#383D3D] pt-[24px]',
-            isSmallScreen && 'text-[14px]',
-          )}>
+        <div className="p-[24px] bg-[var(--fill-hover-bg)] text-secondary rounded-lg">
           <div>
             Once you&apos;ve placed your bid, the corresponding amount of tokens will be temporarily locked, and this
             hold will automatically be released if a higher bid appears. In the event that you win the bid, the tokens
             will be deducted from your account.
           </div>
           <div>Please be aware that bids cannot be canceled once they are placed.</div>
+        </div>
+
+        <div className="mt-[24px] mdTW:mt-[32px]">
+          <Balance amount={fix4NotInt(divDecimals(myBalance?.valueOf(), 8).toNumber())} suffix="ELF" />
         </div>
 
         {isHaveNoMoney && (

@@ -8,6 +8,7 @@ export interface ITableProps<T> extends Omit<TableProps<T>, 'pagination'> {
   pagination?: IEpPaginationProps | false;
   emptyText?: string | ReactNode;
   searchText?: string;
+  adaptation?: boolean;
 }
 
 export function getEmptyText(emptyText?: string | ReactNode) {
@@ -21,19 +22,41 @@ export function getEmptyText(emptyText?: string | ReactNode) {
   }
 }
 
-function Table({ pagination, emptyText, ...params }: ITableProps<any>) {
+function Table({ pagination, emptyText, adaptation = false, ...params }: ITableProps<any>) {
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
 
   return (
     <div className={clsx(styles['forest-table'], isSmallScreen && styles['mobile-forest-table'])}>
-      <AntdTable
-        pagination={false}
-        locale={{
-          emptyText: getEmptyText(emptyText),
-        }}
-        {...params}
-      />
+      {isSmallScreen && adaptation ? (
+        <div>
+          {params?.dataSource?.map((item, index) => {
+            return (
+              <div className="p-[24px] border-0 border-solid border-b border-lineDividers last:border-b-0" key={index}>
+                {params.columns?.map((column) => {
+                  return column.key ? (
+                    <div key={column.key} className="flex justify-between mb-[12px] last:mb-0">
+                      <span className="text-base text-textSecondary">
+                        {typeof column.title === 'function' ? column.title({}) : column.title}
+                      </span>
+                      <span>{column?.render ? column?.render(item[column.key], item, index) : item[column.key]}</span>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <AntdTable
+          pagination={false}
+          locale={{
+            emptyText: getEmptyText(emptyText),
+          }}
+          {...params}
+        />
+      )}
+
       {pagination && <EpPagination {...pagination} />}
     </div>
   );

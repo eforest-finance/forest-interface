@@ -7,11 +7,11 @@ import useGetState from 'store/state/getState';
 import { divDecimals } from 'utils/calculate';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import Button from 'baseComponents/Button';
-import BuyNowModal from '../BuyNowModal';
-import OfferModal from '../OfferModal';
 import { useModal } from '@ebay/nice-modal-react';
 import clsx from 'clsx';
 import { useGetOwnerInfo } from 'pagesComponents/Detail/hooks/useGetOwnerInfo';
+import BuyNowModal from '../BuyNowModal/index';
+import OfferModal from '../OfferModal/index';
 
 interface IProps {
   rate: number;

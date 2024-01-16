@@ -28,8 +28,7 @@ import {
 } from 'store/reducer/detail/detailInfo';
 
 function DetailPc() {
-  const { isFetching, elfRate, isERC721, nftBalance, nftQuantity, tokenBalance, intervalDataForBid } =
-    useInitializationDetail();
+  const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
 
   const { detailInfo } = useDetailGetState();
   const { nftInfo } = detailInfo;
@@ -72,15 +71,10 @@ function DetailPc() {
                         <PriceHistory />
                       </Col>
                       <Col span={24}>
-                        <Listings
-                          nftBalance={nftBalance}
-                          nftQuantity={nftQuantity}
-                          myBalance={new BigNumber(tokenBalance)}
-                          rate={elfRate}
-                        />
+                        <Listings rate={elfRate} />
                       </Col>
                       <Col span={24}>
-                        <Offers nftBalance={nftBalance} rate={elfRate} />
+                        <Offers rate={elfRate} />
                       </Col>
                     </Row>
                   </>

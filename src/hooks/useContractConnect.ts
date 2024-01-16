@@ -28,6 +28,7 @@ export const useGetToken = () => {
     expirationTime?: number;
   }>(storages.accountInfo);
   const { loginState, wallet, getSignature, walletType, logout } = useWebLogin();
+  walletType === WalletType.portkey;
   const isLogin = loginState === WebLoginState.logined;
   const pathName = usePathname();
   const nav = useRouter();

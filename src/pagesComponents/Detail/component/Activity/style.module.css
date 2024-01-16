@@ -188,3 +188,10 @@
     }
   }
 }
+
+.detail-activity-checkbox {
+  @apply !w-full !h-[56px] !flex !items-center;
+  :global(.ant-checkbox) {
+    @apply top-0;
+  }
+}

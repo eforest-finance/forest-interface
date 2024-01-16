@@ -25,13 +25,16 @@ export type FormatOffersType = {
   from: From | null;
   to: To | null;
   nftInfo: IListingNftInfo | null;
+  floorPricePercentage: string;
+  floorPrice: number;
+  floorPriceSymbol: string;
 };
 
 export type NftNumberType = {
-  nftBalance: number;
-  tokenBalance: number;
-  nftQuantity: number;
-  nftTotalSupply: number;
+  nftBalance: number | string;
+  tokenBalance: number | string;
+  nftQuantity: number | string;
+  nftTotalSupply: number | string;
   loading: boolean;
 };
 

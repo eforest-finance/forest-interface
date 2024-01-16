@@ -1,7 +1,6 @@
 import BaseModal from 'baseComponents/Modal';
 import { SummaryInfo } from './comps/SummaryInfo';
 import { SetPrice } from './comps/SetPrice';
-import { NFTSaleInfoCard } from './comps/NFTSaleInfoCard';
 import Button from 'baseComponents/Button';
 import { INftInfo } from 'types/nftTypes';
 import { Duration } from './comps/Duration';
@@ -9,8 +8,10 @@ import { useSaleService } from './hooks/useSaleService';
 import { SetSellItemNumber } from './comps/SetSellItemNumber';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import useGetState from 'store/state/getState';
-import { isERC721 } from 'utils/isTokenIdReuse';
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
+import NftInfoListCard from 'components/NftInfoListCard';
+import { handlePlurality } from 'utils/handlePlurality';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
 interface ISaleModalProps {
   nftInfo: INftInfo;
@@ -85,11 +86,14 @@ export function SaleModalERC721Constructor({ nftInfo, type = 'edit', defaultData
       destroyOnClose={true}
       title={`${type === 'add' ? 'List for Sale' : 'Edit Listing'}`}
       footer={footer}>
-      <NFTSaleInfoCard
-        nftSaleInfo={nftSaleInfo}
-        listItems={itemsForSell}
-        listingPrice={listingPrice?.price}
-        listingUSDPrice={listingUSDPrice}
+      <NftInfoListCard
+        image={nftSaleInfo?.logoImage || ''}
+        collectionName={nftSaleInfo?.collectionName}
+        nftName={nftSaleInfo?.tokenName}
+        item={handlePlurality(itemsForSell, 'item')}
+        priceTitle={'Listing Price'}
+        price={`${listingPrice?.price ? formatTokenPrice(listingPrice?.price) : '--'} ELF`}
+        usdPrice={listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --'}
       />
       <SetPrice
         floorPrice={nftSaleInfo?.floorPrice}
@@ -165,12 +169,14 @@ export function SaleModalERC1155Constructor({ nftInfo, type = 'edit', defaultDat
       destroyOnClose={true}
       title={`${type === 'add' ? 'List for Sale' : 'Edit Listing'}`}
       footer={footer}>
-      <NFTSaleInfoCard
-        nftSaleInfo={nftSaleInfo}
-        listItems={itemsForSell}
-        listingPrice={listingPrice?.price}
-        listingUSDPrice={listingUSDPrice}
-        isERC1155={true}
+      <NftInfoListCard
+        image={nftSaleInfo?.logoImage || ''}
+        collectionName={nftSaleInfo?.collectionName}
+        nftName={nftSaleInfo?.tokenName}
+        item={handlePlurality(itemsForSell, 'item')}
+        priceTitle={'Listing Price Per Item'}
+        price={`${listingPrice?.price ? formatTokenPrice(listingPrice?.price) : '--'} ELF`}
+        usdPrice={listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --'}
       />
       <SetSellItemNumber onChange={(value) => setItemsForSell(Number(value))} maxNumber={availableItemForSell} />
       <SetPrice

@@ -14,12 +14,24 @@ import BigNumber from 'bignumber.js';
 import { message } from 'antd';
 import { messageHTML } from 'utils/aelfUtils';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
+import PromptModal from 'components/PromptModal';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import { handlePlurality } from 'utils/handlePlurality';
+import { CancelListingMessage } from 'constants/promptMessage';
+import { UserDeniedMessage } from 'contract/formatErrorMsg';
 
-export function useListingService(nftInfo: INftInfo, listingModalInstance?: NiceModalHandler, notFetchData?: boolean) {
+export function useListingService(
+  nftInfo: INftInfo,
+  rate: number,
+  listingModalInstance?: NiceModalHandler,
+  notFetchData?: boolean,
+) {
   const { walletInfo } = useGetState();
   const [data, setData] = useState<FormatListingType[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const approveCancelListingModal = useModal(ApproveCancelListingModal);
+  const promptModal = useModal(PromptModal);
+
   const getListingInfo = async () => {
     try {
       setLoading(true);
@@ -100,32 +112,59 @@ export function useListingService(nftInfo: INftInfo, listingModalInstance?: Nice
       return result;
     } catch (error) {
       const resError = error as IContractError;
-      message.error(resError.errorMessage?.message || resError.error?.toString() || DEFAULT_ERROR);
-      return Promise.reject(error);
+      if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
+        message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+        return Promise.reject(error);
+      }
+      message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+      return 'failed';
     }
   };
 
   const handleDelist = async (data: FormatListingType) => {
-    await delist({
-      symbol: nftInfo?.nftSymbol || '',
-      quantity: data.quantity,
-      price: {
-        symbol: (data as FormatListingType)?.purchaseToken?.symbol,
-        amount: data?.price as number,
-      },
-      startTime: {
-        seconds: moment.unix(Math.floor((data as FormatListingType).startTime / 1000)).unix(),
-        nanos: 0,
-      },
-    });
-    getListingInfo();
+    try {
+      await delist({
+        symbol: nftInfo?.nftSymbol || '',
+        quantity: data.quantity,
+        price: {
+          symbol: (data as FormatListingType)?.purchaseToken?.symbol,
+          amount: data?.price as number,
+        },
+        startTime: {
+          seconds: moment.unix(Math.floor((data as FormatListingType).startTime / 1000)).unix(),
+          nanos: 0,
+        },
+      });
+      getListingInfo();
+      promptModal.hide();
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   const cancelListingItem = (item: FormatListingType) => {
     listingModalInstance?.hide();
-    approveCancelListingModal.show({
-      data: item,
-      handle: () => handleDelist(item),
+    const usdPrice = item?.price * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
+
+    promptModal.show({
+      nftInfo: {
+        image: nftInfo?.previewImage || '',
+        collectionName: nftInfo?.nftCollection?.tokenName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: 'Listing Price',
+        price: `${formatTokenPrice(item.price)} ${item.purchaseToken.symbol || 'ELF'}`,
+        usdPrice: formatUSDPrice(usdPrice),
+        item: handlePlurality(Number(item.quantity), 'item'),
+      },
+      title: CancelListingMessage.title,
+      content: {
+        title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
+        content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
+      },
+      initialization: () => handleDelist(item),
+      onClose: () => {
+        promptModal.hide();
+      },
     });
   };
 

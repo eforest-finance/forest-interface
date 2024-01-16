@@ -9,7 +9,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { formatTokenPrice } from 'utils/format';
 import useGetState from 'store/state/getState';
 
-interface IShortCutListProps extends Pick<ISetPriceProps, 'floorPrice' | 'lastSalePrice'> {
+interface IShortCutListProps extends Pick<ISetPriceProps, 'floorPrice' | 'lastSalePrice' | 'bestOfferPrice'> {
   onChangePrice?: (val?: number) => void;
   isMobile?: boolean;
 }
@@ -41,7 +41,7 @@ function PriceShortCut({
       className="bg-fillHoverBg h-[56px] flex items-center justify-center flex-1 mx-2 rounded-lg cursor-pointer"
       onClick={onClick}>
       <span className="text-base font-semibold text-textPrimary">{title}</span>
-      <span className="text-base font-normal text-textSecondary ml-4">{price}</span>
+      <span className="text-base font-normal text-textSecondary ml-4">{formatTokenPrice(price)}</span>
       <span className="text-base font-normal text-textSecondary">{unit}</span>
     </div>
   );
@@ -63,7 +63,7 @@ function PriceShortCutMobile({
       className="bg-fillHoverBg h-[56px] mb-3 flex items-center justify-center mx-2 px-3 rounded-lg cursor-pointer"
       onClick={onClick}>
       <span className="flex-1 text-base font-semibold text-textPrimary">{title}</span>
-      <span className="text-base font-normal text-textSecondary ml-4">{price}</span>
+      <span className="text-base font-normal text-textSecondary ml-4">{formatTokenPrice(price)}</span>
       <span className="text-base font-normal text-textSecondary">{unit}</span>
     </div>
   );
@@ -82,15 +82,19 @@ const renderTitle = (props: ISetPriceProps) => {
   );
 };
 
-const ShortCutList = ({ floorPrice, lastSalePrice, onChangePrice, isMobile }: IShortCutListProps) => {
+const ShortCutList = ({ floorPrice, lastSalePrice, bestOfferPrice, onChangePrice, isMobile }: IShortCutListProps) => {
   const listPrice = [
     {
-      title: 'Floor',
+      title: 'Floor Price',
       price: floorPrice,
     },
     {
       title: 'Last Sale',
       price: lastSalePrice,
+    },
+    {
+      title: 'Best Offer',
+      price: bestOfferPrice,
     },
   ];
   const showList = listPrice.filter((item) => Number(item.price || '') > 0);
@@ -130,6 +134,8 @@ export function SetPrice(props: ISetPriceProps) {
 
   const { price, setToken, setPrice, inputChangeHandler, status } = useSetPriceService(props);
 
+  const { errorTip, placeholder } = props;
+
   const showPrice = getShowPrice(price || '');
 
   const selectAfter = (
@@ -156,20 +162,24 @@ export function SetPrice(props: ISetPriceProps) {
 
   const renderError = () => {
     if (status !== 'error') return null;
+    if (errorTip) {
+      return <div className="mt-2 text-xs text-error">{errorTip}</div>;
+    }
     return (
       <div className="mt-2 text-xs text-error flex justify-between">
         <span></span>
-        <span>Please enter a correct price.</span>
+        <span>{errorTip || 'Please enter a correct price.'}</span>
       </div>
     );
   };
 
   return (
-    <div className={`${isSmallScreen ? 'mt-6' : 'mt-8'}`}>
+    <div className={`${isSmallScreen ? 'mt-6' : 'mt-8'} ${props.className}`}>
       {renderTitle(props)}
       <ShortCutList
         lastSalePrice={props.lastSalePrice}
         floorPrice={props.floorPrice}
+        bestOfferPrice={props.bestOfferPrice}
         onChangePrice={(val) => {
           setPrice(val);
           setToken(fixedPrice.ELF);
@@ -183,7 +193,7 @@ export function SetPrice(props: ISetPriceProps) {
         }}
         onChange={inputChangeHandler}
         value={showPrice}
-        placeholder="Enter a price"
+        placeholder={placeholder || 'Enter a price'}
         suffix={selectAfter}
         className={`${isSmallScreen ? 'mt-0' : 'mt-4'}`}
         status={status}

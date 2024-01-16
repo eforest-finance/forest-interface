@@ -1,24 +1,33 @@
 import { fetchListings } from 'api/fetch';
 import { DEFAULT_PAGE_SIZE } from 'constants/index';
-import { MILLISECONDS_PER_DAY } from 'constants/time';
 import { FormatListingType } from 'store/types/reducer';
 import { IListingType } from 'types/nftTypes';
+import getExpiryTime from 'utils/getExpiryTime';
 
 interface IProps {
   page?: number;
   pageSize?: number;
   symbol: string;
+  excludedAddress?: string;
   address?: string;
   chainId: Chain;
 }
 
-const getListings = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, symbol, address, chainId }: IProps) => {
+const getListings = async ({
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  symbol,
+  address,
+  excludedAddress,
+  chainId,
+}: IProps) => {
   try {
     const result = await fetchListings({
       chainId,
       symbol,
       skipCount: (page - 1) * pageSize,
       maxResultCount: pageSize,
+      excludedAddress,
       address,
     });
 
@@ -37,7 +46,7 @@ const getListings = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, symbol, add
         price,
         quantity: item.quantity,
         ownerAddress: item?.ownerAddress || '',
-        expiration: ((item.endTime - new Date().getTime()) / MILLISECONDS_PER_DAY).toFixed(0).toString(),
+        expiration: getExpiryTime(item.endTime),
         fromName: item?.owner?.name || '--',
         whitelistHash: item.whitelistId,
         startTime: item.startTime,

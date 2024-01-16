@@ -1,200 +1,133 @@
 import { message } from 'antd';
-import Arrow from 'assets/images/arrow.svg';
-import Clock from 'assets/images/clock.svg';
-import ELF from 'assets/images/ELF.png';
 import styles from './style.module.css';
-import { memo, useEffect, useMemo, useState } from 'react';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
+import { ChangeEvent, ReactNode, memo, useEffect, useMemo, useState } from 'react';
 
-import DatePickerPC from 'components/DatePickerPC';
-import TimePickerPC from 'components/TimePickerPC';
-import TimePickerMobile from 'components/TimePickerMobile';
-import DatePickerMobile from 'components/DatePickerMobile';
 import useMakeOffer from 'pagesComponents/Detail/hooks/useMakeOffer';
 import BigNumber from 'bignumber.js';
-import { timesDecimals } from 'utils/calculate';
-import InputHint from 'components/InputHint';
-import { unitConverter } from 'utils/unitConverter';
+import { divDecimals, timesDecimals } from 'utils/calculate';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
-import Image from 'next/image';
-import { AMOUNT_LENGTH, DEVICE_TYPE } from 'constants/common';
-import { MILLISECONDS_PER_DAY, MILLISECONDS_PER_HALF_HOUR, TIME_FORMAT_12_HOUR } from 'constants/time';
-import { Select, Option } from 'baseComponents/Select';
-import Input from 'baseComponents/Input';
 import Button from 'baseComponents/Button';
 import Modal from 'baseComponents/Modal';
-import { useWalletSyncCompleted } from 'hooks/useWalletSync';
-import clsx from 'clsx';
+import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { usePathname } from 'next/navigation';
+import PriceInfo, { PriceTypeEnum } from '../BuyNowModal/components/PriceInfo';
+import InputQuantity from '../BuyNowModal/components/InputQuantity';
+import Balance from '../BuyNowModal/components/Balance';
+import { SetPrice } from '../SaleModal/comps/SetPrice';
+import { Duration } from '../SaleModal/comps/Duration';
+import { IPrice } from '../SaleModal/hooks/useSetPrice';
+import { IDurationData } from '../SaleModal/hooks/useDuration';
+import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
+import PromptModal from 'components/PromptModal';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import ResultModal from 'components/ResultModal';
+import { OfferMessage } from 'constants/promptMessage';
+import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
+import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
+import { WalletType, useWebLogin } from 'aelf-web-login';
+import { isERC721 } from 'utils/isTokenIdReuse';
+import { handlePlurality } from 'utils/handlePlurality';
+import { elementScrollToView } from 'utils/domUtils';
+import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
+import { getExploreLink } from 'utils';
 
-function OfferModal(options: { onClose?: () => void; rate: number }) {
+function OfferModal(options: {
+  balance: BigNumber;
+  onClose?: () => void;
+  rate: number;
+  maxCountLoading?: boolean;
+  maxCount: number;
+}) {
   const modal = useModal();
-  const pathname = usePathname();
+  const promptModal = useModal(PromptModal);
+  const resultModal = useModal(ResultModal);
+  const { login, isLogin } = useCheckLoginAndToken();
 
-  const { infoState } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const [token, setToken] = useState<string>('ELF');
-  const [quantity, setQuantity] = useState<number>();
-  const [price, setPrice] = useState<string | undefined>();
-  const [expirationType, setExpirationType] = useState('7');
-  const [selectedDate, setSelectedDate] = useState<Moment>();
-  const [selectedTime, setSelectedTime] = useState<Moment>();
-  const [mobileDateVisible, setMobileDateVisible] = useState(false);
+  const [quantity, setQuantity] = useState<number | string>('');
+  const [price, setPrice] = useState<number | string>('');
   const [loading, setLoading] = useState(false);
-  const [currentDate, setCurrentDate] = useState<Date>();
-  const [currentTime, setCurrentTime] = useState<string[]>();
-  const [mobileDate, setMobileDate] = useState<Date>();
-  const [mobileTime, setMobileTime] = useState<string[]>();
-  const { onClose, rate } = options;
+  const { onClose, rate, maxCount, maxCountLoading } = options;
   const { detailInfo } = useDetailGetState();
-  const { nftInfo, nftNumber } = detailInfo;
+  const {
+    nftInfo,
+    nftNumber: { nftTotalSupply, tokenBalance },
+  } = detailInfo;
   const makeOffer = useMakeOffer(nftInfo?.chainId);
   const { getAccountInfoSync } = useWalletSyncCompleted();
+  const mainChainTokenBalance = useGetMainChainBalance({ tokenName: 'ELF' });
+  const [priceErrorTip, setPriceErrorTip] = useState<string | ReactNode>('');
+  const [durationTime, setDurationTime] = useState<string | number>('');
 
-  const [balanceNotEnough, setBalanceNotEnough] = useState<boolean>(false);
+  const [durationHours, setDurationHours] = useState<string>('');
+  const [durationMonths, setDurationMonths] = useState<string>('');
 
-  const numberFormat = (value: number) => {
-    return unitConverter(value.toFixed(2)).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-  };
+  const [quantityTip, setQuantityTip] = useState('');
 
-  const priceToELF = useMemo(() => {
-    return (quantity || 0) * (Number(new BigNumber(price || 0).valueOf()) || 0);
-  }, [quantity, price]);
+  const salesInfo = useGetSalesInfo(nftInfo?.id || '');
 
-  const onQuantityChange = (val: string) => {
-    const numQuantity = Number(val.replace(/\.\d+|\./, ''));
-    setQuantity(numQuantity);
-  };
+  const transferModal = useModal(CrossChainTransferModal);
 
-  const onTokenChange = (e: string) => {
-    setToken(e);
-    setPrice(undefined);
-  };
+  const { walletType } = useWebLogin();
+  const isPortkeyConnected = walletType === WalletType.portkey;
 
-  const onPriceChange = (e: { target: { value: string } }) => {
-    const v = new BigNumber(e.target.value);
-    if ((v.e || 0) > AMOUNT_LENGTH) return;
-    const val = e.target.value
-      .split('')
-      .filter((i: string) => i !== '-')
-      .join('');
-    const index = val.split('').findIndex((item: string) => item === '.') + 1;
-
-    setPrice(index ? val.slice(0, index + 2) : val);
-  };
-
-  useEffect(() => {
-    const priceBig = BigNumber(priceToELF);
-    const balanceBig = BigNumber(getBalance(DEVICE_TYPE.PC));
-    if (priceBig.comparedTo(balanceBig) > -1) {
-      setBalanceNotEnough(true);
+  const totalPrice = useMemo(() => {
+    if (nftTotalSupply === '1') {
+      return price ? BigNumber(price).toFixed(4, BigNumber.ROUND_DOWN) : '--';
     } else {
-      setBalanceNotEnough(false);
+      if (quantity && price) {
+        return BigNumber(price).multipliedBy(quantity).toFixed(4, BigNumber.ROUND_DOWN);
+      } else {
+        return '--';
+      }
     }
-  }, [priceToELF, nftNumber.tokenBalance]);
+  }, [nftTotalSupply, price, quantity]);
 
-  const onExpirationTypeChange = (e: string) => {
-    setMobileDate(undefined);
-    setMobileTime(undefined);
-    setExpirationType(e);
-  };
+  const convertPrice = useMemo(() => {
+    if (price && quantity && rate) {
+      const averagePriceBig = BigNumber(totalPrice);
+      const convertAverage = averagePriceBig.multipliedBy(rate).toFixed(4, BigNumber.ROUND_DOWN);
+      return convertAverage;
+    } else {
+      return '--';
+    }
+  }, [price, quantity, rate, totalPrice]);
 
-  const onDateChange = (e: Moment) => {
-    setSelectedDate(e);
-  };
-  const onTimeChange = (e: Moment) => {
-    setSelectedTime(e);
-  };
-
-  const onVisibleChange = () => {
-    setExpirationType('7');
-    setSelectedTime(undefined);
-    setSelectedTime(undefined);
-    setToken('ELF');
-    const date = moment();
-    setCurrentTime([
-      (date.hour() % TIME_FORMAT_12_HOUR).toString().padStart(2, '0'),
-      date.minute().toString().padStart(2, '0'),
-      date.hour() >= TIME_FORMAT_12_HOUR ? 'pm' : 'am',
-    ]);
-    setCurrentDate(new Date(date.valueOf()));
-  };
-
-  useEffect(() => {
-    modal.hide();
-  }, [pathname]);
-
-  useEffect(onVisibleChange, [modal.visible]);
-
-  const MobilePicker = () => {
-    const clockTime =
-      expirationType === 'custom'
-        ? moment(mobileDate || moment(currentDate).valueOf() + MILLISECONDS_PER_HALF_HOUR)?.format('YYYY/MM/DD HH:mm a')
-        : mobileTime
-        ? moment(`${mobileTime.slice(0, 2).join(':')} ${mobileTime[2]}`, 'hh:mm a').format('HH:mm a')
-        : moment(`${currentTime?.slice(0, 2).join(':')} ${currentTime?.slice(2)}`, 'hh:mm a').format('HH:mm a');
-    return (
-      <>
-        <div
-          className={styles['time-btn']}
-          onClick={() => {
-            setMobileDateVisible(true);
-          }}>
-          <div className="flex items-center justify-center">
-            <Clock />
-            {clockTime}
-          </div>
-          <Arrow />
-        </div>
-        {expirationType === 'custom' ? (
-          <DatePickerMobile
-            visible={mobileDateVisible}
-            className={styles['time-picker-mobile']}
-            onCancel={() => {
-              setMobileDateVisible(false);
-            }}
-            onConfirm={(e) => {
-              setMobileDate(e);
-              setMobileDateVisible(false);
-            }}
-            value={mobileDate}
-            defaultValue={currentDate || new Date()}
-          />
-        ) : (
-          <TimePickerMobile
-            visible={mobileDateVisible}
-            className={styles['time-picker-mobile']}
-            onConfirm={(e) => {
-              setMobileTime((e as string[]).map((item) => item.padStart(2, '0')));
-              setMobileDateVisible(false);
-            }}
-            onCancel={() => {
-              setMobileDateVisible(false);
-            }}
-          />
-        )}
-      </>
+  const availableMount = useMemo(() => {
+    if (!price || !quantity || nftTotalSupply == '1') {
+      return nftTotalSupply;
+    }
+    const availableBuyAmount = Math.min(
+      Number(
+        BigNumber(Number(tokenBalance) / 100000000)
+          .minus(BigNumber(totalPrice))
+          .dividedBy(BigNumber(price))
+          .toFixed(0, BigNumber.ROUND_DOWN),
+      ),
+      Number(nftTotalSupply) - (Number(quantity) > 0 ? Number(quantity) : 0),
     );
-  };
+    console.log('availableBuyAmount', availableBuyAmount);
 
-  const PCPicker = () => {
-    return (
-      <div className={styles['part-right']}>
-        {expirationType === 'custom' ? (
-          <DatePickerPC
-            value={selectedDate}
-            defaultValue={moment(currentDate)}
-            onSelect={onDateChange}
-            className="w-full"
-          />
-        ) : (
-          <TimePickerPC value={selectedTime} defaultTime={moment(currentDate)} onSelect={onTimeChange} />
-        )}
-      </div>
-    );
+    return Math.max(availableBuyAmount, 0);
+  }, [nftTotalSupply, price, quantity, tokenBalance, totalPrice]);
+
+  const onQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || BigNumber(e.target.value).isZero()) {
+      setQuantity(0);
+      setQuantityTip('');
+      return;
+    }
+    const inputNumber = Number(formatInputNumber(e.target.value));
+    setQuantity(inputNumber);
+    if (BigNumber(inputNumber).gt(BigNumber(nftTotalSupply))) {
+      setQuantityTip('The current maximum quotable quantity has been exceeded.');
+      return;
+    }
+    setQuantityTip('');
   };
 
   const onCloseModal = () => {
@@ -205,72 +138,190 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     }
   };
 
-  const onMakeOffer = async () => {
-    setLoading(true);
+  const makeOfferNft = async () => {
+    try {
+      setLoading(true);
 
-    const mainAddress = await getAccountInfoSync();
-    if (!mainAddress) {
-      setLoading(false);
-      return;
-    }
+      const mainAddress = await getAccountInfoSync();
 
-    if (nftInfo && quantity && price) {
-      message.loading('Making offer', 0);
-      let expireTime: number = moment(currentDate).valueOf() + MILLISECONDS_PER_HALF_HOUR;
-      let tempTime;
-
-      if (expirationType === 'custom') {
-        isSmallScreen
-          ? mobileDate && (expireTime = moment(mobileDate).valueOf())
-          : selectedDate && (expireTime = moment(selectedDate).valueOf());
-      } else {
-        tempTime = isSmallScreen
-          ? mobileTime
-            ? moment()
-                .set({ hour: Number(mobileTime[0]), minute: Number(mobileTime[1]) })
-                .valueOf()
-            : currentDate
-          : selectedTime || currentDate;
-        expireTime = Number(expirationType)
-          ? moment(tempTime).valueOf() + Number(expirationType) * MILLISECONDS_PER_DAY
-          : moment(tempTime)
-              .month(moment(tempTime).month() + 1)
-              .valueOf();
+      if (!mainAddress) {
+        setLoading(false);
+        return Promise.reject();
       }
 
-      const result = await makeOffer({
-        symbol: nftInfo?.nftSymbol,
-        quantity,
-        price: {
-          symbol: token,
-          amount: Number(timesDecimals(price, 8)),
-        },
-        expireTime,
-      });
-
-      result === 'error' || onCloseModal();
+      if (nftInfo && quantity && price) {
+        const res = await makeOffer({
+          symbol: nftInfo?.nftSymbol,
+          quantity: Number(quantity),
+          price: {
+            symbol: token,
+            amount: Number(timesDecimals(price, 8)),
+          },
+          expireTime: Number(durationTime),
+        });
+        setLoading(false);
+        onCloseModal();
+        promptModal.hide();
+        const TransactionId = res?.TransactionId;
+        const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', nftInfo?.chainId) : '';
+        resultModal.show({
+          previewImage: nftInfo?.previewImage || '',
+          title: 'Offer Successfully Made!',
+          description: `You have made an offer for the ${nftInfo.tokenName} NFT in the ${nftInfo.nftCollection?.tokenName} Collection.`,
+          buttonInfo: {
+            btnText: 'View My Offer',
+            onConfirm: () => {
+              resultModal.hide();
+              elementScrollToView(document.getElementById('page-detail-offers'));
+            },
+          },
+          info: {
+            logoImage: nftInfo.nftCollection?.logoImage || '',
+            subTitle: nftInfo.nftCollection?.tokenName,
+            title: nftInfo.tokenName,
+            extra: isERC721(nftInfo) ? undefined : handlePlurality(Number(quantity), 'item'),
+          },
+          jumpInfo: {
+            url: explorerUrl,
+          },
+        });
+      }
+    } catch (error) {
       setLoading(false);
-      setTimeout(message.destroy, 2000);
+      return Promise.reject(error);
+    }
+  };
+
+  const onMakeOffer = async () => {
+    if (isLogin) {
+      try {
+        if (!durationTime || !checkDate(durationTime)) {
+          setLoading(false);
+          return;
+        }
+        promptModal.show({
+          nftInfo: {
+            image: nftInfo?.previewImage || '',
+            collectionName: nftInfo?.nftCollection?.tokenName,
+            nftName: nftInfo?.tokenName,
+            priceTitle: isERC721(nftInfo!) ? 'Offer Amount' : 'Total Amount',
+            price: `${formatTokenPrice(totalPrice)} ${token || 'ELF'}`,
+            usdPrice: formatUSDPrice(convertPrice),
+            item: isERC721(nftInfo!) ? undefined : handlePlurality(Number(quantity), 'item'),
+          },
+          title: OfferMessage.title,
+          content: {
+            title: walletInfo.portkeyInfo ? OfferMessage.portkey.title : OfferMessage.default.title,
+            content: walletInfo.portkeyInfo ? OfferMessage.portkey.message : OfferMessage.default.message,
+          },
+          initialization: makeOfferNft,
+          onClose: () => {
+            promptModal.hide();
+          },
+        });
+      } catch (error) {
+        /* empty */
+      }
+    } else {
+      login();
     }
   };
 
   const makeOfferDisabled = () => {
-    const quantityStatus = quantity ? quantity <= 0 : true;
-    const priceStatus = price ? new BigNumber(price).comparedTo(0) < 0 : true;
-    return quantityStatus || priceStatus || balanceNotEnough;
-  };
-
-  const getBalance = (type: DEVICE_TYPE) => {
-    if (type === DEVICE_TYPE.PC) {
-      return (Number(nftNumber.tokenBalance?.valueOf()) / 10 ** 8).toFixed(2);
-    }
-    return (Number(nftNumber.tokenBalance?.valueOf()) / 10 ** 8).toFixed(2);
+    return !(
+      BigNumber(quantity).gt(0) &&
+      BigNumber(price).gt(0) &&
+      BigNumber(totalPrice).lte(BigNumber(divDecimals(Number(tokenBalance), 8))) &&
+      !priceErrorTip &&
+      !quantityTip
+    );
   };
 
   useEffect(() => {
-    setQuantity(undefined);
-    setPrice(undefined);
+    setPrice('');
+    setQuantity('1');
+    setQuantityTip('');
   }, [modal.visible]);
+
+  const setOfferPrice = (price: IPrice) => {
+    setPrice(price.price || '');
+  };
+
+  const handleDurationTime = (data: IDurationData) => {
+    if (data.type === 'date') {
+      setDurationTime(moment(data.value).valueOf());
+    } else if (data.type === 'months') {
+      if (data.value === durationMonths) {
+        return;
+      }
+      setDurationMonths(data.value as string);
+      const futureTime = moment().add(Number(data.value), 'months');
+      setDurationTime(futureTime.valueOf());
+    } else {
+      if (data.value === durationHours) {
+        return;
+      }
+      setDurationHours(data.value as string);
+      const futureTime = moment().add(Number(data.value), 'hours');
+      setDurationTime(futureTime.valueOf());
+    }
+  };
+
+  const handleTransferShow = () => {
+    modal.hide();
+    transferModal.show({
+      type: CrossChainTransferType.token,
+      onClose: () => {
+        transferModal.hide();
+        modal.show();
+      },
+    });
+  };
+
+  const checkValid = (price: number) => {
+    const bigValue = BigNumber(price).multipliedBy(BigNumber(quantity));
+    if (bigValue.gt(BigNumber(divDecimals(Number(tokenBalance), 8)))) {
+      if (bigValue.gt(BigNumber(divDecimals(Number(tokenBalance) + Number(mainChainTokenBalance), 8)))) {
+        setPriceErrorTip(<span>Insufficient balance.</span>);
+        return false;
+      } else {
+        setPriceErrorTip(
+          <span className="text-[var(--text-primary)]">
+            <>
+              Insufficient balance.
+              <span>You can</span>{' '}
+              {isPortkeyConnected ? (
+                <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
+                  {`transfer tokens from MainChain to your SideChain address.`}
+                </span>
+              ) : (
+                'manually transfer tokens from MainChain to your SideChain address.'
+              )}
+            </>
+          </span>,
+        );
+        return false;
+      }
+    } else {
+      setPriceErrorTip('');
+      return true;
+    }
+  };
+
+  const checkDate = (duration: number | string) => {
+    const timeDifference = moment(duration).diff(moment());
+    const minutesDifference = moment.duration(timeDifference).asMinutes();
+    const months = moment.duration(timeDifference).asMonths();
+    if (minutesDifference < 15) {
+      message.error('The duration should be at least 15 minutes.');
+      return false;
+    }
+    if (months > 6) {
+      message.error('The duration should be no more than 6 months.');
+      return false;
+    }
+    return true;
+  };
 
   return (
     <Modal
@@ -278,116 +329,51 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
       className={`${styles['offer-modal']} ${isSmallScreen && styles['mobile-offer-modal']}`}
       footer={
         <>
-          <Button type="primary" size="large" loading={loading} disabled={makeOfferDisabled()} onClick={onMakeOffer}>
+          <Button
+            type="primary"
+            className="w-[256px]"
+            size="ultra"
+            loading={loading}
+            disabled={makeOfferDisabled()}
+            onClick={onMakeOffer}>
             Make Offer
-          </Button>
-          <Button size="large" onClick={() => onCloseModal()}>
-            Cancel
           </Button>
         </>
       }
       onCancel={onCloseModal}
       title="Make an offer"
       open={modal.visible}>
-      <div className={'content'}>
-        <div className={styles['field-item']}>
-          <p className={styles['item-title']}>Quantity</p>
-          <div>
-            <InputHint
-              defaultValue="0"
+      <div className="content">
+        <PriceInfo
+          quantity={nftTotalSupply === '1' ? 1 : quantity || 0}
+          price={totalPrice}
+          convertPrice={convertPrice}
+          type={nftTotalSupply === '1' ? PriceTypeEnum.MAKEOFFER721 : PriceTypeEnum.MAKEOFFER}
+        />
+        <SetPrice
+          className="mt-[32px]"
+          floorPrice={salesInfo?.floorPrice}
+          bestOfferPrice={salesInfo?.maxOfferPrice}
+          onChange={setOfferPrice}
+          checkValid={checkValid}
+          errorTip={priceErrorTip}
+          placeholder="Please enter a valid value."
+        />
+        {nftTotalSupply !== '1' && (
+          <div className="mt-[60px]">
+            <InputQuantity
+              availableMount={availableMount}
               onChange={onQuantityChange}
-              value={quantity?.toString()}
-              type="number"
-              maxCount={nftNumber.nftQuantity - nftNumber.nftBalance}
-              loading={nftNumber.loading}
+              value={quantity === 0 ? '' : formatTokenPrice(quantity)}
+              errorTip={quantityTip}
             />
           </div>
+        )}
+        <div className="mt-[60px]">
+          <Duration onChange={handleDurationTime} />
         </div>
-        <div className={styles['field-item']}>
-          <p className={styles['item-title']}>Price per item</p>
-          <div className="flex">
-            <div className={clsx(styles['part-left'], 'flex flex-1 flex-col')}>
-              <Select className="!w-full" defaultValue={token} getPopupContainer={(v) => v} onChange={onTokenChange}>
-                <Option key="ELF">
-                  <Image src={ELF} alt="elf" />
-                  ELF
-                </Option>
-              </Select>
-              {isSmallScreen && (
-                <span className={clsx(styles['convert-price'], 'px-[16px] text-[16px] leading-[24px] font-medium')}>
-                  {formatUSDPrice(new BigNumber(price || 0).times(rate))}
-                </span>
-              )}
-              <span
-                className={`${styles['total-offered']} text-[var(--color-disable)] font-medium ${
-                  isSmallScreen ? 'leading-[18px] text-[12px] mt-[8px] whitespace-nowrap' : 'leading-[21px] mt-[10px]'
-                }`}>
-                Total amount offered: {formatTokenPrice(priceToELF)} ELF
-              </span>
-              {isSmallScreen && (
-                <span className="text-[var(--color-disable)] font-medium leading-[18px] text-[12px] mt-[8px] whitespace-nowrap">
-                  Balance: {formatTokenPrice(getBalance(DEVICE_TYPE.MOBILE))}
-                  {token}
-                </span>
-              )}
-            </div>
-            <div className={clsx(styles['part-right'], 'flex flex-1 flex-col')}>
-              <div className="flex">
-                <Input
-                  value={price}
-                  onKeyDown={(e) => {
-                    /\d|\.|Backspace/.test(e.key) || e.preventDefault();
-                  }}
-                  className={isSmallScreen ? '' : '!rounded-tr-none !rounded-br-none'}
-                  onChange={onPriceChange}
-                  step={0.01}
-                  placeholder="Amount"
-                  type="number"
-                />
-                {!isSmallScreen ? (
-                  <p
-                    className={clsx(
-                      styles['convert-price'],
-                      'border border-solid border-[var(--line-box)] py-[8px] px-[12px] text-[16px] leading-[30px] font-medium',
-                    )}>
-                    ${numberFormat(new BigNumber(price || 0).times(rate).toNumber())}
-                  </p>
-                ) : null}
-              </div>
-              {balanceNotEnough && (
-                <div className="mt-[8px] text-[var(--red1)] text-right ">{'Insufficient funds'}</div>
-              )}
-
-              {!isSmallScreen && !balanceNotEnough ? (
-                <span className="text-[var(--color-disable)] font-medium leading-[21px] mt-[10px] text-right">
-                  Balance:
-                  {formatTokenPrice(getBalance(DEVICE_TYPE.PC))}
-                  {token}
-                </span>
-              ) : null}
-            </div>
-          </div>
-          <span className={`flex mt-[8px] text-[var(--color-disable)] ${isSmallScreen && 'text-[12px]'}`}>
-            Please enter a maximum of 10 digits.
-          </span>
-        </div>
-        <div className={styles['field-item']}>
-          <p className={styles['item-title']}>Offer Expiration</p>
-          <div className={`${isSmallScreen ? 'flex flex-col' : 'flex'}`}>
-            <div className={`${isSmallScreen ? 'w-full' : styles['part-left']}`}>
-              <Select
-                className="!w-full"
-                defaultValue={expirationType}
-                getPopupContainer={(v) => v}
-                onChange={onExpirationTypeChange}>
-                <Option key="3">3 days</Option>
-                <Option key="7">7 days</Option>
-                <Option key="month">A month</Option>
-                <Option key="custom">Custom Date</Option>
-              </Select>
-            </div>
-            {!isSmallScreen ? PCPicker() : MobilePicker()}
-          </div>
+        <div className="mt-[32px]">
+          <Balance amount={divDecimals(Number(tokenBalance), 8).toNumber()} suffix="ELF" />
         </div>
       </div>
     </Modal>

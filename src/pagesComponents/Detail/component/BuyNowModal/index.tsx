@@ -1,89 +1,97 @@
-import { Col, Row, Tooltip } from 'antd';
-import ELF from 'assets/images/ELF.png';
-import ADD from 'assets/images/+.svg';
-import WarningMark from 'assets/images/waring.svg';
-import SUBTRACT from 'assets/images/subtract.svg';
-
-import Logo from 'components/Logo';
-import { memo, useEffect, useMemo, useState } from 'react';
-
-import styles from './style.module.css';
+import { ChangeEvent, memo, useEffect, useMemo, useState } from 'react';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
-import { SERVICE_FEE } from 'constants/common';
-import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
-import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import getListings from 'pagesComponents/Detail/utils/getListings';
 import { FormatListingType } from 'store/types/reducer';
 import { IFixPriceList } from 'contract/type';
-import { cloneDeep } from 'lodash-es';
 import BigNumber from 'bignumber.js';
 import useBatchBuyNow from 'pagesComponents/Detail/hooks/useBatchBuyNow';
-import { DEFAULT_PAGE_SIZE } from 'constants/index';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 
-interface IValidListInfo {
-  curMax: number;
-  validList: FormatListingType[];
-}
 import moment from 'moment';
-import { timesDecimals } from 'utils/calculate';
-import isTokenIdReuse from 'utils/isTokenIdReuse';
-import { ZERO } from 'constants/misc';
-import { usePathname } from 'next/navigation';
+import { divDecimals, timesDecimals } from 'utils/calculate';
+import PriceInfo, { PriceTypeEnum } from './components/PriceInfo';
+import InputQuantity from './components/InputQuantity';
+import Summary from './components/Summary';
+import TotalPrice from './components/TotalPrice';
+import Balance from './components/Balance';
+import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
+import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
+import PromptModal from 'components/PromptModal';
+import ResultModal from 'components/ResultModal';
+import { BuyMessage } from 'constants/promptMessage';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import { WalletType, useWebLogin } from 'aelf-web-login';
+import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
+import { handlePlurality } from 'utils/handlePlurality';
+import { isERC721 } from 'utils/isTokenIdReuse';
+import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
+import { getExploreLink } from 'utils';
 
-function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
+function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
-  const pathname = usePathname();
-
-  const { infoState, walletInfo } = useGetState();
+  const promptModal = useModal(PromptModal);
+  const resultModal = useModal(ResultModal);
+  const title = 'Buy Now';
+  const submitBtnText = 'Buy Now';
+  const { walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
-  const { isSmallScreen } = infoState;
   const { nftInfo } = detailInfo;
-  const { onClose, elfRate } = options;
+  const { onClose, elfRate, buyItem } = options;
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [listings, setListings] = useState<FormatListingType[]>([]);
   const [maxQuantity, setMaxQuantity] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<BigNumber>(ZERO);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const [buyListings, setBuyListings] = useState<IFixPriceList[]>([]);
-
   const batchBuyNow = useBatchBuyNow(nftInfo?.chainId);
+  const { login, isLogin } = useCheckLoginAndToken();
+  const { walletType } = useWebLogin();
+  const isPortkeyConnected = walletType === WalletType.portkey;
+
+  const [quantityErrorTip, setQuantityErrorTip] = useState('');
+
+  const saleInfo = useGetSalesInfo(nftInfo?.id || '');
+
+  const { tokenBalance, nftTotalSupply } = detailInfo.nftNumber;
+
+  const mainChainNftBalance = useGetMainChainBalance({ tokenName: 'ELF' });
+  const transferModal = useModal(CrossChainTransferModal);
 
   const convertTotalPrice = useMemo(() => {
-    const convert = totalPrice.multipliedBy(elfRate).toFixed(2, BigNumber.ROUND_DOWN);
+    const totalPriceBig = new BigNumber(totalPrice);
+    const convert = totalPriceBig.multipliedBy(elfRate).toFixed(4, BigNumber.ROUND_DOWN);
     return convert;
   }, [elfRate, totalPrice]);
   const [quantity, setQuantity] = useState<number>(0);
 
   const averagePrice = useMemo(() => {
-    const average = quantity ? totalPrice.div(quantity).toFixed(4, BigNumber.ROUND_DOWN) : 0;
+    const totalPriceBig = new BigNumber(totalPrice);
+    const average = quantity ? totalPriceBig.div(quantity).toFixed(4, BigNumber.ROUND_DOWN) : 0;
     return average;
   }, [totalPrice, quantity]);
 
   const convertAveragePrice = useMemo(() => {
     const averagePriceBig = new BigNumber(averagePrice);
-    const convertAverage = averagePriceBig.multipliedBy(elfRate).toFixed(2, BigNumber.ROUND_DOWN);
+    const convertAverage = averagePriceBig.multipliedBy(elfRate).toFixed(4, BigNumber.ROUND_DOWN);
     return convertAverage;
   }, [averagePrice, elfRate]);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted();
-
-  const onChangeQuantity = (type: '+' | '-') => {
-    if (nftInfo && isTokenIdReuse(nftInfo)) {
-      if (type === '+') {
-        setQuantity((v) => (++v > maxQuantity ? maxQuantity : v));
-        addBuyListings();
-      } else {
-        setQuantity((v) => (--v < 1 ? 1 : v));
-        minusBuyListings();
+  useEffect(() => {
+    if (buyItem) {
+      if (quantity > buyItem.quantity) {
+        setTotalPrice(0);
+        return;
       }
+      setTotalPrice(quantity * buyItem.price);
     }
-  };
+  }, [buyItem, quantity]);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted();
 
   const onCloseModal = () => {
     if (onClose) {
@@ -93,123 +101,251 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
     }
   };
 
-  const onConfirm = async () => {
-    setLoading(true);
-    const mainAddress = await getAccountInfoSync();
-    if (!mainAddress) {
-      setLoading(false);
-      return;
-    }
+  const buyNow = async () => {
+    try {
+      let buyListingData: IFixPriceList[] = [];
 
-    const batchBuyNowRes = await batchBuyNow({
-      symbol: nftInfo!.nftSymbol,
-      fixPriceList: buyListings.map((list) => {
-        return {
-          ...list,
-          price: {
-            ...list.price,
-            amount: Number(timesDecimals(list.price.amount, 8)),
-          },
-        };
-      }),
-      price: {
-        symbol: 'ELF',
-        amount: new BigNumber(timesDecimals(averagePrice, 8)).toNumber(),
-      },
-      quantity,
-    });
-
-    if (batchBuyNowRes === 'error') {
-      setLoading(false);
-      return;
-    }
-    setLoading(false);
-    onCloseModal();
-  };
-
-  const addBuyListings = () => {
-    if (listings.length && modal.visible) {
-      const curIndex = buyListings.length - 1;
-      if (curIndex === -1 || buyListings[curIndex]?.quantity === listings[curIndex]?.quantity) {
-        const price = listings[curIndex + 1].price;
+      if (buyItem) {
         const buyListing: IFixPriceList = {
-          offerTo: listings[curIndex + 1].ownerAddress,
-          quantity: 1,
+          offerTo: buyItem.ownerAddress,
+          quantity: quantity,
           price: {
-            symbol: listings[curIndex + 1].purchaseToken.symbol,
-            amount: price,
+            symbol: buyItem.purchaseToken.symbol,
+            amount: buyItem.price,
           },
           startTime: {
-            seconds: moment.unix(Math.floor(listings[curIndex + 1].startTime / 1000)).unix(),
+            seconds: moment.unix(Math.floor(buyItem.startTime / 1000)).unix(),
             nanos: 0,
           },
         };
-        setBuyListings([...buyListings, buyListing]);
-        setTotalPrice((p) => p.plus(price));
-      } else if (buyListings[curIndex].quantity < listings[curIndex].quantity) {
-        const price = buyListings[curIndex].price.amount;
-        const buyListing: IFixPriceList = { ...buyListings[curIndex], quantity: buyListings[curIndex].quantity + 1 };
-        const listings = cloneDeep(buyListings);
-        listings.splice(-1, 1, buyListing);
-        setBuyListings(listings);
-        setTotalPrice((p) => p.plus(price));
+        buyListingData = [buyListing];
+      } else {
+        buyListingData = buyListings;
       }
+
+      const batchBuyNowRes = await batchBuyNow({
+        symbol: nftInfo!.nftSymbol,
+        fixPriceList: buyListingData.map((list) => {
+          return {
+            ...list,
+            price: {
+              ...list.price,
+              amount: Number(timesDecimals(list.price.amount, 8)),
+            },
+          };
+        }),
+        price: {
+          symbol: 'ELF',
+          amount: new BigNumber(timesDecimals(averagePrice, 8)).toNumber(),
+        },
+        quantity,
+      });
+
+      if (batchBuyNowRes && batchBuyNowRes !== 'failed') {
+        const explorerUrl = getExploreLink(batchBuyNowRes.TransactionId, 'transaction', nftInfo?.chainId);
+        if (batchBuyNowRes.allSuccessFlag) {
+          resultModal.show({
+            previewImage: nftInfo?.previewImage || '',
+            title: 'NFT Successfully Purchased!',
+            description: `You are now the owner of ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
+            buttonInfo: {
+              btnText: 'View NFT',
+              onConfirm: () => {
+                resultModal.hide();
+              },
+            },
+            info: {
+              logoImage: nftInfo?.nftCollection?.logoImage || '',
+              subTitle: nftInfo?.nftCollection?.tokenName,
+              title: nftInfo?.tokenName,
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(buyListingData.length, 'item'),
+            },
+            jumpInfo: {
+              url: explorerUrl,
+            },
+          });
+        } else {
+          const length = batchBuyNowRes.failPriceList?.value.length || 1;
+          const list = batchBuyNowRes.failPriceList?.value.map((item) => {
+            const price = divDecimals(item.price.amount, 8);
+            const convertPrice = new BigNumber(price).multipliedBy(elfRate);
+
+            return {
+              image: nftInfo?.previewImage || '',
+              collectionName: nftInfo?.nftCollection?.tokenName,
+              nftName: nftInfo?.tokenName,
+              item: handlePlurality(Number(item.quantity), 'item'),
+              priceTitle: 'Each item price',
+              price: `${formatTokenPrice(price)} ${item.price.symbol || 'ELF'}`,
+              usdPrice: formatUSDPrice(convertPrice),
+            };
+          });
+          resultModal.show({
+            previewImage: nftInfo?.previewImage || '',
+            title: 'Purchase Partially Completed',
+            buttonInfo: {
+              btnText: 'View NFT',
+              onConfirm: () => {
+                resultModal.hide();
+              },
+            },
+            info: {
+              logoImage: nftInfo?.nftCollection?.logoImage || '',
+              subTitle: nftInfo?.nftCollection?.tokenName,
+              title: nftInfo?.tokenName,
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(buyListingData.length, 'item'),
+            },
+            jumpInfo: {
+              url: explorerUrl,
+            },
+            error: {
+              title: `Purchase of ${handlePlurality(length, 'item')}  failed`,
+              description: `Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item before you.`,
+              list,
+            },
+          });
+        }
+      }
+
+      promptModal.hide();
+      setLoading(false);
+      onCloseModal();
+    } catch (error) {
+      setLoading(false);
+      return Promise.reject(error);
     }
   };
 
-  const minusBuyListings = () => {
-    if (listings.length && modal.visible) {
-      const curIndex = buyListings.length ? buyListings.length - 1 : 0;
-      if (!buyListings[curIndex]) return;
-      if (buyListings[curIndex].quantity === 1) {
-        const listings = cloneDeep(buyListings);
-        const price = listings[curIndex].price.amount;
-        listings.splice(-1, 1);
-        setBuyListings(listings);
-        setTotalPrice((p) => p.minus(price));
-      } else {
-        const buyListing: IFixPriceList = { ...buyListings[curIndex], quantity: buyListings[curIndex].quantity - 1 };
-        const listings = cloneDeep(buyListings);
-        const price = listings[curIndex].price.amount;
-        listings.splice(-1, 1, buyListing);
-        setBuyListings(listings);
-        setTotalPrice((p) => p.minus(price));
+  const onConfirm = async () => {
+    if (isLogin) {
+      setLoading(true);
+      const mainAddress = await getAccountInfoSync();
+      if (!mainAddress) {
+        setLoading(false);
+        return;
       }
+
+      promptModal.show({
+        nftInfo: {
+          image: nftInfo?.previewImage || '',
+          collectionName: nftInfo?.nftCollection?.tokenName,
+          nftName: nftInfo?.tokenName,
+          priceTitle: isERC721(nftInfo!) ? 'Listing Price' : 'Total Price',
+          price: `${formatTokenPrice(totalPrice)} ELF`,
+          usdPrice: formatUSDPrice(convertTotalPrice),
+          item: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        },
+        title: BuyMessage.title,
+        content: {
+          title: walletInfo.portkeyInfo ? BuyMessage.portkey.title : BuyMessage.default.title,
+          content: walletInfo.portkeyInfo ? BuyMessage.portkey.message : BuyMessage.default.message,
+        },
+        initialization: buyNow,
+        onClose: () => {
+          promptModal.hide();
+        },
+      });
+    } else {
+      login();
     }
   };
+
+  useEffect(() => {
+    if (buyItem && buyItem.quantity == 1) {
+      setTotalPrice(buyItem.price);
+    }
+  }, [buyItem]);
+
+  const calculatePrice = () => {
+    if (!listings.length) {
+      return;
+    }
+    setBuyListings([]);
+    setTotalPrice(0);
+    let totalPrice = 0;
+    let curQuantity = 0;
+    const buyListings: IFixPriceList[] = [];
+    for (let i = 0; i < listings.length; i++) {
+      const list = listings[i];
+      if (list.quantity <= quantity - curQuantity) {
+        const buyListing: IFixPriceList = {
+          offerTo: list.ownerAddress,
+          quantity: list.quantity,
+          price: {
+            symbol: list.purchaseToken.symbol,
+            amount: list.price,
+          },
+          startTime: {
+            seconds: moment.unix(Math.floor(list.startTime / 1000)).unix(),
+            nanos: 0,
+          },
+        };
+        buyListings.push(buyListing);
+        totalPrice += list.price * list.quantity;
+        if (list.quantity === quantity - curQuantity) {
+          break;
+        }
+        curQuantity += list.quantity;
+      } else {
+        const buyListing: IFixPriceList = {
+          offerTo: list.ownerAddress,
+          quantity: quantity - curQuantity,
+          price: {
+            symbol: list.purchaseToken.symbol,
+            amount: list.price,
+          },
+          startTime: {
+            seconds: moment.unix(Math.floor(list.startTime / 1000)).unix(),
+            nanos: 0,
+          },
+        };
+        buyListings.push(buyListing);
+        totalPrice += list.price * (quantity - curQuantity);
+        break;
+      }
+    }
+    setBuyListings(buyListings);
+    setTotalPrice(totalPrice);
+  };
+
+  useEffect(() => {
+    if (modal.visible) {
+      setQuantity(1);
+    }
+  }, [modal.visible]);
+
+  useEffect(() => {
+    if (buyItem) return;
+    if (maxQuantity < quantity && listings.length && quantity <= (saleInfo?.availableQuantity || 0)) {
+      setPage((page) => {
+        return ++page;
+      });
+    } else {
+      if (quantity <= (saleInfo?.availableQuantity || 0)) {
+        calculatePrice();
+      }
+    }
+  }, [buyItem, listings, maxQuantity, quantity, saleInfo]);
 
   const getListingsData = async (page: number) => {
+    if (quantity > (saleInfo?.availableQuantity || 0)) {
+      return;
+    }
     try {
       if (!nftInfo) return;
       const res = await getListings({
         page,
         chainId: nftInfo.chainId,
         symbol: nftInfo.nftSymbol,
+        excludedAddress: walletInfo.address,
       });
       if (!res) return;
       setTotalCount(res.totalCount);
-      const { curMax, validList }: IValidListInfo = res.list.reduce(
-        (pre: IValidListInfo, val) => {
-          if (val.ownerAddress === walletInfo.address) {
-            return pre;
-          }
-          return {
-            curMax: pre.curMax + val.quantity,
-            validList: [...pre.validList, val],
-          };
-        },
-        {
-          curMax: 0,
-          validList: [],
-        },
-      );
+      const curMax = res.list.reduce((pre, val) => {
+        return pre + val.quantity;
+      }, 0);
 
-      if (validList.length === 0 && totalCount > page * DEFAULT_PAGE_SIZE) {
-        setPage((page) => ++page);
-        return;
-      }
-
-      setListings([...listings, ...validList]);
+      setListings([...listings, ...res.list]);
       setMaxQuantity((maxQuantity) => {
         return maxQuantity + curMax;
       });
@@ -219,136 +355,126 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
   };
 
   useEffect(() => {
-    if (listings.length && !buyListings.length) {
-      addBuyListings();
-      setQuantity(1);
-    }
-  }, [buyListings.length, listings]);
-
-  useEffect(() => {
-    if (quantity === maxQuantity && page * DEFAULT_PAGE_SIZE < totalCount) {
-      setPage((page) => ++page);
-    }
-  }, [quantity, maxQuantity]);
-
-  useEffect(() => {
-    console.log('buy now buyListings', buyListings);
-  }, [buyListings]);
-
-  useEffect(() => {
-    console.log('modal=====modal', modal);
     if (modal.visible) {
       getListingsData(page);
-    } else {
-      setQuantity(0);
-      setPage(1);
-      setListings([]);
-      setBuyListings([]);
-      setTotalPrice(ZERO);
-      setMaxQuantity(0);
     }
   }, [page, modal.visible]);
 
+  const isSideChainBalanceInsufficient = useMemo(() => {
+    return BigNumber(divDecimals(Number(tokenBalance), 8)).lt(BigNumber(totalPrice));
+  }, [tokenBalance, totalPrice]);
+
+  const isAllChainsBalanceInsufficient = useMemo(() => {
+    return BigNumber(divDecimals(Number(mainChainNftBalance), 8))
+      .plus(BigNumber(divDecimals(Number(tokenBalance), 8)))
+      .lt(BigNumber(totalPrice));
+  }, [mainChainNftBalance, tokenBalance, totalPrice]);
+
+  const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || BigNumber(e.target.value).isZero()) {
+      setQuantity(0);
+      return;
+    }
+    const inputNumber = Number(formatInputNumber(e.target.value));
+    if (BigNumber(inputNumber).gt(buyItem?.quantity || saleInfo?.availableQuantity || 0)) {
+      setQuantityErrorTip(
+        'Maximum quantity exceeded. Please ensure your purchase does not exceed the available quantity.',
+      );
+      setTotalPrice(0);
+    } else {
+      setQuantityErrorTip('');
+    }
+    setQuantity(inputNumber);
+  };
+
+  const handleTransferShow = () => {
+    modal.hide();
+    transferModal.show({
+      type: CrossChainTransferType.token,
+      onClose: () => {
+        transferModal.hide();
+        modal.show();
+      },
+    });
+  };
+
+  const insufficientTip = useMemo(() => {
+    if (isSideChainBalanceInsufficient) {
+      if (isAllChainsBalanceInsufficient) {
+        return (
+          <div className="text-[12px] leading-[20px] font-normal text-[var(--text-primary)]">Insufficient balance.</div>
+        );
+      } else {
+        return (
+          <div className="text-[12px] leading-[20px] font-normal text-[var(--text-primary)]">
+            <span>Insufficient balance.</span>
+            <>
+              <span>You can</span>{' '}
+              {isPortkeyConnected ? (
+                <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
+                  {`transfer tokens from MainChain to your SideChain address.`}
+                </span>
+              ) : (
+                'manually transfer tokens from MainChain to your SideChain address.'
+              )}
+            </>
+          </div>
+        );
+      }
+    }
+    return null;
+  }, [isAllChainsBalanceInsufficient, isPortkeyConnected, isSideChainBalanceInsufficient]);
+
+  const showQuantity = useMemo(() => {
+    if (buyItem) {
+      return BigNumber(buyItem.quantity).gt(1);
+    }
+    return BigNumber(nftTotalSupply).gt(1);
+  }, [buyItem, nftTotalSupply]);
+
+  const priceInfoType = useMemo(() => {
+    return (buyItem ? buyItem.quantity > 1 : Number(nftTotalSupply) > 1) ? PriceTypeEnum.BUY : PriceTypeEnum.BUY721;
+  }, [buyItem, nftTotalSupply]);
+
   return (
     <Modal
-      className={`${styles['buy-modal']} ${isSmallScreen && styles['mobile-buy-modal']}`}
+      destroyOnClose
+      afterClose={modal.remove}
       footer={
-        <Button disabled={!quantity} loading={loading} type="primary" size="ultra" onClick={onConfirm}>
-          Confirm Checkout
+        <Button
+          disabled={isSideChainBalanceInsufficient || !!quantityErrorTip || !quantity}
+          loading={loading}
+          type="primary"
+          size="ultra"
+          className="!w-[256px]"
+          onClick={onConfirm}>
+          {submitBtnText}
         </Button>
       }
       onCancel={onCloseModal}
-      title="Complete checkout"
+      title={title}
       open={modal.visible}>
-      <Row className={`${styles['content-header']} text-[18px] font-medium`}>
-        <Col span={14}>Item</Col>
-        {isSmallScreen ? null : <Col span={10}>Subtotal</Col>}
-      </Row>
-      <div>
-        <Row className={styles['content-body']} gutter={[0, 24]}>
-          <Col
-            className={`!flex ${isSmallScreen ? styles['content-relative'] : styles['content-static']}`}
-            span={isSmallScreen ? 24 : 20}>
-            <ImgLoading
-              className={`${styles.art} rounded-[8px] ${isSmallScreen ? 'mr-[12px]' : 'mr-[24px]'}`}
-              src={nftInfo?.previewImage || ''}
-              nextImageProps={{ width: 96, height: 96 }}
-            />
-            <div className={`info ${isSmallScreen && styles['content-relative']} font-medium`}>
-              <p
-                className={`${
-                  isSmallScreen ? 'text-[14px] leading-[21px]' : 'text-[16px] leading-[24px]'
-                } text-[var(--brand-base)]`}>
-                {nftInfo?.nftCollection?.tokenName}
-              </p>
-              <p
-                className={` text-[var(--color-primary)] ${
-                  isSmallScreen ? 'text-[16px] leading-[24px]' : 'text-[20px] leading-[30px]'
-                }`}>
-                {nftInfo?.tokenName}
-              </p>
-              <p
-                className={`text-[12px] text-[var(--color-secondary)] leading-[18px] flex mt-[16px] ${styles.royalties}`}>
-                Service Fee: {SERVICE_FEE}
-                <Tooltip title="The creator of this collection will receive 2.5% of the sale total from future sales of this item">
-                  <div className={`${isSmallScreen ? 'w-[10.5px]' : 'w-[14px]'}`}>
-                    <WarningMark />
-                  </div>
-                </Tooltip>
-              </p>
-              <div className={`${styles.counter} flex items-center`}>
-                <button disabled={quantity <= 1} onClick={() => onChangeQuantity('-')}>
-                  <SUBTRACT />
-                </button>
-                {quantity}
-                <button
-                  disabled={quantity >= maxQuantity || !(nftInfo && isTokenIdReuse(nftInfo))}
-                  onClick={() => onChangeQuantity('+')}>
-                  <ADD />
-                </button>
-              </div>
-            </div>
-          </Col>
-          <Col className={styles['part-price']} span={isSmallScreen ? 24 : 4}>
-            {isSmallScreen && <p>Subtotal</p>}
-            <div
-              className={`w-[max-content] flex  ${
-                isSmallScreen ? 'items-center !justify-center' : 'flex-col items-end '
-              }`}>
-              <div className="leading-[24px] flex items-center !justify-center">
-                <Logo className={'w-[24px] h-[24px]'} src={ELF} />
-                &nbsp;
-                <span className="font-semibold text-[16px] leading-[24px]">{formatTokenPrice(averagePrice)}</span>
-              </div>
-              <span
-                className={`text-[var(--color-secondary)] leading-[18px] text-[12px] ${
-                  isSmallScreen ? 'ml-2' : 'mt-[2px]'
-                }`}>
-                {formatUSDPrice(convertAveragePrice)}
-              </span>
-            </div>
-          </Col>
-        </Row>
+      <PriceInfo quantity={quantity} price={averagePrice} convertPrice={convertAveragePrice} type={priceInfoType} />
+      {showQuantity && (
+        <div className="mt-[24px] mdTW:mt-[32px]">
+          <InputQuantity
+            availableMount={buyItem ? buyItem?.quantity : saleInfo?.availableQuantity || 0}
+            value={quantity === 0 ? '' : formatTokenPrice(quantity)}
+            onChange={handleQuantityChange}
+            errorTip={quantityErrorTip}
+          />
+        </div>
+      )}
+      <div className="mt-[52px] mdTW:mt-[60px]">
+        <Summary />
       </div>
-      <Row className={styles['content-bottom']}>
-        <Col span={14} className="text-[18px] font-medium">
-          <span
-            className={`leading-[27px] text-[var(--color-primary)] ${isSmallScreen ? 'text-[18px]' : 'text-[24px]'}`}>
-            Total
-          </span>
-        </Col>
-        <Col span={10}>
-          <div className={`${styles['total-price']} flex`}>
-            <Logo className={'w-[20px] h-[24px]'} src={ELF} />
-            <span className={`ml-[6px] text-[24px] font-semibold leading-[36px] text-[var(--brand-base)]`}>
-              {formatTokenPrice(totalPrice)}
-            </span>
-          </div>
-          <p className="leading-[24px] text-[var(--color-secondary)] text-[16px]">
-            {formatUSDPrice(convertTotalPrice)}
-          </p>
-        </Col>
-      </Row>
+      <div className="mt-[24px] mdTW:mt-[32px]">
+        <TotalPrice totalPrice={totalPrice} convertTotalPrice={convertTotalPrice} />
+      </div>
+      <div className="mt-[24px] mdTW:mt-[32px]">
+        <Balance amount={divDecimals(Number(tokenBalance), 8).toNumber()} suffix="ELF" />
+      </div>
+      <div className="mt-[8px]">{insufficientTip}</div>
     </Modal>
   );
 }
