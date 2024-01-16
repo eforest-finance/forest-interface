@@ -15,7 +15,7 @@ export const PAGE_SIZE = 18;
 export const SERVICE_FEE = '2.5%';
 export const CREATOR_ROYALTY = '5.0%';
 
-export const AMOUNT_LENGTH = 10;
+export const AMOUNT_LENGTH = 11;
 export const ADDRESS_MAX_LENGTH = 100;
 
 export const CONTRACT_AMOUNT = '1000000000000000000';

@@ -5,14 +5,13 @@ import WarningMark from 'assets/images/waring.svg';
 import SUBTRACT from 'assets/images/subtract.svg';
 
 import Logo from 'components/Logo';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import styles from './style.module.css';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
 import { SERVICE_FEE } from 'constants/common';
 import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
@@ -23,6 +22,7 @@ import { cloneDeep } from 'lodash-es';
 import BigNumber from 'bignumber.js';
 import useBatchBuyNow from 'pagesComponents/Detail/hooks/useBatchBuyNow';
 import { DEFAULT_PAGE_SIZE } from 'constants/index';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
 
 interface IValidListInfo {
   curMax: number;
@@ -32,18 +32,18 @@ import moment from 'moment';
 import { timesDecimals } from 'utils/calculate';
 import isTokenIdReuse from 'utils/isTokenIdReuse';
 import { ZERO } from 'constants/misc';
+import { usePathname } from 'next/navigation';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
-export default function BuyNowModal(options: {
-  visible: boolean;
-  elfRate: number;
-  onClose: () => void;
-  nftBalance: number;
-}) {
+function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
+  const modal = useModal();
+  const pathname = usePathname();
+
   const { infoState, walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
   const { nftInfo } = detailInfo;
-  const { visible, onClose, nftBalance, elfRate } = options;
+  const { onClose, elfRate } = options;
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [listings, setListings] = useState<FormatListingType[]>([]);
@@ -85,6 +85,14 @@ export default function BuyNowModal(options: {
     }
   };
 
+  const onCloseModal = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      modal.hide();
+    }
+  };
+
   const onConfirm = async () => {
     setLoading(true);
     const mainAddress = await getAccountInfoSync();
@@ -116,12 +124,11 @@ export default function BuyNowModal(options: {
       return;
     }
     setLoading(false);
-    onClose();
-    refreshDetailPage();
+    onCloseModal();
   };
 
   const addBuyListings = () => {
-    if (listings.length && visible) {
+    if (listings.length && modal.visible) {
       const curIndex = buyListings.length - 1;
       if (curIndex === -1 || buyListings[curIndex]?.quantity === listings[curIndex]?.quantity) {
         const price = listings[curIndex + 1].price;
@@ -151,7 +158,7 @@ export default function BuyNowModal(options: {
   };
 
   const minusBuyListings = () => {
-    if (listings.length && visible) {
+    if (listings.length && modal.visible) {
       const curIndex = buyListings.length ? buyListings.length - 1 : 0;
       if (!buyListings[curIndex]) return;
       if (buyListings[curIndex].quantity === 1) {
@@ -178,7 +185,6 @@ export default function BuyNowModal(options: {
         page,
         chainId: nftInfo.chainId,
         symbol: nftInfo.nftSymbol,
-        address: walletInfo.address,
       });
       if (!res) return;
       setTotalCount(res.totalCount);
@@ -226,7 +232,12 @@ export default function BuyNowModal(options: {
   }, [quantity, maxQuantity]);
 
   useEffect(() => {
-    if (visible) {
+    console.log('buy now buyListings', buyListings);
+  }, [buyListings]);
+
+  useEffect(() => {
+    console.log('modal=====modal', modal);
+    if (modal.visible) {
       getListingsData(page);
     } else {
       setQuantity(0);
@@ -236,7 +247,7 @@ export default function BuyNowModal(options: {
       setTotalPrice(ZERO);
       setMaxQuantity(0);
     }
-  }, [page, visible]);
+  }, [page, modal.visible]);
 
   return (
     <Modal
@@ -246,9 +257,9 @@ export default function BuyNowModal(options: {
           Confirm Checkout
         </Button>
       }
-      onCancel={onClose}
+      onCancel={onCloseModal}
       title="Complete checkout"
-      open={visible}>
+      open={modal.visible}>
       <Row className={`${styles['content-header']} text-[18px] font-medium`}>
         <Col span={14}>Item</Col>
         {isSmallScreen ? null : <Col span={10}>Subtotal</Col>}
@@ -307,13 +318,13 @@ export default function BuyNowModal(options: {
               <div className="leading-[24px] flex items-center !justify-center">
                 <Logo className={'w-[24px] h-[24px]'} src={ELF} />
                 &nbsp;
-                <span className="font-semibold text-[16px] leading-[24px]">{averagePrice}</span>
+                <span className="font-semibold text-[16px] leading-[24px]">{formatTokenPrice(averagePrice)}</span>
               </div>
               <span
                 className={`text-[var(--color-secondary)] leading-[18px] text-[12px] ${
                   isSmallScreen ? 'ml-2' : 'mt-[2px]'
                 }`}>
-                ${convertAveragePrice}
+                {formatUSDPrice(convertAveragePrice)}
               </span>
             </div>
           </Col>
@@ -330,12 +341,16 @@ export default function BuyNowModal(options: {
           <div className={`${styles['total-price']} flex`}>
             <Logo className={'w-[20px] h-[24px]'} src={ELF} />
             <span className={`ml-[6px] text-[24px] font-semibold leading-[36px] text-[var(--brand-base)]`}>
-              {totalPrice.toFixed(4, BigNumber.ROUND_DOWN)}
+              {formatTokenPrice(totalPrice)}
             </span>
           </div>
-          <p className="leading-[24px] text-[var(--color-secondary)] text-[16px]">${convertTotalPrice}</p>
+          <p className="leading-[24px] text-[var(--color-secondary)] text-[16px]">
+            {formatUSDPrice(convertTotalPrice)}
+          </p>
         </Col>
       </Row>
     </Modal>
   );
 }
+
+export default memo(NiceModal.create(BuyNowModal));

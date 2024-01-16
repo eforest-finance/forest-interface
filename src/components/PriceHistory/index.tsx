@@ -37,11 +37,10 @@ interface IHistoryChart {
   theme: string;
   isSmallScreen: boolean | undefined;
   nftInfo: INftInfo | null;
-  pageRefreshCount: number;
   priceList: [number, number][];
 }
 
-const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, pageRefreshCount, priceList }: IHistoryChart) => {
+const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistoryChart) => {
   const chart = useRef<HTMLDivElement>(null);
   const [myChart, setMyChart] = useState<echarts.ECharts>();
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +85,8 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, pageRefreshCount, pr
         backgroundColor: '#3E4659',
         textStyle: { color: '#fff' },
         borderWidth: 0,
+        className: '!z-[998]',
+        confine: true,
       },
       series: [
         {
@@ -131,7 +132,7 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, pageRefreshCount, pr
 
   useEffect(() => {
     getNftPrices();
-  }, [nftInfo?.id, firstTime, pageRefreshCount]);
+  }, [nftInfo?.id, firstTime]);
 
   useEffect(() => {
     console.log(chart.current, 'chart.current');
@@ -193,7 +194,7 @@ export default function PriceHistory() {
   const { detailInfo } = useDetailGetState();
   const [activeKey, setActiveKey] = useState('');
   const firstTime = new Date().getTime() - MILLISECONDS_IN_WEEK;
-  const { nftInfo, pageRefreshCount } = detailInfo;
+  const { nftInfo } = detailInfo;
   const [pricesList, setPricesList] = useState<[number, number][]>([]);
 
   const getNftPrices = async () => {
@@ -238,15 +239,7 @@ export default function PriceHistory() {
           Price History
         </div>
       ),
-      children: (
-        <HistoryChart
-          theme={theme}
-          priceList={pricesList}
-          isSmallScreen={isSmallScreen}
-          nftInfo={nftInfo}
-          pageRefreshCount={pageRefreshCount}
-        />
-      ),
+      children: <HistoryChart theme={theme} priceList={pricesList} isSmallScreen={isSmallScreen} nftInfo={nftInfo} />,
     },
   ];
 

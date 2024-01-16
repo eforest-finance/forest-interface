@@ -50,7 +50,7 @@ function InValidListMsgModal({
             size="ultra"
             className={`${!isSmallScreen && '!w-[256px]'}`}
             onClick={tryAgain}>
-            Try again
+            Try Again
           </Button>
         )
       }>

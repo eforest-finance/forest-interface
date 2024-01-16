@@ -22,6 +22,7 @@ import { SupportedELFChainId } from 'constants/chain';
 import { ZERO } from 'constants/misc';
 import { OmittedType, getOmittedStr } from 'utils';
 import React from 'react';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
 const BalanceCard = (option: {
   icon: string;
@@ -39,8 +40,8 @@ const BalanceCard = (option: {
             <Image className={styles['token-icon']} src={icon === 'elf' ? ELF : USDT} alt="icon" />
             <p className={styles.name}>{name}</p>
             <div className={styles.balance}>
-              <p>{Number(chainList[0].balance.plus(chainList[1].balance).valueOf()).toFixed(3)}</p>
-              <p>${(Number(chainList[0].balance.plus(chainList[1].balance).valueOf()) * rate).toFixed(2)} USD</p>
+              <p>{formatTokenPrice(chainList[0].balance.plus(chainList[1].balance).valueOf())}</p>
+              <p>{formatUSDPrice(chainList[0].balance.plus(chainList[1].balance).times(rate))} USD</p>
             </div>
           </div>
         }>
@@ -54,8 +55,8 @@ const BalanceCard = (option: {
                   <p>{name}</p>
                 </div>
                 <div className={styles['body-right']}>
-                  <p>{balance.valueOf()}</p>
-                  <p>${(Number(balance.valueOf()) * rate).toFixed(2)} USD</p>
+                  <p>{formatTokenPrice(balance.valueOf())}</p>
+                  <p>{formatUSDPrice(Number(balance.valueOf()) * rate)} USD</p>
                 </div>
               </div>
             );
@@ -125,7 +126,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
         <div className={`${styles['balance-wrap']} w-[100%]`}>
           <div className={`${styles['total-balance']} ${styles['balance']}`}>
             <p className={styles.title}>Total balance</p>
-            <p className={styles.value}>${Number(totalBalance.valueOf()).toFixed(2)} USD</p>
+            <p className={styles.value}>{formatUSDPrice(totalBalance.valueOf())} USD</p>
           </div>
           <BalanceCard
             icon="elf"

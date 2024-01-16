@@ -511,3 +511,51 @@ export interface ITransactionFeeResponse {
   transactionFee: number;
   transactionFeeOfUsd: number;
 }
+
+export interface INftInfoOwnersParams {
+  id: string;
+  chainId: Chain;
+  SkipCount: number;
+  MaxResultCount: number;
+}
+
+export interface INftInfoOwners {
+  address: string;
+  fullAddress: string;
+  name: string | null;
+  profileImage: string | null;
+  profileImageOriginal: string | null;
+  bannerImage: string | null;
+  email: string | null;
+  twitter: string | null;
+  instagram: string | null;
+}
+
+export interface INftInfoOwnersItems {
+  owner: INftInfoOwners;
+  itemsNumber: number;
+}
+
+export interface INftInfoOwnersResponse {
+  totalCount: number;
+  supply: number;
+  chainId: Chain;
+  items: INftInfoOwnersItems[];
+}
+
+export interface INftSaleInfoItem {
+  tokenName: string;
+  logoImage: string;
+  collectionName: string;
+  floorPrice?: number;
+  floorPriceSymbol?: string;
+  lastDealPrice?: number;
+  lastDealPriceSymbol?: string;
+  listingPrice?: number;
+}
+export interface INftSaleInfoParams {
+  id: string;
+}
+export interface INftSaleInfoResponse {
+  data: INftSaleInfoItem;
+}

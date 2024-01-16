@@ -1,8 +1,7 @@
-export const tokenContract = '';
-export const NFTContract = '';
-export const NFTMarketContract = '';
-export const whiteListContract = '';
-export const MultiTokenContract = '';
+export const tokenContract = '7RzVGiuVWkvL4VfVHdZfQF2Tri3sgLe9U991bohHFfSRZXuGX';
+export const NFTContract = '2iNerrufZ7rQsj5Ea6Rpbi9G4GMNyTMNe9CBhBUocE9JHnUYJC';
+export const NFTMarketContract = 'zif9un2sHyRFwFfZbpmWM9bqHi5eeCc1fHyeQ7Bvn5b92Sx9N';
+export const whiteListContract = '2LsUPSKq6A2GqKQoncWTqfNSsM14dGSkKsYoSy2u8go8ZdohCx';
 
 export const LOGIN_INFO = {
   chainId: 'tDVV',
@@ -41,11 +40,14 @@ export const LOGIN_INFO = {
   },
 };
 
-// Configure the link here
 export const CHAIN_INFO = {
   chainId: 'tDVV',
-  exploreUrl: '',
-  rpcUrl: '',
+  exploreUrl: 'https://tdvv-explorer.aelf.io/',
+  // rpcUrl: 'https://tdvv-explorer.aelf.io/chain',
+  // rpcUrl: 'https://tdvw-node.aelf.io',
+  // exploreUrl: 'https://explorer.aelf.io/',
+  rpcUrl: 'https://tdvv-explorer.aelf.io/chain',
+  // rpcUrl: 'https://tdvw-node.aelf.io',
 };
 
 export const CHAIN_ID = 'tDVV';

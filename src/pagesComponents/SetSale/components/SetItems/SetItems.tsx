@@ -23,7 +23,6 @@ import { BatchDeListType, IContractError, IListedNFTInfo } from 'contract/type';
 import { getForestContractAddress } from 'contract/forest';
 import { SupportedELFChainId } from 'constants/chain';
 import { getWhiteList } from 'components/WhiteList/hooks/whiteListView';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import { enableWhiteList as EnableWhitelist } from 'components/WhiteList/hooks/managersAction';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import Button from 'baseComponents/Button';
@@ -206,7 +205,6 @@ export default function SetItems() {
       setTimeout(() => {
         nav.back();
       }, 1000);
-      refreshDetailPage();
     } catch (error) {
       const resError = error as IContractError;
       message.error(resError.errorMessage?.message || DEFAULT_ERROR);
@@ -290,6 +288,12 @@ export default function SetItems() {
   useEffect(() => {
     setRank((v) => ({ ...tagInfo, ...v }));
   }, [tagInfo]);
+
+  useTimeoutFn(() => {
+    if (!isLogin) {
+      nav.push('/');
+    }
+  }, 3000);
 
   return (
     <div className={`${styles['set-items-wrapper']} ${isSmallScreen && styles['set-items-wrapper-mobile']} flex-1`}>

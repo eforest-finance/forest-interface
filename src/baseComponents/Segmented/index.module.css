@@ -1,0 +1,22 @@
+.forest-segmented {
+  @apply bg-fillHoverBg rounded-lg p-[4px];
+
+  :global {
+    .ant-segmented-item {
+      .ant-segmented-item-label {
+        @apply py-[5px] px-[13px] text-base font-semibold text-textSecondary;
+      }
+
+      &.ant-segmented-item-selected {
+        @apply bg-fillPageBg rounded-lg;
+        .ant-segmented-item-label {
+          @apply  text-brandNormal;
+        }
+      }
+    }
+    .ant-segmented-thumb {
+      @apply bg-fillPageBg rounded-lg;
+    }
+    
+  }
+}

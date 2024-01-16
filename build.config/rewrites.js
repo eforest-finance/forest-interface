@@ -1,6 +1,6 @@
 let rewrite = [];
 
-if (process.env.NEXT_PUBLIC_APP_ENV === 'development4') {
+if (process.env.NEXT_PUBLIC_APP_ENV === 'development') {
   rewrite = [
     { source: '/api/:path*', destination: 'http://192.168.67.124:5588/api/:path*' },
     { source: '/cms/:path*', destination: 'http://192.168.67.124:8056/:path*' },
@@ -14,7 +14,7 @@ if (process.env.NEXT_PUBLIC_APP_ENV === 'development4') {
     { source: '/portkey/api/:path*', destination: 'http://192.168.66.203:5001/api/:path*' },
   ];
 }
-if (process.env.NEXT_PUBLIC_APP_ENV === 'development') {
+if (process.env.NEXT_PUBLIC_APP_ENV === 'development4') {
   rewrite = [
     { source: '/api/:path*', destination: 'http://192.168.66.131:5004/api/:path*' },
     { source: '/cms/:path*', destination: 'http://192.168.66.131:8055//:path*' },

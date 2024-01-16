@@ -100,6 +100,7 @@ export interface IDelistParams {
   symbol: string;
   quantity: number;
   price: IPrice;
+  startTime: ITimestamp;
 }
 
 export interface ICancelOfferItemParams {
@@ -208,7 +209,8 @@ export interface ITimestamp {
 export interface IListDuration {
   startTime: ITimestamp;
   publicTime: ITimestamp;
-  durationHours: number;
+  durationHours?: number;
+  durationMinutes: number;
 }
 
 export interface IListWithFixedPriceParams {

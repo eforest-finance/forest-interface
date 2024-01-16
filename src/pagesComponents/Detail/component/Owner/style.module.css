@@ -1,0 +1,10 @@
+.owner {
+  @apply mt-[8px] mdTW:mt-[12px];
+  .title {
+    @apply text-textSecondary text-base font-medium ml-[8px];
+  }
+
+  .value {
+    @apply text-brandNormal text-base font-medium cursor-pointer;
+  }
+}

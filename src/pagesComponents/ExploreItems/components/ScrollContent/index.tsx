@@ -12,6 +12,7 @@ import { useDebounceFn } from 'ahooks';
 import TableEmpty, { emptyEnum } from 'components/TableEmpty';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { formatTokenPrice } from 'utils/format';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -55,12 +56,12 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
               <span className={styles.token__label}>{dataSource?.priceDescription}</span>
               <span className={styles.token__price__text}>
                 {(dataSource?.price || dataSource?.price === 0) && dataSource?.price >= 0
-                  ? unitConverter(dataSource.price, dataSource?.price >= 1000 ? 1 : 4) + ' ELF'
+                  ? formatTokenPrice(dataSource.price) + ' ELF'
                   : '-'}
               </span>
             </div>
           ) : (
-            <div className="h-[40px]"></div>
+            <div className="h-[76px] mdb:h-[40px]"></div>
           )}
         </div>
       </Card>

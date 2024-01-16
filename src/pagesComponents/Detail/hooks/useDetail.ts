@@ -1,29 +1,33 @@
-import { useParams } from 'next/navigation';
 import { store } from 'store/store';
-import { setNftInfo } from 'store/reducer/detail/detailInfo';
-import { fetchNftInfo, fetchAuctionInfo } from 'api/fetch';
+import { setNftInfo, setUpdateDetailLoading } from 'store/reducer/detail/detailInfo';
+import { fetchAuctionInfo } from 'api/fetch';
 import { openModal } from 'store/reducer/errorModalInfo';
 import useGetState from 'store/state/getState';
-import useDetailGetState from 'store/state/detailGetState';
-import { useCallback, useEffect, useState } from 'react';
-import { useUpdateEffect } from 'react-use';
+import { useEffect, useState } from 'react';
+import getNftInfo from '../utils/getNftInfo';
+import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
-export const useDetail = () => {
+interface IProps {
+  id: string;
+}
+
+export const useDetail = (params: IProps) => {
   const [isCanBeBid, setIsCanBeBid] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const { id } = params;
+  const { isLogin } = useCheckLoginAndToken();
 
   const { walletInfo } = useGetState();
-  const account = walletInfo.address;
-  const { id } = useParams();
-  const { detailInfo } = useDetailGetState();
-  const { pageRefreshCount } = detailInfo;
   const getDetail = async () => {
+    if (isFetching) return;
     setIsFetching(true);
+    store.dispatch(setUpdateDetailLoading(true));
     try {
-      const result = await fetchNftInfo({
-        id,
-        address: account,
+      const result = await getNftInfo({
+        nftId: id,
+        address: walletInfo.address,
       });
+      store.dispatch(setUpdateDetailLoading(false));
       setIsFetching(false);
       if (!result) return store.dispatch(openModal());
       // document.body.scrollTop = 0;
@@ -45,22 +49,18 @@ export const useDetail = () => {
     } catch (error) {
       setIsFetching(false);
       store.dispatch(setNftInfo(null));
+      store.dispatch(setUpdateDetailLoading(false));
       return store.dispatch(openModal());
     }
   };
 
   useEffect(() => {
     store.dispatch(setNftInfo(null));
-    getDetail(true);
-  }, [id, account]);
+  }, [id]);
 
-  useUpdateEffect(() => {
-    getDetail(false);
-  }, [pageRefreshCount]);
-
-  const run = () => {
+  useEffect(() => {
     getDetail();
-  };
+  }, [id, isLogin, walletInfo.address]);
 
-  return { isCanBeBid, run, isFetching };
+  return { isCanBeBid, getDetail, isFetching };
 };

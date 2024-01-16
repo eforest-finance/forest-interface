@@ -1,7 +1,5 @@
-import { openModal } from 'store/reducer/errorModalInfo';
 import { useCallback, useEffect, useState } from 'react';
-import { store } from 'store/store';
-import { fetchGetTokenData } from 'api/fetch';
+import { getExchangeRate } from 'pagesComponents/Detail/utils/getExchangeRate';
 
 export interface TokenDataType {
   tokenId: string;
@@ -11,13 +9,13 @@ export interface TokenDataType {
 
 export default function useTokenData() {
   const [rate, setRate] = useState(0);
-  const getExchangeRate = useCallback(async () => {
-    const result = await fetchGetTokenData({ symbol: 'ELF' });
-    if (!result) store.dispatch(openModal());
-    setRate(result?.price);
+  const getRate = useCallback(async () => {
+    const result = await getExchangeRate();
+    setRate(result);
   }, []);
+
   useEffect(() => {
-    getExchangeRate();
-  }, [getExchangeRate]);
+    getRate();
+  }, [getRate]);
   return rate;
 }

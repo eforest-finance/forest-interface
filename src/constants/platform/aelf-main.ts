@@ -1,9 +1,7 @@
-export const tokenContract = '';
-export const NFTContract = '';
-// The next two need to be given a value that will not give an error
-export const NFTMarketContract = '';
-export const whiteListContract = '';
-export const MultiTokenContract = '';
+export const tokenContract = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
+export const NFTContract = 'DHo2K7oUXXq3kJRs1JpuwqBJP56gqoaeSKFfuvr9x8svf3vEJ';
+export const NFTMarketContract = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
+export const whiteListContract = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
 
 export const LOGIN_INFO = {
   chainId: 'AELF',
@@ -42,11 +40,14 @@ export const LOGIN_INFO = {
   },
 };
 
-// Configure the link here
 export const CHAIN_INFO = {
   chainId: 'AELF',
-  exploreUrl: '',
-  rpcUrl: '',
+  exploreUrl: 'https://explorer.aelf.io/',
+  // rpcUrl: 'https://explorer.aelf.io/chain',
+  rpcUrl: 'https://explorer.aelf.io/chain',
+  // exploreUrl: 'https://explorer.aelf.io/',
+  // rpcUrl: 'http://192.168.66.251:8000',
+  // rpcUrl: 'http://54.199.254.157:8000',
 };
 
 export const CHAIN_ID = 'AELF';

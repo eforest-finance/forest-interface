@@ -23,13 +23,14 @@ import Loading from 'components/Loading';
 import CollapseForPC from 'components/Collapse';
 import Table from 'baseComponents/Table';
 import Dropdown from 'baseComponents/Dropdown';
+import { formatTokenPrice } from 'utils/format';
 
 export default function Activity() {
   const [, setCopied] = useCopyToClipboard();
   const { infoState } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isMobile, isSmallScreen } = infoState;
-  const { nftInfo, pageRefreshCount } = detailInfo;
+  const { nftInfo } = detailInfo;
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(true);
@@ -107,7 +108,7 @@ export default function Activity() {
       },
       {
         title: 'Price',
-        width: isSmallScreen ? 120 : 120,
+        width: 180,
         dataIndex: 'price',
         render: (text: string, record: IActivitiesItem) => (
           <div className="text-[var(--color-secondary)] font-medium text-[16px] flex items-center overflow-x-auto h-full">
@@ -117,7 +118,7 @@ export default function Activity() {
               className={`text-[var(--color-primary)] font-semibold ${
                 isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
               }`}>
-              {fix4NotInt(+text)}
+              {formatTokenPrice(+text)}
             </span>
             &nbsp;
             <span
@@ -250,7 +251,7 @@ export default function Activity() {
     if (nftInfo?.id) {
       getActivitiesList();
     }
-  }, [nftInfo?.id, filterObj, page, pageRefreshCount]);
+  }, [nftInfo?.id, filterObj, page]);
 
   const items = [
     {

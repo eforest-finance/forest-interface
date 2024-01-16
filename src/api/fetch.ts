@@ -41,6 +41,11 @@ import {
   IMinMarkupPriceResponse,
   ITransactionFeeResponse,
   CompositeNftInfosParams,
+  INftInfoOwnersParams,
+  INftInfoOwnersResponse,
+  INftSaleInfoParams,
+  INftSaleInfoResponse,
+  INftSaleInfoItem,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -228,4 +233,12 @@ export const fetchMinMarkupPrice = async (params: { Symbol: string }) => {
 
 export const fetchTransactionFee = async () => {
   return request.get<ITransactionFeeResponse>('app/seed/transaction-fee');
+};
+
+export const fetchNftInfoOwners = async (params: INftInfoOwnersParams) => {
+  return request.get<INftInfoOwnersResponse>('app/nft/nft-info-owners', { params });
+};
+
+export const fetchNftSalesInfo = async (params: INftSaleInfoParams) => {
+  return request.get<INftSaleInfoItem>('app/nft/nft-for-sale', { params });
 };

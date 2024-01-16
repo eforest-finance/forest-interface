@@ -20,7 +20,10 @@ import { ChainId } from '@portkey/types';
 import { did } from '@portkey/did-ui-react';
 import { MethodsWallet } from '@portkey/provider-types';
 import { useGetToken } from './useContractConnect';
-import { selectInfo } from 'store/reducer/info';
+import { selectInfo, setHasToken } from 'store/reducer/info';
+import { useModal } from '@ebay/nice-modal-react';
+import LoginModal from 'components/LoginModal';
+import { usePathname } from 'next/navigation';
 
 export const useWalletSyncCompleted = () => {
   const info = store.getState().aelfInfo.aelfInfo;
@@ -107,12 +110,19 @@ let getTokenLoading = false;
 let afterLoginCb: any = null;
 
 export const useCheckLoginAndToken = () => {
+  const loginModal = useModal(LoginModal);
+  const pathName = usePathname();
+
   const { loginState, login: aelfLogin, loginEagerly, logout } = useWebLogin();
   const isWalletLogin = loginState === WebLoginState.logined;
   const isEagerly = loginState === WebLoginState.eagerly;
   const loginMethod = isEagerly ? loginEagerly : aelfLogin;
   const getToken = useGetToken();
-
+  const [accountInfo] = useLocalStorage<{
+    account?: string;
+    token?: string;
+    expirationTime?: number;
+  }>(storages.accountInfo);
   const { hasToken } = useSelector(selectInfo);
 
   const isLogin = isWalletLogin && hasToken;
@@ -139,20 +149,41 @@ export const useCheckLoginAndToken = () => {
 
   const initToken = async () => {
     getTokenLoading = true;
-    try {
-      await getToken();
-    } finally {
-      getTokenLoading = false;
-    }
+    loginModal.show({
+      onConfirm: async () => {
+        try {
+          await getToken();
+        } finally {
+          getTokenLoading = false;
+        }
+      },
+      onCancel: () => {
+        isWalletLogin && logout({ noModal: true });
+        loginModal.hide();
+        getTokenLoading = false;
+      },
+    });
   };
 
   useEffect(() => {
+    if (accountInfo?.token) {
+      store.dispatch(setHasToken(true));
+      return;
+    }
+    store.dispatch(setHasToken(false));
+  }, [accountInfo]);
+
+  useEffect(() => {
+    if (pathName.includes('/term-service') || pathName.includes('/privacy-policy')) {
+      return;
+    }
+
     if (isWalletLogin) {
       if (!hasToken && !getTokenLoading) {
         initToken();
       }
     }
-  }, [isWalletLogin]);
+  }, [isWalletLogin, pathName]);
 
   return {
     isLogin,

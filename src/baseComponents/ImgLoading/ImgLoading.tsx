@@ -20,6 +20,7 @@ interface ImgLoadingProps {
   key?: string;
   notReady?: boolean;
   defaultHeight?: number | string;
+  imageSizeType?: 'cover' | 'contain';
 }
 
 function ImgLoading({
@@ -29,6 +30,7 @@ function ImgLoading({
   loading,
   notReady = false,
   defaultHeight = 'auto',
+  imageSizeType = 'contain',
 }: ImgLoadingProps) {
   const [theme] = useTheme();
   const { isSmallScreen } = useSelector(selectInfo);
@@ -54,7 +56,7 @@ function ImgLoading({
       }`}>
       {!notReady ? (
         <Image
-          className={`object-contain w-full h-full`}
+          className={`${imageSizeType === 'contain' ? 'object-contain' : 'object-cover'} w-full h-full`}
           src={loadableStatus ? src : nftPreview}
           alt="show image"
           loading="lazy"

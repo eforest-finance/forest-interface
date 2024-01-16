@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { ZERO } from 'constants/misc';
-import { SECOND_PER_ONE_HOUR } from 'constants/time';
+import { SECOND_PER_MINUTES, SECOND_PER_ONE_HOUR } from 'constants/time';
 import { GetListedNFTInfoList } from 'contract/market';
 import { GetBalance } from 'contract/multiToken';
 import { IListedNFTInfo } from 'contract/type';
@@ -9,6 +9,7 @@ import { INftInfo } from 'types/nftTypes';
 
 const getMaxNftQuantityOfSell = async (chainId: Chain, nftInfo: INftInfo, address: string) => {
   try {
+    if (!nftInfo?.nftSymbol || !address || !chainId) return false;
     const { balance } = await GetBalance({
       symbol: nftInfo?.nftSymbol,
       owner: address,
@@ -34,11 +35,12 @@ const getMaxNftQuantityOfSell = async (chainId: Chain, nftInfo: INftInfo, addres
       return {
         max: balance,
         listedNFTInfoList: [],
+        listItems: 0,
       };
     }
 
     const validList = res.value.filter((item: IListedNFTInfo) => {
-      const time = Number(item.duration.startTime.seconds) + Number(item.duration.durationHours) * SECOND_PER_ONE_HOUR;
+      const time = Number(item.duration.startTime.seconds) + Number(item.duration.durationMinutes) * SECOND_PER_MINUTES;
       const curTime = moment().unix();
       return curTime < time;
     });
@@ -54,11 +56,13 @@ const getMaxNftQuantityOfSell = async (chainId: Chain, nftInfo: INftInfo, addres
     return {
       max: maxQuantity,
       listedNFTInfoList: validList,
+      listItems: q.toNumber(),
     };
   } catch (error) {
     return {
       max: 0,
       listedNFTInfoList: [],
+      listItems: 0,
     };
   }
 };

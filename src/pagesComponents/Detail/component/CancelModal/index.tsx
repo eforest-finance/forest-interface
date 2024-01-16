@@ -9,17 +9,22 @@ import { FormatOffersType, FormatListingType } from 'store/types/reducer';
 import { dispatch } from 'store/store';
 import { setOffers } from 'store/reducer/detail/detailInfo';
 import { cloneDeep } from 'lodash-es';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import BigNumber from 'bignumber.js';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import React from 'react';
+import { usePathname } from 'next/navigation';
+import moment from 'moment';
 
-export default function CancelModal(options: {
-  visible: boolean;
+function CancelModal(options: {
   type: string | undefined;
   data: FormatOffersType | FormatListingType | undefined;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
+  const modal = useModal();
+  const pathname = usePathname();
+
   const { infoState, walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
@@ -27,7 +32,7 @@ export default function CancelModal(options: {
   const account = walletInfo.address;
   const cancelOffer = useCancelOffer(nftInfo?.chainId);
   const delist = useDelist(nftInfo?.chainId);
-  const { visible, onClose, type, data } = options;
+  const { onClose, type, data } = options;
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
@@ -35,7 +40,7 @@ export default function CancelModal(options: {
     if (type === 'offer') {
       let curKey = '';
       const index =
-        offers
+        offers?.items
           ?.filter((item) => item?.from?.address === account)
           ?.findIndex((item) => {
             const { from, quantity, price, expireTime, key } = item;
@@ -48,7 +53,7 @@ export default function CancelModal(options: {
             );
           }) ?? 0;
       const curIndex =
-        offers?.findIndex((item) => {
+        offers?.items?.findIndex((item) => {
           return curKey === item.key;
         }) ?? 0;
 
@@ -72,16 +77,16 @@ export default function CancelModal(options: {
       });
       if (result !== 'error') {
         message.destroy();
-        if (offers) {
-          const offersCopy: FormatOffersType[] = cloneDeep(offers);
-          if (curIndex !== -1) {
-            offersCopy.splice(curIndex, 1);
-            dispatch(setOffers(offersCopy));
-          }
-        }
+        // if (offers) {
+        //   const offersCopy: FormatOffersType[] = cloneDeep(offers?.items || []);
+        //   if (curIndex !== -1) {
+        //     offersCopy.splice(curIndex, 1);
+        //     dispatch(setOffers(offersCopy));
+        //   }
+        // }
       }
       setLoading(false);
-      onClose();
+      onCancel();
     } else if (type === 'listing') {
       await delist({
         symbol: nftInfo?.nftSymbol || '',
@@ -90,24 +95,39 @@ export default function CancelModal(options: {
           symbol: (data as FormatListingType)?.purchaseToken?.symbol,
           amount: data?.price as number,
         },
+        startTime: {
+          seconds: moment.unix(Math.floor((data as FormatListingType).startTime / 1000)).unix(),
+          nanos: 0,
+        },
       });
       setLoading(false);
+      onCancel();
+    }
+  };
+
+  const onCancel = () => {
+    if (onClose) {
       onClose();
-      refreshDetailPage();
+    } else {
+      modal.hide();
     }
   };
 
   useEffect(() => {
-    if (visible) {
+    if (modal.visible) {
       setLoading(false);
     }
-  }, [visible]);
+  }, [modal.visible]);
+
+  useEffect(() => {
+    modal.hide();
+  }, [pathname]);
 
   return (
     <Modal
       title="Confirm"
-      onCancel={() => !loading && onClose()}
-      open={visible}
+      onCancel={() => !loading && onCancel()}
+      open={modal.visible}
       footer={
         <Button type="primary" loading={loading} size="ultra" onClick={handleConfirm}>
           Confirm
@@ -124,3 +144,5 @@ export default function CancelModal(options: {
     </Modal>
   );
 }
+
+export default React.memo(NiceModal.create(CancelModal));

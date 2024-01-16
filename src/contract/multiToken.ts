@@ -126,12 +126,12 @@ export const GetBalance = async (
 export const GetTokenInfo = async (
   params: IGetTokenInfoParams,
   options?: IContractOptions,
-): Promise<{ supply: number }> => {
+): Promise<{ supply: number; totalSupply: number }> => {
   try {
     const res = (await multiTokenContractRequest('GetTokenInfo', params, {
       ...options,
       type: ContractMethodType.VIEW,
-    })) as { supply: number };
+    })) as { supply: number; totalSupply: number };
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject(error);

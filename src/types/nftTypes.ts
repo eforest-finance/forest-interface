@@ -88,6 +88,14 @@ export interface ICreator {
   twitter: string | null;
 }
 
+export enum NftInfoPriceType {
+  other = 'OTHER',
+  otherMinListing = 'OTHERMINLISTING',
+  myMinListing = 'MYMINLISTING',
+  maxOffer = 'MAXOFFER',
+  latestDeal = 'LATESTDEAL',
+}
+
 export interface INftInfo {
   chainId: Chain;
   issueChainId: number;
@@ -98,19 +106,22 @@ export interface INftInfo {
   id: string;
   isOfficial: boolean;
   issuer: string;
-  proxyIssuerAddress: string;
   chainIdStr: string;
+  proxyIssuerAddress: string;
   latestDealPrice: number;
   latestDealTime: string;
   latestDealToken: SaleTokens | null;
   latestListingTime: string | null;
   listingAddress: string | null;
   canBuyFlag: boolean;
-  listingEndTime: string | null;
+  showPriceType: NftInfoPriceType;
   listingId: string | null;
   listingPrice: number;
   listingQuantity: number;
+  listingEndTime: string | null;
   listingToken: SaleTokens | null;
+  maxOfferPrice: number;
+  maxOfferEndTime: string | null;
   metadata: MetadataType | null;
   nftSymbol: string;
   nftTokenId: number;

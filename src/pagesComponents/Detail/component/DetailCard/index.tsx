@@ -11,6 +11,8 @@ import { useMemo } from 'react';
 import moment from 'moment';
 import useJumpExplorer from 'hooks/useJumpExplorer';
 import { Ellipsis } from 'antd-mobile';
+import useGetState from 'store/state/getState';
+import { formatTokenPrice } from 'utils/format';
 
 enum FilterKeyEnum {
   Description = 'Description',
@@ -22,8 +24,18 @@ export default function DetailCard() {
   const { nftInfo } = detailInfo;
   const nav = useRouter();
   const jump = useJumpExplorer();
+  const { walletInfo } = useGetState();
 
   const renderDescription = nftInfo?.description ?? ' ';
+
+  const showName = useMemo(() => {
+    if (!nftInfo?.minter?.address) return '';
+    if (walletInfo.address === nftInfo.minter.address) {
+      return 'you';
+    }
+    if (nftInfo?.minter?.name) return getOmittedStr(nftInfo?.minter?.name, OmittedType.ADDRESS);
+    return getOmittedStr(addPrefixSuffix(nftInfo.minter?.address), OmittedType.ADDRESS);
+  }, [walletInfo.address, nftInfo?.minter]);
 
   const items = useMemo(() => {
     const arr = [
@@ -48,14 +60,14 @@ export default function DetailCard() {
                             }
                             nav.push(`/account/${nftInfo?.minter?.address}`);
                           }}>
-                          {getOmittedStr(nftInfo?.minter?.name, OmittedType.ADDRESS)}
+                          {showName}
                         </span>
                         &nbsp;
                         <Copy className="copy-svg" toCopy={addPrefixSuffix(nftInfo?.minter?.address) || ''} />
                       </>
                     ) : (
                       <>
-                        {getOmittedStr(addPrefixSuffix(nftInfo.minter?.address), OmittedType.ADDRESS)}
+                        {showName}
                         &nbsp;&nbsp;&nbsp;
                         <Tooltip placement="bottom" title={addPrefixSuffix(nftInfo.minter?.address || '')}>
                           <span className="tooltip-svg w-[20px] h-[20px]">
@@ -139,9 +151,9 @@ export default function DetailCard() {
             </p>
             <p>
               <span>Total Supply</span>
-              <Tooltip title={nftInfo?.totalQuantity}>
+              <Tooltip title={nftInfo?.totalQuantity} overlayInnerStyle={{ textAlign: 'center' }}>
                 <span className="font-medium text-[var(--text10)] max-w-[176px] lg:max-w-[200px]">
-                  <Ellipsis direction="middle" content={String(nftInfo?.totalQuantity || '')} />
+                  <Ellipsis direction="middle" content={formatTokenPrice(nftInfo?.totalQuantity || '')} />
                 </span>
               </Tooltip>
             </p>
@@ -167,7 +179,7 @@ export default function DetailCard() {
               <span>Takes Effect</span>
               <span className="font-medium text-[var(--text10)]">
                 {nftInfo?.createTokenInformation?.registered
-                  ? `${moment.unix(nftInfo.createTokenInformation.registered).format('MMM DD YYYY HH:mm:ss')} UTC`
+                  ? `${moment.unix(nftInfo.createTokenInformation.registered).utc().format('MMM DD YYYY HH:mm:ss')} UTC`
                   : '-'}
               </span>
             </p>
@@ -175,7 +187,7 @@ export default function DetailCard() {
               <span>Expires</span>
               <span className="font-medium text-[var(--text10)]">
                 {nftInfo?.createTokenInformation?.expires
-                  ? `${moment.unix(nftInfo.createTokenInformation.expires).format('MMM DD YYYY HH:mm:ss')} UTC`
+                  ? `${moment.unix(nftInfo.createTokenInformation.expires).utc().format('MMM DD YYYY HH:mm:ss')} UTC`
                   : '-'}
               </span>
             </p>
@@ -242,6 +254,7 @@ export default function DetailCard() {
     nftInfo?.totalQuantity,
     nftInfo?.uri,
     renderDescription,
+    showName,
   ]);
 
   return (
