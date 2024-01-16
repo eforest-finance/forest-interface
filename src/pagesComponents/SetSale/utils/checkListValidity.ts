@@ -70,7 +70,6 @@ const checkListValidity: (
       return false;
     }
   });
-
   return {
     status,
     invalidList,

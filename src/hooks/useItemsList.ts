@@ -28,7 +28,9 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
   const [params, setParams] = useState({});
   const [loading, setLoading] = useState(false);
   const pathName = usePathname();
-  const [hash] = useHash();
+  // const [hash] = useHash();
+  const hash = window.location.hash;
+
   const getItemsList = useCallback(async () => {
     // if (loading) return;
 

@@ -3,8 +3,18 @@ import { messageHTML } from 'utils/aelfUtils';
 import { Transfer } from 'contract/multiToken';
 import { IContractError } from 'contract/type';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
+import { getNFTNumber } from '../utils/getNftNumber';
+import useGetState from 'store/state/getState';
+import { updateDetail } from '../utils/getNftInfo';
+import { useParams } from 'next/navigation';
+import useDetailGetState from 'store/state/detailGetState';
 
 export default function useTransfer(chainId?: Chain) {
+  const { walletInfo, infoState } = useGetState();
+  const { detailInfo } = useDetailGetState();
+  const { id } = useParams() as { id: string };
+  const { updateDetailLoading } = detailInfo;
+
   const transfer = async (parameter: { symbol: string; spender: string; amount: number }) => {
     try {
       const transferResult = await Transfer(
@@ -24,6 +34,14 @@ export default function useTransfer(chainId?: Chain) {
       } else {
         const { TransactionId } = transferResult.result || transferResult;
         messageHTML(TransactionId!, 'success', chainId);
+        getNFTNumber({
+          owner: walletInfo.address,
+          nftSymbol: parameter.symbol,
+          chainId: chainId || infoState.sideChain,
+        });
+        // if (!updateDetailLoading) {
+        updateDetail({ nftId: id, address: walletInfo.address });
+        // }
         return true;
       }
     } catch (error) {

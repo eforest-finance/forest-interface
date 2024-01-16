@@ -8,6 +8,7 @@ import SortDown from 'assets/images/explore/arrow-down.svg';
 import SortUp from 'assets/images/explore/arrow-up.svg';
 import { debounce } from 'lodash-es';
 import CustomImg from 'components/CustomImg';
+import { formatNumber, formatTokenPrice } from 'utils/format';
 export enum SortTypeEnum {
   asc,
   desc,
@@ -62,6 +63,7 @@ export default function getColumns(
         {
           title: 'Collection',
           dataIndex: 'tokenName',
+          ellipsis: true,
           key: 'tokenName',
           render: (text, record) => (
             <div className="flex items-center">
@@ -79,7 +81,7 @@ export default function getColumns(
                 <div
                   className={clsx(
                     styles['table-text'],
-                    'font-semibold w-full max-w-[152px] text-ellipsis truncate !text-[14px] !leading-[22px]',
+                    'font-semibold w-full text-ellipsis truncate !text-[14px] !leading-[22px]',
                   )}>
                   {text}
                 </div>
@@ -110,13 +112,12 @@ export default function getColumns(
             </div>
           ),
           dataIndex: 'floorPrice',
-          width: 104,
           key: 'floorPrice',
           render: (text, record) => (
             <div className="text-right">
               <span className={clsx(styles['table-text'], 'font-medium')}>
                 {(text || text === 0) && text >= 0
-                  ? unitConverter(text, text >= 1000 ? 1 : 4) + ' ' + (record.floorPriceSymbol || 'ELF')
+                  ? formatTokenPrice(text) + ' ' + (record.floorPriceSymbol || 'ELF')
                   : '-'}
               </span>
             </div>
@@ -191,7 +192,7 @@ export default function getColumns(
             <div className="flex items-center">
               <span className={clsx(styles['table-text'], 'font-medium')}>
                 {(text || text === 0) && text >= 0
-                  ? unitConverter(text, text >= 1000 ? 1 : 4) + ' ' + (record.floorPriceSymbol || 'ELF')
+                  ? formatTokenPrice(text) + ' ' + (record.floorPriceSymbol || 'ELF')
                   : '-'}
               </span>
             </div>
@@ -217,9 +218,7 @@ export default function getColumns(
           key: 'itemTotal',
           render: (text) => (
             <div className="flex items-center">
-              <span className={clsx(styles['table-text'], 'font-medium')}>
-                {unitConverter(text, text >= 1000 ? 1 : 4)}
-              </span>
+              <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumber(text)}</span>
             </div>
           ),
         },
@@ -243,9 +242,7 @@ export default function getColumns(
           key: 'ownerTotal',
           render: (text) => (
             <div className="text-right">
-              <span className={clsx(styles['table-text'], 'font-medium')}>
-                {unitConverter(text, text >= 1000 ? 1 : 4)}
-              </span>
+              <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumber(text)}</span>
             </div>
           ),
         },

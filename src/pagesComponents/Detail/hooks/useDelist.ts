@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { messageHTML } from 'utils/aelfUtils';
 import { Delist } from 'contract/market';
 import useGetState from 'store/state/getState';
-import { IContractError, IPrice } from 'contract/type';
+import { IContractError, IPrice, ITimestamp } from 'contract/type';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import BigNumber from 'bignumber.js';
 
@@ -10,7 +10,7 @@ export default function useDelist(chainId?: Chain) {
   const { walletInfo } = useGetState();
   const account = walletInfo.address;
 
-  const delist = async (parameter: { symbol: string; quantity: number; price: IPrice }) => {
+  const delist = async (parameter: { symbol: string; quantity: number; price: IPrice; startTime: ITimestamp }) => {
     if (account) {
       try {
         const result = await Delist(
@@ -18,6 +18,7 @@ export default function useDelist(chainId?: Chain) {
             symbol: parameter.symbol,
             quantity: parameter.quantity,
             price: { ...parameter.price, amount: new BigNumber(parameter.price.amount).times(10 ** 8).toNumber() },
+            startTime: parameter.startTime,
           },
           {
             chain: chainId,

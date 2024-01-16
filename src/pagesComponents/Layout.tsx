@@ -25,7 +25,7 @@ import 'utils/analytics';
 import AWSManagerInstance from 'utils/S3';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
@@ -83,6 +83,15 @@ const Layout = dynamic(async () => {
     const getUserInfo = useUserInfo();
 
     const nav = useRouter();
+
+    const pathName = usePathname();
+
+    useEffect(() => {
+      console.log('pathname change', pathName);
+      window.document.body.scrollTo({
+        top: 0,
+      });
+    }, [pathName]);
 
     const { isLogin } = useCheckLoginAndToken();
 
@@ -151,8 +160,6 @@ const Layout = dynamic(async () => {
 
     useBroadcastChannel();
 
-    useBroadcastChannel();
-
     useEffectOnce(() => {
       initAwsConfig();
       initialTheme(theme);
@@ -179,7 +186,7 @@ const Layout = dynamic(async () => {
     return (
       <>
         <AntdLayout
-          className={clsx(`forest-marketplace`, isSmallScreen && `forest-marketplace-mobile`, '!bg-[var(--bg-page)]')}>
+          className={clsx(`forest-marketplace`, isSmallScreen && `forest-marketplace-mobile`, '!bg-fillPageBg')}>
           <Header />
           <AntdLayout.Content
             className={`marketplace-content, ${

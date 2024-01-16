@@ -11,8 +11,9 @@ export default function DatePickerMobile(options: {
   value?: Date;
   className?: string;
   defaultValue: Date;
+  max?: Date;
 }) {
-  const { visible, onConfirm, onCancel, value, className, defaultValue } = options;
+  const { visible, onConfirm, onCancel, value, className, defaultValue, max } = options;
 
   const currentDefaultValue = useMemo(() => {
     return new Date(moment(defaultValue).valueOf() + MILLISECONDS_PER_HALF_HOUR);
@@ -28,6 +29,7 @@ export default function DatePickerMobile(options: {
       onCancel={onCancel}
       onConfirm={onConfirm}
       min={new Date()}
+      max={max}
       value={value}
       defaultValue={currentDefaultValue}
     />

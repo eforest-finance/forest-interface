@@ -19,7 +19,8 @@ interface ICompProps {
 
 export default function ItemsSideMenu() {
   const { filterList, filterSelect } = useSelector((store) => store.layoutInfo);
-  const [hash] = useHash();
+  //const [hash] = useHash();
+  const hash = window.location.hash;
   const onChange = useCallback(
     (val: ItemsSelectSourceType) => {
       console.log('onChange', val);

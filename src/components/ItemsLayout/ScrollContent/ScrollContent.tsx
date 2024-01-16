@@ -22,7 +22,8 @@ export default function ScrollContent() {
   const [changePage, setChangePage] = useState(false);
   const { search } = useLocation();
   const { address: nftCollectionIdOrAddress } = useParams() as { address: string };
-  const [hash] = useHash();
+  //const [hash] = useHash();
+  const hash = window.location.hash;
   const pathname = usePathname();
   const pageModule = useMemo(() => pathname?.includes('/account'), [pathname]);
   const { loading } = useItemsList(page, MAX_RESULT_COUNT_10, nftCollectionIdOrAddress);

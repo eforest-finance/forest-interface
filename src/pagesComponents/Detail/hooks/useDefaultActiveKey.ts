@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-const useDefaultActiveKey = (arr: Array<any> | null, keyString: string) => {
+const useDefaultActiveKey = (arr: Array<any> | null | undefined, keyString: string) => {
   const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
 
   useEffect(() => {

@@ -1,8 +1,7 @@
-export const tokenContract = '';
-export const NFTContract = '';
-export const NFTMarketContract = '';
-export const whiteListContract = '';
-export const MultiTokenContract = '';
+export const tokenContract = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdyjx';
+export const NFTContract = '2ZpYFeE4yWjrcKLBoj1iwbfYnbo9hK7exvfGTdqcq77QSxpzNH';
+export const NFTMarketContract = 'JQkVTWz5HXxEmNXzTtsAVHC7EUTeiFktzoFUu9TyA6MWngkem';
+export const whiteListContract = 'aceGtyU2fVcBkViZcaqZXHHjd7eNAJ6NPwbuFwhqv6He49BS1';
 
 export const LOGIN_INFO = {
   chainId: 'tDVW',
@@ -41,11 +40,10 @@ export const LOGIN_INFO = {
   },
 };
 
-// Configure the link here
 export const CHAIN_INFO = {
   chainId: 'tDVW',
-  exploreUrl: '',
-  rpcUrl: '',
+  exploreUrl: 'https://explorer-test-side02.aelf.io/',
+  rpcUrl: 'https://tdvw-test-node.aelf.io',
 };
 
 export const CHAIN_ID = 'tDVW';

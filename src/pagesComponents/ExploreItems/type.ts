@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import CheckBoxGroups, { CheckboxChoiceProps } from './components/CheckBoxGroups';
 import RangeSelect, { RangeSelectProps } from './components/RangeSelect';
 import { SupportedELFChainId } from 'constants/chain';
+import { formatTokenPrice } from 'utils/format';
 
 export enum SeedTypesEnum {
   seed,
@@ -255,7 +256,12 @@ export const getTagList = (filterSelect: IFilterSelect, search: string) => {
     } else if (type === FilterType.Range) {
       const { min, max } = data[0];
       if (min || max) {
-        const label = min && max ? `${min}-${max}` : (min === 0 || min) && !max ? `≥${min}` : `≤${max}`;
+        const label =
+          min && max
+            ? `${formatTokenPrice(min)}-${formatTokenPrice(max)}`
+            : (min === 0 || min) && !max
+            ? `≥${formatTokenPrice(min)}`
+            : `≤${formatTokenPrice(max)}`;
         result.push({
           type: key,
           label:

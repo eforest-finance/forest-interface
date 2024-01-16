@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { IBidInfo, IAuctionInfoResponse } from 'api/types';
 import Socket from 'socket';
 
-interface IIntervalDataForBid {
+export interface IIntervalDataForBid {
   isBidding: boolean;
   bidInfos: IBidInfo[];
   auctionInfo: IAuctionInfoResponse & Partial<IBidInfo>;

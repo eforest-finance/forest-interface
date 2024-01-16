@@ -45,10 +45,10 @@ const CollapseForPhone = ({
       <>
         <Divider className="!m-0 !mt-0 border-box" />
         <div className={styles['clear-all']}>
-          <Button className={clsx(styles['range-default-button'], 'flex-1 !h-[56px]')} onClick={clearAll}>
+          <Button className={clsx(styles['range-default-button'], 'flex-1 !h-[56px] rounded-lg')} onClick={clearAll}>
             Clear All
           </Button>
-          <Button className="!h-[56px] flex-1 font-medium ml-[16px]" type="primary" onClick={doneChange}>
+          <Button className="!h-[56px] flex-1 font-medium ml-[16px] rounded-lg" type="primary" onClick={doneChange}>
             Done
           </Button>
         </div>

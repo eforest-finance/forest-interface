@@ -5,6 +5,7 @@ import moment, { Moment } from 'moment';
 import styles from './style.module.css';
 import { MILLISECONDS_PER_HALF_HOUR } from 'constants/time';
 import { useMemo } from 'react';
+import { RangePickerProps } from 'antd/lib/date-picker';
 
 export default function DatePickerPC(options: {
   value?: moment.Moment;
@@ -12,8 +13,13 @@ export default function DatePickerPC(options: {
   popupClassName?: string;
   className?: string;
   defaultValue: moment.Moment;
+  disabledDate?: RangePickerProps['disabledDate'];
+  disabledTime?: any;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const { value, onSelect, popupClassName, className, defaultValue } = options;
+  const { value, onSelect, popupClassName, className, defaultValue, disabledDate, disabledTime, ...extendProps } =
+    options;
 
   const currentDefaultValue = useMemo(() => {
     return moment(defaultValue.valueOf() + MILLISECONDS_PER_HALF_HOUR);
@@ -24,7 +30,7 @@ export default function DatePickerPC(options: {
       defaultValue={currentDefaultValue}
       showNow={false}
       value={value}
-      format={'YYYY/MM/DD HH:mm a'}
+      format={'YYYY/MM/DD hh:mm a'}
       onSelect={onSelect}
       allowClear={false}
       popupClassName={`${styles['date-picker-wrap']} ${popupClassName}`}
@@ -32,6 +38,9 @@ export default function DatePickerPC(options: {
       className={`w-full hover-color rounded-[12px] ${styles['date-picker']} ${className}`}
       suffixIcon={<Arrow />}
       showTime
+      disabledDate={disabledDate}
+      disabledTime={disabledTime}
+      {...extendProps}
     />
   );
 }

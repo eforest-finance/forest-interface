@@ -26,7 +26,8 @@ export default function Profile() {
   const { address } = useParams() as {
     address: string;
   };
-  const [hash] = useHash();
+  // const [hash] = useHash();
+  const hash = window.location.hash;
   const [userInfo, setUserInfo] = useState<UserInfoType>(currentUserInfo);
   const [walletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
 

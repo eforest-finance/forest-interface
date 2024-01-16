@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import nftPreview from 'assets/images/nftPreview.jpg';
 import useTransfer from 'pagesComponents/Detail/hooks/useTransfer';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import styles from './style.module.css';
 import useDetailGetState from 'store/state/detailGetState';
@@ -9,15 +9,19 @@ import useGetState from 'store/state/getState';
 import Image, { StaticImageData } from 'next/image';
 import { addPrefixSuffix } from 'utils';
 import { decodeAddress as aelfDecodeAddress } from 'utils/aelfUtils';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import Input from 'baseComponents/Input';
 import { matchErrorMsg } from 'contract/formatErrorMsg';
 import { checkWalletSecurity } from 'aelf-web-login';
 import { debounce } from 'lodash-es';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { usePathname } from 'next/navigation';
 
-export default function TransferModal(options: { quantity: number; visible: boolean; onClose: () => void }) {
+function TransferModal(options: { quantity: number; onClose?: () => void }) {
+  const modal = useModal();
+  const pathname = usePathname();
+
   const { walletInfo, aelfInfo } = useGetState();
 
   const { infoState } = useGetState();
@@ -29,7 +33,7 @@ export default function TransferModal(options: { quantity: number; visible: bool
   const [target, setTarget] = useState<string>('');
   const [error, setError] = useState(false);
   const [errorTip, setErrorTip] = useState('');
-  const { quantity, visible, onClose } = options;
+  const { quantity, onClose } = options;
 
   const [curImage, setCurImage] = useState<string | StaticImageData>(nftInfo?.previewImage || nftPreview);
 
@@ -63,6 +67,14 @@ export default function TransferModal(options: { quantity: number; visible: bool
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const onCloseModal = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      modal.hide();
+    }
+  };
+
   const toTransfer = debounce(async () => {
     if (nftInfo) {
       setLoading(true);
@@ -82,8 +94,7 @@ export default function TransferModal(options: { quantity: number; visible: bool
         });
         if (result) {
           setLoading(false);
-          onClose();
-          refreshDetailPage();
+          onCloseModal();
         }
       } else {
         message.error('Invalid address.');
@@ -129,14 +140,18 @@ export default function TransferModal(options: { quantity: number; visible: bool
     setTarget('');
     setAmount(undefined);
     setError(false);
-  }, [visible]);
+  }, [modal.visible]);
+
+  useEffect(() => {
+    modal.hide();
+  }, [pathname]);
 
   return (
     <Modal
       className={`${styles['transfer-modal']} ${isSmallScreen && styles['mobile-transfer-modal']}`}
       title={'Transfer'}
-      open={visible}
-      onCancel={onClose}
+      open={modal.visible}
+      onCancel={onCloseModal}
       footer={
         <Button type="primary" size="ultra" onClick={toTransfer} loading={loading} disabled={getTransferDisabled()}>
           Transfer
@@ -185,3 +200,5 @@ export default function TransferModal(options: { quantity: number; visible: bool
     </Modal>
   );
 }
+
+export default memo(NiceModal.create(TransferModal));
