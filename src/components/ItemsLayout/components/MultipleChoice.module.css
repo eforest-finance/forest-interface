@@ -1,0 +1,44 @@
+.multiple-choice-wrapper {
+  @apply grid grid-cols-2 gap-x-[16px] bg-[var(--bg-dark)];
+}
+
+.multiple-choice-wrapper :global(.ant-checkbox-wrapper) {
+  @apply text-[16px] leading-normal h-auto text-[var(--text-item)] font-medium;
+
+  font-family: Poppins, sans-serif;
+}
+
+.multiple-choice-wrapper :global(.ant-checkbox-inner) {
+  @apply bg-none border border-solid bg-[var(--line-box)];
+}
+
+.multiple-choice-wrapper .checkbox + span {
+  @apply py-0 px-[16px];
+}
+
+.multiple-choice-wrapper .checkbox-checked .checkbox-inner {
+  @apply bg-[var(--brand-base)];
+}
+
+:global(.forest-marketplace-mobile) .multiple-choice-wrapper {
+  @apply gap-x-[16px];
+}
+
+:global(.forest-marketplace-mobile) .multiple-choice-wrapper .checkbox-wrapper {
+  @apply text-[16px] leading-normal items-center;
+}
+
+:global(.forest-marketplace-mobile) .multiple-choice-wrapper .checkbox-inner {
+  @apply rounded-[2px] w-[16px] h-[16px] after:w-[5.7px] after:h-[9.2px];
+}
+
+:global(.forest-marketplace-mobile) .multiple-choice-wrapper .checkbox + span {
+  @apply py-0 px-[16px];
+}
+
+.multiple-choice-wrapper .checkbox:hover + .checkbox-inner,
+.multiple-choice-wrapper .checkbox:focus + .checkbox-inner,
+.multiple-choice-wrapper .checkbox-input:hover + .checkbox-inner,
+.multiple-choice-wrapper .checkbox-input:focus + .checkbox-inner {
+  @apply hover:border-[var(--brand-base)];
+}

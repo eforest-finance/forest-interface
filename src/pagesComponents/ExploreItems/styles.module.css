@@ -1,0 +1,25 @@
+.explore__banner {
+  @apply w-full h-full flex justify-center;
+}
+.explore__container {
+  @apply box-border overflow-y-scroll max-w-[2560px] w-full;
+
+  height: calc(var(--vh, 1vh) * 100 - 80px);
+  @apply sm:px-[40px] px-[16px];
+  .tab__item {
+    .tab__item__label {
+      @apply text-[16px] mr-[8px] leading-[24px] font-semibold text-[var(--tabs-label-text)];
+    }
+    .tab__item__total {
+      @apply text-[14px] font-medium leading-[22px] text-[var(--tabs-label-total)];
+    }
+  }
+}
+
+.explore__container__mobile {
+  height: calc(var(--vh, 1vh) * 100 - 62.4px);
+}
+
+.explore-item-header {
+  @apply w-full flex justify-end items-center py-[16px] !pt-0;
+}

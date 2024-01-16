@@ -1,0 +1,32 @@
+.single-choice-wrapper {
+  @apply grid grid-cols-2 gap-x-[16px];
+}
+
+.single-choice-wrapper :global(.ant-radio-button-wrapper) {
+  @apply box-border h-auto text-[16px] inline-block;
+  @apply rounded-[8px] text-[var(--text-item)] bg-[var(--bg-page)] border border-solid border-[var(--line-box)];
+  @apply font-medium px-[16px] py-[9px] leading-normal;
+}
+
+.single-choice-wrapper :global(.ant-radio-button-wrapper):not(:first-child)::before {
+  @apply bg-none h-0 w-0;
+}
+
+:global(.forest-marketplace-mobile) .single-choice-wrapper :global(.ant-radio-button-wrapper) {
+  @apply rounded-[8px] text-[16px] leading-normal px-[16px] py-[8px];
+}
+
+.single-choice-wrapper :global(.ant-radio-button-wrapper-checked):not:global(.ant-radio-button-wrapper-disabled) {
+  @apply text-brand border-brand;
+
+  background: rgb(0 191 145 / 12%);
+}
+
+.single-choice-wrapper
+  :global(.ant-radio-button-wrapper-checked):not:global(.ant-radio-button-wrapper-disabled):focus-within {
+  box-shadow: 0 0 12px var(--brand-base);
+}
+
+:global(.forest-marketplace-mobile) .single-choice-wrapper {
+  @apply gap-[15px];
+}

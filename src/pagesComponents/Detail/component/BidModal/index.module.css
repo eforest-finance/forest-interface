@@ -1,0 +1,49 @@
+.bid-modal {
+  .nft__img {
+    @apply rounded-[12px];
+  }
+  :global {
+    .ant-modal-header {
+      @apply !bg-[var(--bg-detail-modal-header)] !py-[32px];
+    }
+    .ant-modal-body {
+      @apply !px-[32px] !py-0;
+    }
+    .ant-modal-footer {
+      @apply !p-[32px];
+    }
+    .ant-modal-close {
+      @apply !h-[100px];
+    }
+  }
+  &.mobile-bid-modal {
+    @apply !m-0 !max-w-full !p-0;
+    :global {
+      .ant-modal-content {
+        @apply !min-w-0 !h-full !rounded-none;
+      }
+      .ant-modal-header {
+        @apply !p-[16px] !rounded-none;
+
+        box-shadow: 0 0.4rem 0.8rem var(--box-shadow-header);
+      }
+      .ant-modal-body {
+        height: calc(100% - 90px - 68px);
+        @apply !px-[16px] !pb-[10px] overflow-y-auto !pt-[40px];
+      }
+      .ant-modal-footer {
+        @apply bg-[var(--bg-page-dark)] !p-[16px] !absolute !w-full !bottom-0 !border-0 !border-t !border-solid border-[#E6E7E9] dark:border-[#383D3D];
+      }
+      .ant-modal-close {
+        @apply !h-[70px];
+        .ant-modal-close-x {
+          @apply mr-[20px];
+        }
+      }
+    }
+  }
+}
+
+.bid-modal-custom :global(.ant-modal-footer) {
+  @apply mdTW:!px-[32px];
+}

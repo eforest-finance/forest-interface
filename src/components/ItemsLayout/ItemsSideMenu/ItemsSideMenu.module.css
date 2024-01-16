@@ -1,0 +1,48 @@
+/* stylelint-disable no-descending-specificity */
+.items-side-menu {
+  @apply bg-[var(--bg-menu)] h-fit overflow-y-auto overflow-x-hidden text-[var(--text-item)] !border-r-0;
+}
+
+.items-side-menu :global(.ant-menu-submenu-selected) {
+  @apply text-[var(--text-item)];
+}
+
+.items-side-menu :global(.ant-menu-submenu-active) {
+  @apply text-[var(--text-item)];
+}
+
+.items-side-menu :global(.ant-menu-sub):global(.ant-menu-inline) {
+  @apply bg-[var(--bg-page)];
+}
+
+.items-side-menu:global(.ant-menu) :global(.ant-menu-item) {
+  @apply h-auto !p-0 !pt-[16px];
+}
+
+.items-side-menu :global(.ant-menu-submenu) :global(.ant-menu-submenu-title) {
+  @apply h-[64px] py-0 px-[24px] border-b border-solid border-[var(--line-box)] hover:text-[var(--text-item)] border-t-0 border-r-0 border-l-0;
+}
+
+.items-side-menu :global(.ant-menu-submenu-expand-icon) {
+  @apply w-[24px] h-[24px];
+}
+
+:global(.forest-marketplace-mobile) .items-side-menu {
+  @apply overflow-y-auto h-auto pb-0;
+}
+
+:global(.forest-marketplace-mobile) .items-side-menu :global(.ant-menu-submenu-title) {
+  @apply h-[64px] pl-[24px] pr-[25px];
+}
+
+.items-side-menu :global(.ant-menu-submenu-title:hover) :global(.ant-menu-submenu-arrow) {
+  @apply text-[var(--color-secondary)];
+}
+
+:global(.forest-marketplace-mobile) .items-side-menu :global .ant-menu-submenu-title .ant-menu-submenu-arrow {
+  @apply right-[25px];
+}
+
+:global(.forest-marketplace-mobile) .items-side-menu :global .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
+  @apply text-white;
+}

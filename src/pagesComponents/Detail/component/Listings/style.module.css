@@ -1,0 +1,6 @@
+.listings .from {
+  @apply whitespace-nowrap overflow-x-auto;
+}
+.listings .from-details {
+  @apply flex items-center justify-center font-medium text-brandNormal cursor-pointer rounded-[8px];
+}

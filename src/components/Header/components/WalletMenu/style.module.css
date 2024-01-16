@@ -1,0 +1,16 @@
+.unconnected-menu {
+  @apply min-w-[404px] p-[16px];
+
+  .account-tip {
+    @apply mt-[-8px] p-0;
+
+    p {
+      @apply mb-[2px];
+
+      &:last-of-type {
+        @apply mb-0;
+      }
+    }
+  }
+  
+}

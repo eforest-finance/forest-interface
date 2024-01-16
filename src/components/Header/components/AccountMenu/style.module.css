@@ -1,0 +1,14 @@
+.nav-icon {
+  @apply flex items-center;
+  svg {
+    @apply !w-[24px] !h-[24px] !fill-none !mr-[11px];
+
+    transition: all 0.3s;
+
+    path,
+    circle,
+    span {
+      @apply !fill-[var(--color-menu)] !text-[var(--color-menu)];
+    }
+  }
+}

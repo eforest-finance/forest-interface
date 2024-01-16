@@ -1,0 +1,29 @@
+.range-wrapper {
+  @apply flex w-full;
+  .range-input {
+    @apply flex-1;
+  }
+
+  :global(.ant-input-status-error) {
+    @apply hover:!border-[var(--message-error)] !border-[var(--message-error)] !bg-[var(--bg-page-dark)];
+  }
+}
+
+.pricing {
+  @apply h-[48px] bg-[var(--bg-dark)] mr-[12px] min-w-[80px] flex items-center px-[12px] py-[7px] rounded-[12px];
+  .pricing__text {
+    @apply text-[16px] leading-[24px] font-medium text-[var(--color-primary)];
+  }
+}
+.range-select {
+  @apply px-[8px] mb-[16px];
+  .range-button {
+    @apply flex justify-between items-center;
+    .range-select-apply {
+      @apply w-full;
+    }
+    .range-default-button {
+      @apply mr-[8px];
+    }
+  }
+}

@@ -1,0 +1,44 @@
+/* stylelint-disable no-descending-specificity */
+.transfer-modal {
+  @apply !top-0;
+}
+.transfer-modal .error {
+  @apply text-[var(--red1)] border-[var(--red1)];
+}
+.transfer-modal .error-tip {
+  @apply text-[var(--red1)];
+}
+.transfer-modal .content {
+  @apply flex flex-col items-center;
+}
+.transfer-modal .content img {
+  @apply w-auto h-[240px] rounded-[12px] object-cover;
+}
+.transfer-modal .content :global .broken {
+  @apply rounded-[12px] object-scale-down;
+}
+.transfer-modal .content .input-panel {
+  @apply w-[510px] mt-[20px];
+}
+.transfer-modal .content .input-panel input {
+  @apply mt-[16px];
+}
+.transfer-modal .content .input-panel .tip {
+  @apply text-[var(--brand-base)];
+}
+.transfer-modal .content .input-panel:first-of-type input {
+  @apply mb-0;
+}
+.mobile-transfer-modal .content img {
+  @apply w-full rounded-[12px] object-cover;
+}
+.mobile-transfer-modal .content .input-panel {
+  @apply w-full mt-[40px];
+}
+
+.mobile-transfer-modal .content .title {
+  @apply text-[30px] leading-[45px] w-full text-left mb-[32px];
+}
+.mobile-transfer-modal .input-panel {
+  @apply w-full pl-[8px] pr-[8px] mt-[24px];
+}

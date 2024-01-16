@@ -1,0 +1,27 @@
+.modal__search {
+  @apply !w-screen !max-w-full !m-0 !p-0 !border-none !h-screen;
+  .modal__content {
+    @apply !w-screen !h-screen bg-[var(--bg-page)];
+  }
+
+  :global(.ant-modal-body) {
+    @apply !p-0;
+  }
+
+  :global(.ant-modal-content) {
+    @apply !rounded-none;
+  }
+  .modal__header {
+    @apply flex items-center w-full justify-between box-border p-[10px] ;
+
+    box-shadow: 0 -1px 0 0 var(--box-shadow-bottom) inset;
+    .modal__header__cancel {
+      @apply text-[var(--text-item)] ml-[12px] font-medium text-[16px] leading-[24px];
+    }
+  }
+  .modal__scroll__container {
+    @apply p-[16px] pb-0 overflow-y-auto overflow-x-hidden;
+
+    height: calc(100vh - 70px);
+  }
+}

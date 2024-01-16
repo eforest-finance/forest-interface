@@ -1,0 +1,167 @@
+.settings {
+  @apply w-full justify-center flex;
+}
+
+.settings .error-tip {
+  @apply absolute text-functionalDanger font-medium;
+}
+
+.settings .main-container {
+  @apply max-w-[784px] px-0 py-[80px];
+}
+
+.settings .main-container .settings-main-title {
+  @apply text-[40px] leading-[48px] py-0 px-[12px] text-[var(--color-primary)] font-semibold;
+}
+
+.settings .main-container .settings-wrap {
+  @apply px-[12px] pt-[48px] pb-[40px];
+}
+
+.settings .main-container .settings-wrap .settings-sub-title {
+  @apply text-[18px] font-medium pb-[16px] leading-[27px] text-[var(--color-primary)];
+}
+
+.settings .main-container .settings-wrap .settings-sub-title .require {
+  @apply leading-[27px] align-middle ml-[4px] text-[#ff3f6d];
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) {
+  @apply w-full block h-auto bg-transparent border-none m-0;
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .avatar {
+  @apply w-[96px] h-[96px] bg-[var(--bg-dark)] border border-[var(--line-box)] border-solid;
+
+  border-radius: 100%;
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .avatar img {
+  @apply rounded-full w-full h-full object-cover;
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .avatar svg circle {
+  @apply stroke-[var(--border-avatar)];
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .avatar svg path {
+  @apply fill-[var(--bg-avatar)];
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .banner {
+  @apply w-[546px] aspect-[546/96] bg-[var(--bg-dark)] rounded-[12px] border border-[var(--line-box)] border-solid;
+}
+
+.settings .main-container .settings-wrap :global(.ant-upload) .banner img {
+  @apply object-cover w-[546px] aspect-[546/96] rounded-[12px];
+}
+
+.main-container .settings-wrap .banner-upload p,
+.main-container .settings-wrap .wallet-address p {
+  @apply text-ellipsis overflow-hidden;
+
+  width: calc(100% - 40px);
+}
+
+.settings .main-container .settings-wrap .wallet-address {
+  @apply relative min-w-[510px] h-[56px] leading-normal text-[16px] text-[var(--color-disable)] bg-[var(--bg-disable)];
+  @apply flex rounded-[12px] border border-solid border-[var(--line-box)] items-center p-[16px];
+}
+
+.settings .main-container .settings-wrap .wallet-address .copy-btn {
+  @apply h-[20px] cursor-pointer absolute right-[16px] leading-none text-[var(--color-secondary)];
+}
+
+.settings .main-container .settings-wrap .wallet-address .copy-btn svg {
+  @apply w-[20px] h-[20px] text-[var(--color-secondary)];
+}
+
+.settings .main-container .settings-wrap .wallet-address .copy-btn:hover svg path {
+  @apply fill-[var(--brand-btn-hover)];
+}
+
+.settings .main-container .settings-wrap .form-item-explain {
+  @apply text-[#ff3f6d] font-medium text-[14px];
+}
+
+.settings .main-container .settings-wrap .form-item-explain .form-item-explain-error {
+  @apply mt-[2px];
+}
+
+.mobile-settings .error-tip {
+  @apply relative text-[12px] font-medium;
+}
+
+.mobile-settings .main-container {
+  @apply max-w-full pt-[40px] pt-0 flex flex-col;
+}
+
+.mobile-settings .main-container .main-wrap {
+  @apply flex flex-col flex-1 pt-0 px-[16px] xs:px-[24px] pb-[120px];
+}
+
+.mobile-settings .main-container .settings-main-title {
+  @apply px-0 text-[30px] leading-normal pt-[40px] pb-0;
+}
+
+.mobile-settings .main-container .settings-wrap {
+  @apply px-0 pt-[32px] pb-0;
+}
+
+.mobile-settings .main-container .settings-wrap .settings-sub-title {
+  @apply text-[18px] leading-normal pt-[16px];
+}
+
+.mobile-settings .main-container .settings-wrap .settings-sub-title .require {
+  @apply leading-normal ml-[4px];
+}
+
+.mobile-settings .main-container .settings-wrap :global(.ant-upload) .avatar {
+  @apply w-[72px] h-[72px] border border-[var(--line-box)] border-solid;
+}
+
+.mobile-settings .main-container .settings-wrap :global(.ant-upload) .avatar svg {
+  @apply w-full;
+}
+
+.mobile-settings .main-container .settings-wrap :global(.ant-upload) .banner {
+  @apply max-w-[100%] h-auto;
+}
+
+.mobile-settings .main-container .settings-wrap :global(.ant-upload) .banner img {
+  @apply w-full h-auto;
+}
+
+.mobile-settings .main-container .settings-wrap .banner-upload,
+.mobile-settings .main-container .settings-wrap .wallet-address {
+  @apply w-full max-w-full aspect-[327/57] min-w-0;
+}
+
+.mobile-settings .main-container .settings-wrap .banner-upload p,
+.mobile-settings .main-container .settings-wrap .wallet-address p {
+  @apply text-ellipsis overflow-hidden;
+
+  width: calc(100% - 40px);
+}
+
+.mobile-settings .main-container .settings-wrap .form-item-explain .form-item-explain-error {
+  @apply text-[12px];
+}
+
+.mobile-settings .main-container .settings-btn-wrap {
+  @apply fixed w-screen bottom-0 bg-[var(--bg-menu)] px-0 py-[16px];
+
+  box-shadow: inset 0 1px 1px var(--box-shadow-bottom);
+
+  :global(.ant-col) {
+    @apply w-full;
+  }
+}
+
+.mobile-settings .main-container .settings-btn-wrap > div {
+  @apply flex flex-row-reverse w-full px-[32px];
+}
+
+.mobile-settings .main-container .settings-btn {
+  @apply w-[156px] max-w-full h-[40px] mx-[7.5px] my-0;
+}

@@ -1,0 +1,96 @@
+/* stylelint-disable no-descending-specificity */
+.date-picker-wrap {
+  :global(.ant-picker-panel-container) {
+    @apply bg-[var(--bg-menu)] border-[var(--line-box)] border-solid border rounded-[12px];
+    :global(.ant-picker-panel) {
+      @apply border-none;
+    }
+    :global(.ant-picker-header) {
+      @apply text-[var(--color-primary)] border-b-0;
+    }
+
+    :global {
+      .ant-picker-datetime-panel {
+        .ant-picker-header {
+          >button {
+            @apply text-[var(--color-primary)];
+          }
+        }
+        .ant-picker-body {
+          @apply text-[var(--color-primary)];
+          .ant-picker-content {
+            thead th {
+              @apply text-[var(--color-secondary)];
+            }
+            tbody {
+              .ant-picker-cell {
+                @apply text-[var(--color-disable)];
+              }
+              .ant-picker-cell-in-view {
+                @apply  text-[var(--color-primary)];
+              }
+
+              .ant-picker-cell-inner {
+                @apply border-[var(--brand-base)];
+              }
+
+              .ant-picker-cell-selected .ant-picker-cell-inner {
+                @apply bg-[var(--brand-base)];
+              }
+            } 
+          } 
+          
+        }
+        
+      }
+    }
+
+    :global(.ant-picker-time-panel) {
+      @apply border-l-0;
+
+      :global(.ant-picker-content) {
+        :global(.ant-picker-time-panel-column) {
+          @apply border-0 border-r border-[var(--line-box)] border-solid;
+          &:first-child {
+            :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+              @apply rounded-tl-[8px];
+            }
+          }
+          &:last-child {
+            @apply border-0;
+            :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+              @apply rounded-tr-[8px];
+            }
+          }
+          :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+            @apply bg-[var(--brand-base)] text-[var(--text1)];
+          }
+          :global(.ant-picker-time-panel-cell-inner) {
+            @apply text-[var(--color-secondary)] hover:bg-[var(--brand-base)] hover:text-[var(--text1)];
+          }
+        }
+      }
+    }
+  }
+
+  :global(.ant-picker-footer) {
+    @apply border-0;
+    button {
+      @apply bg-[var(--brand-base)] border-[var(--brand-base)];
+    }
+  }
+} 
+
+.date-picker {
+  @apply bg-[var(--bg-menu)];
+  :global(.ant-picker-input>input){
+    @apply text-[var(--color-primary)];
+  }
+
+  &:global(.ant-picker-focused) {
+    @apply shadow-none;
+  }
+  
+}
+
+

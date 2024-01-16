@@ -1,0 +1,92 @@
+/* stylelint-disable no-descending-specificity */
+.marketplace-header {
+  @apply fixed top-0 z-[999];
+  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-[var(--bg-header)];
+  @apply flex items-center justify-between;
+
+  box-shadow: 0 4px 8px var(--box-shadow-header);
+}
+
+.mobile-forest-logo svg {
+  @apply w-[80px] h-[16px];
+}
+
+.marketplace-header .forest-logo svg {
+  @apply w-[138px] h-[28px];
+}
+
+.marketplace-header .nav-text {
+  @apply text-[var(--color-header)] not-italic font-semibold text-[18px] leading-[27px] cursor-pointer;
+}
+
+.marketplace-header .nav-text:hover {
+  @apply text-[var(--brand-light)];
+}
+
+.marketplace-header .nav-text.text-select {
+  @apply text-[var(--brand-light)];
+}
+
+.marketplace-header .icon-btn-wrap {
+  @apply !gap-[42.8px] flex items-center;
+}
+
+.marketplace-header .icon-btn-wrap :global .ant-space-item {
+  @apply w-[40px] h-[40px];
+}
+
+.marketplace-header.mobile-header-wrapper .frame svg {
+  @apply w-[32px] h-[32px] fill-[var(--color-header)];
+}
+.marketplace-header.mobile-header-wrapper .forest-logo svg {
+  @apply w-[80px] h-[16px];
+}
+
+.marketplace-header .icon-btn-wrap :global .ant-space-item svg {
+  @apply w-[40px] h-[40px];
+}
+
+.marketplace-header .header-account-btn,
+.marketplace-header .header-wallet-btn,
+.marketplace-header .header-theme-btn {
+  @apply fill-[var(--color-header)];
+
+  transition: all 0.3s;
+}
+
+.marketplace-header .header-account-btn *,
+.marketplace-header .header-wallet-btn *,
+.marketplace-header .header-theme-btn * {
+  @apply fill-[var(--color-header)];
+}
+.marketplace-header .header-account-btn:hover,
+.marketplace-header .header-wallet-btn:hover,
+.marketplace-header .header-theme-btn:hover {
+  @apply fill-[var(--brand-base)];
+}
+.marketplace-header .header-account-btn:hover *,
+.marketplace-header .header-wallet-btn:hover *,
+.marketplace-header .header-theme-btn:hover * {
+  @apply fill-[var(--brand-base)];
+}
+
+.marketplace-header .header-theme-btn:hover {
+  @apply cursor-pointer;
+}
+
+.mobile-header-wrapper {
+  @apply py-[10px] px-[16px];
+}
+
+.marketplace-header.mobile-header-wrapper {
+  @apply h-[62.4px];
+}
+
+.header-wallet-custom {
+  :global(.ant-collapse-arrow) {
+    @apply !w-auto !h-auto;
+    path {
+      @apply !fill-[var(--color-header)];
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.protocol-list {
+  @apply overflow-y-visible;
+
+  height: calc(100vh - 80px);
+}
+
+.protocol-list .protocol-panel {
+  @apply flex w-full max-w-[1296px] pt-[64px] pb-[20px];
+}
+
+.protocol-list .protocol-panel .grid-protocol {
+  @apply flex justify-center;
+}
+
+.mobile-protocol-list {
+  @apply h-screen;
+}
+.mobile-protocol-list .protocol-panel {
+  @apply max-w-[359px] pt-[40px] pb-[16px];
+}
+.flex-center {
+  @apply flex justify-center items-center;
+}

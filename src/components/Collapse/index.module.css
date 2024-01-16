@@ -1,0 +1,23 @@
+.elf-collapse {
+  @apply rounded-[12px] border-lineBorder border border-solid bg-transparent overflow-hidden;
+  :global {
+    .ant-collapse-item {
+      @apply border-0 border-b !border-solid border-lineBorder;
+      .ant-collapse-header {
+        @apply !p-0;
+        path {
+          @apply dark:stroke-white;
+        }
+      }
+      &:last-child {
+        @apply !border-none;
+      }
+    }
+    .ant-collapse-content {
+      @apply border-none bg-transparent;
+    }
+    .ant-collapse-content-box {
+      @apply !p-0;
+    }
+  }
+}

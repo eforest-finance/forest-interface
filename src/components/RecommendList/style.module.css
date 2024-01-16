@@ -1,0 +1,53 @@
+.recommend-panel {
+  @apply rounded-[12px];
+}
+.recommend-panel .items-card-wrapper {
+  @apply h-full;
+}
+.recommend-panel .dot button,
+.recommend-panel .dot li {
+  @apply !w-[8px] !h-[8px] !rounded-[50%];
+}
+.recommend-panel .dot li {
+  @apply !border !border-solid !border-[var(--brand-base)];
+}
+.recommend-panel .dot :global .slick-active {
+  @apply !bg-[var(--brand-base)];
+}
+
+.recommend-panel .dot :global .slick-active button {
+  @apply !bg-[var(--brand-base)];
+}
+
+.mobile-recommend-panel {
+  @apply mt-[16px];
+  .token__price {
+    @apply !h-auto !flex-col !items-start !px-[8px] !py-[12px];
+  }
+}
+
+.mobile-recommend-panel :global .ant-carousel {
+  @apply w-[179px] mt-[16px];
+}
+.mobile-recommend-panel :global .ant-carousel .dot {
+  @apply bottom-0;
+}
+.mobile-recommend-panel :global .ant-carousel .slick-list {
+  @apply overflow-visible;
+}
+.mobile-recommend-panel :global .ant-carousel .slick-slider {
+  @apply !static pb-[30px];
+}
+.mobile-recommend-panel :global .ant-carousel .slick-slide {
+  @apply pr-[15px] overflow-hidden;
+}
+.mobile-recommend-panel :global .ant-carousel .slick-list .slick-slide {
+  @apply !pointer-events-auto;
+}
+.mobile-recommend-panel .btn-wrap {
+  @apply mt-[24px] flex justify-center items-start;
+}
+
+.bid_price__wrapper {
+  @apply flex-col !items-start !h-[76px] mdb:flex-row mdb:!h-[40px] mdb:items-center;
+}

@@ -1,0 +1,29 @@
+.filter-tags {
+  @apply w-full flex items-center mdl:mb-[16px] mb-[24px];
+  .filter-tags-container {
+    @apply flex flex-wrap items-center gap-[12px];
+    .tag-item {
+      @apply flex items-center px-[16px] py-[9px] bg-[var(--bg-dark)] rounded-[12px];
+      .tag-label {
+        @apply flex items-center text-[14px] leading-[22px] font-medium text-[var(--text-item)] mr-[10px];
+      }
+      svg {
+        * {
+          @apply stroke-[var(--table-header-text)] fill-[var(--table-header-text)];
+        }
+      }
+      svg:hover {
+        * {
+          @apply stroke-[var(--color-header)] fill-[var(--color-header)];
+        }
+      }
+    }
+    .tag-item:last-child {
+      @apply !mr-0;
+    }
+  }
+}
+
+.filter__button {
+  @apply px-[16px] py-[9px] cursor-pointer text-[14px] leading-[22px] font-medium text-[var(--text-item)] hover:text-[var(--primary-color)];
+}

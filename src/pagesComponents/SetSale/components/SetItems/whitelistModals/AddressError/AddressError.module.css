@@ -1,0 +1,32 @@
+.address-error-modal :global .ant-modal-body {
+  @apply px-[40px] !pb-0;
+}
+.address-error-modal :global .ant-modal-body :global .tip {
+  @apply ml-[20px] mb-[16px] text-[#dd444d];
+}
+.address-error-modal :global .ant-modal-body :global .tip svg {
+  @apply w-[24px] h-[24px] mr-[16px];
+}
+.address-error-modal :global .ant-modal-body :global .tip svg path {
+  @apply fill-[#dd444d];
+}
+.address-error-modal :global .ant-modal-body .address-list {
+  @apply pl-[44px] h-[200px] overflow-y-scroll;
+}
+.address-error-modal :global .ant-modal-body .address-list p {
+  @apply text-[var(--color-primary)] py-[8px] px-0;
+}
+
+.address-error-modal-mobile :global .ant-modal-body :global .tip {
+  @apply ml-0 mb-[24px] items-start;
+}
+.address-error-modal-mobile :global .ant-modal-body :global .tip svg {
+  @apply h-[14px] mr-[3px] mt-[2px];
+}
+.address-error-modal-mobile :global .ant-modal-body .address-list {
+  @apply pl-[24px] h-[400px] overflow-y-scroll;
+}
+
+.address-error-modal-mobile :global .ant-modal-body .address-list p {
+  @apply text-[var(--color-primary)] py-[8px] px-0;
+}

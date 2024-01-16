@@ -1,0 +1,26 @@
+.chain_select,
+.select_burnable,
+.select_additional,
+.type_select {
+  @apply w-[510px] mt-[8px];
+}
+
+.logo_uploader :global .ant-upload-select {
+  @apply bg-transparent w-[175px] h-[175px] overflow-hidden	rounded-[50%] border border-solid hover:border-[var(--brand-base)] border-[var(--line-box)];
+}
+
+.featured_uploader :global .ant-upload-select {
+  @apply bg-transparent w-[300px] h-[200px] overflow-hidden rounded-[12px] border border-[var(--line-box)] border-solid hover:border-[var(--brand-base)];
+}
+
+.add-metadata-btn {
+  @apply w-[56px] h-[56px] mt-[16px] cursor-pointer border border-[var(--line-box)] border-solid rounded-[12px] flex items-center justify-center;
+}
+
+.add-metadata-btn svg {
+  @apply w-[20px] h-[20px] fill-[var(--color-primary)];
+}
+
+.add-metadata-btn svg path {
+  @apply fill-[var(--color-primary)];
+}

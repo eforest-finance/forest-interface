@@ -1,0 +1,87 @@
+.setting-modal :global .ant-modal-content {
+  @apply min-h-[640px] flex flex-col overflow-hidden;
+}
+
+.setting-modal :global .ant-modal-content :global .ant-modal-body {
+  @apply flex flex-col overflow-hidden flex-1;
+}
+
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table-wrapper {
+  @apply flex-1 overflow-hidden;
+}
+
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .setting-filter {
+  @apply items-center;
+}
+
+.setting-modal :global .ant-modal-content :global .ant-modal-body input::-webkit-outer-spin-button,
+.setting-modal :global .ant-modal-content :global .ant-modal-body input::-webkit-inner-spin-button {
+  @apply !appearance-none;
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body input[type='number'] {
+  appearance: textfield;
+}
+
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .setting-filter button {
+  @apply w-[106px] h-[56px];
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .setting-filter input {
+  @apply w-[160px] py-[12px] px-[16px] leading-[32px];
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .add-rank-btn,
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .default-btn {
+  @apply flex my-[24px] px-0 leading-[24px] items-center cursor-pointer text-[var(--brand-light)];
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .add-rank-btn svg,
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .default-btn svg {
+  @apply w-[18px] h-[18px] mr-[11px];
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action {
+  @apply mt-[21px] mb-[30px] text-[var(--brand-light)] cursor-default items-center;
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action p {
+  @apply cursor-pointer;
+}
+.setting-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action button {
+  @apply text-[12px] leading-[18px] py-[4.5px] px-[15px];
+}
+
+.setting-modal :global .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  @apply !h-[40px];
+}
+.setting-modal
+  :global
+  .ant-pagination-options
+  .ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector {
+  @apply !h-auto;
+}
+
+/* .setting-modal :global .ant-pagination-next,
+.setting-modal :global .ant-pagination-prev,
+.setting-modal :global .ant-pagination-disabled,
+.setting-modal :global .ant-pagination-item {
+  @apply !h-[40px] !min-w-[40px];
+} */
+
+.setting-mobile :global .ant-pagination {
+  @apply my-[16px];
+}
+
+/* .setting-mobile :global .ant-pagination-prev,
+.setting-mobile :global .ant-pagination-next,
+.setting-mobile :global .ant-pagination-jump-prev,
+.setting-mobile :global .ant-pagination-jump-next,
+.setting-mobile :global .ant-pagination-item,
+.setting-mobile :global .ant-pagination-options {
+  @apply !h-[32px] !leading-[32px];
+} */
+
+/* stylelint-disable-next-line no-descending-specificity */
+.setting-mobile :global .ant-select-selector {
+  @apply !h-[32px];
+}
+
+.forest-table-setting-modal {
+  @apply !overflow-y-auto;
+}

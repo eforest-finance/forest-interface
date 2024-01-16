@@ -1,0 +1,7 @@
+.offers .from {
+  @apply whitespace-nowrap overflow-x-auto;
+}
+
+.mobile-offers {
+  @apply mt-[16px];
+}

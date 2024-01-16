@@ -1,0 +1,280 @@
+.protocol-card {
+  @apply w-[416px] cursor-pointer max-w-full;
+}
+
+.protocol-card img.broken {
+  @apply object-none;
+}
+
+.protocol-card img.broken-avatar {
+  @apply hidden;
+}
+
+.protocol-card .card {
+  @apply rounded-[12px] bg-[var(--bg-card)] border border-solid border-[var(--line-box)] overflow-hidden;
+  @apply hover:border-brand;
+}
+
+.protocol-card .card .edit-avatar {
+  @apply absolute hidden top-[216px] right-[172px] z-[1000];
+}
+
+.protocol-card .card .edit-banner {
+  @apply absolute hidden top-[119px] right-[11px];
+}
+
+.protocol-card .card .edit-description {
+  @apply absolute hidden shrink-0 bg-[var(--bg-menu)] w-[45px] h-[16px] rounded-[20px];
+  @apply justify-center items-center bottom-[80px] right-[62px] z-[1000] border border-solid border-[var(--line-box)];
+}
+
+.protocol-card .card .edit-description svg * {
+  @apply fill-[var(--color-primary)];
+}
+
+.protocol-edit-menu .dropdown-menu-item span {
+  @apply text-[10px] leading-normal text-[var(--color-secondary)];
+}
+
+.protocol-card .card .edit-description span {
+  @apply font-medium text-[12px] scale-[0.83] text-[var(--color-blue)];
+}
+
+.protocol-card .card:hover {
+  box-shadow: 0 4px 20px var(--brand-base);
+}
+
+.protocol-card .card:hover .edit-avatar,
+.protocol-card .card:hover .edit-banner {
+  @apply block;
+}
+
+.protocol-card .card:hover .edit-avatar svg rect,
+.protocol-card .card:hover .edit-banner svg rect {
+  @apply fill-[var(--bg-menu)] stroke-[var(--line-box)];
+}
+
+.protocol-card .card:hover .edit-avatar svg path,
+.protocol-card .card:hover .edit-banner svg path {
+  @apply fill-[var(--color-primary)];
+}
+
+.protocol-card .card:hover .edit-description {
+  @apply flex;
+}
+
+.protocol-card .card .card-cover {
+  @apply w-full h-[208px] bg-[var(--bg-dark)] rounded-[12px] overflow-hidden m-0;
+}
+
+.protocol-card .card .card-cover img {
+  @apply w-full h-full object-cover;
+}
+
+.protocol-card .card :global(.ant-card-body) {
+  @apply pb-[16px] m-0 px-0 pt-0;
+}
+
+.protocol-card .card .card-meta {
+  @apply relative flex h-full pt-[40px] m-0;
+}
+
+.protocol-card .card .card-meta p {
+  @apply m-0 p-0 text-center;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) {
+  @apply w-full m-0;
+}
+
+.protocol-card .card .card-meta :global(.ant-card-meta-avatar) {
+  @apply absolute indent-10 top-0 left-1/2 translate-x-[-32px] translate-y-[-32px] indent-0;
+  @apply w-[64px] h-[64px] p-0 border border-solid border-[var(--line-box)] rounded-full bg-[var(--bg-page-dark)];
+}
+
+.protocol-card .card .card-meta :global(.ant-card-meta-avatar) img {
+  @apply w-full h-full object-cover rounded-full;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) .protocol-title {
+  @apply relative font-medium text-[20px] leading-normal text-[var(--color-primary)] m-0;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) .protocol-title .badge {
+  @apply absolute w-[24px] h-[30px] leading-normal py-[7px] px-[4px];
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) .protocol-title .badge * {
+  @apply fill-[var(--color-blue)];
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) .protocol-creator {
+  @apply m-0 leading-normal text-[var(--color-secondary)] overflow-hidden truncate py-0 px-[75px];
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) .protocol-creator span {
+  @apply text-[var(--color-blue)] ml-[4px];
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) :global(.ant-card-meta-description) {
+  @apply relative flex mt-[20px] flex-wrap;
+  @apply text-[var(--color-secondary)] text-center leading-normal overflow-hidden text-ellipsis break-words;
+
+  line-break: anywhere;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) :global(.ant-card-meta-description) .card-description {
+  @apply h-[63px] min-h-[54Px] leading-normal line-clamp-3 w-full text-[14px] whitespace-pre-line break-words;
+
+  padding: 0 calc((100% - 290px) / 2) 0;
+  display: box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  overflow: hidden;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) :global(.ant-card-meta-description) .connect-info {
+  @apply flex justify-center items-center pt-[12px] min-w-[384px] my-0 mx-auto mt-[32px] min-h-[61px];
+  @apply border-t border-solid border-t-[var(--line-box)] border-x-0 border-b-0;
+}
+
+.protocol-card .card :global(.ant-card-meta-detail) :global(.ant-card-meta-description) .connect-info svg:hover * {
+  @apply fill-[var(--brand-base)];
+}
+
+.protocol-card .card .counts {
+  @apply leading-normal text-center mt-[8px] mb-0 mx-auto text-[var(--color-secondary)];
+}
+
+.mobile-protocol-card {
+  @apply w-[343px] max-w-full;
+}
+
+.protocol-card.mobile-protocol-card .card {
+  @apply rounded-[12px];
+}
+
+.mobile-protocol-card .card .card-cover {
+  @apply h-[171.5px];
+
+  max-width: calc(100% + 2px);
+}
+
+.protocol-card.mobile-protocol-card .card .card-cover img {
+  @apply object-cover w-[343px] h-[171.5px] rounded-tl-[12px] rounded-tr-[12px] rounded-b-none;
+}
+
+.protocol-card.mobile-protocol-card .card :global(.ant-card-body) {
+  @apply pb-[8px];
+}
+
+.mobile-protocol-card .card .card-meta :global(.ant-card-meta-avatar) {
+  @apply w-[54px] h-[54px] translate-x-[-27px] translate-y-[-27px];
+}
+
+.mobile-protocol-card .card .card-meta :global(.ant-card-meta-avatar) img {
+  @apply object-cover rounded-full;
+}
+
+.mobile-protocol-card .card .card-meta :global(.ant-card-meta-detail) .protocol-title {
+  @apply text-[20px] leading-normal;
+}
+
+.mobile-protocol-card .card .card-meta :global(.ant-card-meta-detail) .protocol-creator {
+  @apply leading-normal;
+}
+
+.mobile-protocol-card .card .card-meta :global(.ant-card-meta-detail) :global(.ant-card-meta-description) {
+  @apply mt-[20px];
+
+  padding: 0 calc((100% - 290px) / 2) 0;
+}
+
+.mobile-protocol-card.protocol-card
+  .card
+  :global(.ant-card-meta-detail)
+  :global(.ant-card-meta-description)
+  .connect-info {
+  @apply flex justify-center items-center;
+  @apply min-w-[295px] pt-[8px] mt-[32px] min-h-[56.2px];
+}
+
+.mobile-protocol-card .card .counts {
+  @apply leading-normal mt-[48px] mx-auto mb-0;
+}
+
+.mobile-protocol-card .protocol-menu {
+  @apply absolute top-[14px] right-[12px];
+}
+
+.protocol-edit-menu .dropdown-menu-item {
+  @apply h-[37.857px];
+}
+
+.edit-modal .modal-content {
+  @apply w-[800px] h-[500px];
+}
+
+.edit-modal .modal-body {
+  @apply pt-[30px] px-[32px];
+}
+
+.edit-modal .modal-footer {
+  @apply flex justify-center pt-[39px] px-0 pb-[42px];
+}
+
+.edit-modal .modal-footer button {
+  @apply w-[180px] h-[56px] last:mt-[16px];
+}
+
+.edit-modal .edit-panel {
+  @apply resize-none w-[736px] h-[250px];
+}
+
+.edit-modal.mobile-edit-modal {
+  @apply w-screen max-w-[100vw] m-0 p-0;
+}
+
+.edit-modal.mobile-edit-modal .modal-close {
+  @apply h-[60px];
+}
+
+.edit-modal.mobile-edit-modal .modal-close .modal-close-x {
+  @apply h-[60px] mr-[16px];
+}
+
+.edit-modal.mobile-edit-modal .modal-close .modal-close-x svg {
+  @apply fill-white;
+}
+
+.edit-modal.mobile-edit-modal .modal-header {
+  @apply h-[60px] px-[16px] py-[15px] border-none;
+
+  box-shadow: 0 4px 11.2px var(--box-shadow-header);
+}
+
+.edit-modal.mobile-edit-modal .modal-header .modal-title {
+  @apply text-[20px];
+}
+
+.edit-modal.mobile-edit-modal .modal-content {
+  @apply w-full h-full min-w-0 rounded-none;
+}
+
+.edit-modal.mobile-edit-modal .modal-body {
+  @apply pt-[43px] px-[16px] pb-0;
+
+  height: calc(100% - 173px);
+}
+
+.edit-modal.mobile-edit-modal .modal-footer {
+  @apply px-0 pt-[41px] pb-[16px];
+}
+
+.edit-modal.mobile-edit-modal .modal-footer button {
+  @apply w-[164px] last:ml-[16px];
+}
+
+.edit-modal.mobile-edit-modal .edit-panel {
+  @apply resize-none w-full h-full;
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "source": "/",
+    "destination": "$local_endpoint"
+  },
+  {
+    "source": "/cms/",
+    "destination": "$local_cms_endpoint/"
+  },
+  {
+    "source": "/api",
+    "destination": "$local_api_endpoint"
+  },
+  {
+    "source": "/AElfIndexer_DApp",
+    "destination": "$local_dapp_endpoint"
+  },
+  {
+    "source": "/signalr-hubs",
+    "destination": "$local_signalr_endpoint"
+  },
+  {
+    "source": "/connect",
+    "destination": "$local_connect_endpoint"
+  },
+  {
+    "source": "/portkey/api/",
+    "destination": "$portkey_api_endpoint/api/"
+  },
+
+  {
+    "source": "/portkey/connect/",
+    "destination": "$portkey_auth_endpoint/connect/"
+  }
+]

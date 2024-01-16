@@ -1,0 +1,105 @@
+
+.white-list span,
+.white-list span svg,
+.white-list span svg path {
+  @apply !transition-none;
+}
+.white-list .add-list-btn svg {
+  @apply stroke-[50px] stroke-[var(--color-primary)] text-[var(--color-primary)] mr-[16px];
+}
+.white-list-mobile .add-list-btn {
+  @apply mt-[16px] p-[16px] text-[16px] leading-[24px];
+}
+.white-list-mobile .add-list-btn svg {
+  @apply mr-[8px];
+}
+.white-list .add-list-btn:hover svg {
+  @apply fill-[var(--brand-light)] stroke-[var(--brand-light)];
+}
+.white-list .white-list-wrap .detail svg,
+.white-list .white-list-wrap .setting svg {
+  @apply mb-[16px] w-[24px] h-[24px];
+}
+.white-list-mobile .white-list-wrap .detail svg,
+.white-list-mobile .white-list-wrap .setting svg {
+  @apply mb-[12px] w-[24px] h-[24px];
+}
+.white-list .white-list-wrap .add-address-wrap .add-address-btn svg {
+  @apply stroke-[50px] stroke-[var(--color-primary)] text-[var(--color-primary)] mr-[16px];
+}
+.white-list-mobile .white-list-wrap .add-address-wrap .add-address-btn {
+  @apply py-[16px] px-[12px] text-[16px] leading-[24px] mr-[8px];
+}
+.white-list-mobile .white-list-wrap .add-address-wrap .add-address-btn svg {
+  @apply mr-[8px];
+}
+.white-list .white-list-wrap .add-address-wrap .add-address-btn:hover svg {
+  @apply fill-[var(--brand-light)] stroke-[var(--brand-light)];
+}
+.white-list {
+  @apply pb-[40px];
+}
+.white-list .row-title span {
+  @apply text-[var(--color-primary)] text-[18px] leading-[27px];
+}
+.white-list .row-title :global .ant-switch-checked {
+  @apply bg-[var(--bg-btn)];
+}
+.white-list .add-list-btn {
+  @apply cursor-pointer mt-[24px] rounded-[12px] p-[16px] text-[16px] leading-[24px] font-semibold text-[var(--color-primary)];
+  @apply border border-solid border-[var(--line-box)];
+}
+.white-list .add-list-btn:hover {
+  @apply border-[var(--brand-light)] text-[var(--brand-light)] transition-none;
+}
+.white-list .white-list-wrap {
+  @apply mt-[24px];
+}
+.white-list .white-list-wrap .detail {
+  @apply mr-[16px];
+}
+.white-list .white-list-wrap .detail,
+.white-list .white-list-wrap .setting {
+  @apply text-center py-[31.5px] px-0 flex-1 rounded-[12px] text-[var(--color-primary)] font-semibold text-[16px] leading-[24px] cursor-pointer;
+  @apply border border-solid border-[var(--line-box)];
+}
+.white-list-mobile .white-list-wrap .detail,
+.white-list-mobile .white-list-wrap .setting {
+  @apply text-center py-[21.5px] px-0 leading-[24px];
+}
+.white-list-mobile .white-list-wrap .detail {
+  @apply mr-[16px];
+}
+.white-list .white-list-wrap .detail:hover,
+.white-list .white-list-wrap .setting:hover {
+  @apply border-[var(--brand-light)] text-[var(--brand-light)];
+}
+.white-list .white-list-wrap .add-address-wrap {
+  @apply mt-[24px] items-center;
+}
+.white-list .white-list-wrap .add-address-wrap .add-address-btn {
+  @apply w-[320px] cursor-pointer rounded-[12px] p-[16px] text-[16px] leading-[24px] font-semibold text-[var(--color-primary)];
+  @apply border border-solid border-[var(--line-box)];
+}
+.white-list .white-list-wrap .add-address-wrap .add-address-btn:hover {
+  @apply border-[var(--brand-light)] text-[var(--brand-light)] transition-none;
+}
+.white-list .white-list-wrap .add-address-wrap .add-file {
+  @apply font-semibold text-[16px] leading-[24px] cursor-pointer text-[var(--brand-light)];
+}
+
+.white-list-mobile {
+  @apply pb-[24px];
+}
+.white-list-mobile .row-title span {
+  @apply text-[18px] leading-[27px];
+}
+.white-list-mobile .white-list-wrap {
+  @apply mt-[16px];
+}
+.white-list-mobile .white-list-wrap .add-address-wrap {
+  @apply mt-[16px];
+}
+.white-list-mobile .white-list-wrap .add-address-wrap .add-file {
+  @apply text-[14px] leading-[24px];
+}

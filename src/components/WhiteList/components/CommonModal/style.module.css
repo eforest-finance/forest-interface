@@ -1,0 +1,680 @@
+.common-modal :global .ant-form-item-required::before {
+  @apply !content-none;
+}
+.common-modal :global .ant-form-item-label :global label::after {
+  @apply !content-none;
+}
+.common-modal :global .empty {
+  @apply text-[var(--color-disable)] text-center;
+}
+.common-modal :global .ant-table-pagination.ant-pagination {
+  @apply mt-[24px] mx-auto mb-[8px];
+}
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-prev,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-jump-prev,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-jump-next,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-next {
+  @apply m-0 w-[48px] h-[48px];
+}
+.common-modal :global .ant-pagination-prev button {
+  @apply border-none rounded-tl-[12px] rounded-bl-[12px];
+}
+.common-modal :global .ant-pagination-next button {
+  @apply rounded-tr-[12px] rounded-br-[12px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-footer button {
+  @apply p-[16px] text-[16px] leading-[24px] h-[56px] flex-1 w-full;
+}
+
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-prev button,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-jump-prev button,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-jump-next button,
+.common-modal :global .ant-table-pagination.ant-pagination :global .ant-pagination-next button {
+  @apply bg-transparent text-[var(--color-secondary)] border border-solid border-[var(--line-box)];
+}
+.common-modal :global .ant-select-selector {
+  @apply h-[48px];
+}
+.common-modal :global .ant-select-selector :global .ant-select-selection-item {
+  @apply leading-[46px] flex items-center;
+}
+.common-modal :global .ant-pagination-item {
+  @apply rounded-none bg-transparent border-none m-0 w-[48px] h-[48px] flex items-center justify-center font-medium text-[var(--color-primary)];
+  @apply border-[var(--line-box)] border-solid border-t border-b border-l border-r;
+}
+.common-modal :global .ant-pagination-item a {
+  @apply text-[var(--color-primary)];
+}
+.common-modal :global .ant-pagination-item-active {
+  @apply border-[var(--brand-base)];
+  a {
+    @apply text-[var(--brand-base)];
+  }
+}
+.common-modal :global .ant-modal-content {
+  @apply min-h-[640px] flex flex-col overflow-hidden bg-[var(--bg-card)];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-close :global .ant-modal-close-x svg {
+  @apply w-[24px] h-[24px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body {
+  @apply flex-1 flex flex-col overflow-hidden;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .filter-action-wrapper {
+  @apply pb-[32px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .filter-action-wrapper :global .filter-select {
+  @apply flex-[200];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .filter-select
+  :global
+  .ant-select-selection-item {
+  @apply leading-[54px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search {
+  @apply flex-[520];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-wrapper {
+  @apply flex-col gap-[24px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper {
+  @apply gap-[16px] flex;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-form-item input {
+  @apply h-[56px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table-wrapper {
+  @apply flex-1 overflow-y-auto;
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .user-level-setting-tool
+  :global
+  .range-wrapper
+  input {
+  @apply h-[56px] w-[160px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-rank
+  :global
+  .ant-form-item-label
+  > label {
+  @apply text-[var(--color-primary)];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-wrapper
+  input {
+  @apply max-h-[56px] min-h-[56px] p-[16px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .add-white-modal :global .ant-form-item input {
+  @apply h-[56px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper
+  input {
+  @apply h-[56px] flex-[399] !rounded-[12px] border border-solid border-[var(--line-box)];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper
+  :global
+  .ant-input-status-error {
+  @apply border-[var(--error)];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper
+  :global
+  .ant-input-group-addon {
+  @apply block bg-transparent flex-[105] left-0;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .user-level-setting-tool button {
+  @apply w-[105px] h-[56px] text-[16px] font-medium;
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-thead
+  tr
+  :global
+  .action {
+  @apply text-right;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .form-button-wrapper button {
+  @apply !w-[180px] !h-[56px] text-[16px] font-semibold;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .user-level-setting-tool button {
+  @apply w-full h-[44px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .form-button-wrapper button {
+  @apply !w-[180px] !h-[56px] text-[16px] font-semibold;
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-wrapper
+  span
+  button {
+  @apply max-h-[44px] p-[10px] text-[16px];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-tbody
+  tr
+  td
+  button {
+  @apply p-0;
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper
+  :global
+  .ant-input-group-addon
+  button {
+  @apply w-full rounded-[12px] h-[56px];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-wrapper
+  span {
+  @apply w-full;
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .filter-action-wrapper
+  :global
+  .ant-input-search
+  :global
+  .ant-input-wrapper
+  :global
+  .ant-input-group-addon
+  button
+  span {
+  @apply text-[16px] font-medium;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .user-level-setting-tool {
+  @apply mb-[32px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-form-item {
+  @apply flex-col;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-form-item :global .ant-form-item-label {
+  @apply text-[18px] font-medium leading-[27px] text-left flex items-center mr-[12px] h-[56px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-label
+  label {
+  @apply text-[18px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content {
+  @apply flex;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .add-white-modal :global .ant-form-item {
+  @apply flex-row !mb-0;
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item {
+  @apply w-[216px];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content {
+  @apply flex;
+}
+.common-modal :global(.add-white-modal) :global(.ant-upload) svg *,
+.common-modal :global(.remove-whitelist-upload) :global(.ant-upload) svg * {
+  @apply fill-[--color-primary];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-control-input-content {
+  @apply !w-full;
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-select {
+  @apply !m-0 !mr-[16px] !w-full;
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item {
+  @apply w-[156px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item:last-child {
+  @apply w-[504px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .add-white-modal textarea {
+  @apply resize-none h-[120px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-upload {
+  @apply w-full h-[160px] rounded-[12px] flex items-center justify-center;
+  @apply border border-solid border-[var(--line-box)];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-upload-span {
+  @apply font-medium text-[140px] leading-[21px] text-[var(--color-secondary)];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-upload-span
+  :global
+  .ant-upload-list-item-card-actions {
+  @apply hidden;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-upload-span svg * {
+  @apply fill-[var(--color-secondary)];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-thead tr th {
+  @apply py-[12px] px-[24px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-thead
+  tr
+  :global
+  .action {
+  @apply text-right;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody {
+  @apply bg-transparent;
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody tr td {
+  @apply py-[20px] px-[24px];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody img {
+  @apply w-[16px] h-[16px] mr-[4px];
+}
+.common-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-tbody
+  :global
+  .ant-table-cell
+  :global
+  .action {
+  @apply text-[var(--brand-light)];
+}
+.common-modal :global .ant-modal-content :global .ant-modal-body :global .form-button-wrapper :global .warning {
+  @apply bg-[#dd444d] hover:bg-[#f34f59] disabled:bg-[#dd444d];
+}
+.common-modal :global(.add-white-modal) :global(.ant-upload),
+.common-modal :global(.remove-whitelist-upload) :global(.ant-upload) {
+  @apply bg-[var(--bg-card)];
+}
+
+.mobile-modal {
+  @apply m-0 max-w-[100vw] p-0 !top-0;
+}
+.mobile-modal :global .ant-modal-content {
+  @apply flex flex-col rounded-none w-[100vw] min-w-0 h-[100vh] max-h-[100vh];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-close {
+  @apply h-[60px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-header {
+  @apply rounded-none h-[60px] py-[16px] px-[15px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-header :global .ant-modal-title {
+  @apply text-[20px] leading-[30px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body {
+  @apply pt-[40px] px-[16px] pb-[89px] flex-1 overflow-x-scroll;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .filter-action-wrapper :global .filter-select {
+  @apply w-full;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .user-level-setting-tool {
+  @apply mb-[24px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .user-level-setting-tool :global .add-tag-btn {
+  @apply mt-[16px];
+}
+
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-label {
+  @apply text-[18px] font-medium leading-[27px];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-control-input-content {
+  @apply !w-full;
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-select {
+  @apply !w-[full];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .add-white-modal
+  :global
+  .price
+  :global
+  .ant-form-item-control-input-content
+  :global
+  .ant-form-item:last-child {
+  @apply w-[172px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .add-white-modal textarea {
+  @apply resize-none h-[16px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-thead tr th {
+  @apply py-[12px] px-[16px];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody {
+  @apply bg-transparent;
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-tbody
+  :global
+  .ant-checkbox-wrapper::before,
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-tbody
+  :global
+  .ant-table-cell-fix-left-last::after {
+  @apply content-none;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody tr td {
+  @apply h-[64px] max-h-[64px] py-[20px] px-[24px] overflow-hidden overflow-x-scroll whitespace-nowrap;
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .ant-table :global .ant-table-tbody img {
+  @apply w-[16px] h-[16px] mr-[4px];
+}
+.mobile-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .ant-table
+  :global
+  .ant-table-tbody
+  :global
+  .ant-table-cell
+  :global
+  .action {
+  @apply text-[var(--brand-light)];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-body :global .form-button-wrapper {
+  @apply absolute bottom-0 left-0 w-[100vw] p-[16px] gap-x-[16px];
+  @apply border border-solid border-[var(--line-box)];
+}
+.mobile-modal :global .ant-modal-content :global .ant-modal-footer {
+  @apply bg-[var(--bg-menu)] w-[100vw] bottom-0 absolute p-[16px] flex-row-reverse;
+  @apply border border-solid border-[var(--line-box)];
+}
+.reset-modal {
+  @apply !w-[638px];
+}
+.reset-modal :global .ant-modal-content {
+  @apply min-w-[638px];
+}
+.reset-modal :global .ant-modal-content :global .ant-modal-body {
+  @apply py-[40px] px-[95px];
+}
+.reset-modal :global .ant-modal-content :global .ant-modal-body :global .reset-tip-content {
+  @apply mb-[32px];
+}
+.reset-modal :global .ant-modal-content :global .ant-modal-body :global .tip {
+  @apply mb-[48px];
+}

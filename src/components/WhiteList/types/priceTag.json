@@ -1,0 +1,16 @@
+{
+  "nested": {
+    "PriceTag": {
+      "fields": {
+        "symbol": {
+          "type": "string",
+          "id": 1
+        },
+        "amount": {
+          "type": "int64",
+          "id": 2
+        }
+      }
+    }
+  }
+}

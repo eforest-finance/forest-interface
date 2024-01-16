@@ -1,0 +1,35 @@
+.detail-modal :global .ant-modal-content {
+  @apply h-auto;
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .filter {
+  @apply gap-[16px];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .filter :global .ant-select {
+  @apply flex-[200];
+}
+
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .filter :global .ant-input {
+  @apply flex-[399];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .filter button {
+  @apply flex-[105];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .default-btn {
+  @apply w-fit my-[24px] mx-0 cursor-pointer text-[var(--brand-light)];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .default-btn svg {
+  @apply w-[18px] h-[18px] mr-[11px];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action {
+  @apply mt-[21px] mb-[30px] text-[var(--brand-light)] cursor-default;
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action p {
+  @apply cursor-pointer;
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .batch-action :global .action button {
+  @apply text-[12px] leading-[18px] py-[4.5px] px-[15px];
+}
+.detail-modal :global .ant-modal-content :global .ant-modal-body :global .ant-select-selection-item {
+  @apply flex justify-start items-center;
+}
+

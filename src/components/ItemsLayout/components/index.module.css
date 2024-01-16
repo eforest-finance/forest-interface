@@ -1,0 +1,87 @@
+.display-grid-wrapper {
+  @apply flex rounded-[12px] border border-solid border-[var(--line-box)];
+}
+
+.display-grid-wrapper span {
+  @apply flex p-[18px] cursor-pointer first:border-0 first:border-r first:border-solid first:border-[var(--line-box)];
+}
+
+.display-grid-wrapper span svg path {
+  @apply fill-[var(--color-primary-text2)];
+}
+
+.top-filter-button {
+  @apply w-full p-[24px] z-[100] sticky top-[80px] bg-[var(--bg-menu)] shadow-[var(--box-shadow-top)];
+}
+
+.top-filter-button .filter-button-range svg {
+  @apply text-[24px] mr-[11.75px];
+}
+
+.top-filter-button .filter-button-range svg path {
+  @apply fill-[var(--text-item)];
+}
+
+.top-filter-button .top-filter-clear-all {
+  @apply font-medium text-[16px] leading-normal text-brand cursor-pointer;
+}
+
+:global(.forest-marketplace-mobile) .top-filter-button {
+  @apply relative top-0 p-[16px] shadow-none;
+}
+
+:global(.forest-marketplace-mobile) .top-filter-button .fun-btn-wrap {
+  @apply w-[343px];
+}
+
+:global(.forest-marketplace-mobile) .top-filter-button .fun-btn-wrap button {
+  @apply w-[164px] !h-[56px] text-[16px];
+}
+
+:global(.forest-marketplace-mobile) .top-filter-clear-all {
+  @apply text-[16px] leading-normal;
+}
+
+.filter-btn {
+  @apply flex justify-center items-center text-[16px] h-auto font-semibold p-[16px] backdrop-blur-[6px];
+}
+
+.filter-btn.top {
+  @apply relative;
+}
+
+.filter-btn.bottom {
+  @apply fixed bottom-[16px] right-[16px] leading-normal rounded-[52px];
+}
+
+.filter-btn.bottom > span {
+  @apply inline-block pl-[5px];
+}
+
+.filter-btn-wrapper {
+  @apply flex z-[999];
+}
+
+.filter-btn-wrapper .drawer-content {
+  @apply bg-[var(--bg-page)];
+}
+
+.filter-btn-wrapper :global(.ant-drawer-body) {
+  @apply p-0;
+}
+
+.filter-btn-wrapper .layout-sider {
+  @apply bg-transparent;
+}
+
+.filter-btn-wrapper-mobile.filter-btn-wrapper {
+  @apply pt-[60px];
+}
+
+.filter-btn-wrapper-mobile.filter-btn-wrapper :global(.ant-drawer-content-wrapper) {
+  @apply !w-full top-[60px] right-0 bottom-0 left-0;
+}
+
+.filter-btn-wrapper-mobile:global(.ant-drawer-mask) {
+  @apply !bg-none;
+}

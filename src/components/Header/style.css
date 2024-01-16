@@ -1,0 +1,128 @@
+@tailwind components;
+/* stylelint-disable no-descending-specificity  */
+@layer components {
+  .header-drawer {
+    @apply bg-[var(--bg2)] !z-[999];
+  }
+  .header-drawer .ant-drawer-content-wrapper {
+    @apply !w-[100%];
+  }
+  .header-drawer svg {
+    @apply text-white fill-white;
+  }
+  .header-drawer .ant-drawer-header {
+    @apply rounded-none z-[1] flex h-[55px] py-[10px] px-[16px] border-none;
+    @apply bg-[var(--bg-menu)] flex-row-reverse justify-between;
+
+    box-shadow: 0 4px 8px var(--box-shadow-header);
+  }
+  .header-drawer .ant-drawer-header .ant-drawer-extra {
+    @apply h-[33px] flex items-center flex-1;
+  }
+  .header-drawer .ant-drawer-header .ant-drawer-extra img {
+    @apply w-[64.286px] h-[12.857px];
+  }
+  .header-drawer .ant-drawer-header .ant-drawer-header-title {
+    @apply flex-none;
+  }
+  .header-drawer .ant-drawer-header .anticon-close svg {
+    @apply w-[17.89px] h-[17.89px] fill-[var(--color-primary)] stroke-[var(--color-primary)];
+  }
+  .header-drawer .ant-drawer-header .ant-drawer-close {
+    @apply mr-[5px];
+  }
+  .header-drawer .ant-drawer-body {
+    @apply relative bg-[var(--bg-header)] pt-0 px-[16px];
+  }
+  .header-drawer .ant-drawer-body span {
+    @apply text-[var(--color-primary)] text-[12.857px] font-semibold;
+  }
+  .header-drawer .ant-drawer-body .menu-wrap {
+    @apply border-x-0 border-t-0 border-b-[0.625px] border-[var(--line-box)] border-solid;
+    @apply pt-[16.25px] pb-[24px];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap:last-of-type {
+    @apply border-b-0;
+  }
+  .header-drawer .ant-drawer-body .menu-wrap a {
+    @apply flex items-center w-[100%];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap svg {
+    @apply w-[32px] h-[32px] fill-[var(--color-primary)];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap svg * {
+    @apply fill-[var(--color-primary)];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .create-icon svg {
+    @apply stroke-[var(--color-primary)];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .create-collection-icon svg {
+    @apply stroke-none;
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item {
+    @apply flex h-[32px]  mb-[32.375px] items-center;
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item:last-child {
+    @apply mb-0;
+  }
+
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item a {
+    @apply flex items-center h-[32px];
+  }
+  .child-drawer .return-wrap button span {
+    @apply text-[18px] leading-[24px];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item span {
+    @apply ml-[18.375px] text-[18px] flex items-center leading-[0];
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item span.seconde {
+    @apply text-[var(--color-secondary)] font-normal ml-[50px];
+  }
+  .header-drawer .ant-drawer-body .menu-bottom .menu-item {
+    @apply flex items-center justify-center flex-1;
+    @apply border-r-[0.625px] border-[var(--border1)] border-solid;
+  }
+  .header-drawer .ant-drawer-body .menu-wrap .menu-item:last-of-type {
+    @apply mt-0;
+  }
+  .header-drawer .ant-drawer-body .menu-bottom {
+    @apply flex absolute bottom-[25px] justify-around;
+
+    width: calc(100% - 30px);
+  }
+  .header-drawer .ant-drawer-body .menu-bottom .menu-item a {
+    @apply flex;
+  }
+  .header-drawer .ant-drawer-body .menu-bottom .menu-item span {
+    @apply ml-[6.875px];
+  }
+  .header-drawer .ant-drawer-body .menu-bottom .menu-item:last-of-type {
+    @apply border-none;
+  }
+
+  .child-drawer .drawer-title {
+    @apply text-[var(--color-primary)] text-[30px] leading-normal pt-[40px] pb-[8px];
+  }
+  .child-drawer .return-wrap {
+    @apply bg-[var(--bg-menu)] fixed bottom-0 left-0 right-0 py-[16px] px-[24px];
+    @apply border-x-0 border-y-0 border-t-[0.714px] border-[var(--line-box)] border-solid;
+  }
+  .child-drawer .return-wrap button {
+    @apply text-[18px] w-[100%] p-[16px] leading-[24px] h-auto rounded-[8px] bg-[var(--bg-btn-default)] text-[var(--color-primary)];
+  }
+
+  .header-drawer.ant-drawer-left.ant-drawer-open,
+  .header-drawer.ant-drawer-right.ant-drawer-open {
+    width: 100%;
+    transition: -webkit-transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .header-drawer.ant-drawer-left,
+  .header-drawer.ant-drawer-right {
+    width: 0;
+  }
+  .header-drawer.ant-drawer {
+    transition: width 0s ease 0.3s, height 0s ease 0.3s;
+  }
+}

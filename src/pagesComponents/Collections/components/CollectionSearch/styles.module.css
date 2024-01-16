@@ -1,0 +1,5 @@
+.search {
+  :global(.ant-input-clear-icon) {
+    @apply flex items-center;
+  }
+}

@@ -1,0 +1,190 @@
+/* stylelint-disable no-descending-specificity  */
+.activity .empty {
+  @apply text-[var(--color-disable)] text-center;
+  @apply w-full p-[24px] text-base font-medium;
+}
+.activity
+  :global
+  .ant-collapse-borderless
+  :global
+  .ant-collapse-item
+  :global
+  .ant-collapse-content
+  :global
+  .ant-collapse-content-box {
+  @apply pt-0 bg-none;
+}
+.activity .filter-list {
+  @apply mb-[24px];
+}
+.activity .filter-list .filter-item {
+  @apply flex items-center px-[16px] py-[9px] bg-[var(--bg-dark)] rounded-[12px];
+  .filter-item__label {
+    @apply flex items-center text-sm font-medium text-[var(--text-item)] mr-[10px];
+  }
+  svg {
+    * {
+      @apply cursor-pointer stroke-[var(--table-header-text)] fill-[var(--table-header-text)];
+    }
+  }
+  svg:hover {
+    * {
+      @apply stroke-[var(--color-header)] fill-[var(--color-header)];
+    }
+  }
+}
+.activity .filter-list .filter-item span {
+  @apply flex items-center justify-center;
+}
+.activity :global #filter {
+  @apply relative;
+}
+.activity :global #filter .visible {
+  @apply !rounded-br-none !rounded-bl-none border-b-0;
+}
+.mobile-activity .filter-list .filter-item svg {
+  @apply w-[16px] h-[16px] ml-[16px];
+}
+.activity :global #filter .visible svg {
+  @apply cursor-pointer w-[16px] h-[16px] ml-[16px] rotate-180;
+}
+.activity :global #filter :global .filter {
+  @apply border border-solid border-[var(--line-box)];
+  @apply py-[11px] px-[16px] rounded-[12px] bg-[var(--bg-menu)] mb-[24px];
+}
+.activity :global #filter :global .filter > p {
+  @apply text-[16px] leading-[24px];
+}
+.activity :global #filter :global .filter span {
+  @apply flex items-center;
+}
+.activity :global #filter :global .filter span svg {
+  @apply w-[16px] h-[16px] text-[var(--color-primary)];
+  @apply transition-all duration-300;
+}
+
+.activity :global #filter :global .ant-dropdown-menu :global .ant-dropdown-menu-item :global .ant-checkbox-wrapper {
+  @apply flex items-center w-full h-full;
+}
+.activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox-inner {
+  @apply bg-transparent border border-solid border-[var(--line-box)];
+}
+.activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox-checked
+  :global
+  .ant-checkbox-inner {
+  @apply bg-[var(--brand-light)];
+}
+.mobile-activity :global #filter :global .filter span {
+  @apply flex items-center;
+}
+.activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox
+  + span {
+  @apply pl-[16px];
+}
+
+.mobile-activity {
+  @apply mt-[16px];
+}
+.mobile-activity .filter-list {
+  @apply mb-[16px];
+}
+.mobile-activity .filter-list .filter-item {
+  @apply rounded-[12px] p-[16px] leading-[24px] text-[16px];
+}
+.mobile-activity :global #filter :global .filter {
+  @apply py-[12px] px-[16px] rounded-[8px] mb-[16px];
+}
+.mobile-activity :global #filter :global .filter > p {
+  @apply text-[16px] leading-[24px];
+}
+.mobile-activity :global #filter :global .filter span svg {
+  @apply w-[16px] h-[16px];
+}
+
+.mobile-activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox
+  :global
+  .ant-checkbox-inner {
+  @apply w-[16px] h-[16px];
+}
+.mobile-activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox
+  :global
+  .ant-checkbox-inner::after {
+  @apply w-[10px] h-[11px];
+}
+.mobile-activity
+  :global
+  #filter
+  :global
+  .ant-dropdown-menu
+  :global
+  .ant-dropdown-menu-item
+  :global
+  .ant-checkbox-wrapper
+  :global
+  .ant-checkbox
+  + span {
+  @apply pl-[16px] text-[16px] leading-[24px];
+}
+
+.activity,
+.mobile-activity {
+  :global {
+    .ant-dropdown-menu {
+      .ant-dropdown-menu-item {
+        .ant-checkbox {
+          @apply top-auto;
+        }
+      }
+    }
+  }
+}

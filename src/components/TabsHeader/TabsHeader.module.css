@@ -1,0 +1,81 @@
+.tabs-header :global(.ant-tabs-nav-operations) {
+  @apply hidden;
+}
+.tabs-header :global(.ant-tabs-nav) {
+  @apply m-0;
+}
+
+.tabs-header :global(.ant-tabs-tab) {
+  @apply px-0 pt-[28px] pb-[24px];
+}
+.tabs-header > :global(.ant-tabs-nav::before) {
+  @apply border-b-[var(--line-box)];
+}
+.tabs-header :global(.ant-tabs-tab) :global(.ant-tabs-tab-btn) {
+  @apply text-[18px] leading-normal py-0 px-[33px] text-white;
+}
+
+.tabs-header > :global(.ant-tabs-nav) :global(.ant-tabs-ink-bar) {
+  @apply bottom-px h-[4px] rounded-t-[4px] bg-[var(--brand-base)];
+}
+
+.tabs-header .tabs-title :global(.ant-space-item) {
+  @apply flex items-center text-[--color-header];
+}
+
+.tabs-header .tabs-title :global(.ant-space-item) svg {
+  @apply fill-[--color-primary] w-[24px] h-[24px];
+}
+:global(.has-banner) .tabs-header .tabs-title :global(.ant-space-item) svg {
+  @apply fill-white;
+}
+
+.tabs-header .tab-nav-tips {
+  @apply ml-[8px] text-[18px] leading-normal text-[--color-secondary];
+}
+
+.tabs-header.mobile-tabs-header :global(.ant-tabs-nav-tips) {
+  @apply ml-[4px] text-[14px] leading-normal font-semibold;
+}
+
+.tabs-header.mobile-tabs-header :global(.ant-tabs-ink-bar) {
+  @apply h-[4px] bottom-0;
+}
+
+.tabs-header.mobile-tabs-header :global(.ant-tabs-tab) {
+  @apply pt-[30px] pb-[16px] px-0 opacity-60;
+}
+
+.tabs-header.mobile-tabs-header .tabs-title :global(.ant-space-item) svg {
+  @apply w-[16px] h-[16px];
+}
+
+.tabs-header.mobile-tabs-header :global(.ant-tabs-tab.ant-tabs-tab-active) {
+  @apply opacity-100;
+}
+
+.tabs-header.mobile-tabs-header :global(.ant-tabs-tab) :global(.ant-tabs-tab-btn) {
+  @apply text-[14px] font-semibold h-[21px] leading-none py-0 px-[16px];
+}
+
+.tabs-header :global(.ant-tabs-tab-active) .tabs-title :global(.ant-space-item) {
+  @apply text-[--color-primary];
+}
+.tabs-header :global(.ant-tabs-tab) .tabs-title :global(.ant-space-item) svg {
+  @apply fill-[--color-primary];
+}
+:global(.has-banner) .tabs-header :global(.ant-tabs-tab) .tabs-title :global(.ant-space-item) svg {
+  @apply fill-white;
+}
+
+:global(.has-banner) .tabs-header .tab-nav-tips {
+  @apply text-white;
+}
+
+:global(.has-banner) .tabs-header .tabs-title :global(.ant-space-item) {
+  @apply text-white;
+}
+
+:global(.has-banner) .tabs-header :global(.ant-tabs-tab-active) .tabs-title :global(.ant-space-item) {
+  @apply text-white;
+}

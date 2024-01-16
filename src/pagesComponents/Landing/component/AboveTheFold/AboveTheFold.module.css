@@ -1,0 +1,59 @@
+/* .above-the-fold {
+
+} */
+
+.above-the-fold .above-the-fold-content {
+  @apply py-[80px] px-0 max-w-[1200px] xlTW:max-w-[1280px] m-auto flex items-center;
+}
+
+.above-the-fold .above-the-fold-content .slogan-wrapper {
+  @apply mr-[91px] flex flex-col flex-1;
+}
+
+.above-the-fold h3 {
+  @apply font-semibold mb-[16px] text-[40px] leading-[60px] text-[var(--text-item)];
+}
+
+.above-the-fold p {
+  @apply w-[432px] mb-[48px] text-[16px] leading-[24px] text-[var(--text-secondary1)];
+}
+
+.above-the-fold .action-wrapper button {
+  @apply px-0 w-[180px] font-semibold text-[16px] leading-[24px];
+}
+
+.marketplace-mobile.above-the-fold {
+  @apply overflow-hidden;
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content {
+  @apply w-[100%] block pt-[32px] mdTW:pt-[80px]  pb-[80px] px-0;
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .banner {
+  @apply w-[284px] h-[240px];
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper {
+  @apply mr-0;
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper h3 {
+  @apply text-[30px] mdTW:text-[40px] mdTW:leading-[60px] leading-normal mb-[16px] text-center;
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper p {
+  @apply text-[16px] leading-[24px] w-[100%] mb-[56px] text-center;
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper .action-wrapper button {
+  @apply px-0 w-[100%] mdTW:w-[180px] text-[16px] leading-[24px];
+}
+
+.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper .action-wrapper > button:first-child {
+  @apply mr-[16px] mb-[16px] mdTW:mb-0;
+}
+
+.marketplace-mobile .action-wrapper {
+  @apply mdTW:flex mdTW:justify-center;
+}

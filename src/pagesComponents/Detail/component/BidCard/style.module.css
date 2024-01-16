@@ -1,0 +1,68 @@
+.bid-card {
+  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+  .time-panel {
+    @apply flex border-0 border-b !border-solid border-lineBorder h-[72px] px-[16px] lg:px-[24px] leading-[72px] justify-between flex-row items-center;
+  }
+  svg {
+    @apply w-[24px] h-[24px];
+    * {
+      @apply fill-textSecondary;
+    }
+  }
+  .price-panel {
+    @apply py-0 px-[24px] flex !justify-between mdTW:!items-start lgTW:!items-end lgTW:flex-row !items-center mdTW:flex-col;
+    .left-part {
+      @apply pt-[24px] px-0 pb-[24px];
+    }
+    .current-price {
+      @apply leading-[27px];
+    }
+    .price-number {
+      @apply items-center;
+    }
+    .price-margin {
+      @apply my-0 mx-[8px] text-4xl;
+      img {
+        @apply w-[24px] h-[24px];
+      }
+    }
+    .bid-btn {
+      @apply mr-[16px] mdTW:mr-0;
+    }
+  }
+
+  .btn-panel {
+    @apply mb-0 w-full lgTW:w-[160px];
+  }
+}
+
+.mobile-bid-card {
+  @apply mt-[16px];
+  .time-panel {
+    @apply !p-[16px];
+  }
+  .price-panel {
+    @apply !p-[16px] flex-col !items-start;
+    .bid-btn {
+      @apply !w-full mb-[16px];
+    }
+    &:last-child {
+      @apply m-0;
+    }
+    .left-part {
+      @apply w-[100%] !p-0 mb-[24px];
+      img {
+        @apply w-[24px];
+      }
+      .price-margin {
+        @apply my-0 mx-[8px] text-[32px] leading-[40px];
+      }
+    }
+    .current-price {
+      @apply !leading-[27px];
+    }
+    .btn-panel {
+      @apply w-full mb-0;
+    }
+  }
+}

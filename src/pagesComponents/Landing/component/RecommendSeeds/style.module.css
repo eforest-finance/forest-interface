@@ -1,0 +1,18 @@
+.seed-item-card {
+  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[32px] bg-[var(--bg-home)] cursor-pointer hover:bg-[var(--bg-home-hover)];
+}
+
+.adaptive {
+  @apply rounded-md relative;
+  .seed-text {
+    @apply h-full absolute left-0 top-0 bottom-0 box-border px-[1px] flex items-center justify-center flex-wrap;
+  }
+}
+
+.eight {
+  zoom: 67%;
+}
+
+.fiv {
+  zoom: 42%;
+}

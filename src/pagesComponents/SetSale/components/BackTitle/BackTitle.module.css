@@ -1,0 +1,21 @@
+.sale-setting-backtitle-wrapper .sale-setting-backtitle-content {
+  @apply flex items-center m-auto max-w-[1360px] py-[24px] mdTW:px-[40px] px-0;
+}
+.sale-setting-backtitle-wrapper .sale-information {
+  @apply flex flex-1 items-center ml-[24px];
+}
+.sale-setting-backtitle-wrapper .sale-information > img {
+  @apply w-[48px] h-[48px];
+}
+.sale-setting-backtitle-wrapper .sale-information .information {
+  @apply ml-[16px] font-medium;
+}
+.sale-setting-backtitle-wrapper .sale-information .information > p {
+  @apply text-base text-textSecondary m-0;
+}
+.sale-setting-backtitle-wrapper .sale-information .information > h5 {
+  @apply text-xl text-textPrimary m-0;
+}
+.sale-setting-backtitle-wrapper .sale-information .sale-info-img {
+  @apply rounded-md border border-solid border-lineBorder w-12 h-12 overflow-hidden;
+}

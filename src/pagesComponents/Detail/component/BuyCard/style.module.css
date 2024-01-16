@@ -1,0 +1,70 @@
+.buy-card {
+  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+}
+.buy-card .time-panel {
+  @apply flex border-0 border-b !border-solid border-lineBorder items-center h-[72px] px-[16px] lg:px-[24px] leading-[72px];
+}
+.mobile-buy-card .time-icon svg {
+  @apply w-[16px] h-[16px];
+}
+.buy-card .time-icon svg {
+  @apply w-[24px] h-[24px];
+  * {
+    @apply fill-textSecondary;
+  }
+}
+.buy-card .price-panel {
+  @apply mdTW:py-[24px] mdTW:px-[16px] lgTW:p-[24px] lgTW:flex px-[24px] flex mdTW:block !justify-between !items-center;
+}
+.buy-card .price-panel .left-part {
+  @apply mdTW:pt-0 pt-[20px] px-0 pb-[24px] lgTW:p-0;
+}
+.buy-card .price-panel .left-part .current-price {
+  @apply text-textSecondary text-base font-medium;
+}
+.buy-card .price-panel .left-part .price-number {
+  @apply items-center;
+}
+.buy-card .price-panel .left-part .price-number .price-margin {
+  @apply my-0 mx-[8px] text-4xl;
+}
+.buy-card .price-panel .left-part .price-number img {
+  @apply w-[24px] h-[24px];
+}
+.buy-card .price-panel .buy-btn {
+  @apply !min-w-[122px] !h-[44px] !px-[16px] mr-[16px] !py-[10px];
+}
+.mobile-buy-card .price-panel .buy-btn {
+  @apply !w-[100%] !h-[56px]  mb-[16px];
+}
+.buy-card .price-panel .buy-btn:last-child {
+  @apply m-0;
+}
+
+.mobile-buy-card {
+  @apply mt-[16px];
+}
+.mobile-buy-card .time-panel {
+  @apply !p-[16px];
+}
+.mobile-buy-card .price-panel {
+  @apply !p-[24px_16px] flex-col !items-start;
+}
+.mobile-buy-card .price-panel:last-child {
+  @apply m-0;
+}
+.mobile-buy-card .price-panel .left-part {
+  @apply w-full !p-0 mb-[24px];
+}
+.mobile-buy-card .price-panel .left-part .current-price {
+  @apply !leading-[24px];
+}
+.mobile-buy-card .price-panel .left-part .price-number img {
+  @apply w-[24px];
+}
+.mobile-buy-card .price-panel .left-part .price-number .price-margin {
+  @apply my-0 mx-[8px] text-4xl;
+}
+.mobile-buy-card .price-panel .btn-panel {
+  @apply w-full;
+}

@@ -1,0 +1,22 @@
+{
+  "jsxBracketSameLine": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 120,
+  "endOfLine": "lf",
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": "*.css",
+      "options": {
+        "parser": "css"
+      }
+    },
+    {
+      "files": "*.less",
+      "options": {
+        "parser": "less"
+      }
+    }
+  ]
+}

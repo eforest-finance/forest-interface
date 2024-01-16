@@ -1,0 +1,169 @@
+.items-card-wrapper {
+  @apply bg-[var(--bg-page)] border border-solid border-[var(--line-box)] cursor-pointer;
+  @apply box-border rounded-lg transition-all duration-100 text-sm text-[var(--text-item)];
+}
+.items-card-wrapper:hover {
+  @apply bg-[var(--card-bg-hover)];
+}
+.items-card-wrapper:hover .items-card-action .btn {
+  @apply text-white bg-[var(--bg-btn)] border-brandNormal;
+}
+
+.items-card-wrapper .img-loading-wrapper img {
+  @apply object-cover;
+}
+.items-card-wrapper :global(.ant-card-cover) {
+  @apply m-0;
+}
+.items-card-wrapper :global(.ant-card-cover) .mark {
+  @apply flex justify-center items-center font-medium;
+  @apply absolute z-10 text-sm py-[4px] px-[16px] w-fit top-[8px] left-[8px] rounded-[8px] bg-[var(--bg-mark)];
+}
+.items-card-wrapper :global(.ant-card-body) {
+  @apply p-[16px];
+}
+.items-card-wrapper .items-info-wrapper {
+  @apply items-start flex justify-between;
+}
+.items-card-wrapper .title {
+  @apply font-medium text-sm text-[var(--color-table-header)];
+}
+.items-card-wrapper .activity {
+  @apply text-[12px] leading-normal bg-[var(--bg-activity)] py-px px-[6px] rounded-[4px];
+}
+.items-card-wrapper .items-price-title,
+.items-card-wrapper .value.price {
+  @apply ml-[32px];
+}
+.items-card-wrapper .items-user-name {
+  @apply truncate;
+}
+
+.items-card-wrapper .items-user-name .text-name {
+  @apply truncate;
+}
+.items-card-wrapper .items-user-name .badge {
+  @apply ml-[6px] w-[16px] h-[16px] block;
+}
+.items-card-wrapper .items-user-name .badge svg {
+  @apply text-[16px];
+}
+.items-card-wrapper .value {
+  @apply mt-[4px];
+}
+.items-card-wrapper .items-title span,
+.items-card-wrapper .items-price span {
+  @apply inline-block;
+}
+.items-card-wrapper .items-price {
+  @apply text-right;
+}
+.items-card-wrapper .price {
+  @apply font-semibold text-[16px] leading-normal;
+}
+.items-card-wrapper .price-value {
+  @apply ml-[4px];
+}
+.items-card-wrapper .numbering {
+  @apply font-semibold text-[16px] leading-normal truncate;
+}
+.items-card-wrapper .items-card-action {
+  @apply pt-[16px];
+}
+.items-card-wrapper .items-card-action :global(.ant-btn) {
+  @apply text-brand rounded-[8px] border-[var(--border-avatar)];
+}
+.items-card-wrapper .username-items {
+  @apply flex-1 w-0;
+}
+.items-card-wrapper .price-items {
+  @apply text-right min-w-[50px];
+}
+.items-card-wrapper .items-last-price {
+  @apply justify-end mt-[6px];
+}
+.items-card-wrapper .items-last-price > .text {
+  @apply text-sm text-[#bdc1c1];
+}
+.items-card-wrapper .items-last-price > .price {
+  @apply text-[12px] leading-normal text-white ml-[6px];
+
+  background-size: 12px 12px;
+}
+.items-card-wrapper .items-last-price > .price .price-value {
+  @apply ml-[2px];
+}
+
+:global(.forest-marketplace-mobile) .items-card-wrapper {
+  @apply rounded-[12px] text-sm  min-w-[163.9px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper :global(.ant-card-cover) {
+  @apply h-auto rounded-[12px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper :global(.ant-card-cover) .mark {
+  @apply text-[12px] py-[2px] px-[12px] leading-normal;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper :global(.ant-card-cover) .img-loading-wrapper {
+  @apply flex justify-center h-auto rounded-[12px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper :global(.ant-card-cover) .img-loading-wrapper img {
+  @apply h-auto w-[166.6px] object-cover;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-price-title,
+:global(.forest-marketplace-mobile) .items-card-wrapper .value.price {
+  @apply ml-0;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-price-title {
+  @apply flex items-center text-[8.571px] leading-normal;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-price-title div {
+  @apply mr-[4px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-info-wrapper {
+  @apply block;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .username-items {
+  @apply w-auto;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .price-items {
+  @apply text-left flex justify-between items-center mt-[8px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper :global(.ant-card-body) {
+  @apply px-[8px] pt-[8px] pb-[12px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .title {
+  @apply text-sm;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .activity {
+  @apply text-[12px] leading-normal px-[8.4px] py-[1px] rounded-[5.6px] mt-[12px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-user-name {
+  @apply w-full;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-user-name .badge {
+  @apply ml-[8px] w-[16px] h-[16px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-user-name .badge svg {
+  @apply text-[16px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .value {
+  @apply mt-0;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .price {
+  @apply text-[16px] leading-normal pl-[16px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .numbering {
+  @apply text-sm;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-card-action {
+  @apply pt-[24px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-card-action :global(.ant-btn) {
+  @apply rounded-[8px] text-[14px];
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-last-price > .text {
+  @apply text-[12px] leading-normal;
+}
+:global(.forest-marketplace-mobile) .items-card-wrapper .items-last-price > .price {
+  @apply text-[12px] leading-normal pl-[14px] ml-[4px] mt-[8px];
+}

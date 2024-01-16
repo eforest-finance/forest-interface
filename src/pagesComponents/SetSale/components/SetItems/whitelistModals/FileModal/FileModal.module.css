@@ -1,0 +1,63 @@
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .upload {
+  @apply mt-[40px];
+}
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .upload :global .ant-upload {
+  @apply w-full bg-transparent border-none p-0;
+}
+.file-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .upload
+  :global
+  .ant-upload
+  :global
+  .upload-window {
+  @apply w-full h-[160px] rounded-[12px] text-[var(--text-secondary)] bg-[var(--bg-link-detail)];
+  @apply border border-solid border-[var(--line-box)];
+}
+.file-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .upload
+  :global
+  .ant-upload
+  :global
+  .upload-window
+  svg {
+  @apply mb-[16px];
+}
+.file-modal
+  :global
+  .ant-modal-content
+  :global
+  .ant-modal-body
+  :global
+  .upload
+  :global
+  .ant-upload
+  :global
+  .upload-window
+  svg
+  * {
+  @apply fill-[var(--text-secondary)];
+}
+
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .filter {
+  @apply gap-[16px];
+}
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .filter :global .ant-select {
+  @apply flex-[200];
+}
+
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .filter :global .ant-input {
+  @apply flex-[399];
+}
+.file-modal :global .ant-modal-content :global .ant-modal-body :global .filter button {
+  @apply flex-[105];
+}

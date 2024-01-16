@@ -1,0 +1,3 @@
+.header-carousel {
+  @apply w-full box-border px-0 sml:px-[40px];
+}

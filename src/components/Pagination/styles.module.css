@@ -1,0 +1,133 @@
+/* stylelint-disable no-descending-specificity  */
+.pagination {
+  @apply flex justify-between items-center py-[16px];
+  .epPaginationLeft {
+    @apply flex justify-center items-center;
+  }
+  .rightArrow {
+    pointer-events: none !important;
+    svg {
+      @apply w-[16px] h-[16px];
+    }
+  }
+  :global(.ant-btn-primary) {
+    @apply flex items-center border border-solid hover:border-solid bg-[var(--pagination-bg)] text-[var(--pagination-button-text)] border-[var(--pagination-hover-border)] rounded-[6px] font-medium !important;
+  }
+  .pagination__right {
+    @apply flex items-center !important;
+    .ant-pagination-simple-pager {
+      @apply hidden;
+    }
+    :global(.ant-btn.ant-btn-background-ghost[disabled]) {
+      @apply bg-[var(--pagination-disable-bg)] border-solid border-[var(--pagination-border)]  text-[var(--pagination-disable-text)] !important;
+      svg {
+        * {
+          @apply !stroke-[var(--pagination-disable-text)];
+        }
+      }
+      span {
+        @apply !text-[var(--pagination-disable-text)];
+      }
+    }
+    .first-button,
+    .last-button {
+      @apply !px-[8px] !h-[32px] !text-[12px] hover:bg-[var(--pagination-hover-border)] active:bg-[var(--pagination-active)] !leading-[20px] mr-[8px] font-medium !text-[var(--pagination-button-text)] !important;
+      span {
+        @apply !text-[var(--pagination-button-text)];
+      }
+    }
+    .first-button:hover,
+    .last-button:hover {
+      span {
+        @apply !text-white;
+      }
+    }
+    .last-button {
+      @apply ml-[8px] mr-0 !important;
+    }
+
+    .pagination__prev,
+    .pagination__next {
+      @apply rounded-[6px] mr-0;
+      :global(.ant-btn-primary) {
+        @apply w-[32px] px-[8px];
+      }
+      .ant-btn-primary:disabled {
+        @apply bg-[var(--pagination-disable-bg)]  text-[var(--pagination-disable-text)] !important;
+        .active-icon {
+          svg {
+            @apply text-[var(--pagination-disable-text)] !important;
+          }
+        }
+      }
+    }
+    .prev,
+    .next {
+      box-shadow: none;
+      @apply flex hover:bg-[var(--pagination-hover-border)] active:bg-[var(--pagination-active)] justify-center box-border h-[32px] m-0 items-center border !important;
+    }
+    .prev:hover,
+    .next:hover {
+      svg {
+        * {
+          @apply stroke-white !important;
+        }
+      }
+    }
+
+    .prev:active,
+    .next:active {
+      svg {
+        * {
+          @apply stroke-[var(--pagination-active)] !important;
+        }
+      }
+    }
+
+    .ant-pagination-disabled {
+      @apply bg-[var(--pagination-disable-bg)] !important;
+      .prev:hover,
+      .next:hover {
+        @apply bg-[var(--pagination-disable-bg)] text-[var(--pagination-border)] !important;
+
+        cursor: auto;
+      }
+    }
+    .pagination__page {
+      box-sizing: border-box;
+      @apply text-[12px] flex-shrink-0 rounded-[6px] border-[1px] border-solid mx-[8px] border-[var(--pagination-border)] text-[var(--pagination-disable-text)] leading-[18px] bg-[var(--pagination-disable-bg)] px-[8px] py-[6px] !important;
+    }
+  }
+}
+
+.pagesize__select {
+  @apply p-0;
+
+  :global(.ant-select-item-option) {
+    @apply p-[8px] font-normal text-[12px] leading-[20px] text-[var(--text-item)] hover:bg-fillHoverBg;
+  }
+}
+
+.paginationMobile {
+  @apply flex items-start flex-col md:flex-row !important;
+  .pagination__right {
+    @apply mt-[8px];
+  }
+}
+
+.custom-select-record {
+  @apply !w-[68px] !h-[32px] mx-2 !rounded-[6px];
+  :global {
+    .ant-select-selection-item {
+      @apply !text-[12px] !leading-[20px];
+    }
+    .ant-select-item {
+      @apply hover:!bg-fillHoverBg;
+    }
+    .ant-select-arrow {
+      svg > * {
+        @apply !stroke-[var(--text-primary)];
+      }
+    }
+  }
+}

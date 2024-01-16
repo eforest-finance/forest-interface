@@ -1,0 +1,9 @@
+.collection__info {
+  @apply mb-[16px] pt-[48px];
+}
+.link__icon {
+  @apply flex items-center;
+  * {
+    @apply fill-[var(--text-primary)];
+  }
+}

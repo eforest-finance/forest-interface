@@ -1,0 +1,61 @@
+/* stylelint-disable no-descending-specificity */
+.term-service {
+  * {
+    /* prettier-ignore */
+    font-size: 16Px;
+  }
+  p {
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mt-[1em] mb-[1em] font-semibold;
+  }
+
+  hgroup {
+    @apply mb-[40Px];
+    h1 {
+      /* prettier-ignore */
+      font-size: 26Px;
+
+      /* prettier-ignore */
+      margin-bottom: 12Px;
+    }
+  }
+  ul {
+    margin-left: 3em;
+  }
+  li {
+    list-style: circle;
+  }
+  ol {
+    margin-left: 3em;
+  }
+  ol > li {
+    list-style: disc;
+  }
+  li > ul > li {
+    list-style-type: disc;
+  }
+  ul.lower-roman {
+    li {
+      list-style: lower-roman;
+    }
+  }
+}
+
+.term-service-dark {
+  @apply text-[var(--text9)];
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-[var(--text9)];
+  }
+}

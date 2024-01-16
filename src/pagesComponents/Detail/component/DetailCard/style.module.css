@@ -1,0 +1,40 @@
+.detail-card {
+  @apply w-full mt-[16px] lg:w-[400px];
+}
+.detail-card .title {
+  @apply leading-[26px] break-words w-[92%] p-[16px] lg:p-[24px] text-textPrimary text-[18px] font-medium;
+}
+.detail-card p {
+  @apply text-textSecondary flex justify-between leading-[21px] overflow-hidden mb-[12px];
+}
+.detail-card p span {
+  @apply text-[14px] whitespace-pre-line break-words;
+}
+.detail-card p span :global .tooltip-svg path {
+  @apply fill-[#B8C2CF];
+}
+.detail-card p span :global .tooltip-svg circle {
+  @apply stroke-[#B8C2CF];
+}
+.detail-card p span :global .copy-svg span {
+  @apply !w-[16px] !h-[16px];
+}
+.detail-card p span :global .copy-svg span svg {
+  @apply !w-[16px] !h-[16px] fill-brandNormal;
+}
+.detail-card p:last-child {
+  @apply mb-0;
+}
+.detail-card:last-child {
+  @apply mb-0;
+}
+
+.mobile-detail-card {
+  @apply w-auto p-[16px] mt-[16px];
+}
+
+.detail-icon {
+  svg > * {
+    @apply stroke-textSecondary;
+  }
+}

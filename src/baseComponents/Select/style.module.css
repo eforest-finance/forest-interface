@@ -1,0 +1,75 @@
+/* stylelint-disable no-descending-specificity */
+.custom-popup {
+  @apply p-0 rounded-sm bg-fillPageBg border border-solid border-hover;
+
+  :global(.ant-select-item) {
+    @apply border-0 py-4 px-3 text-textSecondary text-base;
+  }
+  :global(.ant-select-item-option-active) {
+    @apply bg-transparent text-brandHover;
+  }
+  :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
+    @apply bg-transparent text-brandHover;
+  }
+  :global(.ant-select-item-option-content) {
+    img {
+      @apply mr-[8px] w-[24px] h-[24px];
+    }
+  }
+}
+
+.custom-select {
+  @apply flex items-center text-textPrimary rounded-lg bg-fillPageBg border border-solid border-lineBorder hover:border-brandHover;
+  &.forest-select-medium {
+    @apply h-[40px];
+  }
+  &.forest-select-default {
+    @apply h-[48px];
+  }
+  &.forest-select-large {
+    @apply h-[56px];
+  }
+  &:global(.ant-select-focused) {
+    @apply border-brandNormal;
+  }
+
+  &.select-status-error {
+    @apply border-error;
+  }
+
+  &:global(.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector),
+  :global(.ant-select-status-error.ant-select:not(.ant-select-disabled, .ant-select-customize-input).ant-select-focused .ant-select-selector)  {
+    @apply bg-transparent h-full border-none !shadow-none;
+
+    border-radius: inherit;
+  }
+
+  &:global(.ant-select:not(.ant-select-customize-input) .ant-select-selector) {
+    @apply bg-transparent h-full border-none shadow-none;
+
+    border-radius: inherit;
+  }
+  &:global(.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input) {
+    @apply h-full;
+  }
+  &:global(.ant-select-single .ant-select-selector .ant-select-selection-placeholder) {
+    @apply text-textDisable font-medium text-base flex align-middle items-center;
+  }
+  :global(.ant-select-selection-item) {
+    @apply font-medium text-base flex align-middle items-center pr-[24px];
+    img {
+      @apply mr-[8px] w-[24px] h-[24px];
+    }
+  }
+  &:global(.ant-select-arrow) {
+    @apply text-textSecondary right-[18px];
+  }
+
+  &:global(.ant-select-disabled) {
+    @apply hover:border-lineBorder hover:shadow-none focus:border-lineBorder focus:shadow-none; 
+
+    :global(.ant-select-selector) {
+      @apply !text-textDisable !bg-fillPageBg;
+    }
+  }
+}

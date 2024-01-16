@@ -1,0 +1,29 @@
+.file-view {
+  @apply fixed flex justify-start w-[100vw] h-[100vh] top-0 left-0 z-[1000] !m-0 bg-black bg-opacity-80;
+}
+.file-view .tool-bar {
+  @apply z-[1] w-[100%] h-[80px] bg-black bg-opacity-30 flex justify-end items-center;
+}
+.file-view .tool-bar svg {
+  @apply mr-[40px] cursor-pointer;
+}
+.file-view .file {
+  @apply max-w-[800px] m-auto h-[800px] w-auto object-contain;
+}
+
+.file-view .audio {
+  @apply flex items-center justify-center  m-auto w-[800px] h-[100px];
+}
+
+.file-view .file.video {
+  @apply h-auto;
+}
+.file-view .file::selection {
+  @apply text-transparent bg-transparent;
+}
+.file-view .mobile-file {
+  @apply max-w-[100%] max-h-[100%] w-full h-auto;
+}
+.file-view .mobile-file.audio {
+  @apply h-[50px];
+}

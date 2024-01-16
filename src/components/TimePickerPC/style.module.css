@@ -1,0 +1,53 @@
+/* stylelint-disable no-descending-specificity */
+.time-picker-wrap {
+  :global(.ant-picker-footer) {
+    @apply hidden;
+  }
+
+  :global(.ant-picker-panel-container) {
+    @apply bg-[var(--bg-menu)] border-[var(--line-box)] border-solid border rounded-[12px];
+    :global(.ant-picker-panel) {
+      @apply border-none;
+    }
+    :global(.ant-picker-time-panel) {
+      @apply p-[9px] border-l-0;
+
+      :global(.ant-picker-content) {
+        :global(.ant-picker-time-panel-column) {
+          @apply border-0 border-r border-[var(--line-box)] border-solid;
+          &:first-child {
+            :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+              @apply rounded-tl-[8px];
+            }
+          }
+          &:last-child {
+            @apply border-0;
+            :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+              @apply rounded-tr-[8px];
+            }
+          }
+          :global(.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner) {
+            @apply bg-[var(--brand-base)] text-[var(--text1)];
+          }
+          :global(.ant-picker-time-panel-cell-inner) {
+            @apply text-[var(--color-secondary)] hover:bg-[var(--brand-base)] hover:text-[var(--text1)];
+          }
+        }
+      }
+    }
+  }
+  
+}
+
+.time-picker {
+  @apply w-full visible rounded-[12px] bg-[var(--bg-menu)] border-[var(--line-box)] outline-none;
+
+  &:global(.ant-picker-focused) {
+    @apply border-[var(--brand-base)] shadow-none;
+  }
+
+  :global(.ant-picker-input) > input {
+    @apply text-[var(--color-primary)] font-medium text-[16px] leading-[24px] bg-transparent;
+  }
+
+}

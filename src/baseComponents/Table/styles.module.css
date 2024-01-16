@@ -1,0 +1,63 @@
+/* stylelint-disable no-descending-specificity */
+.forest-table {
+  :global(.ant-table-sticky-holder),
+  :global(.ant-table-sticky-scroll) {
+    @apply bg-transparent;
+  }
+  :global(.ant-table) {
+    @apply bg-fillPageBg text-textPrimary text-base font-medium;
+  }
+  :global(.ant-table-tbody) {
+    @apply bg-fillPageBg;
+
+    :global(.ant-table-row) {
+      @apply px-3 rounded-lg;
+      > :global(.ant-table-cell) {
+        @apply py-[9px] px-3 border-0 h-[64px];
+
+        &:first-of-type {
+          @apply rounded-tl-lg rounded-bl-lg;
+        }
+        &:last-of-type {
+          @apply rounded-tr-lg rounded-br-lg;
+        }
+
+        &:global(.ant-table-cell-row-hover) {
+          @apply bg-[var(--bg-table-hover)];
+        }
+      }
+      &:global(.ant-table-placeholder) {
+        :global(.ant-empty-description) {
+          @apply text-textPrimary;
+        }
+      }
+      &:hover > td {
+        @apply !bg-[var(--bg-card)];
+      }
+    }
+    > tr > td:global(.ant-table-cell-row-hover) {
+      @apply !bg-[var(--bg-card)];
+    }
+    :global(.ant-table-placeholder .ant-table-cell) {
+      @apply hover:bg-fillPageBg border-0;
+    }
+  }
+  :global(.ant-table-thead) {
+    @apply px-3;
+    > tr > :global(.ant-table-cell) {
+      @apply text-[var(--color-table-header)] bg-fillPageBg text-sm px-3 py-[9px] border-lineBorder;
+
+      &::before {
+        @apply !w-0;
+      }
+    }
+  }
+  :global(.ant-select-selection-item) {
+    @apply flex justify-center items-center;
+  }
+
+  :global(.ant-table-cell-fix-left),
+  :global(.ant-table-cell-fix-right) {
+    @apply bg-fillPageBg;
+  }
+}

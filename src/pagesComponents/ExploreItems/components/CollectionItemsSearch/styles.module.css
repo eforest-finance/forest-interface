@@ -1,0 +1,42 @@
+/* stylelint-disable no-descending-specificity  */
+.collection__search {
+  @apply flex items-center mb-0 mdl:mb-[32px];
+  .collapsed__button {
+    @apply flex cursor-pointer mr-[32px] rounded-[12px] items-center p-[12px] !bg-[var(--collapsed-bg)];
+    .collapsed__text {
+      @apply ml-[8px] text-[16px] font-semibold leading-[24px] !text-[var(--collapsed-text)];
+    }
+    svg {
+      * {
+        @apply stroke-[var(--collapsed-text)];
+      }
+    }
+  }
+  .collapsed__button:hover {
+    svg {
+      * {
+        @apply stroke-[var(--primary-color)];
+      }
+    }
+    .collapsed__text {
+      @apply !text-[var(--primary-color)];
+    }
+  }
+  .size_container {
+    @apply flex ml-[32px] rounded-[12px] border-[1px] items-center h-[48px] border-solid border-[var(--size-border)];
+    .large {
+      @apply flex items-center h-full p-[8px] rounded-l-[12px] cursor-pointer;
+    }
+    svg {
+      * {
+        @apply stroke-[var(--size-svg)]
+      }
+    }
+    .small {
+      @apply flex items-center h-full p-[8px] rounded-r-[12px] cursor-pointer;
+    }
+    .active {
+      @apply bg-[var(--size-active-bg)];
+    }
+  }
+}

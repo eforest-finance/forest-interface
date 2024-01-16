@@ -1,0 +1,40 @@
+@tailwind components;
+
+@layer components {
+  .sale-modal-footer .ant-modal-content .ant-modal-footer {
+    @apply pt-0 px-0 pb-[32px] flex justify-center items-center;
+  }
+  .sale-modal-footer-mobile :global .ant-modal-content :global .ant-modal-footer button {
+    @apply p-[16px] text-[16px] leading-[24px] h-[56px] flex-1;
+  }
+  .sale-modal-footer :global .ant-modal-content :global .ant-modal-footer button {
+    @apply p-[16px] text-[16px] leading-[24px] h-[56px] w-[180px];
+  }
+  .sale-modal-footer :global .ant-modal-content :global .ant-modal-footer button:last-child {
+    @apply ml-[16px];
+  }
+  .sale-modal-footer-mobile :global .ant-modal-content :global .ant-modal-footer {
+    @apply w-[100vw] absolute bottom-0 !p-[16px] z-[100] gap-x-[16px] !bg-[var(--bg-men)] flex-row-reverse;
+    @apply border-0 border-t border-solid border-[var(--line-box)];
+  }
+  .sale-modal-footer-mobile :global .ant-modal-content :global .ant-modal-footer button:last-child {
+    @apply mr-0 ml-0;
+  }
+
+  .sale-not-full-modal :global .ant-modal-content {
+    @apply !rounded-[12px] !w-[24.5px] !h-fit;
+  }
+  .sale-not-full-modal :global .ant-modal-content :global .ant-modal-body {
+    @apply !min-h-fit mb-[89px];
+  }
+  .sale-not-full-modal :global .ant-modal-content :global .ant-modal-footer {
+    @apply !border-none !w-full gap-x-[16px];
+  }
+
+  .sale-warning-modal :global .ant-modal-content {
+    @apply min-w-[640px];
+  }
+  .sale-warning-modal :global .ant-modal-content :global .ant-modal-body {
+    @apply pt-[40px] pb-[32px];
+  }
+}

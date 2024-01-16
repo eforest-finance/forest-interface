@@ -1,0 +1,41 @@
+.protocol-card,
+.protocol-card-m {
+  @apply cursor-pointer rounded-[12px] border-[1px] border-solid border-[var(--line-box)] relative bg-[var(--bg-page)] 2xl:!w-[448px] 2xl:!h-[448px] xl:w-[calc((100vw-128Px)/4)] xl:h-[calc((100vw-128Px)/4)] lg:w-[calc((100vw-112Px)/3)] lg:h-[calc((100vw-112Px)/3)] sm:w-[calc((100vw-64Px)/2)] sm:h-[calc((100vw-64Px)/2)] w-[calc((100vw-48Px))] h-[calc((100vw-48Px))];
+}
+
+.protocol-card:hover {
+  @apply border-brand;
+}
+
+.protocol-card-m {
+  @apply 2xl:!w-[460px] 2xl:!h-[460px] xl:w-[calc((100vw-84Px)/4)] xl:h-[calc((100vw-84Px)/4)] lg:w-[calc((100vw-64Px)/3)] lg:h-[calc((100vw-64Px)/3)] sm:w-[calc((100vw-48Px)/2)] sm:h-[calc((100vw-48Px)/2)] w-[calc((100vw-32Px))] h-[calc((100vw-32Px))];
+}
+
+.protocol-card :global(.ant-card-body) {
+  @apply hidden;
+}
+
+.protocol-card :global(.ant-card) {
+  @apply rounded-[12px];
+}
+
+.protocol-card :global(.ant-card-bordered) {
+  @apply border-none m-0;
+}
+
+.protocol-card :global(.ant-card-cover) {
+  @apply m-0;
+}
+
+.protocol-title {
+  @apply w-full h-[100px] absolute bottom-0 left-0 rounded-b-[12px] px-[16px];
+
+  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, #000 100%);
+  p {
+    @apply text-[16px] leading-[24px] font-semibold text-[var(--forest-text-primary)] mt-[60px];
+  }
+
+  .badge {
+    @apply flex items-center;
+  }
+}

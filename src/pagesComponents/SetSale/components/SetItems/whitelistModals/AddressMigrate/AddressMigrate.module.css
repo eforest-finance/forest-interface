@@ -1,0 +1,15 @@
+.migration-modal :global .ant-modal-body :global .tip svg {
+  @apply w-[24px] h-[24px] mr-[16px];
+}
+.migration-modal :global .ant-modal-body :global .tip {
+  @apply text-[#dd444d] mb-[32px];
+}
+.migration-modal :global .ant-modal-body :global .tip svg path {
+  @apply fill-[#dd444d];
+}
+.migration-modal :global .ant-modal-body :global .confirm {
+  @apply mt-[32px];
+}
+.migration-modal :global .ant-modal-body :global .ant-pagination {
+  @apply justify-center;
+}

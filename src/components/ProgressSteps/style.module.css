@@ -1,0 +1,126 @@
+/* stylelint-disable no-descending-specificity  */
+/* stylelint-disable no-duplicate-selectors */
+.elf-steps-wrapper {
+  @apply flex flex-col items-stretch mdb:flex-row;
+
+  .elf-step-wrapper {
+    @apply flex flex-1 flex-col justify-between;
+  }
+  .elf-step-wrapper:not(:first-child) {
+    @apply ml-0 mt-[12px] mdb:ml-[3px] mdb:mt-0;
+  }
+
+  .elf-step-wrapper:first-child {
+    .chain-step {
+      @apply mdb:pl-0;
+    }
+  }
+  .elf-step-wrapper:last-child {
+    .chain-step {
+      @apply mdb:pr-0;
+    }
+  }
+
+
+  .chain-step {
+    @apply relative flex flex-row items-start justify-start mdb:items-start  mdb:pl-[22.5px] mdb:pr-[22.5px];
+
+    .step-icon {
+      @apply flex items-center justify-center border-[var(--color-primary)] border-solid rounded-full;
+      @apply min-w-[24px] min-h-[24px] border-[2px] mr-[16px] mdb:border-[3px] mdb:mr-[12px] mdb:min-w-[50Px] mdb:min-h-[50Px];
+    }
+    .icon-title {
+      @apply text-[var(--color-primary)] font-semibold text-[14px] mdb:text-[24px];
+    }
+    :global(.ant-progress-circle .ant-progress-text) {
+      @apply text-[var(--color-primary)] font-semibold text-[14px] mdb:text-[24px];
+    }
+    .content {
+      @apply flex flex-col max-w-[430Px];
+      .title {
+        @apply flex font-semibold;
+
+        font-size: 20px;
+      }
+      .sub-title {
+        @apply flex text-[16px] text-[var(--color-placeholder)] whitespace-pre-line font-normal mt-[10Px];
+      }
+    }
+
+    .chain-step-tail {
+      @apply absolute top-[14px] pt-[11px] left-[11px] w-[2px] h-full;
+
+      &::after {
+        @apply bg-[var(--line-box)];
+
+        content: '';
+        width: 2px;
+        height: 100%;
+        display: block;
+      }
+    }
+
+    &.success {
+      .icon-title {
+        @apply text-[#1B76E2];
+      }
+      .chain-step-tail::after {
+        background-color: #1b76e2;
+      }
+    }
+  }
+
+  .progress-step {
+    @apply flex flex-col items-center mt-[48Px];
+    .progress-step-title {
+      @apply font-semibold;
+
+      font-size: 20px;
+      color: var(--text-item);
+
+      /* color: transparent;
+      background: #051d17 -webkit-linear-gradient(left, #1b76e2, #1b76e2) no-repeat 0 0;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 100% 100%; */
+    }
+    &.success .progress-step-title {
+      color: var(--primary-color);
+    }
+    &.exception .progress-step-title {
+      color: var(--error);
+    }
+    .progress-step-sub-title {
+      @apply flex h-[32px] text-[var(--color-placeholder)] font-semibold;
+
+      font-size: 14px;
+    }
+  }
+
+  .elf-step-wrapper:first-child .progress-step {
+    :global(.ant-progress-inner),
+    :global(.ant-progress-bg),
+    :global(.ant-progress-status-success) {
+      border-radius: 8px 0 0 8px !important;
+    }
+  }
+
+  .elf-step-wrapper:not(:first-child, :last-child) .progress-step {
+    :global(.ant-progress-inner),
+    :global(.ant-progress-bg),
+    :global(.ant-progress-status-success) {
+      border-radius: 0 !important;
+    }
+  }
+
+  .elf-step-wrapper:last-child .chain-step {
+    @apply self-start mdb:self-end;
+  }
+  .elf-step-wrapper:last-child .progress-step {
+    :global(.ant-progress-inner),
+    :global(.ant-progress-bg),
+    :global(.ant-progress-status-success) {
+      border-radius: 0 8px 8px 0;
+    }
+  }
+}

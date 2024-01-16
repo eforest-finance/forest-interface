@@ -1,0 +1,13 @@
+[defaults]
+url=https://sentry.io/
+project=forest
+org=blockchainforever
+
+[auth]
+token=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
+
+[log]
+level=debug
+
+[http]
+verify_ssl=false

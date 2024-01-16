@@ -1,0 +1,5 @@
+.empty__table {
+  :global(.ant-empty-footer) {
+    @apply flex justify-center mt-[24px];
+  }
+}

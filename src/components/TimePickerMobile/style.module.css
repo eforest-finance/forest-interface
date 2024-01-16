@@ -1,0 +1,43 @@
+/* stylelint-disable no-descending-specificity */
+.time-picker-popup {
+  :global(.adm-popup-body) {
+    @apply rounded-tl-[12px] rounded-tr-[12px] bg-transparent;
+  }
+}
+
+.time-picker-mobile {
+  @apply rounded-tl-[12px] rounded-tr-[12px];
+  :global {
+    .adm-picker-header {
+      @apply bg-[var(--bg-page)] border-[var(--line-box)];
+      .adm-picker-header-button {
+        @apply text-[var(--color-primary)];
+      }
+    }
+
+    .adm-picker-body {
+      .adm-picker-view {
+        @apply bg-[var(--bg-page)];
+        .adm-picker-view-column {
+          .adm-picker-view-column-item {
+            @apply text-[var(--color-primary)];
+          }
+          .adm-picker-view-column-item[aria-label='active'] {
+            @apply bg-[var(--brand-base)] text-[var(--text1)];
+          }
+          
+        }
+        .adm-picker-view-mask {
+          .adm-picker-view-mask-top, .adm-picker-view-mask-bottom {
+            @apply bg-[var(--bg-page)];
+          }
+          .adm-picker-view-mask-middle {
+            @apply bg-transparent border-[var(--line-box)];
+          }
+          
+        }
+      }
+      
+    }
+  }
+}
