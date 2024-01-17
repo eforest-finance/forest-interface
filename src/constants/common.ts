@@ -28,3 +28,6 @@ export const instagramReg = /^(https?:\/\/)?(www\.)?instagram\.com\/[a-zA-Z0-9-_
 export const urlReg = /(https?:\/\/)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i;
 export const DANGEROUS_CHARACTERS_REG = /^(?!.*[<>\\"'%&+\\\\\\']).*$/;
 export const externalLinkReg = /((https?|ftp):\/\/)([a-z0-9-]+\.)+[a-z]{2,}(:\d{1,5})?(\/[^\s]*)?/;
+
+export const hideHeaderPage = ['asset'];
+export const hideFooterPage = ['asset', 'explore-items', 'account', 'collections', 'my-collections'];

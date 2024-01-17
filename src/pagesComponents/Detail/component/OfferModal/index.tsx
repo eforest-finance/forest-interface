@@ -33,13 +33,7 @@ import { elementScrollToView } from 'utils/domUtils';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 
-function OfferModal(options: {
-  balance: BigNumber;
-  onClose?: () => void;
-  rate: number;
-  maxCountLoading?: boolean;
-  maxCount: number;
-}) {
+function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
   const promptModal = useModal(PromptModal);
   const resultModal = useModal(ResultModal);
@@ -51,16 +45,17 @@ function OfferModal(options: {
   const [quantity, setQuantity] = useState<number | string>('');
   const [price, setPrice] = useState<number | string>('');
   const [loading, setLoading] = useState(false);
-  const { onClose, rate, maxCount, maxCountLoading } = options;
+  const { onClose, rate } = options;
   const { detailInfo } = useDetailGetState();
   const {
     nftInfo,
-    nftNumber: { nftTotalSupply, tokenBalance },
+    nftNumber: { nftTotalSupply, nftBalance, tokenBalance },
   } = detailInfo;
   const makeOffer = useMakeOffer(nftInfo?.chainId);
   const { getAccountInfoSync } = useWalletSyncCompleted();
   const mainChainTokenBalance = useGetMainChainBalance({ tokenName: 'ELF' });
   const [priceErrorTip, setPriceErrorTip] = useState<string | ReactNode>('');
+  const [priceValid, setPriceValid] = useState<boolean>(false);
   const [durationTime, setDurationTime] = useState<string | number>('');
 
   const [durationHours, setDurationHours] = useState<string>('');
@@ -97,23 +92,28 @@ function OfferModal(options: {
     }
   }, [price, quantity, rate, totalPrice]);
 
-  const availableMount = useMemo(() => {
-    if (!price || !quantity || nftTotalSupply == '1') {
-      return nftTotalSupply;
-    }
-    const availableBuyAmount = Math.min(
-      Number(
-        BigNumber(Number(tokenBalance) / 100000000)
-          .minus(BigNumber(totalPrice))
-          .dividedBy(BigNumber(price))
-          .toFixed(0, BigNumber.ROUND_DOWN),
-      ),
-      Number(nftTotalSupply) - (Number(quantity) > 0 ? Number(quantity) : 0),
-    );
-    console.log('availableBuyAmount', availableBuyAmount);
+  const maxAvailable = useMemo(() => {
+    return new BigNumber(nftTotalSupply).minus(nftBalance || 0).toNumber();
+  }, [nftTotalSupply, nftBalance]);
 
-    return Math.max(availableBuyAmount, 0);
-  }, [nftTotalSupply, price, quantity, tokenBalance, totalPrice]);
+  const maxElfAvailable = useMemo(() => {
+    if (price) {
+      return new BigNumber(divDecimals(tokenBalance, 8)).div(new BigNumber(price)).toNumber();
+    }
+    return 0;
+  }, [price, tokenBalance]);
+
+  const availableMount = useMemo(() => {
+    if (!price) {
+      return maxAvailable;
+    }
+
+    const availableBuyAmount = new BigNumber(Math.min(maxAvailable, maxElfAvailable))
+      .minus(quantity || 0)
+      .toFixed(0, BigNumber.ROUND_DOWN);
+
+    return Math.max(Number(availableBuyAmount), 0);
+  }, [price, maxAvailable, maxElfAvailable, quantity]);
 
   const onQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value || BigNumber(e.target.value).isZero()) {
@@ -123,7 +123,7 @@ function OfferModal(options: {
     }
     const inputNumber = Number(formatInputNumber(e.target.value));
     setQuantity(inputNumber);
-    if (BigNumber(inputNumber).gt(BigNumber(nftTotalSupply))) {
+    if (BigNumber(inputNumber).gt(BigNumber(maxAvailable))) {
       setQuantityTip('The current maximum quotable quantity has been exceeded.');
       return;
     }
@@ -247,6 +247,10 @@ function OfferModal(options: {
     setPrice(price.price || '');
   };
 
+  useEffect(() => {
+    checkValid(price, quantity);
+  }, [price, quantity]);
+
   const handleDurationTime = (data: IDurationData) => {
     if (data.type === 'date') {
       setDurationTime(moment(data.value).valueOf());
@@ -278,20 +282,20 @@ function OfferModal(options: {
     });
   };
 
-  const checkValid = (price: number) => {
+  const checkValid = (price: number | string, quantity: number | string) => {
     const bigValue = BigNumber(price).multipliedBy(BigNumber(quantity));
     if (bigValue.gt(BigNumber(divDecimals(Number(tokenBalance), 8)))) {
       if (bigValue.gt(BigNumber(divDecimals(Number(tokenBalance) + Number(mainChainTokenBalance), 8)))) {
         setPriceErrorTip(<span>Insufficient balance.</span>);
-        return false;
+        setPriceValid(false);
       } else {
         setPriceErrorTip(
-          <span className="text-[var(--text-primary)]">
+          <span className="text-textPrimary">
             <>
               Insufficient balance.
               <span>You can</span>{' '}
               {isPortkeyConnected ? (
-                <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
+                <span className="cursor-pointer text-functionalLink" onClick={handleTransferShow}>
                   {`transfer tokens from MainChain to your SideChain address.`}
                 </span>
               ) : (
@@ -300,11 +304,11 @@ function OfferModal(options: {
             </>
           </span>,
         );
-        return false;
+        setPriceValid(false);
       }
     } else {
       setPriceErrorTip('');
-      return true;
+      setPriceValid(true);
     }
   };
 
@@ -351,13 +355,14 @@ function OfferModal(options: {
           type={nftTotalSupply === '1' ? PriceTypeEnum.MAKEOFFER721 : PriceTypeEnum.MAKEOFFER}
         />
         <SetPrice
+          title="Offer Amount"
           className="mt-[32px]"
           floorPrice={salesInfo?.floorPrice}
           bestOfferPrice={salesInfo?.maxOfferPrice}
           onChange={setOfferPrice}
-          checkValid={checkValid}
           errorTip={priceErrorTip}
-          placeholder="Please enter a valid value."
+          placeholder="Please enter your offer amount."
+          valid={!priceValid ? 'error' : ''}
         />
         {nftTotalSupply !== '1' && (
           <div className="mt-[60px]">

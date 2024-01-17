@@ -1,8 +1,8 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AMOUNT_LENGTH } from 'constants/common';
 import BigNumber from 'bignumber.js';
-import { formatTokenPrice } from 'utils/format';
 import { useUpdateEffect } from 'react-use';
+import { InputStatus } from 'antd/lib/_util/statusUtils';
 
 export interface ITokenOfPrice {
   symbol: string;
@@ -28,6 +28,7 @@ export interface ISetPriceProps {
   errorTip?: string | ReactNode;
   checkValid?: (price: number) => boolean;
   placeholder?: string;
+  valid?: InputStatus;
 }
 
 export function useSetPriceService({ onChange, defaultPrice, checkValid }: ISetPriceProps) {

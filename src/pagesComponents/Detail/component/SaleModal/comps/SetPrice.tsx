@@ -161,7 +161,7 @@ export function SetPrice(props: ISetPriceProps) {
   );
 
   const renderError = () => {
-    if (status !== 'error') return null;
+    if ((props?.valid || status) !== 'error') return null;
     if (errorTip) {
       return <div className="mt-2 text-xs text-error">{errorTip}</div>;
     }
@@ -196,7 +196,7 @@ export function SetPrice(props: ISetPriceProps) {
         placeholder={placeholder || 'Enter a price'}
         suffix={selectAfter}
         className={`${isSmallScreen ? 'mt-0' : 'mt-4'}`}
-        status={status}
+        status={props?.valid || status}
       />
       {renderError()}
     </div>

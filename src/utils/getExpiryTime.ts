@@ -1,3 +1,5 @@
+import { handlePlurality } from './handlePlurality';
+
 const getExpiryTime = (timestamp: number) => {
   const minute = 1000 * 60;
   const hour = minute * 60;
@@ -15,13 +17,13 @@ const getExpiryTime = (timestamp: number) => {
   const minCount = diffValue / minute;
 
   if (monthCount >= 1) {
-    return `in ${Math.floor(monthCount)} month`;
+    return `in ${handlePlurality(Math.floor(monthCount), 'month')}`;
   } else if (dayCount >= 1) {
-    return `in ${Math.floor(dayCount)} days`;
+    return `in ${handlePlurality(Math.floor(dayCount), 'day')}`;
   } else if (hourCount >= 1) {
-    return `in ${Math.floor(hourCount)} hours`;
+    return `in ${handlePlurality(Math.floor(hourCount), 'hour')}`;
   } else if (minCount >= 1) {
-    return `in ${Math.floor(minCount)} minutes`;
+    return `in ${handlePlurality(Math.floor(minCount), 'minute')}`;
   }
   return 'in 1 minute';
 };
