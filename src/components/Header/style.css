@@ -2,7 +2,7 @@
 /* stylelint-disable no-descending-specificity  */
 @layer components {
   .header-drawer {
-    @apply bg-[var(--bg2)] !z-[999];
+    @apply bg-[var(--bg2)] !z-[1000];
   }
   .header-drawer .ant-drawer-content-wrapper {
     @apply !w-[100%];
