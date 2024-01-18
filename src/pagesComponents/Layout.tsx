@@ -20,7 +20,7 @@ import { useEffectOnce, useLocalStorage } from 'react-use';
 import storages from '../storages';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'hooks/useTheme';
-import { logOutUserInfo, setUserInfo } from 'store/reducer/userInfo';
+import { logOutUserInfo, setUserInfo, setWalletInfo } from 'store/reducer/userInfo';
 import 'utils/analytics';
 import AWSManagerInstance from 'utils/S3';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
@@ -141,6 +141,7 @@ const Layout = dynamic(async () => {
       removeAccountInfo();
       removeWalletInfo();
       dispatch(setUserInfo(logOutUserInfo));
+      dispatch(setWalletInfo({}));
     }, [removeAccountInfo, removeWalletInfo]);
 
     useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
