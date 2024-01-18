@@ -46,7 +46,7 @@
 }
 
 .fixedTabs :global(.ant-tabs-nav) {
-  @apply sticky top-[62px] z-[999] bg-fillPageBg;
+  @apply sticky top-[62px] bg-fillPageBg;
   @apply before:absolute before:content-[''] before:right-0 before:left-0;
   @apply before:border-t-0 before:border-b before:border-solid before:border-lineDividers;
 
@@ -59,7 +59,7 @@
   }
 }
 .fixedTabs.has-sticky :global(.ant-tabs-nav) {
-  @apply bg-[var(--bg-header)] -mx-4;
+  @apply bg-[var(--bg-header)] -mx-4 z-[999];
   @apply before:right-0 before:left-0;
 
   :global(.ant-tabs-nav-list) {
