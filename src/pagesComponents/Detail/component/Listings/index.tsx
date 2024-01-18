@@ -80,15 +80,13 @@ function Listings(option: { rate: number }) {
       if (isLogin) {
         const nftBalanceBig = new BigNumber(nftNumber.nftBalance);
         const nftQuantityBig = new BigNumber(nftNumber.nftQuantity);
-        const myBalanceBig = divDecimals(nftNumber.tokenBalance, 8);
-        const priceBig = new BigNumber(record.price);
 
-        return nftBalanceBig.comparedTo(nftQuantityBig) === 0 || myBalanceBig.comparedTo(priceBig) === -1;
+        return nftBalanceBig.comparedTo(nftQuantityBig) === 0;
       } else {
         return false;
       }
     },
-    [isLogin, nftNumber.tokenBalance, nftNumber.nftBalance, nftNumber.nftQuantity],
+    [isLogin, nftNumber.nftBalance, nftNumber.nftQuantity],
   );
 
   useEffect(() => {

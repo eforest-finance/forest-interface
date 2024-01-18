@@ -187,7 +187,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
               </span>
               {isPortkeyConnected ? (
                 <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
-                  transfer tokens from MainChain to your SideChain address.
+                  manually transfer NFTs from SideChain to your MainChain address.
                 </span>
               ) : (
                 'manually transfer NFTs from SideChain to your MainChain address.'

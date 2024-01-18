@@ -72,10 +72,10 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
 
   const totalPrice = useMemo(() => {
     if (nftTotalSupply === '1') {
-      return price ? BigNumber(price).toFixed(4, BigNumber.ROUND_DOWN) : '--';
+      return price ? BigNumber(price).toNumber() : '--';
     } else {
       if (quantity && price) {
-        return BigNumber(price).multipliedBy(quantity).toFixed(4, BigNumber.ROUND_DOWN);
+        return BigNumber(price).multipliedBy(quantity).toNumber();
       } else {
         return '--';
       }
@@ -85,7 +85,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   const convertPrice = useMemo(() => {
     if (price && quantity && rate) {
       const averagePriceBig = BigNumber(totalPrice);
-      const convertAverage = averagePriceBig.multipliedBy(rate).toFixed(4, BigNumber.ROUND_DOWN);
+      const convertAverage = averagePriceBig.multipliedBy(rate).toNumber();
       return convertAverage;
     } else {
       return '--';
@@ -296,7 +296,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
               <span>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer text-functionalLink" onClick={handleTransferShow}>
-                  {`transfer tokens from MainChain to your SideChain address.`}
+                  {`manually transfer tokens from MainChain to your SideChain address.`}
                 </span>
               ) : (
                 'manually transfer tokens from MainChain to your SideChain address.'

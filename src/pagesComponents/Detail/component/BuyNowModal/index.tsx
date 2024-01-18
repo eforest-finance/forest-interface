@@ -64,20 +64,20 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
 
   const convertTotalPrice = useMemo(() => {
     const totalPriceBig = new BigNumber(totalPrice);
-    const convert = totalPriceBig.multipliedBy(elfRate).toFixed(4, BigNumber.ROUND_DOWN);
+    const convert = totalPriceBig.multipliedBy(elfRate).toNumber();
     return convert;
   }, [elfRate, totalPrice]);
   const [quantity, setQuantity] = useState<number>(0);
 
   const averagePrice = useMemo(() => {
     const totalPriceBig = new BigNumber(totalPrice);
-    const average = quantity ? totalPriceBig.div(quantity).toFixed(4, BigNumber.ROUND_DOWN) : 0;
+    const average = quantity ? totalPriceBig.div(quantity).toNumber() : 0;
     return average;
   }, [totalPrice, quantity]);
 
   const convertAveragePrice = useMemo(() => {
     const averagePriceBig = new BigNumber(averagePrice);
-    const convertAverage = averagePriceBig.multipliedBy(elfRate).toFixed(4, BigNumber.ROUND_DOWN);
+    const convertAverage = averagePriceBig.multipliedBy(elfRate).toNumber();
     return convertAverage;
   }, [averagePrice, elfRate]);
 
@@ -402,7 +402,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
     if (isSideChainBalanceInsufficient) {
       if (isAllChainsBalanceInsufficient) {
         return (
-          <div className="text-[12px] leading-[20px] font-normal text-[var(--text-primary)]">Insufficient balance.</div>
+          <div className="text-[12px] leading-[20px] font-normal text-functionalDanger">Insufficient balance.</div>
         );
       } else {
         return (
@@ -412,7 +412,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               <span>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
-                  {`transfer tokens from MainChain to your SideChain address.`}
+                  {`manually transfer tokens from MainChain to your SideChain address.`}
                 </span>
               ) : (
                 'manually transfer tokens from MainChain to your SideChain address.'

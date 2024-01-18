@@ -56,9 +56,7 @@ function BuyButton(props: IProps) {
       isOnlyOwner ||
       !nftInfo?.showPriceType ||
       !nftInfo?.listingPrice ||
-      (isLogin &&
-        nftNumber.nftQuantity < nftNumber.nftBalance &&
-        divDecimals(nftNumber.tokenBalance?.valueOf(), 8).toNumber() < (nftInfo?.listingPrice || 0)) ||
+      (isLogin && nftNumber.nftQuantity < nftNumber.nftBalance) ||
       !nftInfo?.canBuyFlag
     );
   }, [
@@ -69,7 +67,6 @@ function BuyButton(props: IProps) {
     isLogin,
     nftNumber.nftQuantity,
     nftNumber.nftBalance,
-    nftNumber.tokenBalance,
   ]);
 
   if (!nftInfo) return null;
