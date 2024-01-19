@@ -17,6 +17,8 @@ import { checkWalletSecurity } from 'aelf-web-login';
 import { debounce } from 'lodash-es';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();
@@ -36,6 +38,8 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const { quantity, onClose } = options;
 
   const [curImage, setCurImage] = useState<string | StaticImageData>(nftInfo?.previewImage || nftPreview);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   useEffect(() => {
     if (nftInfo?.previewImage) {
@@ -76,6 +80,11 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   };
 
   const toTransfer = debounce(async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     if (nftInfo) {
       setLoading(true);
       if (aelfDecodeAddress(target)) {

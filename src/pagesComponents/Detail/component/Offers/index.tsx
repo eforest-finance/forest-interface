@@ -23,12 +23,14 @@ import { getOffersInfo } from './utils/getOffersInfo';
 import useIntervalRequestForOffers from 'pagesComponents/Detail/hooks/useIntervalRequestForOffers';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { useMount } from 'react-use';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+
 
 export default function Offers(options: { rate: number; nftBalance: number }) {
   const exchangeModal = useModal(ExchangeModal);
   const cancelModal = useModal(CancelModal);
 
-  const { infoState, walletInfo } = useGetState();
+  const { infoState, walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const { detailInfo } = useDetailGetState();
   const { nftInfo, offers } = detailInfo;
@@ -38,6 +40,8 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
   };
 
   useIntervalRequestForOffers(id, chainId);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo.curChain);
 
   const nav = useRouter();
 
@@ -70,7 +74,11 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
     [],
   );
 
-  const onCancel = (data: FormatOffersType) => {
+  const onCancel = async (data: FormatOffersType) => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
     cancelModal.show({
       type: 'offer',
       data,

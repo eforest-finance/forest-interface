@@ -36,6 +36,7 @@ import { dispatch } from 'store/store';
 import moment from 'moment';
 import { getExploreLink } from 'utils';
 import BigNumber from 'bignumber.js';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -133,6 +134,8 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   const invalidListModal = useModal(InValidListMsgModal);
   const saleListingModal = useModal(SaleListingModal);
   const approveCancelListingModal = useModal(ApproveCancelListingModal);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   const listFail = (error?: IContractError) => {
     if (error) message.error(error.errorMessage?.message || DEFAULT_ERROR);
@@ -232,6 +235,11 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
 
   const onCancelAllListings = async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     sellModalInstance.hide();
     approveCancelListingModal.show({
       handle: async () => {
@@ -302,6 +310,12 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
   const onEditListingForERC721 = async () => {
     if (!checkInputDataBeforeSubmit()) return;
+
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     sellModalInstance.hide();
     const amount = 1;
     const durationList = getDurationParamsForListingContractByDuration(duration);
@@ -365,6 +379,11 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
 
   const onCompleteListingHandler = async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     if (!walletInfo.address || !nftInfo.nftSymbol || !checkInputDataBeforeSubmit()) return;
     dispatch(setApproveListingModalRetry(false));
 

@@ -14,12 +14,14 @@ import BigNumber from 'bignumber.js';
 import { message } from 'antd';
 import { messageHTML } from 'utils/aelfUtils';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export function useListingService(nftInfo: INftInfo, listingModalInstance?: NiceModalHandler, notFetchData?: boolean) {
   const { walletInfo } = useGetState();
   const [data, setData] = useState<FormatListingType[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const approveCancelListingModal = useModal(ApproveCancelListingModal);
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
   const getListingInfo = async () => {
     try {
       setLoading(true);
@@ -70,6 +72,10 @@ export function useListingService(nftInfo: INftInfo, listingModalInstance?: Nice
     // if (!isERC721 && data?.length) {
     //   itemsNumberForDel = data.reduce((pre, curItem) => pre + curItem.quantity, 0);
     // }
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
     listingModalInstance?.hide();
     approveCancelListingModal.show({
       handle: () => handleBatchDeList(),
@@ -121,7 +127,12 @@ export function useListingService(nftInfo: INftInfo, listingModalInstance?: Nice
     getListingInfo();
   };
 
-  const cancelListingItem = (item: FormatListingType) => {
+  const cancelListingItem = async (item: FormatListingType) => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     listingModalInstance?.hide();
     approveCancelListingModal.show({
       data: item,
