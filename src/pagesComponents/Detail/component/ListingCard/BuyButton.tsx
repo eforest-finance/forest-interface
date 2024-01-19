@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import { useGetOwnerInfo } from 'pagesComponents/Detail/hooks/useGetOwnerInfo';
 import BuyNowModal from '../BuyNowModal/index';
 import OfferModal from '../OfferModal/index';
+import BigNumber from 'bignumber.js';
 
 interface IProps {
   rate: number;
@@ -56,7 +57,7 @@ function BuyButton(props: IProps) {
       isOnlyOwner ||
       !nftInfo?.showPriceType ||
       !nftInfo?.listingPrice ||
-      (isLogin && nftNumber.nftQuantity < nftNumber.nftBalance) ||
+      (isLogin && BigNumber(nftNumber.nftQuantity).lt(BigNumber(nftNumber.nftBalance))) ||
       !nftInfo?.canBuyFlag
     );
   }, [

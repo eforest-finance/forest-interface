@@ -62,7 +62,7 @@ const NftInfoListCard = (props: INftInfoListCard) => {
       {isSmallScreen && (
         <div className="flex flex-1 flex-col justify-between items-start overflow-hidden">
           <p className={clsx('text-base font-medium text-textSecondary')}>{collectionName}</p>
-          <div className="flex items-center justify-between mt-[4px]">
+          <div className="flex items-center justify-between mt-[4px] w-full">
             <p className={clsx('text-xl flex-1 font-semibold text-textPrimary')}>{nftName}</p>
             <p className={clsx('text-base min-w-fit font-medium text-textSecondary text-right')}>{item}</p>
           </div>

@@ -180,6 +180,10 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               usdPrice: formatUSDPrice(convertPrice),
             };
           });
+          let errorCount = 0;
+          batchBuyNowRes.failPriceList?.value.forEach((item) => {
+            errorCount += Number(item.quantity);
+          });
           resultModal.show({
             previewImage: nftInfo?.previewImage || '',
             title: 'Purchase Partially Completed',
@@ -193,13 +197,13 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               logoImage: nftInfo?.nftCollection?.logoImage || '',
               subTitle: nftInfo?.nftCollection?.tokenName,
               title: nftInfo?.tokenName,
-              extra: isERC721(nftInfo!) ? undefined : handlePlurality(buyListingData.length, 'item'),
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(Number(quantity) - errorCount, 'item'),
             },
             jumpInfo: {
               url: explorerUrl,
             },
             error: {
-              title: `Purchase of ${handlePlurality(length, 'item')}  failed`,
+              title: `Purchase of ${handlePlurality(errorCount, 'item')}  failed`,
               description: `Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item before you.`,
               list,
             },
