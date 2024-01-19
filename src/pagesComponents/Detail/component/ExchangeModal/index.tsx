@@ -65,7 +65,7 @@ function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance
 
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted();
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
   const price = new BigNumber(art?.price || 0);
   const convertPrice = new BigNumber(art?.convertPrice || 0);
 

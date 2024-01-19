@@ -24,6 +24,7 @@ import useBatchBuyNow from 'pagesComponents/Detail/hooks/useBatchBuyNow';
 import { DEFAULT_PAGE_SIZE } from 'constants/index';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 
+
 interface IValidListInfo {
   curMax: number;
   validList: FormatListingType[];
@@ -39,7 +40,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
   const modal = useModal();
   const pathname = usePathname();
 
-  const { infoState, walletInfo } = useGetState();
+  const { infoState, walletInfo, aelfInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
   const { nftInfo } = detailInfo;
@@ -71,7 +72,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void }) {
     return convertAverage;
   }, [averagePrice, elfRate]);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted();
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo?.curChain);
 
   const onChangeQuantity = (type: '+' | '-') => {
     if (nftInfo && isTokenIdReuse(nftInfo)) {
