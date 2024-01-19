@@ -113,7 +113,7 @@ export const useCheckLoginAndToken = () => {
   const loginModal = useModal(LoginModal);
   const pathName = usePathname();
 
-  const { loginState, login: aelfLogin, loginEagerly, logout } = useWebLogin();
+  const { loginState, login: aelfLogin, loginEagerly, logout, walletType } = useWebLogin();
   const isWalletLogin = loginState === WebLoginState.logined;
   const isEagerly = loginState === WebLoginState.eagerly;
   const loginMethod = isEagerly ? loginEagerly : aelfLogin;
@@ -149,6 +149,14 @@ export const useCheckLoginAndToken = () => {
 
   const initToken = async () => {
     getTokenLoading = true;
+    if (walletType === WalletType.portkey) {
+      try {
+        await getToken();
+      } finally {
+        getTokenLoading = false;
+      }
+      return;
+    }
     loginModal.show({
       onConfirm: async () => {
         try {
