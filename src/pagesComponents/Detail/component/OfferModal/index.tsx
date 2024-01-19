@@ -34,7 +34,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
   const pathname = usePathname();
 
-  const { infoState } = useGetState();
+  const { infoState, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const [token, setToken] = useState<string>('ELF');
   const [quantity, setQuantity] = useState<number>();
@@ -52,7 +52,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   const { detailInfo } = useDetailGetState();
   const { nftInfo, nftNumber } = detailInfo;
   const makeOffer = useMakeOffer(nftInfo?.chainId);
-  const { getAccountInfoSync } = useWalletSyncCompleted();
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   const [balanceNotEnough, setBalanceNotEnough] = useState<boolean>(false);
 

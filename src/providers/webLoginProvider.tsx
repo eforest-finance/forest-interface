@@ -16,7 +16,7 @@ const WebLoginProviderDynamic = dynamic(
 
     weblogin.setGlobalConfig({
       appName: APP_NAME,
-      chainId: info.curChain,
+      chainId: 'AELF', //info.curChain,
       portkey: {
         useLocalStorage: true,
         graphQLUrl: info.graphqlServer,
@@ -49,7 +49,7 @@ const WebLoginProviderDynamic = dynamic(
           },
         },
       },
-      defaultRpcUrl: (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) || info?.rpcUrlTDVW,
+      defaultRpcUrl: (info?.[`rpcUrl${String('AELF').toUpperCase()}`] as unknown as string) || info?.rpcUrlTDVW,
       networkType: info?.networkType,
     });
     return weblogin.WebLoginProvider;
