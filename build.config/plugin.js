@@ -1,5 +1,6 @@
 // const withLess = require('next-with-less');
 
+const { NEXT_PUBLIC_APP_ENV } = process.env;
 const { withSentryConfig } = require('@sentry/nextjs');
 const sentryWebpackPluginOptions = {
   silent: true, // Suppresses all logs
@@ -9,4 +10,7 @@ const sentryWebpackPluginOptions = {
   org: 'blockchainforever',
   project: 'forest',
 };
-module.exports = [(nextConfig) => withSentryConfig(nextConfig, sentryWebpackPluginOptions)];
+module.exports = [
+  (nextConfig) =>
+    NEXT_PUBLIC_APP_ENV === 'development' ? nextConfig : withSentryConfig(nextConfig, sentryWebpackPluginOptions),
+];

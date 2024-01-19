@@ -20,6 +20,7 @@ import Profile from 'assets/images/profile.svg';
 import MyCollection from 'assets/images/myCollection.svg';
 import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
+import DropIcon from 'assets/images/events/drops.svg';
 
 import './style.css';
 import styles from './style.module.css';
@@ -129,6 +130,11 @@ function Header() {
                       <span>Create a Collection</span>
                     </AuthNavLink>
                   </p>
+                  <p className="menu-item">
+                    <Link href={'/drops'}>
+                      <DropIcon /> <span>Drops</span>
+                    </Link>
+                  </p>
                 </div>
                 <div className="menu-wrap">
                   <p className="menu-item" onClick={onClose}>
@@ -227,6 +233,9 @@ function Header() {
                 }>
                 <span className="!cursor-default">Create</span>
               </DropMenu>
+              <Link href="/drops" className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
+                Drops
+              </Link>
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
