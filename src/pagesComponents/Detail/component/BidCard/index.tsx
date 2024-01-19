@@ -128,7 +128,7 @@ const BidList = ({ bidInfos }: { bidInfos: IBidInfo[] }) => {
       key: 'bidTime',
       with: 200,
       render: (text: string) => {
-        return `${moment.unix(Number(text)).utc().format('YYYY.MM.DD HH:mm:ss')}`;
+        return `${moment.unix(Number(text)).format('YYYY.MM.DD HH:mm:ss')}`;
       },
     },
     {
