@@ -95,6 +95,7 @@ export interface IListingsParams {
   skipCount: number;
   maxResultCount: number;
   address?: string;
+  excludedAddress?: string;
 }
 
 export interface IListingsResponse {
@@ -555,6 +556,7 @@ export interface INftSaleInfoItem {
 }
 export interface INftSaleInfoParams {
   id: string;
+  excludedAddress?: string;
 }
 export interface INftSaleInfoResponse {
   data: INftSaleInfoItem;

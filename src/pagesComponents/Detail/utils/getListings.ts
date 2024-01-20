@@ -10,15 +10,24 @@ interface IProps {
   symbol: string;
   address?: string;
   chainId: Chain;
+  excludedAddress?: string;
 }
 
-const getListings = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, symbol, address, chainId }: IProps) => {
+const getListings = async ({
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  symbol,
+  address,
+  excludedAddress,
+  chainId,
+}: IProps) => {
   try {
     const result = await fetchListings({
       chainId,
       symbol,
       skipCount: (page - 1) * pageSize,
       maxResultCount: pageSize,
+      excludedAddress,
       address,
     });
 

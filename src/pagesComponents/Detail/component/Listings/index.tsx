@@ -28,6 +28,7 @@ import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { useListingService } from '../SaleListingModal/hooks/useListingService';
 import { INftInfo } from 'types/nftTypes';
 import { useMount } from 'react-use';
+import BuyNowModal from '../BuyNowModal';
 
 function Listings(option: { nftBalance: number; nftQuantity: number; myBalance: BigNumber | undefined; rate: number }) {
   const exchangeModal = useModal(ExchangeModal);
@@ -39,6 +40,7 @@ function Listings(option: { nftBalance: number; nftQuantity: number; myBalance: 
     type: string;
   };
   const { isLogin, login } = useCheckLoginAndToken();
+  const buyModal = useModal(BuyNowModal);
 
   const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
@@ -68,28 +70,10 @@ function Listings(option: { nftBalance: number; nftQuantity: number; myBalance: 
   };
 
   const onClickBuy = (record: FormatListingType) => {
-    console.log('handleListingBuy', nftInfo, record);
-    if (nftInfo && record?.purchaseToken) {
-      const convertPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? rate : 1);
-      const art: ArtType = {
-        id: nftInfo.nftTokenId,
-        symbol: nftInfo.nftSymbol,
-        name: nftInfo.tokenName || '',
-        collection: nftInfo.nftCollection?.tokenName,
-        token: { symbol: record?.purchaseToken?.symbol },
-        decimals: record?.decimals,
-        price: record?.price,
-        quantity: record?.quantity,
-        convertPrice,
-        address: record.ownerAddress,
-      };
-
-      exchangeModal.show({
-        art,
-        nftBalance,
-        exchangeType: '',
-      });
-    }
+    buyModal.show({
+      elfRate: rate,
+      buyItem: record,
+    });
   };
 
   const buyDisabled = useCallback(
