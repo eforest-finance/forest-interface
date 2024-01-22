@@ -54,7 +54,7 @@ function DetailPc() {
             <Creator />
             <Title className={`${nftInfo?.nftCollection?.tokenName && 'mt-[12px]'} text-5xl`} />
             <Owner className="mt-[12px]" isERC721={isERC721} />
-            {!isFetching && (
+            {!isFetching && nftInfo && (
               <>
                 {intervalDataForBid?.isBidding ? (
                   <div className="mt-[40px]">
