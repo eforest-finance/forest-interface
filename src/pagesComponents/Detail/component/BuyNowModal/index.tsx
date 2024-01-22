@@ -141,6 +141,8 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         quantity,
       });
 
+      console.log('batchBuyNowRes', batchBuyNowRes);
+
       if (batchBuyNowRes && batchBuyNowRes !== 'failed') {
         const explorerUrl = getExploreLink(batchBuyNowRes.TransactionId, 'transaction', nftInfo?.chainId);
         if (batchBuyNowRes.allSuccessFlag) {

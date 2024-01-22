@@ -188,7 +188,7 @@ export default function Offers(options: { rate: number }) {
 
       offers?.items?.forEach((target: FormatOffersType) => {
         const price = `${formatTokenPrice(target?.price)} ${target.token.symbol}`;
-        const usdPrice = target?.price * (target?.token?.symbol === 'ELF' ? rate : 1);
+        const usdPrice = `${formatUSDPrice(target?.price * (target?.token?.symbol === 'ELF' ? rate : 1))}`;
 
         const priceWidth = getTextWidth(price) + 24;
         const usdPriceWidth = getTextWidth(formatUSDPrice(Number(usdPrice))) + 24;
@@ -196,8 +196,8 @@ export default function Offers(options: { rate: number }) {
         const curPriceValue = widthMap.get('price') || 0;
         const curUsdPriceValue = widthMap.get('usdPrice') || 0;
 
-        widthMap.set('price', Math.max(curPriceValue, priceWidth, DEFAULT_CELL_WIDTH));
-        widthMap.set('usdPrice', Math.max(curUsdPriceValue, usdPriceWidth, isERC721 ? DEFAULT_CELL_WIDTH : 170));
+        widthMap.set('price', Math.max(curPriceValue, priceWidth, 150));
+        widthMap.set('usdPrice', Math.max(curUsdPriceValue, usdPriceWidth, 150));
         columWidth.current = widthMap;
       });
     };
@@ -213,7 +213,7 @@ export default function Offers(options: { rate: number }) {
         title: titles.PRICE,
         key: 'price',
         dataIndex: 'price',
-        width: columWidth.current?.get('price') || DEFAULT_CELL_WIDTH,
+        width: columWidth.current?.get('price') || 150,
         render: (text: string, record: FormatOffersType) => (
           <TableCell content={`${formatTokenPrice(text)} ${record.token.symbol}`} />
         ),
@@ -222,7 +222,7 @@ export default function Offers(options: { rate: number }) {
         title: titles.USD_PRICE,
         key: 'usdPrice',
         dataIndex: 'usdPrice',
-        width: columWidth.current?.get('usdPrice') || (isERC721 ? DEFAULT_CELL_WIDTH : 170),
+        width: columWidth.current?.get('usdPrice') || 150,
         render: (_, record: FormatOffersType) => {
           const usdPrice = record?.price * (record?.token?.symbol === 'ELF' ? rate : 1);
           return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
@@ -280,6 +280,7 @@ export default function Offers(options: { rate: number }) {
       },
       {
         key: 'action',
+        fixed: 'right',
         width: 92,
         render: (_text: string, record: FormatOffersType) =>
           record?.from?.address !== walletInfo.address ? (
@@ -324,6 +325,7 @@ export default function Offers(options: { rate: number }) {
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
           <Table
+            className={styles['offers-table-custom']}
             loading={loading}
             rowKey={(record) => record.from + record.key}
             pagination={{

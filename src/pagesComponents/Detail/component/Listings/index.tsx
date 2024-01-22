@@ -97,7 +97,7 @@ function Listings(option: { rate: number }) {
 
       listings?.items?.forEach((target: FormatListingType) => {
         const price = `${formatTokenPrice(target.price)} ${target?.purchaseToken?.symbol}`;
-        const usdPrice = target?.price * (target?.purchaseToken?.symbol === 'ELF' ? rate : 1);
+        const usdPrice = `${formatUSDPrice(target?.price * (target?.purchaseToken?.symbol === 'ELF' ? rate : 1))}`;
 
         const priceWidth = getTextWidth(String(price)) + 24;
         const usdPriceWidth = getTextWidth(String(usdPrice)) + 24;
@@ -105,8 +105,8 @@ function Listings(option: { rate: number }) {
         const curPriceValue = widthMap.get('price') || 0;
         const curUsdPriceValue = widthMap.get('usdPrice') || 0;
 
-        widthMap.set('price', Math.max(curPriceValue, priceWidth, DEFAULT_CELL_WIDTH));
-        widthMap.set('usdPrice', Math.max(curUsdPriceValue, usdPriceWidth, isERC721 ? DEFAULT_CELL_WIDTH : 170));
+        widthMap.set('price', Math.max(curPriceValue, priceWidth, 150));
+        widthMap.set('usdPrice', Math.max(curUsdPriceValue, usdPriceWidth, 150));
         columWidth.current = widthMap;
       });
     };
@@ -114,14 +114,14 @@ function Listings(option: { rate: number }) {
     if (listings?.items && listings.items.length) {
       getMaxColumWidth();
     }
-  }, [isSmallScreen, listings, rate]);
+  }, [isERC721, isSmallScreen, listings, rate]);
 
   const columns: ColumnsType<FormatListingType> = useMemo(
     () => [
       {
         title: titles.PRICE,
         key: 'price',
-        width: columWidth.current?.get('price') || DEFAULT_CELL_WIDTH,
+        width: columWidth.current?.get('price') || 150,
         dataIndex: 'price',
         render: (text: string, record: FormatListingType) => (
           <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />
@@ -130,7 +130,7 @@ function Listings(option: { rate: number }) {
       {
         title: titles.USD_PRICE,
         key: 'usdPrice',
-        width: columWidth.current?.get('usdPrice') || (isERC721 ? DEFAULT_CELL_WIDTH : 170),
+        width: columWidth.current?.get('usdPrice') || 150,
         dataIndex: 'usdPrice',
         render: (_, record: FormatListingType) => {
           const usdPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? rate : 1);
@@ -171,6 +171,7 @@ function Listings(option: { rate: number }) {
       },
       {
         key: 'action',
+        fixed: 'right',
         width: 92,
         render: (_text: string, record: FormatListingType) =>
           record.ownerAddress !== walletInfo.address ? (
@@ -232,6 +233,7 @@ function Listings(option: { rate: number }) {
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
           <Table
+            className={styles['listings-table-custom']}
             loading={loading}
             columns={columns}
             scroll={{ x: 792, y: 326 }}
