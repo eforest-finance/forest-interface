@@ -143,6 +143,7 @@ export function SetPrice(props: ISetPriceProps) {
       defaultValue="ELF"
       bordered={false}
       popupClassName="!border-none"
+      getPopupContainer={(v) => v}
       className="!border-0 !my-4 !h-6 !-mr-[11px] !border-l border-solid !border-lineDividers !rounded-none"
       onChange={(tokenId) => setToken(fixedPrice?.[tokenId as FixedPriceKey])}
       onClick={(e) => {

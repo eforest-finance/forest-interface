@@ -36,6 +36,9 @@ import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { handlePlurality } from 'utils/handlePlurality';
 import { CancelListingMessage, ListingMessage } from 'constants/promptMessage';
 import { elementScrollToView } from 'utils/domUtils';
+import { store, useSelector } from 'store/store';
+import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { selectInfo } from 'store/reducer/info';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -126,6 +129,8 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   const editListingSuccessModal = useModal(EditListingSuccessModal);
   const saleListingModal = useModal(SaleListingModal);
 
+  const { isSmallScreen } = useSelector(selectInfo);
+
   const listFail = (error?: IContractError) => {
     if (error) message.error(error.errorMessage?.message || DEFAULT_ERROR);
   };
@@ -137,7 +142,8 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     editListingSuccessModal.hide();
     saleListingModal.hide();
     sellModalInstance.hide();
-    elementScrollToView(document.getElementById('listings'));
+    store.dispatch(setCurrentTab('listingOffers'));
+    elementScrollToView(document.getElementById('listings'), isSmallScreen ? 'start' : 'center');
   };
 
   const listWithFixedPrice = async (amount: number, status?: EditStatusType) => {

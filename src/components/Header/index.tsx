@@ -149,7 +149,7 @@ function Header() {
                       onClose={onClose}
                       open={childVisible}>
                       <h1 className="drawer-title font-semibold">Wallet</h1>
-                      <WalletMenu />
+                      <WalletMenu onclick={onClose} />
                       <div className="return-wrap">
                         <Button type="default" onClick={onChildClose}>
                           Return

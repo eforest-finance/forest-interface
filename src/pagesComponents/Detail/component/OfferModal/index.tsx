@@ -33,6 +33,8 @@ import { elementScrollToView } from 'utils/domUtils';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { Moment } from 'moment';
+import { store } from 'store/store';
+import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 
 function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
@@ -173,7 +175,8 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
             btnText: 'View My Offer',
             onConfirm: () => {
               resultModal.hide();
-              elementScrollToView(document.getElementById('page-detail-offers'));
+              store.dispatch(setCurrentTab('listingOffers'));
+              elementScrollToView(document.getElementById('page-detail-offers'), isSmallScreen ? 'start' : 'center');
             },
           },
           info: {

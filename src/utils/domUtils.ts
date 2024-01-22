@@ -1,4 +1,4 @@
-function elementScrollToView(element: HTMLElement | null) {
+function elementScrollToView(element: HTMLElement | null, block?: 'center' | 'end' | 'start') {
   if (!element) {
     return;
   }
@@ -6,7 +6,7 @@ function elementScrollToView(element: HTMLElement | null) {
     try {
       element.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
+        block: block || 'center',
       });
     } catch (error) {
       console.log('scrollIntoView error', error);

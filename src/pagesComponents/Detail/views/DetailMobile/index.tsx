@@ -20,6 +20,9 @@ import ListingCard from 'pagesComponents/Detail/component/ListingCard';
 import BigNumber from 'bignumber.js';
 import { useIntersection } from 'react-use';
 import clsx from 'clsx';
+import useDetailGetState from 'store/state/detailGetState';
+import { store } from 'store/store';
+import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
@@ -32,6 +35,10 @@ export default function DetailMobile() {
     rootMargin: `0px 0px -${bottom}px 0px`,
   });
   intersection?.isIntersecting && console.log('tabRef intersection', intersection);
+
+  const {
+    detailInfo: { currentTab },
+  } = useDetailGetState();
 
   return (
     <div className={`${styles.detail} ${styles['mobile-detail']}`}>
@@ -55,6 +62,10 @@ export default function DetailMobile() {
         )}
         <div ref={tabsRef} className="mt-10">
           <Tabs
+            activeKey={currentTab}
+            onChange={(activeKey) => {
+              store.dispatch(setCurrentTab(activeKey));
+            }}
             className={clsx(styles['fixedTabs'], intersection?.isIntersecting && styles['has-sticky'])}
             animated={false}>
             <Tabs.TabPane tab="Details" key="detail">

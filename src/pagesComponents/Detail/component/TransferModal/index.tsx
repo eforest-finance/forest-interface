@@ -329,10 +329,6 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
             onBlur={onAddressBlur}
             value={inputAddress}
             onChange={onAddressChange}
-            onClickAddress={(address: string) => {
-              setInputAddress(address);
-              decodeAddress(address);
-            }}
             errorTip={addressErrorTip}
           />
         </div>

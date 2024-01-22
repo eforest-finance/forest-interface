@@ -1,5 +1,0 @@
-.transfer-input-popover {
-  :global(.ant-popover-inner-content) {
-    @apply p-0 w-full;
-  }
-}

@@ -54,6 +54,7 @@ export type ItemState = {
   } | null;
   nftNumber: NftNumberType;
   updateDetailLoading: boolean;
+  currentTab: string;
 };
 
 export interface IRangInputState {
