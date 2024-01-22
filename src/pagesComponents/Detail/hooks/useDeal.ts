@@ -79,7 +79,7 @@ export default function useDeal(chainId?: Chain) {
         message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
         return Promise.reject(error);
       }
-      showErrorModal({ quantity: parameter.quantity });
+      showErrorModal({ quantity: 0 });
       return 'failed';
     }
   };

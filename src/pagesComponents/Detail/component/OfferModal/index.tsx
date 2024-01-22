@@ -32,6 +32,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { elementScrollToView } from 'utils/domUtils';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
+import { Moment } from 'moment';
 
 function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
@@ -124,7 +125,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     const inputNumber = Number(formatInputNumber(e.target.value));
     setQuantity(inputNumber);
     if (BigNumber(inputNumber).gt(BigNumber(maxAvailable))) {
-      setQuantityTip('The current maximum quotable quantity has been exceeded.');
+      setQuantityTip('Maximum quantity exceeded. Please ensure your offer does not exceed the available quantity.');
       return;
     }
     setQuantityTip('');
@@ -327,6 +328,20 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     return true;
   };
 
+  const checkDateValidate = (date: Moment) => {
+    const timeDifference = date.diff(moment());
+    const minutesDifference = moment.duration(timeDifference).asMinutes();
+
+    const months = moment.duration(timeDifference).asMonths();
+    if (minutesDifference < 15) {
+      return 'The duration should be at least 15 minutes.';
+    } else if (months > 6) {
+      return 'The duration should be no more than 6 months.';
+    } else {
+      return '';
+    }
+  };
+
   return (
     <Modal
       destroyOnClose
@@ -375,7 +390,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
           </div>
         )}
         <div className="mt-[60px]">
-          <Duration onChange={handleDurationTime} />
+          <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
         </div>
         <div className="mt-[32px]">
           <Balance amount={divDecimals(Number(tokenBalance), 8).toNumber()} suffix="ELF" />
