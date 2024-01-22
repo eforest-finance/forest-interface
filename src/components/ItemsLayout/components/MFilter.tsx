@@ -4,14 +4,9 @@ import { setCollapsed } from 'store/reducer/layoutInfo';
 import ItemsSider from '../ItemsSide/ItemsSide';
 import styles from './index.module.css';
 import Button from 'baseComponents/Button';
+import { ButtonType } from 'antd/es/button';
 
-export default function FilterBtn({
-  type = 'primary',
-  position = 'bottom',
-}: {
-  type?: 'primary' | 'link' | 'text' | 'ghost' | 'default' | 'dashed' | undefined;
-  position?: string;
-}) {
+export default function FilterBtn({ type = 'primary', position = 'bottom' }: { type?: ButtonType; position?: string }) {
   const {
     info: { isSmallScreen },
     layoutInfo: { isCollapsed },
@@ -25,10 +20,10 @@ export default function FilterBtn({
         {position === 'top' ? 'filter' : 'Filter'}
       </Button>
       <Drawer
-        className={`${styles['filter-btn-wrapper']} ${isSmallScreen ? styles['filter-btn-wrapper-mobile'] : ''}`}
+        rootClassName={`${styles['filter-btn-wrapper']} ${isSmallScreen ? styles['filter-btn-wrapper-mobile'] : ''}`}
         placement={'right'}
         closable={false}
-        maskStyle={{ background: 'none' }}
+        maskClassName="bg-none"
         open={isCollapsed}>
         <ItemsSider />
       </Drawer>

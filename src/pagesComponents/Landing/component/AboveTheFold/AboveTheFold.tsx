@@ -10,6 +10,7 @@ import { useTheme } from 'hooks/useTheme';
 import BaseButton from 'baseComponents/Button';
 import useResponsive from 'hooks/useResponsive';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
+import clsx from 'clsx';
 
 export default function AboveTheFold() {
   const router = useRouter();
@@ -45,8 +46,8 @@ export default function AboveTheFold() {
               alt={'forestBanner'}
             />
           </div>
-          <div className={styles['action-wrapper']}>
-            <BaseButton type="primary" className="mr-[16px]" size="ultra" onClick={createAnNFT}>
+          <div className={clsx(styles['action-wrapper'], 'flex flex-col mdTW:flex-row')}>
+            <BaseButton type="primary" className="mr-0 mdTW:mr-[16px]" size="ultra" onClick={createAnNFT}>
               Create an Item
             </BaseButton>
             <BaseButton type="default" onClick={() => router.push('/collections')} size="ultra">

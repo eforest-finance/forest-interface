@@ -157,6 +157,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
   return (
     <div>
       <Menu
+        triggerSubMenuAction="click"
         className={`min-w-[404px] ${styles['wallet-menu']} ${isSmallScreen && styles['mobile-wallet-menu']}`}
         items={items}
         onClick={onclick}

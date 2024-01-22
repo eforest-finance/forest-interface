@@ -88,7 +88,7 @@ function Header() {
               <Frame />
             </div>
             <Drawer
-              className="header-drawer"
+              rootClassName="header-drawer"
               extra={
                 <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>
               }
@@ -103,13 +103,13 @@ function Header() {
                     </Link>
                   </p>
                   <p className="menu-item">
-                    <AuthNavLink to="/create-item" className="create-icon">
+                    <AuthNavLink to="/create-item" rootClassName="create-icon">
                       <Create />
                       <span>Create an Item</span>
                     </AuthNavLink>
                   </p>
                   <p className="menu-item">
-                    <AuthNavLink to="/create-collection" className="create-collection-icon">
+                    <AuthNavLink to="/create-collection" rootClassName="create-collection-icon">
                       <CreateCollection />
                       <span>Create a Collection</span>
                     </AuthNavLink>
@@ -129,7 +129,7 @@ function Header() {
                   <p className="menu-item" onClick={showChildDrawer}>
                     <Wallet /> <span>Wallet</span>
                     <Drawer
-                      className="header-drawer child-drawer"
+                      rootClassName="header-drawer child-drawer"
                       extra={
                         <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
                       }
@@ -193,17 +193,15 @@ function Header() {
               <DropMenu
                 getPopupContainer={(v) => v}
                 className={`${styles['nav-text']} ${pathname === '/create' && styles['text-select']}`}
-                overlay={
-                  <Menu
-                    items={[
-                      { label: <AuthNavLink to={'/create-item'}>Create an Item</AuthNavLink>, key: 'item' },
-                      {
-                        label: <AuthNavLink to={'/create-collection'}>Create a Collection</AuthNavLink>,
-                        key: 'Collection',
-                      },
-                    ]}
-                  />
-                }>
+                menu={{
+                  items: [
+                    { label: <AuthNavLink to={'/create-item'}>Create an Item</AuthNavLink>, key: 'item' },
+                    {
+                      label: <AuthNavLink to={'/create-collection'}>Create a Collection</AuthNavLink>,
+                      key: 'Collection',
+                    },
+                  ],
+                }}>
                 <span className="!cursor-default">Create</span>
               </DropMenu>
             </Space>
@@ -220,7 +218,12 @@ function Header() {
                 open={walletVisible}
                 destroyPopupOnHide={true}
                 getPopupContainer={(v) => v}
-                onOpenChange={(flag) => setWalletVisible(flag)}
+                onOpenChange={(flag, info) => {
+                  if (info.source === 'menu') {
+                    return;
+                  }
+                  setWalletVisible(flag);
+                }}
                 overlay={<WalletMenu />}
                 placement="bottomRight">
                 <span className={`${styles['header-wallet-btn']} flex w-[40px] h-[40px]`}>

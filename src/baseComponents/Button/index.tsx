@@ -1,36 +1,24 @@
-import React, { useMemo } from 'react';
-import { Button as AntdButton, ButtonProps as AntdButtonProps } from 'antd';
+import React from 'react';
+import { AELFDProvider, Button as AelfButton, IButtonProps } from 'aelf-design';
 import styles from './index.module.css';
-import { SizeType as AntdSizeType } from 'antd/lib/config-provider/SizeContext';
+import { themeButtonConfig } from './config';
 
-type ExtSizeType = 'ultra' | 'mini';
-type SizeType = AntdSizeType | ExtSizeType;
-
-interface ButtonProps extends Omit<AntdButtonProps, 'size'> {
-  size?: SizeType;
-  isFull?: boolean;
-}
-
-function Button(props: ButtonProps) {
-  const { children, size = 'large', isFull } = props;
-  const extSizeType = ['ultra', 'mini'];
-
-  const sizeStyle: Record<ExtSizeType, string> = {
-    ultra: styles['forest-btn-ultra'],
-    mini: styles['forest-btn-mini'],
-  };
-
-  const isExtSize = useMemo(() => size && extSizeType.includes(size), [size]);
-
+function Button(props: IButtonProps) {
   return (
-    <AntdButton
-      {...props}
-      size={isExtSize ? 'middle' : (size as AntdSizeType)}
-      className={`${styles.button} ${isExtSize ? sizeStyle[size as ExtSizeType] : ''} ${
-        isFull && styles['button-full']
-      } ${props.className}`}>
-      {children}
-    </AntdButton>
+    <AELFDProvider
+      prefixCls="forest"
+      theme={{
+        components: {
+          Button: themeButtonConfig,
+        },
+      }}>
+      <AelfButton
+        {...props}
+        className={`${styles.button} ${props.size === 'ultra' ? 'font-semibold' : 'font-medium'} ${
+          props.size === 'mini' && styles['forest-btn-mini']
+        } ${props.className}`}
+      />
+    </AELFDProvider>
   );
 }
 

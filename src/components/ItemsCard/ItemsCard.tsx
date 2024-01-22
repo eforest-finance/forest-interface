@@ -110,7 +110,7 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
       {extraActions}
       {!extraActions && !hiddenActions && dataSource?.listingAddress !== null && !!dataSource?.canBuyFlag && (
         <div className={styles['items-card-action']}>
-          <Button size="middle" type="default">
+          <Button size="medium" type="default">
             Buy Now
           </Button>
         </div>

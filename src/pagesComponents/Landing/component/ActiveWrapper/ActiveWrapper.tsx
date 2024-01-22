@@ -17,7 +17,7 @@ export default function ActiveWrapper() {
         </div>
         <Button
           type="default"
-          isFull={isSmallScreen}
+          className={isSmallScreen ? 'w-full' : ''}
           size={isSmallScreen ? 'large' : 'ultra'}
           onClick={() => router.push('/activity')}>
           GO

@@ -1,7 +1,7 @@
-import { Dropdown, DropdownProps } from 'antd';
+import { Dropdown, IDropdownProps } from 'aelf-design';
 import styles from './index.module.css';
 
-interface IDropMenu extends Omit<DropdownProps, 'overlayClassName'> {
+interface IDropMenu extends Omit<IDropdownProps, 'overlayClassName'> {
   dropMenuClassName?: string;
 }
 

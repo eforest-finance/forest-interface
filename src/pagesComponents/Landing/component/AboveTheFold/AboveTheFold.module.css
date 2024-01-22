@@ -18,10 +18,6 @@
   @apply w-[432px] mb-[48px] text-[16px] leading-[24px] text-[var(--text-secondary1)];
 }
 
-.above-the-fold .action-wrapper button {
-  @apply px-0 w-[180px] font-semibold text-[16px] leading-[24px];
-}
-
 .marketplace-mobile.above-the-fold {
   @apply overflow-hidden;
 }
@@ -46,12 +42,8 @@
   @apply text-[16px] leading-[24px] w-[100%] mb-[56px] text-center;
 }
 
-.marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper .action-wrapper button {
-  @apply px-0 w-[100%] mdTW:w-[180px] text-[16px] leading-[24px];
-}
-
 .marketplace-mobile.above-the-fold .above-the-fold-content .slogan-wrapper .action-wrapper > button:first-child {
-  @apply mr-[16px] mb-[16px] mdTW:mb-0;
+  @apply mb-[16px] mdTW:mb-0;
 }
 
 .marketplace-mobile .action-wrapper {

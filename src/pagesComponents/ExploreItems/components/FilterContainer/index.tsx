@@ -57,7 +57,7 @@ const CollapseForPhone = ({
   }, [clearAll, doneChange]);
   return (
     <Drawer
-      className={`${styles['elf-dropdown-phone-dark']} ${params.wrapClassName || ''}`}
+      rootClassName={`${styles['elf-dropdown-phone-dark']} ${params.wrapClassName || ''}`}
       placement="top"
       maskClosable={false}
       title={

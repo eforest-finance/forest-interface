@@ -21,13 +21,7 @@ function JumpButton({
   onChange: (event: React.MouseEvent<HTMLElement>) => void;
 }) {
   return (
-    <Button
-      type="primary"
-      ghost
-      disabled={disabled}
-      className={className}
-      onClick={onChange}
-      icon={svgComponent}></Button>
+    <Button type="primary" ghost disabled={disabled} className={className} onClick={onChange} icon={svgComponent} />
   );
 }
 

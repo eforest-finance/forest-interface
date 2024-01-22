@@ -104,7 +104,7 @@ export function RecommendSeeds() {
         ))}
       </main>
       <footer className="mt-[16px] mdTW:mt-[24px] w-full mdb:w-[166px] mx-auto">
-        <Button isFull={true} onClick={goTsm}>
+        <Button className="!w-full" onClick={goTsm}>
           View More
         </Button>
       </footer>

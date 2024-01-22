@@ -5,6 +5,7 @@ import styles from './RangeSelect.module.css';
 import Button from 'baseComponents/Button';
 import RangeInputNew from 'pagesComponents/ExploreItems/components/RangeSelect/RangeInput';
 import ELFICon from 'assets/images/explore/aelf.svg';
+import clsx from 'clsx';
 
 export interface RangeSelectProps {
   dataSource?: RangeItemType;
@@ -80,8 +81,7 @@ export default function RangeSelect({ dataSource, defaultValue, onChange }: Rang
         onValueChange={rangeInputChange}
       />
       <Button
-        className={styles['range-select-apply']}
-        isFull={true}
+        className={clsx(styles['range-select-apply'], 'w-full')}
         size="ultra"
         disabled={applyDis}
         type="primary"

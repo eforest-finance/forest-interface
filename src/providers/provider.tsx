@@ -1,11 +1,9 @@
 'use client';
 
 import StoreProvider from 'providers/storeProvider';
-import { ConfigProvider, message } from 'antd';
+import { message } from 'antd';
+import { AELFDProvider } from 'aelf-design';
 
-import enUS from 'antd/lib/locale/en_US';
-
-import { prefixCls } from 'constants/theme';
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
 import { store } from 'store/store';
@@ -13,6 +11,7 @@ import Loading from 'components/PageLoading';
 
 import { fetchConfigItems } from 'api/fetch';
 import { setAelfInfo } from 'store/reducer/aelfInfo';
+import { themeColor } from 'styles/themeColor';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -31,9 +30,17 @@ function Provider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <StoreProvider>
-        <ConfigProvider locale={enUS} autoInsertSpaceInButton={false}>
+        <AELFDProvider
+          prefixCls="ant"
+          theme={{
+            token: {
+              colorPrimary: themeColor.brandNormal,
+              colorPrimaryHover: themeColor.brandHover,
+              colorPrimaryActive: themeColor.brandClick,
+            },
+          }}>
           {loading ? <Loading></Loading> : <WebLoginProvider>{children}</WebLoginProvider>}
-        </ConfigProvider>
+        </AELFDProvider>
       </StoreProvider>
     </>
   );

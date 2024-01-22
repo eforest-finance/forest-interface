@@ -91,10 +91,10 @@ function BidModal({
       footer={
         <Button
           type="primary"
+          className="w-full"
           loading={placeBidBtnLoading}
           onClick={() => placeBidHandler(totalPriceObj.bidElf)}
-          disabled={isHaveNoMoney || auctionInfo?.finishIdentifier === 2}
-          isFull={true}>
+          disabled={isHaveNoMoney || auctionInfo?.finishIdentifier === 2}>
           Place a Bid
         </Button>
       }>

@@ -257,7 +257,7 @@ export default function PriceHistory() {
       onChange={() => {
         setActiveKey((c) => (c === key ? '' : key));
       }}
-      wrapClassName={`${styles['price-history']} ${isSmallScreen && styles['mobile-price-history']}`}
+      // wrapClassName={`${styles['price-history']} ${isSmallScreen && styles['mobile-price-history']}`}
     />
   );
 }

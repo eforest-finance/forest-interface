@@ -99,7 +99,7 @@ function BuyCard(options: {
             <span className="text-textSecondary text-base xl:hidden">(${getPrice('current')})</span>
           </div>
         </div>
-        <p className={`${styles['btn-panel']} ${isSmallScreen && 'flex flex-col'}`}>
+        <p className={`${styles['btn-panel']} flex flex-col lgTW:flex-row`}>
           <Button
             disabled={disabledBuyNow}
             className={`mdTW:mr-0 mr-[16px] mb-2 lgTW:mb-0 lgTW:mr-[16px] lgTW:w-auto lgTW:min-w-[140px] w-full ${

@@ -1,4 +1,4 @@
-.elf-collapse {
+/* .elf-collapse {
   @apply rounded-[12px] border-lineBorder border border-solid bg-transparent overflow-hidden;
   :global {
     .ant-collapse-item {
@@ -20,4 +20,9 @@
       @apply !p-0;
     }
   }
-}
+} */
+
+/* .forest-collapse {
+  
+  @apply 
+} */

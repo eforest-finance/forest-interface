@@ -94,10 +94,9 @@ const BidCard = ({ isSmallScreen, auctionInfo, placeBid }: IBidCard) => {
         <p className={styles['btn-panel']}>
           <Button
             disabled={auctionInfo?.finishIdentifier === 2}
-            className={`${styles['bid-btn']} mdTW:!mb-[24px]`}
+            className={`${styles['bid-btn']} mdTW:!mb-[24px] w-full`}
             type="primary"
             size="ultra"
-            isFull
             onClick={placeBid}>
             Place a Bid
           </Button>
