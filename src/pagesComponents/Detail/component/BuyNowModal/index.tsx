@@ -158,7 +158,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               logoImage: nftInfo?.nftCollection?.logoImage || '',
               subTitle: nftInfo?.nftCollection?.tokenName,
               title: nftInfo?.tokenName,
-              extra: isERC721(nftInfo!) ? undefined : handlePlurality(buyListingData.length, 'item'),
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
             },
             jumpInfo: {
               url: explorerUrl,
