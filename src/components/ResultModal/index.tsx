@@ -105,8 +105,8 @@ function ResultModal({
       <div className="w-full h-full flex flex-col">
         <NftInfoCard previewImage={previewImage} info={info} />
         <div className="flex flex-col items-center mt-12">
-          <span className="text-textPrimary font-semibold text-2xl">{title}</span>
-          <p className="text-base font-medium text-textSecondary mt-4">{getDescriptionCom(description)}</p>
+          <span className="text-textPrimary font-semibold text-2xl text-center">{title}</span>
+          <p className="text-base font-medium text-textSecondary mt-4 text-center">{getDescriptionCom(description)}</p>
         </div>
         {error && (
           <div className="flex flex-col flex-1 w-full border-0 mdTW:border border-solid border-lineBorder rounded-lg px-0 mdTW:px-[32px] py-[32px] my-[32px]">
