@@ -19,7 +19,7 @@ import { useModal } from '@ebay/nice-modal-react';
 import { getListingsInfo } from './utils/getListingsInfo';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { COLUMN_TITLE } from '../Offers';
-import { DEFAULT_CELL_WIDTH, DEFAULT_PAGE_SIZE } from 'constants/index';
+import { DEFAULT_CELL_WIDTH } from 'constants/index';
 import getTextWidth from 'utils/getTextWidth';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
 import TableCell from '../TableCell';
@@ -28,6 +28,8 @@ import { useListingService } from '../SaleListingModal/hooks/useListingService';
 import { INftInfo } from 'types/nftTypes';
 import BuyNowModal from '../BuyNowModal';
 import useIntervalRequestForListings from 'pagesComponents/Detail/hooks/useIntervalRequestForListings';
+import { useMount } from 'react-use';
+import { MAX_RESULT_COUNT_10 } from 'constants/common';
 
 function Listings(option: { rate: number }) {
   const { chainId, id } = useParams() as {
@@ -48,7 +50,7 @@ function Listings(option: { rate: number }) {
 
   // const [page, setPage] = useState<number>(1);
   const [pageState, setPage] = useState<IPaginationPage>({
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: MAX_RESULT_COUNT_10,
     page: 1,
   });
   const [loading, setLoading] = useState<boolean>(false);
@@ -251,7 +253,9 @@ function Listings(option: { rate: number }) {
     },
   ];
 
-  console.log('================listing render activeKey', activeKey);
+  useMount(() => {
+    getListingsData(1, MAX_RESULT_COUNT_10);
+  });
 
   return (
     <div id="listings" className={`${styles.listings} ${isSmallScreen && 'mt-4'}`}>

@@ -1,11 +1,9 @@
 import Socket from 'socket';
-import useDetailGetState from 'store/state/detailGetState';
 import { getListingsInfo } from '../component/Listings/utils/getListingsInfo';
 import { useEffect } from 'react';
 import { DEFAULT_PAGE_SIZE } from 'constants/index';
 import { getNFTNumber } from '../utils/getNftNumber';
 import { SupportedELFChainId } from 'constants/chain';
-import useGetState from 'store/state/getState';
 import { updateDetail } from '../utils/getNftInfo';
 import { store } from 'store/store';
 
