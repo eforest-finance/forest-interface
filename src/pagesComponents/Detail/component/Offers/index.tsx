@@ -207,6 +207,15 @@ export default function Offers(options: { rate: number }) {
     }
   }, [isSmallScreen, offers, rate]);
 
+  const showAction = useMemo(() => {
+    const canCancelList = offers?.items?.filter((item) => item?.from?.address === walletInfo.address);
+    if (canCancelList?.length) {
+      return true;
+    } else {
+      return nftNumber.nftBalance ? true : false;
+    }
+  }, [nftNumber.nftBalance, offers?.items, walletInfo.address]);
+
   const columns: ColumnsType<FormatOffersType> = useMemo(
     () => [
       {
@@ -280,7 +289,7 @@ export default function Offers(options: { rate: number }) {
       },
       {
         key: 'action',
-        fixed: 'right',
+        fixed: showAction ? 'right' : false,
         width: 92,
         render: (_text: string, record: FormatOffersType) =>
           record?.from?.address !== walletInfo.address ? (

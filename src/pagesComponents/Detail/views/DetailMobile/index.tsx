@@ -71,7 +71,10 @@ export default function DetailMobile() {
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Listings & offers" key="listingOffers" forceRender={true}>
+            <Tabs.TabPane
+              tab={intervalDataForBid?.isBidding ? 'Offers' : 'Listings & offers'}
+              key="listingOffers"
+              forceRender={true}>
               {!isFetching && (
                 <>
                   {intervalDataForBid?.isBidding ? (
@@ -87,9 +90,11 @@ export default function DetailMobile() {
                 </>
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Price History" key="priceHistory">
-              <PriceHistory />
-            </Tabs.TabPane>
+            {!intervalDataForBid?.isBidding && (
+              <Tabs.TabPane tab="Price History" key="priceHistory">
+                <PriceHistory />
+              </Tabs.TabPane>
+            )}
             <Tabs.TabPane tab="Activity" key="activity">
               <Activity />
             </Tabs.TabPane>

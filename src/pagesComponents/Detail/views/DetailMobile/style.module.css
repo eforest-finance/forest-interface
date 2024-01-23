@@ -55,7 +55,7 @@
   }
 
   :global(.ant-tabs-tab) {
-    @apply text-textSecondary font-semibold text-base;
+    @apply text-textSecondary font-semibold text-base !ml-[48px] first-of-type:!ml-0;
   }
 }
 .fixedTabs.has-sticky :global(.ant-tabs-nav) {
