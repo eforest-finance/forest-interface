@@ -167,8 +167,7 @@ export function SetPrice(props: ISetPriceProps) {
       return <div className="mt-2 text-xs text-error">{errorTip}</div>;
     }
     return (
-      <div className="mt-2 text-xs text-error flex justify-between">
-        <span></span>
+      <div className="mt-2 text-xs text-error">
         <span>{defaultErrorTip || 'Please enter a correct price.'}</span>
       </div>
     );
