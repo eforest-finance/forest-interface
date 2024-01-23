@@ -46,6 +46,7 @@ function Table({ pagination, emptyText, adaptation = false, ...params }: ITableP
               </div>
             );
           })}
+          {!params.dataSource?.length && getEmptyText(emptyText)}
         </div>
       ) : (
         <AntdTable

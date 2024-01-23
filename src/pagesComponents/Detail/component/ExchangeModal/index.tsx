@@ -25,6 +25,7 @@ import { isERC721 } from 'utils/isTokenIdReuse';
 import { handlePlurality } from 'utils/handlePlurality';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
+import styles from './index.module.css';
 
 export type ArtType = {
   id: number;
@@ -217,7 +218,8 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
       onCancel={onCancel}
       afterClose={modal.remove}
       title="Accept Offer"
-      open={modal.visible}>
+      open={modal.visible}
+      className={styles['deal-modal-custom']}>
       <div className="content">
         <PriceInfo quantity={quantity} price={art.price} convertPrice={art.convertPrice} type={PriceTypeEnum.DEAL} />
         {BigNumber(maxQuantity).gt(1) && (

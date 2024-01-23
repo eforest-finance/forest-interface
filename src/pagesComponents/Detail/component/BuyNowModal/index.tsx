@@ -31,6 +31,7 @@ import { isERC721 } from 'utils/isTokenIdReuse';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { usePathname } from 'next/navigation';
+import styles from './index.module.css';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
@@ -447,6 +448,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
 
   return (
     <Modal
+      className={styles['buy-modal-custom']}
       destroyOnClose
       afterClose={modal.remove}
       footer={

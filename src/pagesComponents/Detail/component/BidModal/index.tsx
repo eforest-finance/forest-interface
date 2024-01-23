@@ -20,6 +20,7 @@ import Balance from '../BuyNowModal/components/Balance';
 import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import ElfLogo from 'assets/images/explore/elf';
 
 interface IBidModalProps {
   auctionInfo: IAuctionInfoResponse & Partial<IBidInfo>;
@@ -227,9 +228,12 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
           <div className={clsx('flex flex-row justify-between font-medium items-start')}>
             <div className="text-primary">Total</div>
             <div className="flex flex-col items-end">
-              <span className={clsx('text-primary', isSmallScreen && '!pr-0')}>
-                {fix4NotInt(totalPriceObj.totalElf)}&nbsp;ELF
-              </span>
+              <div className="flex items-center">
+                <ElfLogo className="mr-[8px]" />
+                <span className={clsx('text-primary', isSmallScreen && '!pr-0')}>
+                  {fix4NotInt(totalPriceObj.totalElf)}&nbsp;ELF
+                </span>
+              </div>
               <span className="text-secondary mt-[8px]">$&nbsp;{fix4NotInt(totalPriceObj.totalUSD)}</span>
             </div>
           </div>

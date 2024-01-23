@@ -1,7 +1,10 @@
 .bid-modal {
   :global {
     .ant-modal-body {
-      /* @apply !pt-[40px] md:!pt-0; */
+      @apply mdTW:!pb-0;
+    }
+    .ant-modal-footer{
+      @apply mdTW:!py-[32px];
     }
   }
 }
