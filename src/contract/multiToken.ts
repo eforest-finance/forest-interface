@@ -53,7 +53,7 @@ const multiTokenContractRequest = async <T, R>(
 
       const result = res as IContractError;
       if (result?.error || result?.code || result?.Error) {
-        return Promise.reject(formatErrorMsg(result));
+        return Promise.reject(formatErrorMsg(result, method));
       }
 
       return Promise.resolve(res);
@@ -69,7 +69,7 @@ const multiTokenContractRequest = async <T, R>(
       const result = res as IContractError;
 
       if (result?.error || result?.code || result?.Error) {
-        return Promise.reject(formatErrorMsg(result));
+        return Promise.reject(formatErrorMsg(result, method));
       }
 
       const { transactionId, TransactionId } = result.result || result;
@@ -84,7 +84,7 @@ const multiTokenContractRequest = async <T, R>(
   } catch (error) {
     console.error('=====multiTokenContractRequest error:', method, JSON.stringify(error));
     const resError = error as IContractError;
-    return Promise.reject(formatErrorMsg(resError));
+    return Promise.reject(formatErrorMsg(resError, method));
   }
 };
 

@@ -134,7 +134,7 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
       resultModal.show({
         previewImage: nftInfo?.previewImage || '',
         title: 'Offer Successfully Accepted!',
-        description: `You have made an offer for the ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
+        description: `You have accepted the offer for the ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
         hideButton: true,
         info: {
           logoImage: nftInfo?.nftCollection?.logoImage || '',

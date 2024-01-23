@@ -347,6 +347,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
 
   return (
     <Modal
+      afterClose={modal.remove}
       destroyOnClose
       className={`${styles['offer-modal']} ${isSmallScreen && styles['mobile-offer-modal']}`}
       footer={
@@ -373,13 +374,14 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
           type={nftTotalSupply === '1' ? PriceTypeEnum.MAKEOFFER721 : PriceTypeEnum.MAKEOFFER}
         />
         <SetPrice
-          title="Offer Amount"
+          title="Offer Amount Per Item"
           className="mt-[32px]"
           floorPrice={salesInfo?.floorPrice}
           bestOfferPrice={salesInfo?.maxOfferPrice}
           onChange={setOfferPrice}
           errorTip={priceErrorTip}
-          placeholder="Please enter your offer amount."
+          placeholder="Please enter your offer amount"
+          defaultErrorTip="Please enter a valid value."
           valid={!priceValid ? 'error' : ''}
         />
         {nftTotalSupply !== '1' && (

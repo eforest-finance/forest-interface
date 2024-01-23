@@ -29,6 +29,7 @@ export interface ISetPriceProps {
   checkValid?: (price: number) => boolean;
   placeholder?: string;
   valid?: InputStatus;
+  defaultErrorTip?: string;
 }
 
 export function useSetPriceService({ onChange, defaultPrice, checkValid }: ISetPriceProps) {

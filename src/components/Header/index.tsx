@@ -33,6 +33,7 @@ import Button from 'baseComponents/Button';
 import DropMenu from 'baseComponents/DropMenu';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { hideHeaderPage } from 'constants/common';
+import { WalletType, useWebLogin } from 'aelf-web-login';
 function Header() {
   const [theme, changeTheme] = useTheme();
   const nav = useRouter();
@@ -44,6 +45,8 @@ function Header() {
   const [visible, setVisible] = useState(false);
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
+
+  const { walletType } = useWebLogin();
 
   const hidden = useMemo(() => {
     const path = pathname?.split('/')?.[1];
@@ -149,7 +152,13 @@ function Header() {
                       onClose={onClose}
                       open={childVisible}>
                       <h1 className="drawer-title font-semibold">Wallet</h1>
-                      <WalletMenu onclick={onClose} />
+                      <WalletMenu
+                        onclick={() => {
+                          if (walletType === WalletType.portkey) {
+                            onClose();
+                          }
+                        }}
+                      />
                       <div className="return-wrap">
                         <Button type="default" onClick={onChildClose}>
                           Return

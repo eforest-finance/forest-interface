@@ -134,7 +134,7 @@ export function SetPrice(props: ISetPriceProps) {
 
   const { price, setToken, setPrice, inputChangeHandler, status } = useSetPriceService(props);
 
-  const { errorTip, placeholder } = props;
+  const { errorTip, placeholder, defaultErrorTip } = props;
 
   const showPrice = getShowPrice(price || '');
 
@@ -169,7 +169,7 @@ export function SetPrice(props: ISetPriceProps) {
     return (
       <div className="mt-2 text-xs text-error flex justify-between">
         <span></span>
-        <span>{errorTip || 'Please enter a correct price.'}</span>
+        <span>{defaultErrorTip || 'Please enter a correct price.'}</span>
       </div>
     );
   };

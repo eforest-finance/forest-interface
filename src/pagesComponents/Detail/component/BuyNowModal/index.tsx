@@ -416,12 +416,12 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         );
       } else {
         return (
-          <div className="text-[12px] leading-[20px] font-normal text-[var(--text-primary)]">
-            <span>Insufficient balance.</span>
+          <div className="text-[12px] leading-[20px] font-normal  text-functionalDanger">
+            <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>Insufficient balance.</span>
             <>
-              <span>You can</span>{' '}
+              <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>You can</span>{' '}
               {isPortkeyConnected ? (
-                <span className="cursor-pointer text-[var(--functional-link)]" onClick={handleTransferShow}>
+                <span className="cursor-pointer !text-[var(--functional-link)]" onClick={handleTransferShow}>
                   {`manually transfer tokens from MainChain to your SideChain address.`}
                 </span>
               ) : (

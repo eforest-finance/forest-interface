@@ -13,9 +13,9 @@ export enum PriceTypeEnum {
 }
 
 const typeDescMaps: Record<PriceTypeEnum, string> = {
-  [PriceTypeEnum.BUY]: 'Average item price',
+  [PriceTypeEnum.BUY]: 'Average Item Price',
   [PriceTypeEnum.BUY721]: 'Listing Price',
-  [PriceTypeEnum.MAKEOFFER]: 'Offer Amount Per Item',
+  [PriceTypeEnum.MAKEOFFER]: 'Total Offer Amount',
   [PriceTypeEnum.MAKEOFFER721]: 'Offer Amount',
   [PriceTypeEnum.DEAL]: 'Offer Amount',
 };
