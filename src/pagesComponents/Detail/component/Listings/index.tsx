@@ -38,6 +38,7 @@ function Listings(option: { rate: number }) {
     type: string;
   };
   const { isLogin, login } = useCheckLoginAndToken();
+  const buyModal = useModal(BuyNowModal);
 
   const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
@@ -57,7 +58,6 @@ function Listings(option: { rate: number }) {
 
   const nav = useRouter();
 
-  const buyModal = useModal(BuyNowModal);
   const { activeKey, setActiveKey } = useDefaultActiveKey(listings?.items, 'listings');
   const isERC721: boolean = useMemo(() => !(nftInfo && isTokenIdReuse(nftInfo)), [nftInfo]);
 

@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation';
 import Balance from '../BuyNowModal/components/Balance';
 import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 interface IBidModalProps {
   auctionInfo: IAuctionInfoResponse & Partial<IBidInfo>;
@@ -34,6 +35,7 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
   const [placeBidBtnLoading, setPlaceBidBtnLoading] = useState(false);
   const { detailInfo } = useDetailGetState();
   const { nftInfo } = detailInfo;
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo?.curChain);
 
   const [priceData, setPriceData] = useState<ITransactionFeeResponse>({ transactionFee: 0, transactionFeeOfUsd: 0 });
   const totalPriceObj = {
@@ -57,6 +59,8 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
   const isHaveNoMoney = divDecimals(myBalance?.valueOf(), 8).toNumber() < totalPriceObj.totalElf;
 
   const placeBidHandler = async (totalPrice: number) => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) return;
     try {
       setPlaceBidBtnLoading(true);
       console.log('walletInfo.address', walletInfo.address);

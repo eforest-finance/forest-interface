@@ -39,6 +39,7 @@ import { elementScrollToView } from 'utils/domUtils';
 import { store, useSelector } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { selectInfo } from 'store/reducer/info';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -131,6 +132,8 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
 
   const { isSmallScreen } = useSelector(selectInfo);
 
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
+
   const listFail = (error?: IContractError) => {
     if (error) message.error(error.errorMessage?.message || DEFAULT_ERROR);
   };
@@ -209,6 +212,11 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
 
   const onCancelAllListings = async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     sellModalInstance.hide();
     promptModal.show({
       nftInfo: {
@@ -316,6 +324,12 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
   const onEditListingForERC721 = async () => {
     if (!checkInputDataBeforeSubmit()) return;
+
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     sellModalInstance.hide();
     const amount = 1;
     const durationList = getDurationParamsForListingContractByDuration(duration);
@@ -382,6 +396,11 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
 
   const onCompleteListingHandler = async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     if (!walletInfo.address || !nftInfo.nftSymbol || !checkInputDataBeforeSubmit()) return;
 
     sellModalInstance.hide();

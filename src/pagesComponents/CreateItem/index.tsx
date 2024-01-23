@@ -95,7 +95,7 @@ export default function CreateItem() {
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
 
-  const { infoState, supportChains = [], walletInfo } = useGetState();
+  const { infoState, supportChains = [], walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const address = walletInfo?.address;
 
@@ -741,7 +741,7 @@ export default function CreateItem() {
           <Select
             className={`${isSmallScreen ? '!w-full mt-[16px]' : '!w-[510px] mt-[8px]'}`}
             disabled
-            value={SupportedELFChainId.TDVW_NET}>
+            value={aelfInfo?.curChain}>
             {supportChains.map((item) => {
               return <Option key={item}>{item}</Option>;
             })}

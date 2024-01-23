@@ -19,6 +19,7 @@ import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { handlePlurality } from 'utils/handlePlurality';
 import { CancelListingMessage } from 'constants/promptMessage';
 import { UserDeniedMessage } from 'contract/formatErrorMsg';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export function useListingService(
   nftInfo: INftInfo,
@@ -32,6 +33,7 @@ export function useListingService(
   const approveCancelListingModal = useModal(ApproveCancelListingModal);
   const promptModal = useModal(PromptModal);
 
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
   const getListingInfo = async () => {
     try {
       setLoading(true);
@@ -82,6 +84,10 @@ export function useListingService(
     // if (!isERC721 && data?.length) {
     //   itemsNumberForDel = data.reduce((pre, curItem) => pre + curItem.quantity, 0);
     // }
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
     listingModalInstance?.hide();
     approveCancelListingModal.show({
       handle: () => handleBatchDeList(),
@@ -142,7 +148,12 @@ export function useListingService(
     }
   };
 
-  const cancelListingItem = (item: FormatListingType) => {
+  const cancelListingItem = async (item: FormatListingType) => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
     listingModalInstance?.hide();
     const usdPrice = item?.price * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
 

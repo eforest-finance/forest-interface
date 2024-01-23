@@ -29,6 +29,7 @@ import { CancelOfferMessage } from 'constants/promptMessage';
 import { handlePlurality } from 'utils/handlePlurality';
 import useCancelOffer from 'pagesComponents/Detail/hooks/useCancelOffer';
 import BigNumber from 'bignumber.js';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export const COLUMN_TITLE = {
   1155: {
@@ -46,7 +47,7 @@ export default function Offers(options: { rate: number }) {
   const promptModal = useModal(PromptModal);
   const columWidth = useRef<Map<string, number>>();
 
-  const { infoState, walletInfo } = useGetState();
+  const { infoState, walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const { detailInfo } = useDetailGetState();
   const { nftInfo, offers, nftNumber } = detailInfo;
@@ -59,6 +60,8 @@ export default function Offers(options: { rate: number }) {
   };
 
   useIntervalRequestForOffers(id, chainId);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo.curChain);
 
   const nav = useRouter();
 

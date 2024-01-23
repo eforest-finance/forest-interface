@@ -30,6 +30,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
+import { usePathname } from 'next/navigation';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
@@ -37,7 +38,8 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   const resultModal = useModal(ResultModal);
   const title = 'Buy Now';
   const submitBtnText = 'Buy Now';
-  const { walletInfo } = useGetState();
+  const pathname = usePathname();
+  const { infoState, walletInfo, aelfInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { nftInfo } = detailInfo;
   const { onClose, elfRate, buyItem } = options;
@@ -91,7 +93,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
     }
   }, [buyItem, quantity]);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted();
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo?.curChain);
 
   const onCloseModal = () => {
     if (onClose) {
@@ -357,6 +359,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       });
     } catch (error) {
       /* empty */
+      setLoading(false);
     }
   };
 

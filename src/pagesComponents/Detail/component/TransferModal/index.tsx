@@ -26,6 +26,7 @@ import { isERC721 } from 'utils/isTokenIdReuse';
 import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice } from 'utils/format';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();
@@ -50,6 +51,8 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const isPortkeyConnected = walletType === WalletType.portkey;
 
   const [curImage, setCurImage] = useState<string | StaticImageData>(nftInfo?.previewImage || nftPreview);
+
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   useEffect(() => {
     if (nftInfo?.previewImage) {
