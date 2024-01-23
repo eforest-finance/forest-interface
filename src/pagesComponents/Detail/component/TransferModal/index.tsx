@@ -27,6 +27,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice } from 'utils/format';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import styles from './style.module.css';
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();
@@ -276,6 +277,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
       open={modal.visible}
       onCancel={onCloseModal}
       afterClose={modal.remove}
+      className={styles['transfer-modal-custom']}
       footer={
         <Button
           type="primary"
@@ -283,7 +285,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
           onClick={toTransfer}
           loading={loading}
           disabled={getTransferDisabled()}
-          className="mdTW:w-[256px] mdTW:mb-[16px] mdTW:mt-[28px]">
+          className="mdTW:w-[256px]">
           Transfer
         </Button>
       }>

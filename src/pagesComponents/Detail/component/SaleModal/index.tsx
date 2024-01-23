@@ -12,6 +12,7 @@ import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
 import NftInfoListCard from 'components/NftInfoListCard';
 import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import styles from './index.module.css';
 
 interface ISaleModalProps {
   nftInfo: INftInfo;
@@ -85,7 +86,8 @@ export function SaleModalERC721Constructor({ nftInfo, type = 'edit', defaultData
       afterClose={modal.remove}
       destroyOnClose={true}
       title={`${type === 'add' ? 'List for Sale' : 'Edit Listing'}`}
-      footer={footer}>
+      footer={footer}
+      className={styles['sale-modal-custom']}>
       <NftInfoListCard
         image={nftSaleInfo?.logoImage || ''}
         collectionName={nftSaleInfo?.collectionName}
@@ -162,6 +164,7 @@ export function SaleModalERC1155Constructor({ nftInfo, type = 'edit', defaultDat
 
   return (
     <BaseModal
+      className={styles['sale-modal-custom']}
       open={modal.visible}
       onOk={modal.hide}
       onCancel={modal.hide}

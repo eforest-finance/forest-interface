@@ -102,6 +102,7 @@ function Header() {
               <Frame />
             </div>
             <Drawer
+              zIndex={300}
               className="header-drawer"
               extra={
                 <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>

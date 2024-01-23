@@ -298,6 +298,7 @@ export default function Offers(options: { rate: number }) {
           record?.from?.address !== walletInfo.address ? (
             nftNumber.nftBalance ? (
               <Button
+                className="!w-[64px]"
                 size="mini"
                 disabled={getDealDisabled(record.to?.address)}
                 type="primary"
@@ -306,7 +307,7 @@ export default function Offers(options: { rate: number }) {
               </Button>
             ) : null
           ) : (
-            <Button size="mini" type="default" onClick={() => onCancel(record)}>
+            <Button size="mini" type="default" className="!w-[64px]" onClick={() => onCancel(record)}>
               Cancel
             </Button>
           ),

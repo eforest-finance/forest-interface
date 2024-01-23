@@ -176,6 +176,7 @@ function Listings(option: { rate: number }) {
         render: (_text: string, record: FormatListingType) =>
           record.ownerAddress !== walletInfo.address ? (
             <Button
+              className="!w-[64px]"
               type="primary"
               size="mini"
               disabled={buyDisabled(record)}
@@ -189,7 +190,7 @@ function Listings(option: { rate: number }) {
               Buy
             </Button>
           ) : (
-            <Button size="mini" type="default" onClick={() => onCancel(record)}>
+            <Button size="mini" className="!w-[64px]" type="default" onClick={() => onCancel(record)}>
               Cancel
             </Button>
           ),
