@@ -1,4 +1,4 @@
-import ElfLogo from 'assets/images/explore/elf';
+import ElfLogo from 'assets/images/explore/aelf.svg';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
 export default function TotalPrice(info: {

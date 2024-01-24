@@ -1,6 +1,6 @@
 import { INftCollectionInfo } from 'hooks/useIsMinter';
 import styles from './styles.module.css';
-import ElfIcon from 'assets/images/explore/aelf.svg';
+import ElfIcon from 'assets/images/explore/elf';
 import LinkIcon from 'assets/images/explore/link.svg';
 import { OmittedType, addPrefixSuffix, getOmittedStr } from 'utils';
 import useResponsive from 'hooks/useResponsive';
@@ -61,6 +61,7 @@ function SeedLink({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
       <div className="flex cursor-pointer items-center w-[40px] h-[40px] justify-center">
         <ElfIcon
           onClick={() => {
+            alert();
             jump(collectionsInfo?.issueChainId || '', `/token/${collectionsInfo?.symbol}`);
           }}
         />
