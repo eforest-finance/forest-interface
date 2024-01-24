@@ -8,7 +8,7 @@
       @apply shadow-none rounded-tl-none rounded-tr-none p-0 bg-[var(--bg-menu)];
 
       .ant-dropdown-menu-item {
-        @apply py-0 px-[19px] font-medium text-[16px] min-w-[137px] bg-transparent min-h-[56px] hover:bg-[var(--bg-dark)] border-0 border-solid border-t-[var(--border-menu)] border-t;
+        @apply flex flex-col items-start justify-center py-0 px-[19px] font-medium text-[16px] min-w-[137px] bg-transparent min-h-[56px] hover:bg-[var(--bg-dark)] border-0 border-solid border-t-[var(--border-menu)] border-t;
 
         &:first-child {
           @apply !border-none;
@@ -25,7 +25,7 @@
         }
 
         .ant-dropdown-menu-title-content {
-          @apply h-full;
+          @apply h-full w-full;
         }
 
         &:hover span {

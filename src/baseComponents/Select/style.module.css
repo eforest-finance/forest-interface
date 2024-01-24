@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity */
 .custom-popup {
-  @apply p-0 rounded-sm bg-fillPageBg border border-solid border-hover;
+  @apply p-0 rounded-sm bg-fillPageBg border border-solid !border-[var(--line-border)];
 
   :global(.ant-select-item) {
     @apply border-0 py-4 px-3 text-textSecondary text-base;

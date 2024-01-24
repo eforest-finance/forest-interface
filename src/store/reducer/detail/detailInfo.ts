@@ -17,6 +17,7 @@ const initialState: ItemState = {
   listings: null,
   offers: null,
   updateDetailLoading: false,
+  currentTab: 'detail',
 };
 
 // Actual Slice
@@ -42,6 +43,9 @@ export const detailInfoSlice = createSlice({
     setUpdateDetailLoading: (state, action) => {
       state.updateDetailLoading = action.payload;
     },
+    setCurrentTab: (state, action) => {
+      state.currentTab = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -55,7 +59,8 @@ export const detailInfoSlice = createSlice({
   },
 });
 
-export const { setNftInfo, setListings, setOffers, setNftNumber, setUpdateDetailLoading } = detailInfoSlice.actions;
+export const { setNftInfo, setListings, setOffers, setNftNumber, setUpdateDetailLoading, setCurrentTab } =
+  detailInfoSlice.actions;
 
 export const getDetailInfo = (state: AppState): ItemState => state.detailInfo;
 

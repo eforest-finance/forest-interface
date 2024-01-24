@@ -32,11 +32,11 @@
         }
       }
       &:hover > td {
-        @apply !bg-[var(--bg-card)];
+        @apply !bg-fillCardBg;
       }
     }
     > tr > td:global(.ant-table-cell-row-hover) {
-      @apply !bg-[var(--bg-card)];
+      @apply !bg-fillCardBg;
     }
     :global(.ant-table-placeholder .ant-table-cell) {
       @apply hover:bg-fillPageBg border-0;
@@ -45,7 +45,7 @@
   :global(.ant-table-thead) {
     @apply px-3;
     > tr > :global(.ant-table-cell) {
-      @apply text-[var(--color-table-header)] bg-fillPageBg text-sm px-3 py-[9px] border-lineBorder;
+      @apply text-textSecondary bg-fillPageBg text-sm px-3 py-[9px] border-lineBorder;
 
       &::before {
         @apply !w-0;

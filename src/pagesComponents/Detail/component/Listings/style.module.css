@@ -4,3 +4,18 @@
 .listings .from-details {
   @apply flex items-center justify-center font-medium text-brandNormal cursor-pointer rounded-[8px];
 }
+
+.listings-table-custom {
+  :global(.ant-table-tbody) {
+    :global(.ant-table-row) {
+      > :global(.ant-table-cell) {
+        &:first-of-type {
+          @apply !rounded-none;
+        }
+        &:last-of-type {
+          @apply !rounded-none;
+        }
+      }
+    }
+  }
+}

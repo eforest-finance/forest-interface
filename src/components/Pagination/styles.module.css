@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity  */
 .pagination {
-  @apply flex justify-between items-center py-[16px];
+  @apply flex justify-between items-center py-[16px] px-[24px];
   .epPaginationLeft {
     @apply flex justify-center items-center;
   }

@@ -1,17 +1,9 @@
-import {
-  useGetAccount,
-  useWebLogin,
-  useWebLoginEvent,
-  WalletType,
-  WebLoginEvents,
-  WebLoginState,
-} from 'aelf-web-login';
+import { useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
 import { store, dispatch, useSelector } from 'store/store';
 import storages from 'storages';
 import { message } from 'antd';
-import { cloneDeep } from 'lodash-es';
 import { useLocalStorage } from 'react-use';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import useDiscoverProvider from './useDiscoverProvider';
 import { getOriginalAddress } from 'utils';
 import { setWalletInfo } from 'store/reducer/userInfo';
@@ -30,23 +22,25 @@ export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   const getAccountInAELF = useGetAccount('AELF');
   const { wallet, walletType } = useWebLogin();
   console.log(walletType, wallet, 'walletType');
-  const { walletInfo } = cloneDeep(useSelector((store: any) => store.userInfo));
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
   const { discoverProvider } = useDiscoverProvider();
 
   const getAccount = useCallback(async () => {
     try {
       const aelfChainAddress = await getAccountInAELF();
+      const walletInfoRes = {
+        ...walletInfo,
+        aelfChainAddress: getOriginalAddress(aelfChainAddress),
+      };
 
-      walletInfo.aelfChainAddress = getOriginalAddress(aelfChainAddress);
-
-      dispatch(setWalletInfo(walletInfo));
-      setLocalWalletInfo(walletInfo);
+      dispatch(setWalletInfo(walletInfoRes));
+      setLocalWalletInfo(walletInfoRes);
       if (!aelfChainAddress) {
         message.info(TipsMessage.Synchronizing);
         return '';
       } else {
-        return walletInfo.aelfChainAddress;
+        return walletInfoRes.aelfChainAddress;
       }
     } catch (error) {
       message.info(TipsMessage.Synchronizing);

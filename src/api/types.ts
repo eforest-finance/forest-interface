@@ -94,8 +94,8 @@ export interface IListingsParams {
   symbol: string;
   skipCount: number;
   maxResultCount: number;
-  address?: string;
   excludedAddress?: string;
+  address?: string;
 }
 
 export interface IListingsResponse {
@@ -356,6 +356,7 @@ export interface IConfigItems {
   rpcUrlTDVW?: string;
   identityPoolID?: string;
   tsm?: string;
+  faucetContractAddress?: string;
 }
 
 export interface IUserSettingParams {
@@ -553,6 +554,8 @@ export interface INftSaleInfoItem {
   lastDealPrice?: number;
   lastDealPriceSymbol?: string;
   listingPrice?: number;
+  maxOfferPrice?: number;
+  availableQuantity?: number;
 }
 export interface INftSaleInfoParams {
   id: string;
