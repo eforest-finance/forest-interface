@@ -27,11 +27,30 @@ export type FormatOffersType = {
   nftInfo: IListingNftInfo | null;
 };
 
+export type NftNumberType = {
+  nftBalance: number;
+  tokenBalance: number;
+  nftQuantity: number;
+  nftTotalSupply: number;
+  loading: boolean;
+};
+
 export type ItemState = {
   nftInfo: INftInfo | null;
-  listings: FormatListingType[] | null;
-  offers: FormatOffersType[] | null;
-  pageRefreshCount: number;
+  listings: {
+    items: FormatListingType[] | null;
+    totalCount: number;
+    page: number;
+    pageSize?: number;
+  } | null;
+  offers: {
+    items: FormatOffersType[] | null;
+    totalCount: number;
+    page: number;
+    pageSize?: number;
+  } | null;
+  nftNumber: NftNumberType;
+  updateDetailLoading: boolean;
 };
 
 export interface IRangInputState {

@@ -15,6 +15,8 @@ import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
 import { usePathname, useRouter } from 'next/navigation';
 import { setHasToken, setLoading } from 'store/reducer/info';
+import { useModal } from '@ebay/nice-modal-react';
+import LoginModal from 'components/LoginModal';
 const AElf = require('aelf-sdk');
 
 const signTip = `Welcome to Forest! Click to sign in to Forest and accept its Terms of Service and Privacy Policy. This request will not trigger a blockchain transaction or cost any gas fees.`;
@@ -29,6 +31,7 @@ export const useGetToken = () => {
   const isLogin = loginState === WebLoginState.logined;
   const pathName = usePathname();
   const nav = useRouter();
+  const loginModal = useModal(LoginModal);
 
   const closeLoading = () => {
     store.dispatch(
@@ -65,20 +68,22 @@ export const useGetToken = () => {
       });
     } catch (error) {
       const resError = error as IContractError;
+      loginModal.hide();
       message.error(formatErrorMsg(resError).errorMessage?.message);
       console.log('=====resError', resError);
       closeLoading();
       isLogin && logout({ noModal: true });
-      return Promise.reject();
+      return Promise.reject(resError);
     }
 
     if (sign?.error) {
       const resError = sign as unknown as IContractError;
+      loginModal.hide();
       message.error(formatErrorMsg(resError).errorMessage?.message);
       console.log('=====signResError', resError);
       closeLoading();
       isLogin && logout({ noModal: true });
-      return Promise.reject();
+      return Promise.reject(resError);
     }
     let extraParam = {};
     if (walletType === WalletType.elf) {
@@ -124,6 +129,7 @@ export const useGetToken = () => {
         token: res.access_token,
         expirationTime: timestamp + res.expires_in * 1000,
       });
+      loginModal.hide();
       store.dispatch(setHasToken(true));
       return Promise.resolve();
     }
@@ -193,7 +199,7 @@ export const useContractConnect = () => {
           setLocalWalletInfo(cloneDeep(walletInfo));
         });
     }
-    if (loginState === WebLoginState.lock || loginState === WebLoginState.initial) {
+    if (loginState === WebLoginState.lock) {
       dispatch(setWalletInfo({}));
       setLocalWalletInfo({ address: '' });
     }

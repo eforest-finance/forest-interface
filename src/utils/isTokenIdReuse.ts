@@ -10,4 +10,10 @@ const isTokenIdReuse = (nftInfo: INftInfo) => {
   }
 };
 
+const isERC721 = (nftInfo: INftInfo) => {
+  return !isTokenIdReuse(nftInfo);
+};
+
 export default isTokenIdReuse;
+
+export { isERC721 };

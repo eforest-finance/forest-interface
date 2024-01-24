@@ -13,6 +13,7 @@ import ELFPng from 'assets/images/ELF.png';
 import { SYMBOL_TYPE } from 'constants/Symbol';
 import { COLLECTION_DEFAULT_IMG } from 'constants/FileConfig';
 import Button from 'baseComponents/Button';
+import { formatTokenPrice } from 'utils/format';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -87,7 +88,7 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
                 <Logo className={isSmallScreen ? 'flex w-[12px] h-[12px]' : 'flex w-[16px] h-[16px]'} src={src} />
               )}
               <span className={styles['price-value']}>
-                {dataSource?.listingPrice ? unitConverter(dataSource?.listingPrice ?? 0, 3) : ''}
+                {dataSource?.listingPrice ? formatTokenPrice(dataSource?.listingPrice ?? 0) : ''}
               </span>
             </div>
           </div>
@@ -101,7 +102,7 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
             <div className={`${styles['price']} flex items-center`}>
               <Logo className="flex w-[12px] h-[12px]" src={dataSource?.whitelistPrice ? whitelistSrc : lastSrc} />
               <span className={`${styles['price-value']} text-[var(--color-secondary)]`}>
-                {unitConverter((dataSource?.whitelistPrice || dataSource?.latestDealPrice) ?? 0, 3)}
+                {formatTokenPrice((dataSource?.whitelistPrice || dataSource?.latestDealPrice) ?? 0)}
               </span>
             </div>
           </div>

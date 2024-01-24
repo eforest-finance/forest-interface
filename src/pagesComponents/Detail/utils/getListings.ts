@@ -3,23 +3,31 @@ import { DEFAULT_PAGE_SIZE } from 'constants/index';
 import { MILLISECONDS_PER_DAY } from 'constants/time';
 import { FormatListingType } from 'store/types/reducer';
 import { IListingType } from 'types/nftTypes';
-import { OmittedType, getOmittedStr } from 'utils';
 
 interface IProps {
   page?: number;
   pageSize?: number;
   symbol: string;
-  address: string;
+  address?: string;
   chainId: Chain;
+  excludedAddress?: string;
 }
 
-const getListings = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, symbol, address, chainId }: IProps) => {
+const getListings = async ({
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  symbol,
+  address,
+  excludedAddress,
+  chainId,
+}: IProps) => {
   try {
     const result = await fetchListings({
       chainId,
       symbol,
       skipCount: (page - 1) * pageSize,
       maxResultCount: pageSize,
+      excludedAddress,
       address,
     });
 
@@ -39,7 +47,7 @@ const getListings = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, symbol, add
         quantity: item.quantity,
         ownerAddress: item?.ownerAddress || '',
         expiration: ((item.endTime - new Date().getTime()) / MILLISECONDS_PER_DAY).toFixed(0).toString(),
-        fromName: address === item?.ownerAddress ? 'you' : getOmittedStr(item?.owner?.name || '', OmittedType.ADDRESS),
+        fromName: item?.owner?.name || '--',
         whitelistHash: item.whitelistId,
         startTime: item.startTime,
         endTime: item.endTime,

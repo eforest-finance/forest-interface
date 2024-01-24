@@ -6,16 +6,19 @@
 }
 
 .date-picker-mobile {
-  @apply rounded-tl-[12px] rounded-tr-[12px];
+  --item-height: 52px;
+
+  @apply rounded-tl-[12px] rounded-tr-[12px] h-[332px];
   :global {
     .adm-picker-header {
-      @apply bg-[var(--bg-page)] border-[var(--line-box)];
+      @apply bg-[var(--bg-page)] border-[var(--line-box)] p-4 border-b-0;
       .adm-picker-header-button {
-        @apply text-[var(--color-primary)];
+        @apply font-medium text-base text-brandNormal py-2 px-5;
       }
     }
 
     .adm-picker-body {
+      @apply bg-[var(--bg-page)] px-4 pb-4;
       .adm-picker-view {
         @apply bg-[var(--bg-page)];
         .adm-picker-view-column {
@@ -23,21 +26,19 @@
             @apply text-[var(--color-primary)];
           }
           .adm-picker-view-column-item[aria-label='active'] {
-            @apply bg-[var(--brand-base)] text-[var(--text1)];
+            @apply text-textPrimary font-medium;
           }
-          
         }
         .adm-picker-view-mask {
-          .adm-picker-view-mask-top, .adm-picker-view-mask-bottom {
+          .adm-picker-view-mask-top,
+          .adm-picker-view-mask-bottom {
             @apply bg-[var(--bg-page)];
           }
           .adm-picker-view-mask-middle {
-            @apply bg-transparent border-[var(--line-box)];
+            @apply bg-transparent border-[var(--line-box)] border-none;
           }
-          
         }
       }
-      
     }
   }
 }

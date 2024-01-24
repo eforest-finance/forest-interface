@@ -20,8 +20,9 @@ function Modal(props: ModalProps) {
       destroyOnClose={true}
       closeIcon={<Close />}
       width={800}
+      centered
       {...props}
-      className={`${styles.modal} ${isSmallScreen && styles['modal-mobile']} ${className}`}
+      className={`${styles.modal} ${isSmallScreen && styles['modal-mobile']} ${className || ''}`}
       wrapClassName={`${styles['modal-wrap']} ${wrapClassName}`}
       okButtonProps={{
         className: `${btnStyles.button}`,

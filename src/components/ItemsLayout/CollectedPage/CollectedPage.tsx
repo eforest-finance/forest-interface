@@ -9,7 +9,8 @@ import { setDropDownMenu } from 'store/reducer/layoutInfo';
 import BackTop from 'assets/images/backTop.svg';
 
 export default function CollectedPage({ showAdd }: { showAdd?: boolean }) {
-  const [hash] = useHash();
+  // const [hash] = useHash();
+  const hash = window.location.hash;
   const {
     info: { isSmallScreen },
   } = useSelector((store) => store);

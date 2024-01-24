@@ -6,7 +6,7 @@
   }
 }
 
-.button:global([ant-click-animating-without-extra-node=true]::after) {
+.button:global([ant-click-animating-without-extra-node='true']::after) {
   @apply !shadow-none;
 }
 
@@ -26,6 +26,10 @@
       @apply disabled:bg-brandDisable text-textWhite;
     }
   }
+}
+
+.button:global(.ant-btn-icon-only) {
+  @apply flex justify-center items-center;
 }
 
 .button:global(.ant-btn-primary.ant-btn-dangerous) {
@@ -60,6 +64,14 @@
     &:focus,
     &:active {
       @apply text-textDisable bg-fillPageBg border border-textDisable;
+    }
+  }
+  &:global(.ant-btn-icon-only) {
+    svg {
+      @apply fill-textPrimary;
+      path {
+        @apply fill-textPrimary;
+      }
     }
   }
 }
@@ -164,6 +176,13 @@
 
 .button.forest-btn-ultra {
   @apply h-[56px] text-[16px] rounded-xl leading-[24px] px-[32px] font-semibold;
+
+  &:global(.ant-btn-icon-only) {
+    @apply px-[16px];
+    svg {
+      @apply w-[24px] h-[24px];
+    }
+  }
 }
 
 .button.forest-btn-mini {

@@ -10,23 +10,27 @@ export interface ITableProps<T> extends Omit<TableProps<T>, 'pagination'> {
   searchText?: string;
 }
 
+export function getEmptyText(emptyText?: string | ReactNode) {
+  if (!emptyText) return <span>No Data</span>;
+  if (typeof emptyText === 'string') {
+    return (
+      <p className="text-textDisable text-center w-full p-[24px] text-base font-medium">{emptyText || 'No Data'}</p>
+    );
+  } else {
+    return emptyText;
+  }
+}
+
 function Table({ pagination, emptyText, ...params }: ITableProps<any>) {
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
-
-  const EmptyText =
-    typeof emptyText === 'string' ? (
-      <p className="text-textDisable text-center w-full p-[24px] text-base font-medium">{emptyText || 'No Data'}</p>
-    ) : (
-      emptyText
-    );
 
   return (
     <div className={clsx(styles['forest-table'], isSmallScreen && styles['mobile-forest-table'])}>
       <AntdTable
         pagination={false}
         locale={{
-          emptyText: EmptyText,
+          emptyText: getEmptyText(emptyText),
         }}
         {...params}
       />

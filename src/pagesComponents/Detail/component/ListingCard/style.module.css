@@ -1,0 +1,19 @@
+.listing-card {
+  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+}
+
+.listing-card-title {
+  @apply border-0 border-b !border-solid border-lineBorder p-[24px] flex;
+
+  .time-panel-value {
+    @apply text-base font-medium text-textSecondary;
+  }
+}
+
+.mobile-button {
+  @apply fixed w-full bottom-0 left-0 bg-fillPageBg p-[16px] flex z-[998] border-0 border-t border-solid border-lineBorder;
+}
+
+.mobile-listing-card {
+  @apply mt-[16px];
+}

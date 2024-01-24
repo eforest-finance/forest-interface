@@ -43,7 +43,7 @@ export default function BaseFooter() {
   const showMargin = useMemo(() => {
     if (!isSmallScreen) return false;
     const path = pathname?.split('/')?.[1];
-    return ['settings', 'sale-info'].includes(path);
+    return ['settings', 'sale-info', 'detail'].includes(path);
   }, [pathname, isSmallScreen]);
 
   const getFooterNav = useCallback(async () => {
@@ -91,10 +91,10 @@ export default function BaseFooter() {
             <li className={styles['navigate-list-item']}>
               <h5>Legal</h5>
               <ul className={styles['navigate-list-children']}>
-                <a href="/term-service">
+                <a href="/term-service" target="_blank">
                   <li className={styles['children-item']}>Terms of Service</li>
                 </a>
-                <a href="/privacy-policy">
+                <a href="/privacy-policy" target="_blank">
                   <li className={styles['children-item']}>Privacy Policy</li>
                 </a>
               </ul>
@@ -105,10 +105,10 @@ export default function BaseFooter() {
             <li className={styles['navigate-list-item']}>
               <h5>Legal</h5>
               <ul className={styles['navigate-list-children']}>
-                <a href="/term-service">
+                <a href="/term-service" target="_blank">
                   <li className={styles['children-item']}>Terms of Service</li>
                 </a>
-                <a href="/privacy-policy">
+                <a href="/privacy-policy" target="_blank">
                   <li className={styles['children-item']}>Privacy Policy</li>
                 </a>
               </ul>

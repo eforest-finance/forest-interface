@@ -20,9 +20,12 @@ import { ChainId } from '@portkey/types';
 import { did } from '@portkey/did-ui-react';
 import { MethodsWallet } from '@portkey/provider-types';
 import { useGetToken } from './useContractConnect';
-import { selectInfo } from 'store/reducer/info';
+import { selectInfo, setHasToken } from 'store/reducer/info';
+import { useModal } from '@ebay/nice-modal-react';
+import LoginModal from 'components/LoginModal';
+import { usePathname } from 'next/navigation';
 
-export const useWalletSyncCompleted = () => {
+export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   const info = store.getState().aelfInfo.aelfInfo;
   const getAccountInAELF = useGetAccount('AELF');
   const { wallet, walletType } = useWebLogin();
@@ -40,6 +43,7 @@ export const useWalletSyncCompleted = () => {
       dispatch(setWalletInfo(walletInfo));
       setLocalWalletInfo(walletInfo);
       if (!aelfChainAddress) {
+        message.info(TipsMessage.Synchronizing);
         return '';
       } else {
         return walletInfo.aelfChainAddress;
@@ -50,51 +54,57 @@ export const useWalletSyncCompleted = () => {
     }
   }, [walletInfo, getAccountInAELF, setLocalWalletInfo]);
 
-  const getAccountInfoSync = useCallback(
-    async (chainId = 'AELF') => {
-      let caHash;
-      let address: any;
-      console.log(WalletType, walletInfo, 'WalletType');
-      if (walletType === WalletType.elf) {
-        return walletInfo.aelfChainAddress;
-      }
-      if (walletType === WalletType.portkey) {
-        const didWalletInfo = wallet.portkeyInfo;
-        caHash = didWalletInfo?.caInfo?.caHash;
-        address = didWalletInfo?.walletInfo?.address;
-        const currentChainId = chainId as ChainId;
-        try {
-          const holder = await did.didWallet.getHolderInfoByContract({
-            chainId: currentChainId,
-            caHash: caHash as string,
-          });
-          const filteredHolders = holder.managerInfos.filter((manager) => manager?.address === address);
-          if (filteredHolders.length) {
-            return await getAccount();
-          } else {
-            message.info(TipsMessage.Synchronizing);
-            return '';
-          }
-        } catch (error) {
-          message.info(TipsMessage.Synchronizing);
-          return '';
+  const getAccountInfoSync = useCallback(async () => {
+    let caHash;
+    let address: any;
+    console.log(WalletType, walletInfo, 'WalletType');
+    if (walletType === WalletType.elf) {
+      return walletInfo.aelfChainAddress;
+    }
+    if (walletType === WalletType.portkey) {
+      const didWalletInfo = wallet.portkeyInfo;
+      caHash = didWalletInfo?.caInfo?.caHash;
+      address = didWalletInfo?.walletInfo?.address;
+      // const currentChainId = chainId as ChainId;
+      const originChainId = didWalletInfo?.chainId;
+
+      if (originChainId === contractChainId) {
+        if (contractChainId === 'AELF') {
+          return await getAccount();
+        } else {
+          return wallet.address;
         }
-      } else {
-        const provider = await discoverProvider();
-        const status = await provider?.request({
-          method: MethodsWallet.GET_WALLET_MANAGER_SYNC_STATUS,
-          payload: { chainId: info.curChain },
+      }
+      try {
+        const holder = await did.didWallet.getHolderInfoByContract({
+          chainId: contractChainId as ChainId,
+          caHash: caHash as string,
         });
-        if (status) {
+        const filteredHolders = holder.managerInfos.filter((manager) => manager?.address === address);
+        if (filteredHolders.length) {
           return await getAccount();
         } else {
           message.info(TipsMessage.Synchronizing);
           return '';
         }
+      } catch (error) {
+        message.info(TipsMessage.Synchronizing);
+        return '';
       }
-    },
-    [wallet, walletType, walletInfo],
-  );
+    } else {
+      const provider = await discoverProvider();
+      const status = await provider?.request({
+        method: MethodsWallet.GET_WALLET_MANAGER_SYNC_STATUS,
+        payload: { chainId: info.curChain },
+      });
+      if (status) {
+        return await getAccount();
+      } else {
+        message.info(TipsMessage.Synchronizing);
+        return '';
+      }
+    }
+  }, [wallet, walletType, walletInfo, contractChainId]);
   return { getAccountInfoSync };
 };
 
@@ -107,12 +117,19 @@ let getTokenLoading = false;
 let afterLoginCb: any = null;
 
 export const useCheckLoginAndToken = () => {
-  const { loginState, login: aelfLogin, loginEagerly, logout } = useWebLogin();
+  const loginModal = useModal(LoginModal);
+  const pathName = usePathname();
+
+  const { loginState, login: aelfLogin, loginEagerly, logout, walletType } = useWebLogin();
   const isWalletLogin = loginState === WebLoginState.logined;
   const isEagerly = loginState === WebLoginState.eagerly;
   const loginMethod = isEagerly ? loginEagerly : aelfLogin;
   const getToken = useGetToken();
-
+  const [accountInfo] = useLocalStorage<{
+    account?: string;
+    token?: string;
+    expirationTime?: number;
+  }>(storages.accountInfo);
   const { hasToken } = useSelector(selectInfo);
 
   const isLogin = isWalletLogin && hasToken;
@@ -139,20 +156,49 @@ export const useCheckLoginAndToken = () => {
 
   const initToken = async () => {
     getTokenLoading = true;
-    try {
-      await getToken();
-    } finally {
-      getTokenLoading = false;
+    if (walletType === WalletType.portkey) {
+      try {
+        await getToken();
+      } finally {
+        getTokenLoading = false;
+      }
+      return;
     }
+    loginModal.show({
+      onConfirm: async () => {
+        try {
+          await getToken();
+        } finally {
+          getTokenLoading = false;
+        }
+      },
+      onCancel: () => {
+        isWalletLogin && logout({ noModal: true });
+        loginModal.hide();
+        getTokenLoading = false;
+      },
+    });
   };
 
   useEffect(() => {
+    if (accountInfo?.token) {
+      store.dispatch(setHasToken(true));
+      return;
+    }
+    store.dispatch(setHasToken(false));
+  }, [accountInfo]);
+
+  useEffect(() => {
+    if (pathName.includes('/term-service') || pathName.includes('/privacy-policy')) {
+      return;
+    }
+
     if (isWalletLogin) {
       if (!hasToken && !getTokenLoading) {
         initToken();
       }
     }
-  }, [isWalletLogin]);
+  }, [isWalletLogin, pathName]);
 
   return {
     isLogin,

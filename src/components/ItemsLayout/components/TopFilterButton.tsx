@@ -18,6 +18,7 @@ import USDIcon from 'assets/images/USD.svg';
 import { valueType } from 'antd/lib/statistic/utils';
 import { DefaultOptionType } from 'antd/lib/select';
 import Button from 'baseComponents/Button';
+import { formatTokenPrice } from 'utils/format';
 
 export default function TopFilterButton({ showAdd = false }: { showAdd?: boolean }) {
   const {
@@ -155,7 +156,12 @@ export default function TopFilterButton({ showAdd = false }: { showAdd?: boolean
             } else if (type === FilterType.Range) {
               if (value.data[0]?.min === '' && value.data[0]?.max === '') return null;
               const { min, max } = value.data[0];
-              const label = min && max ? `${min}-${max}` : (min === '0' || min) && !max ? `≥${min}` : `≤${max}`;
+              const label =
+                min && max
+                  ? `${formatTokenPrice(min)}-${formatTokenPrice(max)}`
+                  : (min === '0' || min) && !max
+                  ? `≥${formatTokenPrice(min)}`
+                  : `≤${formatTokenPrice(max)}`;
               return (
                 <BaseTag
                   key={key}

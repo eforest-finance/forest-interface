@@ -3,7 +3,7 @@ import Arrow from 'assets/images/arrow.svg';
 import Clock from 'assets/images/clock.svg';
 import ELF from 'assets/images/ELF.png';
 import styles from './style.module.css';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import moment, { Moment } from 'moment';
 
 import DatePickerPC from 'components/DatePickerPC';
@@ -20,23 +20,21 @@ import useDetailGetState from 'store/state/detailGetState';
 import Image from 'next/image';
 import { AMOUNT_LENGTH, DEVICE_TYPE } from 'constants/common';
 import { MILLISECONDS_PER_DAY, MILLISECONDS_PER_HALF_HOUR, TIME_FORMAT_12_HOUR } from 'constants/time';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import { Select, Option } from 'baseComponents/Select';
 import Input from 'baseComponents/Input';
 import Button from 'baseComponents/Button';
 import Modal from 'baseComponents/Modal';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import clsx from 'clsx';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { usePathname } from 'next/navigation';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
-export default function OfferModal(options: {
-  balance: BigNumber;
-  visible: boolean;
-  onClose: () => void;
-  rate: number;
-  maxCountLoading?: boolean;
-  maxCount: number;
-}) {
-  const { infoState } = useGetState();
+function OfferModal(options: { onClose?: () => void; rate: number }) {
+  const modal = useModal();
+  const pathname = usePathname();
+
+  const { infoState, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const [token, setToken] = useState<string>('ELF');
   const [quantity, setQuantity] = useState<number>();
@@ -50,11 +48,11 @@ export default function OfferModal(options: {
   const [currentTime, setCurrentTime] = useState<string[]>();
   const [mobileDate, setMobileDate] = useState<Date>();
   const [mobileTime, setMobileTime] = useState<string[]>();
-  const { visible, onClose, rate, maxCount, maxCountLoading } = options;
+  const { onClose, rate } = options;
   const { detailInfo } = useDetailGetState();
-  const { nftInfo, pageRefreshCount } = detailInfo;
+  const { nftInfo, nftNumber } = detailInfo;
   const makeOffer = useMakeOffer(nftInfo?.chainId);
-  const { getAccountInfoSync } = useWalletSyncCompleted();
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   const [balanceNotEnough, setBalanceNotEnough] = useState<boolean>(false);
 
@@ -91,13 +89,12 @@ export default function OfferModal(options: {
   useEffect(() => {
     const priceBig = BigNumber(priceToELF);
     const balanceBig = BigNumber(getBalance(DEVICE_TYPE.PC));
-    console.log(priceBig, balanceBig, priceBig.comparedTo(balanceBig));
     if (priceBig.comparedTo(balanceBig) > -1) {
       setBalanceNotEnough(true);
     } else {
       setBalanceNotEnough(false);
     }
-  }, [priceToELF, options.balance]);
+  }, [priceToELF, nftNumber.tokenBalance]);
 
   const onExpirationTypeChange = (e: string) => {
     setMobileDate(undefined);
@@ -126,7 +123,11 @@ export default function OfferModal(options: {
     setCurrentDate(new Date(date.valueOf()));
   };
 
-  useEffect(onVisibleChange, [visible]);
+  useEffect(() => {
+    modal.hide();
+  }, [pathname]);
+
+  useEffect(onVisibleChange, [modal.visible]);
 
   const MobilePicker = () => {
     const clockTime =
@@ -196,6 +197,14 @@ export default function OfferModal(options: {
     );
   };
 
+  const onCloseModal = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      modal.hide();
+    }
+  };
+
   const onMakeOffer = async () => {
     setLoading(true);
 
@@ -239,10 +248,9 @@ export default function OfferModal(options: {
         expireTime,
       });
 
-      result === 'error' || onClose();
+      result === 'error' || onCloseModal();
       setLoading(false);
       setTimeout(message.destroy, 2000);
-      refreshDetailPage();
     }
   };
 
@@ -254,15 +262,15 @@ export default function OfferModal(options: {
 
   const getBalance = (type: DEVICE_TYPE) => {
     if (type === DEVICE_TYPE.PC) {
-      return (Number(options.balance?.valueOf()) / 10 ** 8).toFixed(2);
+      return (Number(nftNumber.tokenBalance?.valueOf()) / 10 ** 8).toFixed(2);
     }
-    return (Number(options.balance?.valueOf()) / 10 ** 8).toFixed(2);
+    return (Number(nftNumber.tokenBalance?.valueOf()) / 10 ** 8).toFixed(2);
   };
 
   useEffect(() => {
     setQuantity(undefined);
     setPrice(undefined);
-  }, [visible]);
+  }, [modal.visible]);
 
   return (
     <Modal
@@ -273,14 +281,14 @@ export default function OfferModal(options: {
           <Button type="primary" size="large" loading={loading} disabled={makeOfferDisabled()} onClick={onMakeOffer}>
             Make Offer
           </Button>
-          <Button size="large" onClick={() => onClose()}>
+          <Button size="large" onClick={() => onCloseModal()}>
             Cancel
           </Button>
         </>
       }
-      onCancel={onClose}
+      onCancel={onCloseModal}
       title="Make an offer"
-      open={visible}>
+      open={modal.visible}>
       <div className={'content'}>
         <div className={styles['field-item']}>
           <p className={styles['item-title']}>Quantity</p>
@@ -290,8 +298,8 @@ export default function OfferModal(options: {
               onChange={onQuantityChange}
               value={quantity?.toString()}
               type="number"
-              maxCount={maxCount}
-              loading={maxCountLoading}
+              maxCount={nftNumber.nftQuantity - nftNumber.nftBalance}
+              loading={nftNumber.loading}
             />
           </div>
         </div>
@@ -307,18 +315,18 @@ export default function OfferModal(options: {
               </Select>
               {isSmallScreen && (
                 <span className={clsx(styles['convert-price'], 'px-[16px] text-[16px] leading-[24px] font-medium')}>
-                  ${numberFormat(new BigNumber(price || 0).times(rate).toNumber())}
+                  {formatUSDPrice(new BigNumber(price || 0).times(rate))}
                 </span>
               )}
               <span
                 className={`${styles['total-offered']} text-[var(--color-disable)] font-medium ${
                   isSmallScreen ? 'leading-[18px] text-[12px] mt-[8px] whitespace-nowrap' : 'leading-[21px] mt-[10px]'
                 }`}>
-                Total amount offered: {priceToELF.toFixed(2)} ELF
+                Total amount offered: {formatTokenPrice(priceToELF)} ELF
               </span>
               {isSmallScreen && (
                 <span className="text-[var(--color-disable)] font-medium leading-[18px] text-[12px] mt-[8px] whitespace-nowrap">
-                  Balance: {getBalance(DEVICE_TYPE.MOBILE)}
+                  Balance: {formatTokenPrice(getBalance(DEVICE_TYPE.MOBILE))}
                   {token}
                 </span>
               )}
@@ -353,7 +361,7 @@ export default function OfferModal(options: {
               {!isSmallScreen && !balanceNotEnough ? (
                 <span className="text-[var(--color-disable)] font-medium leading-[21px] mt-[10px] text-right">
                   Balance:
-                  {getBalance(DEVICE_TYPE.PC)}
+                  {formatTokenPrice(getBalance(DEVICE_TYPE.PC))}
                   {token}
                 </span>
               ) : null}
@@ -385,3 +393,5 @@ export default function OfferModal(options: {
     </Modal>
   );
 }
+
+export default memo(NiceModal.create(OfferModal));

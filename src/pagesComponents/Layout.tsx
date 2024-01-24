@@ -20,12 +20,12 @@ import { useEffectOnce, useLocalStorage } from 'react-use';
 import storages from '../storages';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'hooks/useTheme';
-import { logOutUserInfo, setUserInfo } from 'store/reducer/userInfo';
+import { logOutUserInfo, setUserInfo, setWalletInfo } from 'store/reducer/userInfo';
 import 'utils/analytics';
 import AWSManagerInstance from 'utils/S3';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
@@ -84,6 +84,15 @@ const Layout = dynamic(async () => {
 
     const nav = useRouter();
 
+    const pathName = usePathname();
+
+    useEffect(() => {
+      console.log('pathname change', pathName);
+      window.document.body.scrollTo({
+        top: 0,
+      });
+    }, [pathName]);
+
     const { isLogin } = useCheckLoginAndToken();
 
     useEffect(() => {
@@ -132,6 +141,7 @@ const Layout = dynamic(async () => {
       removeAccountInfo();
       removeWalletInfo();
       dispatch(setUserInfo(logOutUserInfo));
+      dispatch(setWalletInfo({}));
     }, [removeAccountInfo, removeWalletInfo]);
 
     useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
@@ -148,8 +158,6 @@ const Layout = dynamic(async () => {
       const resError = error as IContractError;
       message.error(formatErrorMsg(resError).errorMessage.message);
     });
-
-    useBroadcastChannel();
 
     useBroadcastChannel();
 
@@ -179,7 +187,7 @@ const Layout = dynamic(async () => {
     return (
       <>
         <AntdLayout
-          className={clsx(`forest-marketplace`, isSmallScreen && `forest-marketplace-mobile`, '!bg-[var(--bg-page)]')}>
+          className={clsx(`forest-marketplace`, isSmallScreen && `forest-marketplace-mobile`, '!bg-fillPageBg')}>
           <Header />
           <AntdLayout.Content
             className={`marketplace-content, ${

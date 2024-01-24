@@ -9,7 +9,13 @@ type SignalRParams = {
 
 type HandlerFn = (data: any) => void;
 
-const messageType: Array<string> = ['ReceiveSymbolBidInfo', 'ReceiveSymbolBidInfos', 'ReceiveSymbolAuctionInfo'];
+const messageType: Array<string> = [
+  'ReceiveSymbolBidInfo',
+  'ReceiveSymbolBidInfos',
+  'ReceiveSymbolAuctionInfo',
+  'ReceiveListingChangeSignal',
+  'ReceiveOfferChangeSignal',
+];
 
 export default class SignalR {
   private connection: HubConnection | null;

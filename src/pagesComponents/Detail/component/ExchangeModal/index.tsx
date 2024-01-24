@@ -5,7 +5,7 @@ import SUBTRACT from 'assets/images/subtract.svg';
 
 import Logo from 'components/Logo';
 import useDeal from 'pagesComponents/Detail/hooks/useDeal';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import useMakeOffer from '../../hooks/useMakeOffer';
 
 import styles from './style.module.css';
@@ -13,7 +13,6 @@ import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
 import { SERVICE_FEE } from 'constants/common';
 import ImgLoading from 'components/ImgLoading/ImgLoading';
-import { refreshDetailPage } from 'pagesComponents/Detail/util';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
@@ -21,6 +20,9 @@ import BigNumber from 'bignumber.js';
 import { GetBalance } from 'contract/multiToken';
 import { divDecimals } from 'utils/calculate';
 import { ZERO } from 'constants/misc';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { usePathname } from 'next/navigation';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
 export type ArtType = {
   id: number;
@@ -35,18 +37,15 @@ export type ArtType = {
   collection?: string;
 };
 
-export default function ExchangeModal(options: {
-  visible: boolean;
-  onClose: () => void;
-  art: ArtType;
-  nftBalance: number;
-  exchangeType?: string;
-}) {
+function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance: number; exchangeType?: string }) {
+  const modal = useModal();
+  const pathname = usePathname();
+
   const { infoState } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
-  const { nftInfo, pageRefreshCount } = detailInfo;
-  const { visible, onClose, art, nftBalance, exchangeType } = options;
+  const { nftInfo } = detailInfo;
+  const { onClose, art, nftBalance, exchangeType } = options;
   const [loading, setLoading] = useState<boolean>(false);
   const [offerFromBalance, setOfferFromBalance] = useState<BigNumber>(ZERO);
 
@@ -66,9 +65,9 @@ export default function ExchangeModal(options: {
 
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted();
-  const price = new BigNumber(art?.price || 0).toFixed(2, 1);
-  const convertPrice = new BigNumber(art?.convertPrice || 0).toFixed(2, 1);
+  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
+  const price = new BigNumber(art?.price || 0);
+  const convertPrice = new BigNumber(art?.convertPrice || 0);
 
   const onChangeQuantity = (type: '+' | '-') => {
     type === '+' ? setQuantity((v) => (++v > maxQuantity ? maxQuantity : v)) : setQuantity((v) => (--v < 1 ? 1 : v));
@@ -79,7 +78,7 @@ export default function ExchangeModal(options: {
   };
 
   const getTotal = () => {
-    return (Number(price) * quantity).toFixed(2);
+    return price.times(quantity);
   };
 
   const getOfferFromBalance = async () => {
@@ -91,13 +90,21 @@ export default function ExchangeModal(options: {
     setOfferFromBalance(divDecimals(offerFromBalance.balance, 8));
   };
 
+  const onCancel = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      modal.hide();
+    }
+  };
+
   useEffect(() => {
     if (exchangeType) {
       getOfferFromBalance();
     }
   }, [art, exchangeType]);
 
-  useEffect(onVisibleChange, [visible]);
+  useEffect(onVisibleChange, [modal.visible]);
 
   const onConfirm = async () => {
     setLoading(true);
@@ -114,10 +121,13 @@ export default function ExchangeModal(options: {
       quantity: quantity,
     });
 
-    onClose();
+    onCancel();
     setLoading(false);
-    refreshDetailPage();
   };
+
+  useEffect(() => {
+    modal.hide();
+  }, [pathname]);
 
   return (
     <Modal
@@ -127,9 +137,9 @@ export default function ExchangeModal(options: {
           Confirm {exchangeType ? 'transaction' : 'Checkout'}
         </Button>
       }
-      onCancel={onClose}
+      onCancel={onCancel}
       title={`Complete ${exchangeType ? 'transaction' : 'checkout'}`}
-      open={visible}>
+      open={modal.visible}>
       <Row className={`${styles['content-header']} text-[18px] font-medium`}>
         <Col span={14}>Item</Col>
         {isSmallScreen ? null : <Col span={10}>Subtotal</Col>}
@@ -185,13 +195,13 @@ export default function ExchangeModal(options: {
               <div className="leading-[24px] flex items-center !justify-center">
                 <Logo className={'w-[24px] h-[24px]'} src={ELF} />
                 &nbsp;
-                <span className="font-semibold text-[16px] leading-[24px]">{price}</span>
+                <span className="font-semibold text-[16px] leading-[24px]">{formatTokenPrice(price)}</span>
               </div>
               <span
                 className={`text-[var(--color-secondary)] leading-[18px] text-[12px] ${
                   isSmallScreen ? 'ml-2' : 'mt-[2px]'
                 }`}>
-                ${convertPrice}
+                {formatUSDPrice(convertPrice)}
               </span>
             </div>
           </Col>
@@ -208,14 +218,16 @@ export default function ExchangeModal(options: {
           <div className={`${styles['total-price']} flex`}>
             <Logo className={'w-[20px] h-[24px]'} src={ELF} />
             <span className={`ml-[6px] text-[24px] font-semibold leading-[36px] text-[var(--brand-base)]`}>
-              {getTotal()}
+              {formatTokenPrice(getTotal())}
             </span>
           </div>
           <p className="leading-[24px] text-[var(--color-secondary)] text-[16px]">
-            ${(Number(convertPrice) * quantity).toFixed(2)}
+            {formatUSDPrice(convertPrice.times(quantity))}
           </p>
         </Col>
       </Row>
     </Modal>
   );
 }
+
+export default memo(NiceModal.create(ExchangeModal));

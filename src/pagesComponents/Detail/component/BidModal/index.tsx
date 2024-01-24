@@ -1,12 +1,11 @@
-import { Image, Tooltip } from 'antd';
+import { Image, Tooltip, message } from 'antd';
 import { IAuctionInfoResponse, IBidInfo, ITransactionFeeResponse } from 'api/types';
 import { formatAmount, plusAmountByBigNumber, fix4NotInt } from 'utils/formatElf';
-import { INftInfo } from 'types/nftTypes';
 import defaultImage from './defautlmage';
-import { fetchTransactionFee, fetchMinMarkupPrice } from 'api/fetch';
+import { fetchTransactionFee } from 'api/fetch';
 import { memo, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { divDecimals } from 'utils/calculate';
+import { divDecimals, timesDecimals } from 'utils/calculate';
 import useGetState from 'store/state/getState';
 import Question from 'assets/images/question.svg';
 import BalanceWallet from 'assets/images/balanceWallet.svg';
@@ -14,28 +13,29 @@ import clsx from 'clsx';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import styles from './index.module.css';
+import { Approve, GetAllowance } from 'contract/multiToken';
+import { PlaceBid } from 'contract/auction';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import useDetailGetState from 'store/state/detailGetState';
+import { usePathname } from 'next/navigation';
+import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
+import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 interface IBidModalProps {
   auctionInfo: IAuctionInfoResponse & Partial<IBidInfo>;
-  visible: boolean;
-  onClose: () => void;
-  placeBidHandler: (price: number) => void;
-  nftInfo: INftInfo | null;
+  onClose?: () => void;
   myBalance: BigNumber;
-  placeBidBtnLoading: boolean;
 }
-function BidModal({
-  visible,
-  onClose,
-  auctionInfo,
-  nftInfo,
-  myBalance,
-  placeBidHandler,
-  placeBidBtnLoading,
-}: IBidModalProps) {
-  console.log('BidModal');
-  const { infoState } = useGetState();
+function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
+  const modal = useModal();
+  const pathname = usePathname();
+
+  const { infoState, walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
+  const [placeBidBtnLoading, setPlaceBidBtnLoading] = useState(false);
+  const { detailInfo } = useDetailGetState();
+  const { nftInfo } = detailInfo;
+  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo?.curChain)
 
   const [priceData, setPriceData] = useState<ITransactionFeeResponse>({ transactionFee: 0, transactionFeeOfUsd: 0 });
   const totalPriceObj = {
@@ -58,20 +58,79 @@ function BidModal({
 
   const isHaveNoMoney = divDecimals(myBalance?.valueOf(), 8).toNumber() < totalPriceObj.totalElf;
 
+  const placeBidHandler = async (totalPrice: number) => {
+    const mainAddress = await getAccountInfoSync();
+    if(!mainAddress) return;
+    try {
+      setPlaceBidBtnLoading(true);
+      console.log('walletInfo.address', walletInfo.address);
+      const allowance = await GetAllowance({
+        symbol: 'ELF',
+        owner: walletInfo.address,
+        spender: aelfInfo?.auctionSideAddress,
+      });
+
+      if (allowance.error) {
+        message.error(allowance.errorMessage?.message || allowance.error.toString());
+        return;
+      }
+
+      const bigA = timesDecimals(totalPrice, 8);
+
+      const allowanceBN = new BigNumber(allowance?.allowance || 0);
+
+      if (allowanceBN.lt(bigA)) {
+        const approveRes = await Approve({
+          spender: aelfInfo?.auctionSideAddress,
+          symbol: 'ELF',
+          amount: timesDecimals(totalPrice, 8).toNumber(),
+          // amount: timesDecimals(10000, 8).toString(),
+        });
+        console.log('token approve finish', approveRes);
+      }
+
+      await PlaceBid({
+        auctionId: auctionInfo?.id || '',
+        amount: timesDecimals(totalPrice, 8).toNumber(),
+      });
+      getNFTNumber({ nftSymbol: nftInfo?.nftSymbol, chainId: infoState.sideChain, owner: walletInfo.address });
+      message.success('success');
+    } catch (e: any) {
+      let msg = e?.errorMessage?.message;
+      if (/Insufficient balance of ELF/.test(e.errorMessage?.message)) {
+        msg = 'Insufficient funds';
+      }
+      console.log('PlaceBid finish error', e);
+      message.error(msg);
+    } finally {
+      setPlaceBidBtnLoading(false);
+      modal.hide();
+    }
+  };
+
+  const onCancel = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      modal.hide();
+    }
+  };
+
+  useEffect(() => {
+    modal.hide();
+  }, [pathname]);
+
   useEffect(() => {
     async function fetchData() {
       if (!nftInfo) {
         return;
       }
-      if (!visible) {
+      if (!modal.visible) {
         return;
       }
       const transactionFeeData = fetchTransactionFee();
-      // const markupPriceData = fetchMinMarkupPrice({ Symbol: nftInfo?.nftSymbol });
 
       try {
-        // const [transactionFee, markupPrice] = await Promise.all([transactionFeeData, markupPriceData]);
-        // setPriceData({ ...transactionFee, ...markupPrice });
         const transactionFee = await transactionFeeData;
         setPriceData(transactionFee);
       } catch (e) {
@@ -79,15 +138,15 @@ function BidModal({
       }
     }
     fetchData();
-  }, [nftInfo, visible]);
+  }, [nftInfo, modal.visible]);
 
   return (
     <Modal
       width={800}
       title="Place a Bid"
       className={styles['bid-modal-custom']}
-      onCancel={() => onClose()}
-      open={visible}
+      onCancel={() => onCancel()}
+      open={modal.visible}
       footer={
         <Button
           type="primary"
@@ -217,4 +276,4 @@ function BidModal({
     </Modal>
   );
 }
-export default memo(BidModal);
+export default memo(NiceModal.create(BidModal));

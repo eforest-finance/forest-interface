@@ -10,6 +10,7 @@ import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
 import { store } from 'store/store';
 import Loading from 'components/PageLoading';
+import NiceModal from '@ebay/nice-modal-react';
 
 import { fetchConfigItems } from 'api/fetch';
 import { setAelfInfo } from 'store/reducer/aelfInfo';
@@ -32,7 +33,13 @@ function Provider({ children }: { children: React.ReactNode }) {
     <>
       <StoreProvider>
         <ConfigProvider locale={enUS} autoInsertSpaceInButton={false}>
-          {loading ? <Loading></Loading> : <WebLoginProvider>{children}</WebLoginProvider>}
+          {loading ? (
+            <Loading></Loading>
+          ) : (
+            <WebLoginProvider>
+              <NiceModal.Provider>{children}</NiceModal.Provider>
+            </WebLoginProvider>
+          )}
         </ConfigProvider>
       </StoreProvider>
     </>

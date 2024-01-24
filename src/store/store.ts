@@ -16,6 +16,7 @@ import DetailInfoReducer, { detailInfoSlice } from 'store/reducer/detail/detailI
 import WhiteListInfoReducer, { whiteListInfoSlice } from 'store/reducer/saleInfo/whiteListInfo';
 import SaleInfoReducer, { saleInfoSlice } from 'store/reducer/saleInfo/saleInfo';
 import SyncChainModalReducer, { syncChainModalSlice } from 'store/reducer/syncChainModal';
+import sellModalsInfosSliceReducer, { sellModalsInfosSlice } from 'store/reducer/saleInfo/sellModalsInfo';
 
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux';
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   [saleInfoSlice.name]: SaleInfoReducer,
   [whiteListInfoSlice.name]: WhiteListInfoReducer,
   [syncChainModalSlice.name]: SyncChainModalReducer,
+  [sellModalsInfosSlice.name]: sellModalsInfosSliceReducer,
 });
 
 const makeStore = () => {
