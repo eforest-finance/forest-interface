@@ -7,7 +7,6 @@ import { DownOutlined } from '@ant-design/icons';
 import Jump from 'assets/images/detail/jump.svg';
 import qs from 'query-string';
 import CloseOutlined from 'assets/images/explore/tag-close.svg';
-import { fix4NotInt } from 'utils/formatElf';
 
 import styles from './style.module.css';
 import moment from 'moment';
@@ -66,7 +65,10 @@ export default function Activity() {
       items: filterList.map((item) => {
         return {
           label: (
-            <Checkbox checked={filterObj[item]} onChange={(e) => onFilterChange(e.target.checked, item)}>
+            <Checkbox
+              className={styles['detail-activity-checkbox']}
+              checked={filterObj[item]}
+              onChange={(e) => onFilterChange(e.target.checked, item)}>
               {item}
             </Checkbox>
           ),
@@ -262,7 +264,7 @@ export default function Activity() {
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder">
           <div id="filter" className="px-[24px] pt-[16px]">
-            <Dropdown trigger={['click']} className={visible ? styles.visible : ''} menu={dropdownMenu}>
+            <Dropdown trigger={['click']} overlayClassName={styles['detail-activity-dropdown']} menu={dropdownMenu}>
               <div className={`filter flex justify-between`} onClick={() => setVisible((v) => !v)}>
                 <p className="text-textPrimary">Filter</p>
                 <DownOutlined />

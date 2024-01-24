@@ -5,3 +5,18 @@
 .mobile-offers {
   @apply mt-[16px];
 }
+
+.offers-table-custom{
+  :global(.ant-table-tbody) {
+    :global(.ant-table-row) {
+      > :global(.ant-table-cell) {
+        &:first-of-type {
+          @apply !rounded-none;
+        }
+        &:last-of-type {
+          @apply !rounded-none;
+        }
+      }
+    }
+  }
+}

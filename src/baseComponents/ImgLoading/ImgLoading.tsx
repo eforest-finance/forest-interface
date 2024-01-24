@@ -2,7 +2,7 @@ import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import loadingImage from 'assets/images/loading.png';
 import loadingImageL from 'assets/images/loadingL.png';
 import nftPreview from 'assets/images/nftPreview.jpg';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { useTheme } from 'hooks/useTheme';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
@@ -10,7 +10,7 @@ import { isBase64Url, isUrl } from 'utils/reg';
 
 import styles from './ImgLoading.module.css';
 interface ImgLoadingProps {
-  src: string;
+  src: string | StaticImageData;
   loading?: ReactNode;
   nextImageProps?: {
     width?: number;
@@ -34,7 +34,7 @@ function ImgLoading({
 }: ImgLoadingProps) {
   const [theme] = useTheme();
   const { isSmallScreen } = useSelector(selectInfo);
-  const [loadableStatus, setLoadableStatus] = useState<boolean>(isUrl(src));
+  const [loadableStatus, setLoadableStatus] = useState<boolean>(false);
   const defaultLoadingWrapper = useMemo(() => {
     return (
       <Image
@@ -46,7 +46,11 @@ function ImgLoading({
   }, [theme]);
 
   useEffect(() => {
-    setLoadableStatus(isUrl(src) || isBase64Url(src));
+    if (typeof src === 'string') {
+      setLoadableStatus(isUrl(src) || isBase64Url(src));
+    } else {
+      setLoadableStatus(true);
+    }
   }, [src]);
 
   return (

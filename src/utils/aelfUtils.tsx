@@ -12,6 +12,7 @@ import { CONTRACT_AMOUNT } from 'constants/common';
 import { store } from 'store/store';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { GetTotalEffectiveListedNFTAmount, GetTotalOfferAmount } from 'contract/market';
+import { SupportedELFChainId } from 'constants/chain';
 const { transform, decodeAddressRep } = AElf.utils;
 
 const httpProviders: any = {};
@@ -438,6 +439,26 @@ export const decodeAddress = (address: string) => {
     } else {
       decodeAddressRep(address);
       return true;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const decodeTransferAddress = (address: string) => {
+  try {
+    if (!address) return false;
+    if (address.indexOf('_') > -1) {
+      const info = store.getState().aelfInfo.aelfInfo;
+      const parts = address.split('_');
+      if ((parts[0] === 'ELF' && parts[2] === info.curChain) || parts[2] === SupportedELFChainId.MAIN_NET) {
+        decodeAddressRep(parts[1]);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   } catch (error) {
     return false;

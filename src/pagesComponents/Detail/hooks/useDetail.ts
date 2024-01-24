@@ -5,7 +5,6 @@ import { openModal } from 'store/reducer/errorModalInfo';
 import useGetState from 'store/state/getState';
 import { useEffect, useState } from 'react';
 import getNftInfo from '../utils/getNftInfo';
-import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
 interface IProps {
   id: string;
@@ -15,7 +14,6 @@ export const useDetail = (params: IProps) => {
   const [isCanBeBid, setIsCanBeBid] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { id } = params;
-  const { isLogin } = useCheckLoginAndToken();
 
   const { walletInfo } = useGetState();
   const getDetail = async () => {
@@ -60,7 +58,7 @@ export const useDetail = (params: IProps) => {
 
   useEffect(() => {
     getDetail();
-  }, [id, isLogin, walletInfo.address]);
+  }, [id, walletInfo.address]);
 
   return { isCanBeBid, getDetail, isFetching };
 };

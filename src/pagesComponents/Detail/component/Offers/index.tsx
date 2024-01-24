@@ -1,39 +1,59 @@
-import ELF from 'assets/images/ELF.png';
-
 import styles from './style.module.css';
-import { useCallback, useMemo, useState } from 'react';
-import Logo from 'components/Logo';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
 import { FormatOffersType } from 'store/types/reducer';
 import { From } from 'types/nftTypes';
 import { MAX_RESULT_COUNT_10 } from 'constants/common';
-import { OmittedType, getOmittedStr } from 'utils';
+import { OmittedType, addPrefixSuffix, getOmittedStr } from 'utils';
 import { ColumnsType } from 'antd/lib/table';
 import { IPaginationPage } from 'store/types/reducer';
 import CollapseForPC from 'components/Collapse';
 import Table from 'baseComponents/Table';
 import Button from 'baseComponents/Button';
 import useDefaultActiveKey from 'pagesComponents/Detail/hooks/useDefaultActiveKey';
-import ExchangeModal from '../ExchangeModal';
+import ExchangeModal from '../ExchangeModal/index';
 import { useModal } from '@ebay/nice-modal-react';
-import CancelModal from '../CancelModal';
 import { getOffersInfo } from './utils/getOffersInfo';
 import useIntervalRequestForOffers from 'pagesComponents/Detail/hooks/useIntervalRequestForOffers';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
+import getTextWidth from 'utils/getTextWidth';
+import { DEFAULT_CELL_WIDTH } from 'constants/index';
+import TableCell from '../TableCell';
+import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
+import isTokenIdReuse from 'utils/isTokenIdReuse';
 import { useMount } from 'react-use';
+import PromptModal from 'components/PromptModal';
+import { CancelOfferMessage } from 'constants/promptMessage';
+import { handlePlurality } from 'utils/handlePlurality';
+import useCancelOffer from 'pagesComponents/Detail/hooks/useCancelOffer';
+import BigNumber from 'bignumber.js';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
+export const COLUMN_TITLE = {
+  1155: {
+    PRICE: 'Unit Price',
+    USD_PRICE: 'Unit USD Price',
+  },
+  721: {
+    PRICE: 'Price',
+    USD_PRICE: 'USD Price',
+  },
+};
 
-export default function Offers(options: { rate: number; nftBalance: number }) {
+export default function Offers(options: { rate: number }) {
   const exchangeModal = useModal(ExchangeModal);
-  const cancelModal = useModal(CancelModal);
+  const promptModal = useModal(PromptModal);
+  const columWidth = useRef<Map<string, number>>();
 
   const { infoState, walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const { detailInfo } = useDetailGetState();
-  const { nftInfo, offers } = detailInfo;
+  const { nftInfo, offers, nftNumber } = detailInfo;
+
+  const cancelOffer = useCancelOffer(nftInfo?.chainId);
+
   const { chainId, id } = useParams() as {
     chainId: Chain;
     id: string;
@@ -53,7 +73,7 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { rate, nftBalance } = options;
+  const { rate } = options;
 
   const getOffers = async (page: number, pageSize: number) => {
     setLoading(true);
@@ -69,19 +89,54 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
     getOffers(1, MAX_RESULT_COUNT_10);
   });
 
-  const numberFormat = useCallback(
-    (value: number) => value.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'),
-    [],
-  );
-
-  const onCancel = async (data: FormatOffersType) => {
-    const mainAddress = await getAccountInfoSync();
-    if (!mainAddress) {
-      return;
+  const handleCancelOffer = async (data: FormatOffersType) => {
+    try {
+      await cancelOffer({
+        symbol: nftInfo?.nftSymbol || '',
+        tokenId: nftInfo?.nftTokenId || 0,
+        offerFrom: data?.from?.address || '',
+        cancelOfferList: [
+          {
+            expireTime: {
+              nanos: 0,
+              seconds: `${(data?.expireTime || 0) / 1000}`,
+            },
+            offerTo: data?.to?.address,
+            price: {
+              symbol: 'ELF',
+              amount: new BigNumber(data?.price || 0).times(10 ** 8).toNumber(),
+            },
+          },
+        ],
+      });
+      promptModal.hide();
+    } catch (error) {
+      return Promise.reject(error);
     }
-    cancelModal.show({
-      type: 'offer',
-      data,
+  };
+
+  const onCancel = (data: FormatOffersType) => {
+    const usdPrice = data?.price * (data?.token?.symbol === 'ELF' ? rate : 1);
+
+    promptModal.show({
+      nftInfo: {
+        image: nftInfo?.previewImage || '',
+        collectionName: nftInfo?.nftCollection?.tokenName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: 'Offer Price',
+        price: `${formatTokenPrice(data.price)} ${data.token.symbol || 'ELF'}`,
+        usdPrice: formatUSDPrice(usdPrice),
+        item: handlePlurality(Number(data.quantity), 'item'),
+      },
+      title: CancelOfferMessage.title,
+      content: {
+        title: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.title : CancelOfferMessage.default.title,
+        content: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.message : CancelOfferMessage.default.message,
+      },
+      initialization: () => handleCancelOffer(data),
+      onClose: () => {
+        promptModal.hide();
+      },
     });
   };
 
@@ -103,19 +158,16 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
 
       exchangeModal.show({
         art,
-        nftBalance,
-        exchangeType: 'sell',
-        onClose: () => {
-          exchangeModal.hide();
-        },
+        rate: rate,
+        nftBalance: Number(nftNumber.nftBalance),
+        onClose: () => exchangeModal.hide(),
       });
     }
   };
   const getDealDisabled = (toAddress: string | undefined) => {
-    if (!nftBalance) {
+    if (!nftNumber.nftBalance) {
       return true;
     }
-
     if (
       toAddress === walletInfo.address ||
       toAddress === nftInfo?.issuer ||
@@ -126,117 +178,156 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
     return true;
   };
 
-  const columns: ColumnsType<FormatOffersType> = [
-    {
-      title: 'Price',
-      key: 'price',
-      width: isSmallScreen ? 120 : 140,
-      dataIndex: 'price',
-      render: (text: string, record: FormatOffersType) => (
-        <div
-          className={`text-[var(--color-secondary)] font-medium flex items-center ${
-            isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-          }`}>
-          <Logo className={'w-[16px] h-[16px] mr-[4px]'} src={ELF} />
-          &nbsp;
-          <span className="text-[var(--color-primary)] font-semibold">{formatTokenPrice(text)}</span>
-          &nbsp;
-          {record.token.symbol}
-        </div>
-      ),
-    },
-    {
-      title: 'USD Price',
-      key: 'usdPrice',
-      width: isSmallScreen ? 120 : 170,
-      dataIndex: 'usdPrice',
-      render: (_, record: FormatOffersType) => {
-        const usdPrice = record?.price * (record?.token?.symbol === 'ELF' ? rate : 1);
-        return (
-          <span
-            className={`font-medium whitespace-nowrap ${
-              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-            }`}>
-            {formatUSDPrice(usdPrice)}
-          </span>
-        );
-      },
-    },
-    {
-      title: 'Quantity',
-      key: 'quantity',
-      dataIndex: 'quantity',
-      width: isSmallScreen ? 120 : 108,
-      render: (text: number | string) => (
-        <span
-          className={`text-[var(--color-secondary)] ${
-            isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-          }`}>
-          {formatNumber(text)}
-        </span>
-      ),
-    },
-    {
-      title: 'Expiration',
-      key: 'expiration',
-      width: isSmallScreen ? 120 : 140,
-      dataIndex: 'expiration',
-      render: (text: string) => (
-        <span
-          className={`font-medium text-[var(--color-secondary)] ${
-            isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-          }`}>
-          {(text && `in ${text} days`) || '--'}
-        </span>
-      ),
-    },
-    {
-      title: 'From',
-      key: 'from',
-      dataIndex: 'from',
-      width: isSmallScreen ? 240 : 260,
-      render: (from: From | null) => {
-        // console.log(walletInfo.address, from?.name, from?.name === walletInfo.address, 'xxx');
-        return (
-          <span
-            className={`${styles.from} cursor-pointer text-[var(--brand-base)] font-medium ${
-              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-            }`}
-            onClick={() => from?.address && nav.push(`/account/${from.address}`)}>
-            {walletInfo.address === from?.address ? 'you' : getOmittedStr(from?.name || '', OmittedType.ADDRESS)}
-          </span>
-        );
-      },
-    },
-    {
-      key: 'action',
-      width: 92,
-      render: (_text: string, record: FormatOffersType) =>
-        record?.from?.address !== walletInfo.address ? (
-          nftBalance ? (
-            <Button
-              className="!w-[68px] flex justify-center items-center !h-[28px] !text-[12px] !font-medium !rounded-[6px] !p-0"
-              disabled={getDealDisabled(record.to?.address)}
-              type="primary"
-              onClick={() => {
-                onDeal({
-                  ...record,
-                  quantity: nftBalance < record.quantity ? nftBalance : record.quantity,
-                });
-              }}>
-              Deal
-            </Button>
-          ) : null
-        ) : (
-          <Button
-            className="!w-[68px] flex justify-center items-center !h-[28px] !text-[12px] !font-medium !rounded-[6px] !p-0"
-            type="default"
-            onClick={() => onCancel(record)}>
-            Cancel
-          </Button>
+  const isERC721: boolean = useMemo(() => !(nftInfo && isTokenIdReuse(nftInfo)), [nftInfo]);
+
+  const titles = useMemo(() => {
+    const nftType = isERC721 ? 721 : 1155;
+    return COLUMN_TITLE[nftType] || COLUMN_TITLE[1155];
+  }, [isERC721]);
+
+  useEffect(() => {
+    const getMaxColumWidth = () => {
+      const widthMap = new Map();
+
+      offers?.items?.forEach((target: FormatOffersType) => {
+        const price = `${formatTokenPrice(target?.price)} ${target.token.symbol}`;
+        const usdPrice = `${formatUSDPrice(target?.price * (target?.token?.symbol === 'ELF' ? rate : 1))}`;
+
+        const priceWidth = getTextWidth(price) + 24;
+        const usdPriceWidth = getTextWidth(formatUSDPrice(Number(usdPrice))) + 24;
+
+        const curPriceValue = widthMap.get('price') || 0;
+        const curUsdPriceValue = widthMap.get('usdPrice') || 0;
+
+        widthMap.set('price', Math.max(curPriceValue, priceWidth, 150));
+        widthMap.set('usdPrice', Math.max(curUsdPriceValue, usdPriceWidth, 150));
+        columWidth.current = widthMap;
+      });
+    };
+
+    if (offers?.items && offers.items.length) {
+      getMaxColumWidth();
+    }
+  }, [isSmallScreen, offers, rate]);
+
+  const showAction = useMemo(() => {
+    const canCancelList = offers?.items?.filter((item) => item?.from?.address === walletInfo.address);
+    if (canCancelList?.length) {
+      return true;
+    } else {
+      return nftNumber.nftBalance ? true : false;
+    }
+  }, [nftNumber.nftBalance, offers?.items, walletInfo.address]);
+
+  const columns: ColumnsType<FormatOffersType> = useMemo(
+    () => [
+      {
+        title: titles.PRICE,
+        key: 'price',
+        dataIndex: 'price',
+        width: columWidth.current?.get('price') || 150,
+        render: (text: string, record: FormatOffersType) => (
+          <TableCell content={`${formatTokenPrice(text)} ${record.token.symbol}`} />
         ),
-    },
-  ];
+      },
+      {
+        title: titles.USD_PRICE,
+        key: 'usdPrice',
+        dataIndex: 'usdPrice',
+        width: columWidth.current?.get('usdPrice') || 150,
+        render: (_, record: FormatOffersType) => {
+          const usdPrice = record?.price * (record?.token?.symbol === 'ELF' ? rate : 1);
+          return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
+        },
+      },
+      {
+        title: 'Quantity',
+        key: 'quantity',
+        dataIndex: 'quantity',
+        width: isSmallScreen ? 120 : 108,
+        render: (text: number | string) => <TableCell content={formatNumber(text)} tooltip={formatTokenPrice(text)} />,
+      },
+      {
+        title: 'Floor Difference',
+        key: 'floorPricePercentage',
+        dataIndex: 'floorPricePercentage',
+        width: isSmallScreen ? 120 : 170,
+        render: (text: string, record: FormatOffersType) => (
+          <TableCell
+            content={text}
+            tooltip={
+              record.floorPrice !== -1
+                ? `Collection floor price ${formatTokenPrice(record.floorPrice)} ${record.floorPriceSymbol}`
+                : ''
+            }
+          />
+        ),
+      },
+      {
+        title: 'Expiration',
+        key: 'expiration',
+        width: isSmallScreen ? 120 : 140,
+        dataIndex: 'expiration',
+        render: (text: string, record: FormatOffersType) => (
+          <TableCell content={(text && text) || '-'} tooltip={timeFormat(record.expireTime)} />
+        ),
+      },
+      {
+        title: 'From',
+        key: 'from',
+        dataIndex: 'from',
+        width: isSmallScreen ? 240 : 260,
+        render: (from: From | null) => {
+          return (
+            <TableCell
+              content={
+                walletInfo.address === from?.address ? 'you' : getOmittedStr(from?.name || '', OmittedType.ADDRESS)
+              }
+              isLink={true}
+              onClick={() => from?.address && nav.push(`/account/${from.address}`)}
+              tooltip={from?.address && addPrefixSuffix(from.address)}
+            />
+          );
+        },
+      },
+      {
+        key: 'action',
+        fixed: showAction ? 'right' : false,
+        width: 92,
+        render: (_text: string, record: FormatOffersType) =>
+          record?.from?.address !== walletInfo.address ? (
+            nftNumber.nftBalance ? (
+              <Button
+                className="!w-[64px]"
+                size="mini"
+                disabled={getDealDisabled(record.to?.address)}
+                type="primary"
+                onClick={() => onDeal(record)}>
+                Deal
+              </Button>
+            ) : null
+          ) : (
+            <Button size="mini" type="default" className="!w-[64px]" onClick={() => onCancel(record)}>
+              Cancel
+            </Button>
+          ),
+      },
+    ],
+    [
+      isSmallScreen,
+      nav,
+      nftNumber.nftBalance,
+      rate,
+      titles.PRICE,
+      titles.USD_PRICE,
+      walletInfo.address,
+      columWidth.current?.get('price'),
+      columWidth.current?.get('usdPrice'),
+      nftNumber.tokenBalance,
+      nftNumber.nftBalance,
+      nftNumber.nftQuantity,
+    ],
+  );
 
   const items = [
     {
@@ -247,6 +338,7 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
           <Table
+            className={styles['offers-table-custom']}
             loading={loading}
             rowKey={(record) => record.from + record.key}
             pagination={{
@@ -258,7 +350,8 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
                 getOffers(page, pageSize);
               },
             }}
-            emptyText="No offers yet"
+            adaptation={true}
+            emptyText="No offers yet."
             columns={columns}
             dataSource={offers?.items || []}
             scroll={{ x: 630, y: 326 }}
@@ -268,14 +361,8 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
     },
   ];
 
-  console.log('offers rerender activeKey', activeKey);
-
-  useMount(() => {
-    console.log('offers rerender activeKey mounted', activeKey);
-  });
-
   return (
-    <div className={`${styles.offers} ${isSmallScreen && styles['mobile-offers']}`}>
+    <div className={`${styles.offers} ${isSmallScreen && styles['mobile-offers']}`} id="page-detail-offers">
       <CollapseForPC
         activeKey={activeKey}
         onChange={() => {
