@@ -1,6 +1,6 @@
 'use client';
 import { Tabs } from 'antd';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import DetailCard from 'pagesComponents/Detail/component/DetailCard';
 import Listings from 'pagesComponents/Detail/component/Listings';
@@ -27,6 +27,8 @@ import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
 
+  const [showSticky, setShowSticky] = useState<boolean>(false);
+
   const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
 
   const tabsRef = useRef(null);
@@ -34,7 +36,18 @@ export default function DetailMobile() {
     root: document.body,
     rootMargin: `0px 0px -${bottom}px 0px`,
   });
-  intersection?.isIntersecting && console.log('tabRef intersection', intersection);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (!tabsRef?.current) return;
+      const { top } = (tabsRef?.current as HTMLElement).getBoundingClientRect();
+      setShowSticky(top < 63);
+    };
+    document.body.addEventListener('scroll', onScroll);
+    return () => {
+      document.body.removeEventListener('scroll', onScroll);
+    }
+  }, []);
 
   const {
     detailInfo: { currentTab },
@@ -66,7 +79,7 @@ export default function DetailMobile() {
             onChange={(activeKey) => {
               store.dispatch(setCurrentTab(activeKey));
             }}
-            className={clsx(styles['fixedTabs'], intersection?.isIntersecting && styles['has-sticky'])}
+            className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
             animated={false}>
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />

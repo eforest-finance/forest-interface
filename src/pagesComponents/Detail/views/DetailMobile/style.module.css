@@ -46,7 +46,7 @@
 }
 
 .fixedTabs :global(.ant-tabs-nav) {
-  @apply sticky top-[62px] bg-fillPageBg;
+  @apply bg-fillPageBg;
   @apply before:absolute before:content-[''] before:right-0 before:left-0;
   @apply before:border-t-0 before:border-b before:border-solid before:border-lineDividers;
 
@@ -58,8 +58,13 @@
     @apply text-textSecondary font-semibold text-base !ml-[48px] first-of-type:!ml-0;
   }
 }
+
+.fixedTabs.has-sticky :global(.ant-tabs-content-holder){
+  @apply mt-16;
+}
+
 .fixedTabs.has-sticky :global(.ant-tabs-nav) {
-  @apply bg-[var(--bg-header)] -mx-4 z-[999];
+  @apply fixed bg-[var(--bg-header)] z-[999] top-[62px] left-0 right-0;
   @apply before:right-0 before:left-0;
 
   :global(.ant-tabs-nav-list) {
