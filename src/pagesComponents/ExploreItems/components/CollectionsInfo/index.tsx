@@ -61,7 +61,6 @@ function SeedLink({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
       <div className="flex cursor-pointer items-center w-[40px] h-[40px] justify-center">
         <ElfIcon
           onClick={() => {
-            alert();
             jump(collectionsInfo?.issueChainId || '', `/token/${collectionsInfo?.symbol}`);
           }}
         />
