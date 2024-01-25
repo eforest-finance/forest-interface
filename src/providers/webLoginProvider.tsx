@@ -1,12 +1,23 @@
 'use client';
 
-import { PortkeyProvider } from 'aelf-web-login';
+// import { PortkeyProvider } from 'aelf-web-login';
 import { scheme } from '@portkey/utils';
 import dynamic from 'next/dynamic';
 import isMobile from 'utils/isMobile';
 import { store } from 'store/store';
 
 const APP_NAME = 'forest';
+
+const PortkeyProviderDynamic = dynamic(
+  async () => {
+    const info = store.getState().aelfInfo.aelfInfo;
+
+    const weblogin = await import('aelf-web-login').then((module) => module);
+    return weblogin.PortkeyProvider;
+  },
+  { ssr: false },
+) as any;
+
 const WebLoginProviderDynamic = dynamic(
   async () => {
     const info = store.getState().aelfInfo.aelfInfo;
@@ -110,7 +121,7 @@ export default ({ children }: { children: React.ReactNode }) => {
   console.log('networkType---', info?.networkType);
 
   return (
-    <PortkeyProvider networkType={'TESTNET'}>
+    <PortkeyProviderDynamic networkType={'TESTNET'}>
       <WebLoginProviderDynamic
         nightElf={{
           useMultiChain: true,
@@ -143,6 +154,6 @@ export default ({ children }: { children: React.ReactNode }) => {
         }}>
         {children}
       </WebLoginProviderDynamic>
-    </PortkeyProvider>
+    </PortkeyProviderDynamic>
   );
 };
