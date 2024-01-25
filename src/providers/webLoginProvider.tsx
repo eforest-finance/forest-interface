@@ -1,12 +1,14 @@
 'use client';
 
-import { PortkeyProvider } from '@portkey/did-ui-react';
+import { PortkeyDid, PortkeyDidV1 } from 'aelf-web-login';
 import { scheme } from '@portkey/utils';
 import dynamic from 'next/dynamic';
 import isMobile from 'utils/isMobile';
 import { store } from 'store/store';
+import { useCallback } from 'react';
 
 const APP_NAME = 'forest';
+const PortkeyProvider = PortkeyDid.PortkeyProvider;
 
 const WebLoginProviderDynamic = dynamic(
   async () => {
@@ -17,19 +19,44 @@ const WebLoginProviderDynamic = dynamic(
     weblogin.setGlobalConfig({
       appName: APP_NAME,
       chainId: info.curChain,
+      networkType: 'TESTNET',
       portkey: {
         useLocalStorage: true,
         graphQLUrl: info.graphqlServer,
-        connectUrl: info.connectServer,
+        connectUrl: 'http://192.168.66.203:8001',
         socialLogin: {
           // Portkey: {
           //   websiteName: APP_NAME,
           //   websiteIcon: `${window.location.origin}/logo192.png`,
           // },
         },
+        loginConfig: {
+          recommendIndexes: [0, 1],
+          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Phone', 'Email'],
+        },
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
-          baseURL: info.portkeyServer,
+          baseURL: `${info.portkeyServer}/v1`,
+        },
+      },
+      portkeyV2: {
+        networkType: 'TESTNET',
+        useLocalStorage: true,
+        graphQLUrl: info.graphqlServer,
+        connectUrl: 'http://192.168.67.127:8080',
+        socialLogin: {
+          // Portkey: {
+          //   websiteName: APP_NAME,
+          //   websiteIcon: `${window.location.origin}/logo192.png`,
+          // },
+        },
+        loginConfig: {
+          recommendIndexes: [0, 1],
+          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Phone', 'Email'],
+        },
+        requestDefaults: {
+          timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
+          baseURL: `${info.portkeyServer}/v2`,
         },
       },
       aelfReact: {
@@ -50,7 +77,6 @@ const WebLoginProviderDynamic = dynamic(
         },
       },
       defaultRpcUrl: (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) || info?.rpcUrlTDVW,
-      networkType: info?.networkType,
     });
     return weblogin.WebLoginProvider;
   },
@@ -84,8 +110,18 @@ const jumpAppInH5 = (maxWaitingTime: number) => {
 
 export default ({ children }: { children: React.ReactNode }) => {
   const info = store.getState().aelfInfo.aelfInfo;
+
+  const PortkeyProviderVersion = useCallback(({ children, ...props }: any) => {
+    return (
+      <PortkeyDid.PortkeyProvider {...props}>
+        <PortkeyDidV1.PortkeyProvider {...props}>{children}</PortkeyDidV1.PortkeyProvider>
+      </PortkeyDid.PortkeyProvider>
+    );
+  }, []);
+  console.log('networkType---', info?.networkType);
+
   return (
-    <PortkeyProvider networkType={info?.networkType}>
+    <PortkeyProviderVersion networkType={'TESTNET'}>
       <WebLoginProviderDynamic
         nightElf={{
           useMultiChain: true,
@@ -118,6 +154,6 @@ export default ({ children }: { children: React.ReactNode }) => {
         }}>
         {children}
       </WebLoginProviderDynamic>
-    </PortkeyProvider>
+    </PortkeyProviderVersion>
   );
 };

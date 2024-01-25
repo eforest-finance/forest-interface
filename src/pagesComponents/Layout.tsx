@@ -43,6 +43,25 @@ const Layout = dynamic(async () => {
     const { isSmallScreen, loading } = useSelector(selectInfo);
     const { isMD } = useResponsive();
     const [theme, initialTheme] = useTheme();
+
+    // const { callSendMethod: callAELFSendMethodV1, callViewMethod: callAELFViewMethodV1 } = useCallContractV1({
+    //   chainId: SupportedELFChainId.MAIN_NET,
+    //   rpcUrl: info?.rpcUrlAELF,
+    // });
+    // const { callSendMethod: callTDVVSendMethodV1, callViewMethod: callTDVVViewMethodV1 } = useCallContractV1({
+    //   chainId: SupportedELFChainId.TDVV_NET,
+    //   rpcUrl: info?.rpcUrlTDVV,
+    // });
+    // const { callSendMethod: callTDVWSendMethodV1, callViewMethod: callTDVWViewMethodV1 } = useCallContractV1({
+    //   chainId: SupportedELFChainId.TDVW_NET,
+    //   rpcUrl: info?.rpcUrlTDVW,
+    // });
+
+    const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
+    const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
+    const webLoginContext = useWebLogin();
+    const { version } = webLoginContext;
+
     const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } = useCallContract({
       chainId: SupportedELFChainId.MAIN_NET,
       rpcUrl: info?.rpcUrlAELF,
@@ -56,28 +75,10 @@ const Layout = dynamic(async () => {
       rpcUrl: info?.rpcUrlTDVW,
     });
 
-    const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
-    const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
-    const webLoginContext = useWebLogin();
+    console.log('version---', version);
+
     (window as any).logout = webLoginContext.logout;
     WebLoginInstance.get().setWebLoginContext(webLoginContext);
-    WebLoginInstance.get().setContractMethod([
-      {
-        chain: SupportedELFChainId.MAIN_NET,
-        sendMethod: callAELFSendMethod,
-        viewMethod: callAELFViewMethod,
-      },
-      {
-        chain: SupportedELFChainId.TDVV_NET,
-        sendMethod: callTDVVSendMethod,
-        viewMethod: callTDVVViewMethod,
-      },
-      {
-        chain: SupportedELFChainId.TDVW_NET,
-        sendMethod: callTDVWSendMethod,
-        viewMethod: callTDVWViewMethod,
-      },
-    ]);
 
     const getToken = useGetToken();
     const getUserInfo = useUserInfo();
@@ -94,6 +95,25 @@ const Layout = dynamic(async () => {
     }, [pathName]);
 
     const { isLogin } = useCheckLoginAndToken();
+
+    // const method = {
+    //   '2': {
+    //     callAELFSendMethod,
+    //     callAELFViewMethod,
+    //     callTDVVSendMethod,
+    //     callTDVVViewMethod,
+    //     callTDVWSendMethod,
+    //     callTDVWViewMethod,
+    //   },
+    //   '1': {
+    //     callAELFSendMethod: callAELFSendMethodV1,
+    //     callAELFViewMethod: callAELFViewMethodV1,
+    //     callTDVVSendMethod: callTDVVSendMethodV1,
+    //     callTDVVViewMethod: callTDVVViewMethodV1,
+    //     callTDVWSendMethod: callTDVWSendMethodV1,
+    //     callTDVWViewMethod: callTDVWViewMethodV1,
+    //   },
+    // };
 
     useEffect(() => {
       if (isLogin) {
@@ -129,6 +149,23 @@ const Layout = dynamic(async () => {
     useEffect(() => {
       console.log('webLoginContext.loginState', webLoginContext.loginState);
       if (webLoginContext.loginState === WebLoginState.logined) {
+        WebLoginInstance.get().setContractMethod([
+          {
+            chain: SupportedELFChainId.MAIN_NET,
+            sendMethod: callAELFSendMethod,
+            viewMethod: callAELFViewMethod,
+          },
+          {
+            chain: SupportedELFChainId.TDVV_NET,
+            sendMethod: callTDVVSendMethod,
+            viewMethod: callTDVVViewMethod,
+          },
+          {
+            chain: SupportedELFChainId.TDVW_NET,
+            sendMethod: callTDVWSendMethod,
+            viewMethod: callTDVWViewMethod,
+          },
+        ]);
         // getSynchronizedResults();
       }
     }, [webLoginContext.loginState]);

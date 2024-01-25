@@ -65,6 +65,8 @@ export default class WebLoginInstance {
       viewMethod: MethodType;
     }[],
   ) {
+    console.log('setContractMethod', contractMethod);
+
     contractMethod.forEach((item) => {
       this.setMethod(item);
     });

@@ -6,12 +6,13 @@ if (process.env.NEXT_PUBLIC_APP_ENV === 'development') {
     { source: '/cms/:path*', destination: 'http://192.168.67.124:8056/:path*' },
     { source: '/signalr-hubs/:path*', destination: 'http://192.168.67.124:5588/signalr-hubs/:path*' },
     { source: '/connect/:path*', destination: 'http://192.168.67.124:8080/connect/:path*' },
-    { source: '/portkey/connect/:path*', destination: 'http://192.168.66.203:8001/connect/:path*' },
+    { source: '/portkey/connect/:path*', destination: 'http://192.168.67.127:8080/connect/:path*' },
     {
       source: '/AElfIndexer_DApp/:path*',
       destination: 'http://192.168.66.203:8083/AElfIndexer_DApp/:path*',
     },
-    { source: '/portkey/api/:path*', destination: 'http://192.168.66.203:5001/api/:path*' },
+    { source: '/portkey/v1/api/:path*', destination: 'http://192.168.66.203:5001/api/:path*' },
+    { source: '/portkey/v2/api/:path*', destination: 'http://192.168.67.127:5001/api/:path*' },
   ];
 }
 if (process.env.NEXT_PUBLIC_APP_ENV === 'development4') {

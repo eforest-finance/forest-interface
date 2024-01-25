@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
 
 import styles from './style.module.css';
 import useDetailGetState from 'store/state/detailGetState';
@@ -7,12 +6,9 @@ import React from 'react';
 import useGetState from 'store/state/getState';
 import Button from 'baseComponents/Button';
 import { useModal } from '@ebay/nice-modal-react';
-import isTokenIdReuse, { isERC721 } from 'utils/isTokenIdReuse';
+import { isERC721 } from 'utils/isTokenIdReuse';
 import TransferModal from '../TransferModal';
-import getMaxNftQuantityOfSell from 'utils/getMaxNftQuantityOfSell';
-import { message } from 'antd';
-import { cancelListingMessage } from 'contract/formatErrorMsg';
-import { PortkeyAssetProvider } from 'aelf-web-login';
+import { PortkeyDid, PortkeyDidV1, useWebLogin } from 'aelf-web-login';
 import TransferIcon from 'assets/images/icon/transfer.svg';
 import clsx from 'clsx';
 import { SaleModalForERC721, SaleModalForERC1155 } from '../SaleModal';
@@ -21,6 +17,7 @@ import { INftInfo } from 'types/nftTypes';
 import { SaleListingModal } from '../SaleListingModal';
 
 function SellButton() {
+  const { version } = useWebLogin();
   const transferModal = useModal(TransferModal);
   const sellModalForERC721 = useModal(SaleModalForERC721);
   const sellModalForERC1155 = useModal(SaleModalForERC1155);
@@ -80,6 +77,17 @@ function SellButton() {
   };
 
   if (!nftInfo) return null;
+
+  const PortkeyAssetProvider = useCallback(
+    (props: any) => {
+      if (version === 'v1') {
+        return <PortkeyDidV1.PortkeyAssetProvider {...props} />;
+      } else {
+        return <PortkeyDid.PortkeyAssetProvider {...props} />;
+      }
+    },
+    [version],
+  );
 
   return (
     <div className={clsx('flex', `${isSmallScreen && styles['mobile-button']}`)}>
