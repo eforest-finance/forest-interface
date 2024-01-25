@@ -31,7 +31,7 @@ export default function DetailCard() {
         key: FilterKeyEnum.Description,
         header: <div className={styles.title}>Description</div>,
         children: (
-          <div className="p-[16px] pt-0 lg:p-[24px] lg:pt-0">
+          <div>
             <p className="!mb-0">
               {nftInfo?.minter && (
                 <span className="flex items-center flex-row w-full">

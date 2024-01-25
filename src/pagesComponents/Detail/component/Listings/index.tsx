@@ -206,9 +206,7 @@ export default function Listings(option: {
   const items = [
     {
       key: 'listings',
-      header: (
-        <div className="text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">Listings</div>
-      ),
+      header: <div className="text-textPrimary text-[18px] font-medium leading-[26px]">Listings</div>,
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
           <Table

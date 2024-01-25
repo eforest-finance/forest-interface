@@ -2,7 +2,7 @@
   @apply w-full mt-[16px] lg:w-[400px];
 }
 .detail-card .title {
-  @apply leading-[26px] break-words w-[92%] p-[16px] lg:p-[24px] text-textPrimary text-[18px] font-medium;
+  @apply leading-[26px] break-words w-[92%] text-textPrimary text-[18px] font-medium;
 }
 .detail-card p {
   @apply text-textSecondary flex justify-between leading-[21px] overflow-hidden mb-[12px];

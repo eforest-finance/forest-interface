@@ -233,11 +233,7 @@ export default function PriceHistory() {
     {
       key,
       destroyInactivePanel: true,
-      header: (
-        <div className={`text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]`}>
-          Price History
-        </div>
-      ),
+      header: <div className={`text-textPrimary text-[18px] font-medium leading-[26px]`}>Price History</div>,
       children: (
         <HistoryChart
           theme={theme}

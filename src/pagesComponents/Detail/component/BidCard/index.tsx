@@ -141,11 +141,7 @@ const BidList = ({ bidInfos }: { bidInfos: IBidInfo[] }) => {
   const items = [
     {
       key: 'biddings',
-      header: (
-        <div className="text-[var(--color-primary)] text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">
-          Offers
-        </div>
-      ),
+      header: <div className="text-[var(--color-primary)] text-[18px] font-medium leading-[26px]">Offers</div>,
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder">
           {bidInfos?.length > 0 ? (

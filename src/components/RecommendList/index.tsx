@@ -66,7 +66,7 @@ export default function RecommendList() {
     {
       key: 'history',
       header: (
-        <div className="!flex !justify-between text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px] !pr-[56px]">
+        <div className="!flex !justify-between text-textPrimary text-[18px] font-medium leading-[26px] !pr-[56px]">
           <p className="font-medium flex items-center">More from this Collection</p>
           {!isSmallScreen ? (
             <Button type="primary" size="medium" onClick={onViewCollection}>

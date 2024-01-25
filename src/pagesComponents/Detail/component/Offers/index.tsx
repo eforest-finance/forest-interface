@@ -241,9 +241,7 @@ export default function Offers(options: { rate: number; nftBalance: number; onDe
   const items = [
     {
       key: 'offers',
-      header: (
-        <div className="text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">Offers</div>
-      ),
+      header: <div className="text-textPrimary text-[18px] font-medium leading-[26px]">Offers</div>,
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
           <Table

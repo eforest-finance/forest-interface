@@ -21,16 +21,6 @@
   @apply mt-[16px];
 }
 
-.detail :global .ant-collapse-item {
-  @apply border-none;
-}
-.detail :global .ant-collapse-item :global .ant-collapse-header {
-  @apply p-[24px] flex flex-row-reverse justify-between text-[var(--color-primary)];
-}
-.detail :global .ant-collapse-item :global .ant-collapse-header svg {
-  @apply w-[24px] h-[24px];
-}
-
 .mobile-detail .top-panel {
   @apply min-w-0 w-full !m-0;
 }
