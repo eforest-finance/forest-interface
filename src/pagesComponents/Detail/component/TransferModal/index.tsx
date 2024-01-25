@@ -13,12 +13,11 @@ import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import Input from 'baseComponents/Input';
 import { matchErrorMsg } from 'contract/formatErrorMsg';
-import { checkWalletSecurity } from 'aelf-web-login';
+// import { checkWalletSecurity } from 'aelf-web-login';
 import { debounce } from 'lodash-es';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
-
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();
@@ -48,25 +47,26 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   }, [nftInfo?.previewImage]);
 
   const getWalletSecurity = async () => {
-    if (walletInfo.portkeyInfo && walletInfo.portkeyInfo?.caInfo?.caHash) {
-      try {
-        const walletSecurity = await checkWalletSecurity({
-          originChainId: walletInfo.portkeyInfo.chainId,
-          targetChainId: aelfInfo.curChain,
-          caHash: walletInfo.portkeyInfo.caInfo.caHash,
-        });
-        if (walletSecurity.status === 'TransferSafe' || walletSecurity.status === 'OriginChainSafe') {
-          return true;
-        } else {
-          message.error(matchErrorMsg(walletSecurity.message));
-          return false;
-        }
-      } catch (error) {
-        return true;
-      }
-    } else {
-      return true;
-    }
+    // if (walletInfo.portkeyInfo && walletInfo.portkeyInfo?.caInfo?.caHash) {
+    //   try {
+    //     const walletSecurity = await checkWalletSecurity({
+    //       originChainId: walletInfo.portkeyInfo.chainId,
+    //       targetChainId: aelfInfo.curChain,
+    //       caHash: walletInfo.portkeyInfo.caInfo.caHash,
+    //     });
+    //     if (walletSecurity.status === 'TransferSafe' || walletSecurity.status === 'OriginChainSafe') {
+    //       return true;
+    //     } else {
+    //       message.error(matchErrorMsg(walletSecurity.message));
+    //       return false;
+    //     }
+    //   } catch (error) {
+    //     return true;
+    //   }
+    // } else {
+    //   return true;
+    // }
+    return true;
   };
 
   const [loading, setLoading] = useState<boolean>(false);

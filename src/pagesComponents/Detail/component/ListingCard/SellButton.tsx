@@ -8,7 +8,7 @@ import Button from 'baseComponents/Button';
 import { useModal } from '@ebay/nice-modal-react';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import TransferModal from '../TransferModal';
-import { PortkeyDid, PortkeyDidV1, useWebLogin } from 'aelf-web-login';
+import { PortkeyAssetProvider, useWebLogin } from 'aelf-web-login';
 import TransferIcon from 'assets/images/icon/transfer.svg';
 import clsx from 'clsx';
 import { SaleModalForERC721, SaleModalForERC1155 } from '../SaleModal';
@@ -77,18 +77,6 @@ function SellButton() {
   };
 
   if (!nftInfo) return null;
-
-  const PortkeyAssetProvider = useCallback(
-    (props: any) => {
-      if (version === 'v1') {
-        return <PortkeyDidV1.PortkeyAssetProvider {...props} />;
-      } else {
-        return <PortkeyDid.PortkeyAssetProvider {...props} />;
-      }
-    },
-    [version],
-  );
-
   return (
     <div className={clsx('flex', `${isSmallScreen && styles['mobile-button']}`)}>
       <Button
