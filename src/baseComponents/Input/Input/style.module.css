@@ -1,0 +1,10 @@
+/* stylelint-disable no-descending-specificity */
+.input {
+  &:global(.ant-input-status-error:not(.ant-input-disabled)) {
+    @apply border-functionalDanger hover:border-functionalDangerHover active:border-functionalDangerClick;
+  }
+
+  &:global(.ant-input-disabled) {
+    @apply border-textDisable;
+  }
+}

@@ -21,7 +21,7 @@
     "@sentry/nextjs": "^7.19.0",
     "@types/lodash-es": "^4.17.8",
     "@types/react-infinite-scroller": "^1.2.4",
-    "aelf-design": "^0.1.25-alpha.0",
+    "aelf-design": "^0.1.43-alpha.0",
     "aelf-sdk": "^3.2.44",
     "aelf-web-login": "1.1.9-alpha",
     "ahooks": "^3.7.8",

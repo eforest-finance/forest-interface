@@ -282,7 +282,7 @@ export default function CreateItem() {
     }
   };
 
-  const handleTokenIdChange = (value: number | null) => {
+  const handleTokenIdChange = (value: string | number | null) => {
     const id = value === null ? undefined : value;
     updateErrorState('tokenId', undefined);
 
@@ -659,7 +659,6 @@ export default function CreateItem() {
             />
           ) : (
             <Input
-              allowClear
               status={formError?.externalLink && 'error'}
               className={`w-full !mt-[16px] xlTW:!w-[840px]`}
               placeholder="http://yoursite.io/item/123"

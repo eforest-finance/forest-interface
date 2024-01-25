@@ -26,10 +26,6 @@
     @apply h-full;
   }
 
-  &:global(.ant-input), &:global(.ant-input-number-focused) {
-    @apply !shadow-none;
-  }
-
   &:global(.ant-input-status-error:not(.ant-input-disabled, .ant-input-borderless).ant-input),
   &:global(.ant-input-status-error:not(.ant-input-disabled, .ant-input-borderless).ant-input:hover) {
     @apply bg-fillPageBg;
@@ -38,24 +34,16 @@
   &:disabled {
     @apply text-base bg-fillPageBg text-textDisable border-lineBorder hover:border-lineBorder;
   }
-  &::placeholder {
-    @apply text-textDisable;
-  }
-  &[type='number'] {
-    appearance: textfield;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      @apply appearance-none m-0;
-    }
-  }
 
   input {
     @apply bg-fillPageBg text-textPrimary !shadow-none;;
   }
 
-  :global(.ant-input-number-input) {
+  :global(.ant-input-number-input-wrap) {
     @apply h-full p-0;
+    >input {
+      @apply h-full p-0;
+    }
   }
 
   :global {

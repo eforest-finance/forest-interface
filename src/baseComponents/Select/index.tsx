@@ -1,4 +1,4 @@
-import { Select as AntdSelect, SelectProps as AntdSelectProps } from 'antd';
+import { Select as AntdSelect, SelectProps as AntdSelectProps, ConfigProvider } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import Arrow from 'assets/images/icon/arrow.svg';
@@ -27,19 +27,21 @@ export function Select(props: SelectProps) {
   };
 
   return (
-    <AntdSelect
-      {...params}
-      size="middle"
-      className={clsx(
-        styles['custom-select'],
-        sizeStyle[props.size || 'default'],
-        props.status === 'error' && !props.disabled && styles['select-status-error'],
-        className,
-      )}
-      disabled={disabled}
-      suffixIcon={suffixIcon || <Arrow />}
-      popupClassName={clsx(styles['custom-popup'], popupClassName)}>
-      {children}
-    </AntdSelect>
+    <ConfigProvider prefixCls="ant">
+      <AntdSelect
+        {...params}
+        size="middle"
+        className={clsx(
+          styles['custom-select'],
+          sizeStyle[props.size || 'default'],
+          props.status === 'error' && !props.disabled && styles['select-status-error'],
+          className,
+        )}
+        disabled={disabled}
+        suffixIcon={suffixIcon || <Arrow />}
+        popupClassName={clsx(styles['custom-popup'], popupClassName)}>
+        {children}
+      </AntdSelect>
+    </ConfigProvider>
   );
 }

@@ -1,31 +1,22 @@
 'use client';
-import { Input as AntdInput, InputProps as AntdInputProps, InputRef } from 'antd';
+// import { Input as AntdInput, InputProps as AntdInputProps, InputRef } from 'antd';
+import { Input as AelfInput, IInputProps, AELFDProvider } from 'aelf-design';
 import clsx from 'clsx';
-import styles from '../style.module.css';
-import React, { Ref, forwardRef } from 'react';
-import initializationStyle, { sizeStyle } from '../utils/initializationStyle';
-import { SizeType } from 'baseComponents/type';
+import React, { forwardRef } from 'react';
+import { themeInputConfig } from './config';
+import styles from './style.module.css';
 
-export interface InputProps extends Omit<AntdInputProps, 'size'> {
-  size?: SizeType;
-}
-
-function Input(props: InputProps, ref: Ref<InputRef> | undefined) {
+function Input(props: IInputProps) {
   return (
-    <AntdInput
-      {...props}
-      ref={ref}
-      size="middle"
-      className={clsx(
-        initializationStyle({
-          disabled: props.disabled,
-          status: props.status,
-        }),
-        styles.input,
-        sizeStyle[props.size || 'default'],
-        props.className,
-      )}
-    />
+    <AELFDProvider
+      prefixCls="ant"
+      theme={{
+        components: {
+          Input: themeInputConfig,
+        },
+      }}>
+      <AelfInput {...props} size="middle" className={clsx(styles.input, props.className)} />
+    </AELFDProvider>
   );
 }
 export default React.memo(forwardRef(Input));

@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity */
 
-.button:global(.forest-btn-primary.forest-btn-dangerous) {
+.button:global(.ant-btn-primary.ant-btn-dangerous) {
   @apply border-none bg-functionalDanger text-textWhite;
   &:hover {
     @apply bg-functionalDangerHover;
@@ -18,7 +18,7 @@
   }
 }
 
-.button:global(.forest-btn.forest-btn-default) {
+.button:global(.ant-btn.ant-btn-default) {
   @apply border-lineBorder bg-fillPageBg text-textPrimary;
   &:hover {
     @apply border-lineDash bg-fillHoverBg text-textPrimary;
@@ -35,7 +35,7 @@
     }
   }
 }
-.button:global(.forest-btn.forest-btn-dashed) {
+.button:global(.ant-btn.ant-btn-dashed) {
   @apply border-lineDash bg-fillPageBg text-textPrimary;
   &:hover {
     @apply border-brandHover bg-fillPageBg text-brandHover;
@@ -54,8 +54,8 @@
 }
 
 .button {
-  &:global(.forest-btn.forest-btn-default.forest-btn-dangerous),
-  &:global(.forest-btn.forest-btn-dashed.forest-btn-dangerous) {
+  &:global(.ant-btn.ant-btn-default.ant-btn-dangerous),
+  &:global(.ant-btn.ant-btn-dashed.ant-btn-dangerous) {
     @apply border-functionalDanger bg-fillPageBg text-functionalDanger;
       &:hover {
         @apply border-functionalDangerHover bg-fillPageBg text-functionalDangerHover;
@@ -75,7 +75,7 @@
   
 }
 
-.button:global(.forest-btn.forest-btn-link) {
+.button:global(.ant-btn.ant-btn-link) {
   @apply border-0 bg-fillPageBg text-brandNormal;
   &:hover {
     @apply border-0 bg-fillHoverBg text-brandHover;
@@ -93,7 +93,7 @@
   }
 }
 
-.button:global(.forest-btn-link.forest-btn-dangerous) {
+.button:global(.ant-btn-link.ant-btn-dangerous) {
   @apply border-0 bg-fillPageBg text-functionalDanger;
   &:hover {
     @apply border-0 bg-functionalDangerBg text-functionalDangerHover;
@@ -111,7 +111,7 @@
   }
 }
 
-.button:global(.forest-btn-text) {
+.button:global(.ant-btn-text) {
   @apply border-0 bg-fillPageBg text-brandNormal;
   &:hover {
     @apply border-0 bg-fillHoverBg text-brandHover;

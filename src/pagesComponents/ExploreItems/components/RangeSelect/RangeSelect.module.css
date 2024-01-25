@@ -20,7 +20,7 @@
   .range-button {
     @apply flex justify-between items-center;
     .range-select-apply {
-      @apply w-full;
+      @apply flex-1;
     }
     .range-default-button {
       @apply mr-[8px];

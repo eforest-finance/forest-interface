@@ -6,7 +6,7 @@ import { themeButtonConfig } from './config';
 function Button(props: IButtonProps) {
   return (
     <AELFDProvider
-      prefixCls="forest"
+      prefixCls="ant"
       theme={{
         components: {
           Button: themeButtonConfig,

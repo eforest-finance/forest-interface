@@ -593,7 +593,8 @@ export default function CreateCollection() {
               value={protocolInfo.url}
               maxLength={100}
               onFocus={(e) => elementScrollToView(e.target)}
-              onChange={handleExternalChange}></TextArea>
+              onChange={handleExternalChange}
+            />
           ) : (
             <Input
               status={formError?.externalLink && 'error'}

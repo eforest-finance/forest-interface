@@ -272,7 +272,7 @@ export default function Settings() {
                 <Form.Item className="!mb-0">
                   <Input
                     showCount
-                    size="large"
+                    size="middle"
                     value={form.username.value}
                     onChange={(e) => onFormChange(e, 'username')}
                     minLength={1}
@@ -305,7 +305,7 @@ export default function Settings() {
                 <Form.Item className="!mb-0">
                   <Input
                     value={form.email.value}
-                    size="large"
+                    size="middle"
                     onChange={(e) => onFormChange(e, 'email')}
                     maxLength={100}
                     status={form.email.validateStatus && form.email.errorMsg && form.email.value ? 'error' : ''}
@@ -320,7 +320,7 @@ export default function Settings() {
                 <p className={styles['settings-sub-title']}>Twitter</p>
                 <Form.Item className="!mb-0">
                   <Input
-                    size="large"
+                    size="middle"
                     value={form.twitter.value}
                     onChange={(e) => onFormChange(e, 'twitter')}
                     type="text"
@@ -336,7 +336,7 @@ export default function Settings() {
                 <p className={styles['settings-sub-title']}>Instagram</p>
                 <Form.Item className="!mb-0">
                   <Input
-                    size="large"
+                    size="middle"
                     value={form.instagram.value}
                     onChange={(e) => onFormChange(e, 'instagram')}
                     type="text"
