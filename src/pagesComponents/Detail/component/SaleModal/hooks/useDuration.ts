@@ -120,10 +120,6 @@ export function useDurationService({ onChange, defaultExpirationData }: IDuratio
   }, [expirationType, selectedDate, onChange]);
 
   useEffect(() => {
-    if (expirationType === 'custom') {
-      setMobileDateVisible(true);
-      return;
-    }
     if (expirationType === 'previous') {
       const expireDate = moment(defaultSelectedDate);
       setSelectedDate(expireDate);
