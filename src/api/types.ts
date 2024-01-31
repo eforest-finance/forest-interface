@@ -564,3 +564,50 @@ export interface INftSaleInfoParams {
 export interface INftSaleInfoResponse {
   data: INftSaleInfoItem;
 }
+
+export enum SocialMediaType {
+  tweet = 'tweet',
+  discord = 'discord',
+  telegram = 'telegram',
+  web = 'web',
+}
+
+export interface ISocialMedia {
+  type: SocialMediaType;
+  link: string;
+}
+
+export enum DropState {
+  'Upcoming',
+  'Live',
+  'Canceled',
+  'End',
+}
+
+export interface IDropQuotaResponse {
+  dropId: string;
+  totalAmount: number;
+  claimAmount: number;
+  addressClaimLimit: number;
+  addressClaimAmount: number;
+  state: DropState;
+}
+
+export interface IDropDetailInfo {
+  dropId: string;
+  dropName: string;
+  bannerUrl: string;
+  logoUrl: string;
+  collectionId: string;
+  collectionLogo: string;
+  collectionName: string;
+  introduction: string;
+  mintPrice: number;
+  mintPriceUsd: number;
+  burn: boolean;
+  startTime: number;
+  expireTime: number;
+  socialMedia: ISocialMedia[];
+}
+
+export type IDropDetailResponse = IDropDetailInfo & IDropQuotaResponse;

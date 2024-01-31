@@ -231,6 +231,7 @@
   --fill-page-bg: #fff;
   --fill-mask-1: rgb(0 0 0 / 60%);
   --fill-mask-2: rgb(0 0 0 / 80%);
+  --share-svg-hover: #000;
 }
 
 .dark-theme {
@@ -370,4 +371,5 @@
   --fill-page-bg: #1a1a1a;
   --fill-mask-1: rgb(0 0 0 / 60%);
   --fill-mask-2: rgb(0 0 0 / 80%);
+  --share-svg-hover: #fff;
 }
