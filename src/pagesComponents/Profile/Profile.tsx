@@ -52,8 +52,6 @@ export default function Profile() {
     }
   }, [hash, tabType, totalCount]);
 
-  useLogoutListener();
-
   // console.log(tabType, hash, 'itemsSource===');
   useEffect(() => {
     if (!accountAddress) return navigate.push('/collections');
