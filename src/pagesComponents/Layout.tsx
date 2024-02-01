@@ -96,25 +96,6 @@ const Layout = dynamic(async () => {
 
     const { isLogin } = useCheckLoginAndToken();
 
-    // const method = {
-    //   '2': {
-    //     callAELFSendMethod,
-    //     callAELFViewMethod,
-    //     callTDVVSendMethod,
-    //     callTDVVViewMethod,
-    //     callTDVWSendMethod,
-    //     callTDVWViewMethod,
-    //   },
-    //   '1': {
-    //     callAELFSendMethod: callAELFSendMethodV1,
-    //     callAELFViewMethod: callAELFViewMethodV1,
-    //     callTDVVSendMethod: callTDVVSendMethodV1,
-    //     callTDVVViewMethod: callTDVVViewMethodV1,
-    //     callTDVWSendMethod: callTDVWSendMethodV1,
-    //     callTDVWViewMethod: callTDVWViewMethodV1,
-    //   },
-    // };
-
     useEffect(() => {
       if (isLogin) {
         getSynchronizedResults();
