@@ -3,13 +3,21 @@ import { clearDropDetailInfo, setDropDetailInfo, setDropQuota } from 'store/redu
 import useGetState from 'store/state/getState';
 import { dispatch, store } from 'store/store';
 import { getDropDetail } from '../utils/getDropDetail';
+import { useParams } from 'next/navigation';
 
 export const useInitialization = () => {
   const { walletInfo } = useGetState();
+  const { dropId } = useParams() as {
+    dropId: string;
+  };
 
   const getInfo = async () => {
     try {
-      const res = await getDropDetail();
+      if (!dropId) return;
+      const res = await getDropDetail({
+        dropId,
+        address: walletInfo.address,
+      });
       if (res) {
         dispatch(setDropDetailInfo(res));
         dispatch(

@@ -35,6 +35,7 @@ import { getExploreLink } from 'utils';
 import { Moment } from 'moment';
 import { store } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 
 function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
@@ -246,6 +247,13 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     setPrice('');
     setQuantity('1');
     setQuantityTip('');
+    if (modal.visible) {
+      getNFTNumber({
+        owner: walletInfo.address,
+        nftSymbol: nftInfo?.nftSymbol,
+        chainId: infoState.sideChain,
+      });
+    }
   }, [modal.visible]);
 
   const setOfferPrice = (price: IPrice) => {

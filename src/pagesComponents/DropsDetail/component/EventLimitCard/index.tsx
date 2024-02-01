@@ -50,12 +50,13 @@ function EventLimitCard(props: IProps) {
         title="Price"
         content={[
           {
-            label: `${
-              new BigNumber(dropDetailInfo?.mintPrice || 0).isEqualTo(0)
-                ? 'Free'
-                : `${formatTokenPrice(dropDetailInfo?.mintPrice || 0)} ELF`
-            }`,
-            value: formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
+            label: 'price',
+            value: new BigNumber(dropDetailInfo?.mintPrice || 0).isEqualTo(0)
+              ? ['Free']
+              : [
+                  `${formatTokenPrice(dropDetailInfo?.mintPrice || 0)} ELF`,
+                  formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
+                ],
           },
         ]}
       />

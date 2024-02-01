@@ -32,6 +32,7 @@ import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils
 import { getExploreLink } from 'utils';
 import { usePathname } from 'next/navigation';
 import styles from './index.module.css';
+import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
@@ -369,6 +370,11 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   useEffect(() => {
     if (modal.visible) {
       getListingsData(page);
+      getNFTNumber({
+        owner: walletInfo.address,
+        nftSymbol: nftInfo?.nftSymbol,
+        chainId: infoState.sideChain,
+      });
     }
   }, [page, modal.visible]);
 

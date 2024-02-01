@@ -20,10 +20,14 @@ import CrossChainTransferModal, { CrossChainTransferType } from 'components/Cros
 import PromptModal from 'components/PromptModal';
 import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import { MintNftMessage } from 'constants/promptMessage';
-import { sleep } from 'utils';
+import { getExploreLink, sleep } from 'utils';
+import ResultModal from 'components/ResultModal';
+import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
+import { DropState } from 'api/types';
+import { useClaimDrop } from 'pagesComponents/DropsDetail/hooks/useClaimDrop';
 
 interface IProps {
-  initQuantity: number;
+  initQuantity?: number;
 }
 
 function MintModal(props?: IProps) {
@@ -32,9 +36,13 @@ function MintModal(props?: IProps) {
   const elfRate = useTokenData();
   const { walletType } = useWebLogin();
   const isPortkeyConnected = walletType === WalletType.portkey;
+
+  const { infoState, walletInfo, aelfInfo } = useGetState();
+
   const transferModal = useModal(CrossChainTransferModal);
   const promptModal = useModal(PromptModal);
-  const { infoState, walletInfo, aelfInfo } = useGetState();
+  const resultModal = useModal(ResultModal);
+  const { claimDrop } = useClaimDrop(aelfInfo?.curChain);
 
   const { login, isLogin } = useCheckLoginAndToken();
   const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo?.curChain);
@@ -139,9 +147,73 @@ function MintModal(props?: IProps) {
 
   const onMint = async () => {
     try {
-      await sleep(1000);
-      return Promise.reject('error');
-      // const res = await
+      if (!dropDetailInfo?.dropId) return;
+      const claimDropRes = await claimDrop({
+        dropId: dropDetailInfo?.dropId,
+        claimAmount: quantity,
+      });
+      if (claimDropRes && claimDropRes !== 'failed') {
+        let status: 'all' | 'partially' = 'all';
+        const explorerUrl = getExploreLink(claimDropRes.TransactionId, 'transaction');
+
+        if (BigNumber(claimDropRes.currentAmount).lt(quantity)) {
+          status = 'partially';
+        }
+
+        const list = claimDropRes.claimDetailRecord?.value.map((item) => {
+          return {
+            image: dropDetailInfo?.logoUrl,
+            collectionName: dropDetailInfo?.collectionName,
+            nftName: item.tokenName,
+            item: `Quantity: ${item.amount}`,
+            priceTitle: 'Price Each',
+            price: dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} 'ELF'` : 'Free',
+            usdPrice: formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
+          };
+        });
+
+        promptModal.hide();
+
+        resultModal.show({
+          previewImage: dropDetailInfo?.logoUrl,
+          title: status === 'all' ? MintNftMessage.successMessage.title : MintNftMessage.partiallyMessage.title,
+          hideButton: status === 'all' ? true : false,
+          info: {
+            title: dropDetailInfo?.collectionName,
+          },
+          jumpInfo: {
+            url: explorerUrl,
+          },
+          buttonInfo: {
+            btnText: 'Try Again',
+            openLoading: true,
+            onConfirm: async () => {
+              const res = await updateDropQuota({
+                dropId: dropDetailInfo?.dropId,
+                address: walletInfo.address,
+              });
+              switch (res) {
+                case DropState.Canceled:
+                  await sleep(3000);
+                  // nav.back();
+                  return;
+                case DropState.End:
+                  resultModal.hide();
+                  return;
+                default:
+                  resultModal.hide();
+                  modal.show();
+                  return;
+              }
+            },
+          },
+          error: {
+            title: <span className="text-textPrimary">NFT(s) Minted</span>,
+            description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
+            list,
+          },
+        });
+      }
     } catch (error) {
       /* empty */
       return Promise.reject(error);

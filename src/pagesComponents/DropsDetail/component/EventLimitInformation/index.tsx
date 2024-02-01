@@ -9,7 +9,7 @@ interface IProps {
   title?: string;
   content?: {
     label: string;
-    value?: string | number;
+    value?: string | number | string[];
   }[];
   tips?: {
     title: string;
@@ -50,9 +50,21 @@ function EventLimitInformation(props: IProps) {
             return (
               <span
                 key={index}
-                className="text-textSecondary text-base font-medium mb-[16px] last:mb-0 flex justify-between items-center">
+                className="text-textSecondary text-base font-medium mb-[16px] last:mb-0 flex justify-between items-start">
                 <span className="text-textSecondary text-base font-medium">{item.label}</span>
-                <span className="text-textPrimary text-base font-medium">{item.value}</span>
+                {item.value instanceof Array ? (
+                  <div className="flex flex-col items-end">
+                    {item.value.map((val, i) => {
+                      return (
+                        <span key={i} className="text-textPrimary text-base font-medium mb-[8px] last:mb-0">
+                          {val}
+                        </span>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <span className="text-textPrimary text-base font-medium">{item.value}</span>
+                )}
               </span>
             );
           })}

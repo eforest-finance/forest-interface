@@ -21,7 +21,9 @@ function EventInformation(props: IProps) {
     }
     const claimAmountBig = new BigNumber(dropQuota?.claimAmount || 0);
     const totalAmountBig = new BigNumber(dropQuota?.totalAmount || 0);
-    return claimAmountBig.div(totalAmountBig).multipliedBy(100).toFixed(2, BigNumber.ROUND_DOWN);
+    return formatTokenPrice(claimAmountBig.div(totalAmountBig).multipliedBy(100), {
+      decimalPlaces: 2,
+    });
   }, [dropDetailInfo?.burn, dropQuota?.claimAmount, dropQuota?.state, dropQuota?.totalAmount]);
 
   const amount = useMemo(() => {
@@ -47,7 +49,12 @@ function EventInformation(props: IProps) {
 
         <div className="w-full h-[8px] rounded-[20px] bg-lineDividers mt-[16px] overflow-hidden">
           <div
-            className="h-full rounded-[20px] bg-brandNormal"
+            className={clsx(
+              'h-full rounded-[20px]',
+              percentage === '100' || dropQuota?.state === DropState.End || dropQuota?.state === DropState.Canceled
+                ? 'bg-brandDisable'
+                : 'bg-brandNormal',
+            )}
             style={{
               width: `${percentage}%`,
             }}

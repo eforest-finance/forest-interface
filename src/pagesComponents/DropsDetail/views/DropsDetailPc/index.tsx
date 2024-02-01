@@ -23,11 +23,9 @@ export default function DropsDetailPc() {
         expireTime={dropDetailInfo.expireTime}
         status={dropQuota?.state}
       />
-      <Row className="my-[80px] flex">
+      <Row className="my-[80px] flex flex-nowrap">
         <Col span={15} className="flex-1">
-          <div className="h-full">
-            <DetailCard />
-          </div>
+          <DetailCard />
         </Col>
         <Col span={9} className="min-w-[422px]">
           <div className="h-full pl-[61.5px]">
