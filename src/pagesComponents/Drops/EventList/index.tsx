@@ -8,6 +8,7 @@ import { useInViewport, useRequest, useSize } from 'ahooks';
 import Button from 'baseComponents/Button';
 import { fetchDropList } from 'api/eventApi';
 import { IActionDetail } from 'api/types';
+import Link from 'next/link';
 
 export function EventList() {
   const [data, setData] = useState<IActionDetail[]>([]);
@@ -37,6 +38,9 @@ export function EventList() {
       setData((data) => data.concat(result.items));
       setTotalCount(result.totalCount);
       setPageIndex((pageIndex) => ++pageIndex);
+    },
+    onError() {
+      setTotalCount(0);
     },
     onFinally() {
       if (params[0]?.state !== selectTypeState || pageIndex !== params[0]?.pageIndex) {
@@ -68,7 +72,10 @@ export function EventList() {
   };
 
   useUpdateEffect(() => {
-    if (!firstLoaded) return;
+    if (!firstLoaded) {
+      setHasMore(true);
+      return;
+    }
     const hasMore = data.length < totalCount;
     setHasMore(hasMore);
   }, [data, totalCount, firstLoaded]);
@@ -91,9 +98,15 @@ export function EventList() {
     emptyText: (
       <div className="flex flex-col -m-4 items-center h-[344px] justify-center border border-solid border-lineBorder rounded-lg">
         <span className="text-base text-textPrimary font-medium">No event found</span>
-        <Button type="primary" size="ultra" className="text-textPrimary w-[207px] mt-6">
-          Back to all events
-        </Button>
+        {selectTypeState !== 0 ? (
+          <Button
+            type="primary"
+            size="ultra"
+            className="text-textPrimary w-[207px] mt-6"
+            onClick={() => setSelectTypeState(0)}>
+            Back to all events
+          </Button>
+        ) : null}
       </div>
     ),
   };
@@ -115,7 +128,9 @@ export function EventList() {
           renderItem={(item) => {
             return (
               <List.Item>
-                <EventItem {...item} />
+                <Link href={`/drops-detail/${item.dropId}`}>
+                  <EventItem {...item} />
+                </Link>
               </List.Item>
             );
           }}></List>

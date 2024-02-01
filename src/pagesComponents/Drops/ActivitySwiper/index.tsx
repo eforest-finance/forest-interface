@@ -11,6 +11,8 @@ import { useCallback, useRef, useState } from 'react';
 import { CountDown } from '../../../components/CountDown';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import { IActionDetail } from 'api/types';
+import moment from 'moment';
+import Link from 'next/link';
 
 interface ISwiperProps {
   swiperData: IActionDetail[];
@@ -59,6 +61,22 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
     return null;
   }
 
+  const renderCountDown = ({ startTime, expireTime }: IActionDetail) => {
+    let title;
+    let endTime;
+    if (moment().isBefore(moment(startTime))) {
+      title = 'Event starts in';
+      endTime = startTime;
+    } else if (moment().isSameOrAfter(moment(expireTime))) {
+      return <div className="text-base sml:text-lg text-textPrimary font-medium">Event ended</div>;
+    } else {
+      title = 'Event ends in';
+      endTime = expireTime;
+    }
+
+    return <CountDown title={title} value={endTime} />;
+  };
+
   return (
     <div className="relative -mx-5 sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
       {!isXS && !first && !(swiperData.length === 1) && (
@@ -103,15 +121,17 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
               className={clsx(isXS && styles['calcWidth'], isXS && 'border border-solid border-lineBorder rounded-lg')}
               key={item.dropId}>
               <div className="relative">
-                <ImgLoading className="rounded-[12px] h-[300px]" src={item.bannerUrl || ''} />
-                <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
-                  {isXS ? <CountDown value={item.expireTime} /> : null}
-                </div>
-                {isXS ? (
-                  <div className="absolute left-0 bottom-[136px] w-full px-4 pb-6">
-                    <span className="line-clamp-2 text-4xl text-white font-semibold">{item.dropName || ''}</span>
+                <Link href={`/drops-detail/${item.dropId}`}>
+                  <ImgLoading className="rounded-[12px] h-[300px]" src={item.bannerUrl || ''} />
+                  <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
+                    {isXS ? renderCountDown(item) : null}
                   </div>
-                ) : null}
+                  {isXS ? (
+                    <div className="absolute left-0 bottom-[136px] w-full px-4 pb-6">
+                      <span className="line-clamp-2 text-4xl text-white font-semibold">{item.dropName || ''}</span>
+                    </div>
+                  ) : null}
+                </Link>
               </div>
             </SwiperSlide>
           );
@@ -149,7 +169,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
                         {item.introduction || ''}
                       </p>
                     </div>
-                    <CountDown value={deadline} />
+                    {renderCountDown(item)}
                   </div>
                 </SwiperSlide>
               );

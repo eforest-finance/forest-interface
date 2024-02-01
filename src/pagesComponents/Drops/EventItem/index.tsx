@@ -49,7 +49,7 @@ export function EventItem({
   };
 
   return (
-    <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover">
+    <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover cursor-pointer">
       <div className="w-full aspect-square overflow-hidden relative">
         <Image
           className="w-full h-full object-cover hover:scale-110 transition-all"
