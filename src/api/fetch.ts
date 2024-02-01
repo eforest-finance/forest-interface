@@ -248,6 +248,6 @@ export const fetchDropDetail = async (params: { dropId: string; address?: string
   return request.get<IDropDetailResponse>('app/drop/detail', { params });
 };
 
-export const fetchDropQuota = async (params: { dropId: string; address?: string }) => {
+export const fetchDropQuota = async (params: { dropId: string; address: string }) => {
   return request.get<IDropQuotaResponse>('app/drop/quota', { params });
 };

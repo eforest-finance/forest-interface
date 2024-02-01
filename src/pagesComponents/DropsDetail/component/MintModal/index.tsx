@@ -25,6 +25,8 @@ import ResultModal from 'components/ResultModal';
 import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
 import { DropState } from 'api/types';
 import { useClaimDrop } from 'pagesComponents/DropsDetail/hooks/useClaimDrop';
+import { useRouter } from 'next/navigation';
+import { INftInfoList } from 'components/NftInfoList';
 
 interface IProps {
   initQuantity?: number;
@@ -32,6 +34,7 @@ interface IProps {
 
 function MintModal(props?: IProps) {
   const { initQuantity } = props || {};
+  const nav = useRouter();
   const modal = useModal();
   const elfRate = useTokenData();
   const { walletType } = useWebLogin();
@@ -145,16 +148,90 @@ function MintModal(props?: IProps) {
     return null;
   }, [isAllChainsBalanceInsufficient, isPortkeyConnected, isSideChainBalanceInsufficient]);
 
+  const tryAgain = async () => {
+    if (!dropDetailInfo?.dropId) return;
+    const res = await updateDropQuota({
+      dropId: dropDetailInfo.dropId,
+      address: walletInfo.address,
+    });
+    switch (res) {
+      case DropState.Canceled:
+        await sleep(3000);
+        nav.back();
+        return;
+      case DropState.End:
+        resultModal.hide();
+        return;
+      default:
+        resultModal.hide();
+        modal.show();
+        return;
+    }
+  };
+
+  const showResultModal = async (params: {
+    TransactionId?: string;
+    list?: INftInfoList[];
+    status: 'all' | 'partially' | 'failed';
+  }) => {
+    const { TransactionId, list, status } = params;
+    const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction') : '';
+    const title = {
+      all: MintNftMessage.successMessage.title,
+      partially: MintNftMessage.partiallyMessage.title,
+      failed: MintNftMessage.errorMessage.title,
+    };
+    resultModal.show({
+      previewImage: dropDetailInfo?.collectionLogo,
+      title: title[status],
+      hideButton: status === 'all' ? true : false,
+      info: {
+        title: dropDetailInfo?.collectionName,
+      },
+      jumpInfo: explorerUrl
+        ? {
+            url: explorerUrl,
+          }
+        : undefined,
+      buttonInfo: {
+        btnText: 'Try Again',
+        openLoading: true,
+        onConfirm: tryAgain,
+      },
+      error:
+        status === 'failed'
+          ? {
+              title: `Minting of ${BigNumber(quantity).gt(1) ? 'NFTs' : 'NFT'} failed`,
+              description: MintNftMessage.errorMessage.description,
+            }
+          : {
+              title: (
+                <span className="text-textPrimary">{`${
+                  list?.length && list?.length > 1 ? 'NFTs' : 'NFT'
+                } Minted`}</span>
+              ),
+              description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
+              list,
+            },
+    });
+  };
+
   const onMint = async () => {
     try {
       if (!dropDetailInfo?.dropId) return;
       const claimDropRes = await claimDrop({
         dropId: dropDetailInfo?.dropId,
         claimAmount: quantity,
+        price: dropDetailInfo.mintPrice,
       });
+      if (claimDropRes === 'failed') {
+        promptModal.hide();
+        showResultModal({
+          status: 'failed',
+        });
+      }
       if (claimDropRes && claimDropRes !== 'failed') {
         let status: 'all' | 'partially' = 'all';
-        const explorerUrl = getExploreLink(claimDropRes.TransactionId, 'transaction');
 
         if (BigNumber(claimDropRes.currentAmount).lt(quantity)) {
           status = 'partially';
@@ -173,45 +250,10 @@ function MintModal(props?: IProps) {
         });
 
         promptModal.hide();
-
-        resultModal.show({
-          previewImage: dropDetailInfo?.logoUrl,
-          title: status === 'all' ? MintNftMessage.successMessage.title : MintNftMessage.partiallyMessage.title,
-          hideButton: status === 'all' ? true : false,
-          info: {
-            title: dropDetailInfo?.collectionName,
-          },
-          jumpInfo: {
-            url: explorerUrl,
-          },
-          buttonInfo: {
-            btnText: 'Try Again',
-            openLoading: true,
-            onConfirm: async () => {
-              const res = await updateDropQuota({
-                dropId: dropDetailInfo?.dropId,
-                address: walletInfo.address,
-              });
-              switch (res) {
-                case DropState.Canceled:
-                  await sleep(3000);
-                  // nav.back();
-                  return;
-                case DropState.End:
-                  resultModal.hide();
-                  return;
-                default:
-                  resultModal.hide();
-                  modal.show();
-                  return;
-              }
-            },
-          },
-          error: {
-            title: <span className="text-textPrimary">NFT(s) Minted</span>,
-            description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
-            list,
-          },
+        showResultModal({
+          TransactionId: claimDropRes.TransactionId,
+          status,
+          list,
         });
       }
     } catch (error) {

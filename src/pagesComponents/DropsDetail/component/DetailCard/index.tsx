@@ -50,14 +50,17 @@ function DetailCard(props: IProps) {
       )}>
       <h1 className="text-xl mdTW:text-2xl text-textPrimary font-semibold">About</h1>
       <p className="text-base text-textSecondary font-medium mt-[16px]">{dropDetailInfo?.introduction}</p>
-      <Image
-        src={dropDetailInfo?.logoUrl || ''}
-        width={350}
-        height={350}
-        className="w-full aspect-square h-auto object-cover rounded-lg mt-[16px] mdTW:mt-[32px]"
-        alt={'detailImage'}
-      />
-      {dropDetailInfo?.socialMedia.length ? (
+      {dropDetailInfo?.logoUrl ? (
+        <Image
+          src={dropDetailInfo.logoUrl}
+          width={350}
+          height={350}
+          className="w-full aspect-square h-auto object-cover rounded-lg mt-[16px] mdTW:mt-[32px]"
+          alt={'detailImage'}
+        />
+      ) : null}
+
+      {dropDetailInfo?.socialMedia?.length ? (
         <div className="py-[16px] mt-0 mdTW:mt-[16px] flex items-center justify-between">
           <span className="text-base text-textSecondary font-medium">More Information</span>
           <div className={styles['detail-card-svg']}>

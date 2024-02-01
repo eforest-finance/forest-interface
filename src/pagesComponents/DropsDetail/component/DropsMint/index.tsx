@@ -12,7 +12,7 @@ import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
 import { sleep } from 'utils';
 import { useRouter } from 'next/navigation';
-import { walletInfo } from 'store/reducer/userInfo';
+import moment from 'moment';
 
 interface IProps {
   className?: string;
@@ -51,7 +51,7 @@ const MintButtonInfo: Record<
 
 function DropsMint(props: IProps) {
   const { className } = props;
-  const { infoState } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const mintModal = useModal(MintModal);
   const { login, isLogin } = useCheckLoginAndToken();
@@ -109,7 +109,7 @@ function DropsMint(props: IProps) {
           case DropState.Canceled:
             setIsCancel(true);
             await sleep(3000);
-            // nav.back();
+            nav.back();
             return;
           case DropState.End:
             setIsCancel(false);
@@ -120,7 +120,7 @@ function DropsMint(props: IProps) {
             return;
         }
       } catch (error) {
-        /* empty */
+        setMintLoading(false);
       }
     } else {
       login();
@@ -134,7 +134,11 @@ function DropsMint(props: IProps) {
           'fixed bottom-0 left-0 w-full border-0 border-t border-solid border-t-lineBorder bg-fillPageBg p-[16px] z-40',
         className,
       )}>
-      {isSmallScreen && <EventLimitCountdownMobile />}
+      {isSmallScreen && (
+        <EventLimitCountdownMobile
+          value={dropQuota?.state === DropState.Live ? dropDetailInfo?.expireTime : dropDetailInfo?.startTime}
+        />
+      )}
       <Button
         loading={mintLoading}
         disabled={disabled}

@@ -10,17 +10,17 @@ import { useInitialization } from 'pagesComponents/DropsDetail/hooks/useInitiali
 import PageLoading from 'components/PageLoading';
 
 export default function DropsDetailPc() {
-  useInitialization();
+  const { loading } = useInitialization();
   const { dropDetailInfo, dropQuota } = useDropDetailGetState();
-  console.log('=====dropDetailInfo', dropDetailInfo);
-  return dropDetailInfo ? (
+  console.log('=====dropDetailInfo loading', loading);
+  return !loading ? (
     <div className="pt-[80px] px-[40px] pb-[20px] mx-auto max-w-[1360px] min-h-screen">
-      <Banner img={dropDetailInfo.bannerUrl} />
+      <Banner img={dropDetailInfo?.bannerUrl} />
       <BasicInformation
         className="mt-[32px]"
-        name={dropDetailInfo.dropName}
-        startTime={dropDetailInfo.startTime}
-        expireTime={dropDetailInfo.expireTime}
+        name={dropDetailInfo?.dropName}
+        startTime={dropDetailInfo?.startTime}
+        expireTime={dropDetailInfo?.expireTime}
         status={dropQuota?.state}
       />
       <Row className="my-[80px] flex flex-nowrap">
