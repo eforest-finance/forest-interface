@@ -25,7 +25,7 @@ const InfoItem = ({ left, right, className = '' }: IInfoItemProps) => {
 const getShowInfoData = ({ listingPrice = '', itemsForSell = 1, forestFees = 0.025 }: IPreviewInfo) => {
   const num = new BigNumber(itemsForSell);
   const price = new BigNumber(listingPrice);
-  const showPrice = price.isNaN() ? '--' : formatTokenPrice(price);
+  const showPrice = price.isNaN() ? '--' : formatTokenPrice(price.times(num));
   const totalPrice =
     num.isNaN() || price.isNaN()
       ? '--'
