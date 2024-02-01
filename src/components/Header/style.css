@@ -11,10 +11,8 @@
     @apply text-white fill-white;
   }
   .header-drawer .ant-drawer-header {
-    @apply rounded-none z-[1] flex h-[55px] py-[10px] px-[16px] border-none;
-    @apply bg-[var(--bg-menu)] flex-row-reverse justify-between;
-
-    box-shadow: 0 4px 8px var(--box-shadow-header);
+    @apply rounded-none z-[1] flex h-[55px] py-[10px] px-[16px];
+    @apply bg-[var(--bg-menu)] flex-row-reverse justify-between border-0 border-b border-solid border-lineBorder;
   }
   .header-drawer .ant-drawer-header .ant-drawer-extra {
     @apply h-[33px] flex items-center flex-1;

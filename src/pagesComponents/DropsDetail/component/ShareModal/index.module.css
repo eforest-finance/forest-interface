@@ -1,0 +1,39 @@
+/* stylelint-disable no-descending-specificity */
+.share-modal-svg {
+  @apply w-full flex items-center justify-around mt-[48px] mdTW:mt-[32px];
+  >div {
+    @apply w-full flex flex-col items-center justify-center;
+    >div {
+      @apply w-[64px] h-[64px] rounded-[64px] cursor-pointer border-solid border border-lineBorder flex justify-center items-center;
+    }
+  }
+
+  .text {
+    @apply mt-[8px] text-base text-textSecondary font-normal; 
+  }
+
+  svg {
+    @apply w-[32px] h-[32px];
+  }
+
+  .share-modal-svg-twitter {
+    path {
+      @apply fill-[var(--share-svg-hover)] stroke-[var(--share-svg-hover)];
+    }
+  }
+  .share-modal-svg-copy {
+    path {
+      @apply stroke-[var(--share-svg-hover)];
+    }
+  }
+  .share-modal-svg-telegram {
+    path:first-child {
+      @apply fill-[#28A8E9];
+    }
+  }
+  .share-modal-svg-facebook {
+    path:first-child {
+      @apply fill-[#0866FF];
+    }
+  }
+}

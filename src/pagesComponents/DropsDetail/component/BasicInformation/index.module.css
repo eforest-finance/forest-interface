@@ -1,0 +1,17 @@
+.basic-information {
+  @apply bg-fillPageBg pb-[16px];
+  svg {
+    @apply w-[24px] h-[24px];
+    path {
+      @apply stroke-textPrimary;
+    }
+  }
+  .basic-information-time {
+    svg {
+      @apply w-[24px] h-[24px];
+      path {
+        @apply fill-textSecondary stroke-none;
+      }
+    }
+  }
+}

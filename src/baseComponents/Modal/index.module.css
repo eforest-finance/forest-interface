@@ -46,7 +46,7 @@
       @apply w-screen h-screen max-h-full;
 
       :global(.ant-modal-header) {
-        @apply border-b-0 shadow-modalHeader;
+        @apply border-0 border-b border-solid border-lineBorder;
       }
 
       :global(.ant-modal-footer) {
