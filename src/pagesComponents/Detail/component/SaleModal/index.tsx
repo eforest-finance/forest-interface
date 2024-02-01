@@ -181,7 +181,7 @@ export function SaleModalERC1155Constructor({ nftInfo, type = 'edit', defaultDat
         defaultPrice={listingPrice.price}
       />
       <Duration onChange={setDuration} defaultExpirationData={defaultData?.duration} />
-      <SummaryInfo listingPrice={listingPrice?.price || ''} />
+      <SummaryInfo listingPrice={listingPrice?.price || ''} itemsForSell={itemsForSell} />
     </BaseModal>
   );
 }

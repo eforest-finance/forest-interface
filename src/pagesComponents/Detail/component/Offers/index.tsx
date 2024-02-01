@@ -25,7 +25,6 @@ import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { useMount } from 'react-use';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
-
 export default function Offers(options: { rate: number; nftBalance: number }) {
   const exchangeModal = useModal(ExchangeModal);
   const cancelModal = useModal(CancelModal);
@@ -130,7 +129,7 @@ export default function Offers(options: { rate: number; nftBalance: number }) {
     {
       title: 'Price',
       key: 'price',
-      width: isSmallScreen ? 120 : 140,
+      width: isSmallScreen ? 180 : 220,
       dataIndex: 'price',
       render: (text: string, record: FormatOffersType) => (
         <div
