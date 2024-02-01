@@ -611,3 +611,25 @@ export interface IDropDetailInfo {
 }
 
 export type IDropDetailResponse = IDropDetailInfo & IDropQuotaResponse;
+export interface IActionDetail {
+  dropId: string;
+  dropName: string;
+  bannerUrl?: string;
+  logoUrl?: string;
+  introduction: string;
+  mintPrice: number;
+  mintPriceUsd?: number;
+  startTime: number;
+  expireTime: number;
+}
+
+export interface IDropListParams {
+  pageIndex: number;
+  pageSize: number;
+  state: number;
+}
+
+export interface IDropListRes {
+  totalCount: number;
+  items: IActionDetail[];
+}

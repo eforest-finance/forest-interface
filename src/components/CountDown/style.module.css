@@ -1,0 +1,16 @@
+.count-down-wrapper {
+  @apply flex flex-col;
+
+  .count-down-title {
+    @apply text-base sml:text-lg text-textPrimary font-medium;
+  }
+  .count-down-content {
+    @apply mt-4 flex items-center;
+  }
+  .count-down-value {
+    @apply w-10 h-10 sml:w-12 sml:h-12 flex items-center justify-center rounded-md text-2xl font-semibold bg-fillHoverBg;
+  }
+  .count-down-value-unit {
+    @apply flex items-center justify-center text-xs text-textSecondary min-w-[20px] sml:min-w-[26px] mx-1;
+  }
+}
