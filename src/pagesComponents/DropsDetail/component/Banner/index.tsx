@@ -26,7 +26,7 @@ function Banner(props: IProps) {
         height={isSmallScreen ? 343 : 300}
         src={img}
         alt="banner"
-        className="w-full aspect-square mdTW:aspect-[128/30] object-cover"
+        className="w-full h-full object-cover"
       />
     </div>
   );

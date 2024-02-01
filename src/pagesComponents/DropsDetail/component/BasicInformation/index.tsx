@@ -85,7 +85,7 @@ function BasicInformation(props: IProps) {
             </span>
           ) : null}
         </div>
-        <div className="cursor-pointer" onClick={() => shareModal.show()}>
+        <div className={styles['share-icon']} onClick={() => shareModal.show()}>
           <Share />
         </div>
       </div>

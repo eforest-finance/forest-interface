@@ -1,8 +1,8 @@
 /* stylelint-disable no-descending-specificity */
 .detail-card-svg {
   @apply flex items-center;
-  >div {
-    @apply w-[24px] h-[24px] flex justify-center items-center ml-[40px] cursor-pointer;
+  .detail-card-share {
+    @apply w-[24px] h-[24px] flex justify-center items-center ml-[24px] lgTW:ml-[40px] cursor-pointer;
   }
 
   .detail-card-svg-twitter {
@@ -35,13 +35,13 @@
       }
     }
   }
-  .detail-card-svg-facebook {
-    path:first-child {
-      @apply fill-textSecondary;
+  .detail-card-svg-discord {
+    path {
+      @apply scale-[0.4] fill-textSecondary;
     }
     &:hover {
-      path:first-child {
-        @apply fill-[#0866FF];
+      path {
+        @apply fill-[#5865F2];
       }
     }
   }

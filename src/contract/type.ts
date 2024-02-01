@@ -402,3 +402,23 @@ export interface IBatchDeListParams {
   price: IPrice;
   batchDelistType: BatchDeListType;
 }
+
+export interface IClaimDropParams {
+  dropId: string;
+  claimAmount: number;
+}
+
+export interface IClaimDetailRecordList {
+  symbol: string;
+  amount: number;
+  tokenName: string;
+}
+
+export interface IClaimDropResult {
+  currentAmount: number;
+  totalAmount: number;
+  dropId: string;
+  claimDetailRecord?: {
+    value: IClaimDetailRecordList[];
+  };
+}

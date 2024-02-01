@@ -9,12 +9,10 @@ import BigNumber from 'bignumber.js';
 import { useModal } from '@ebay/nice-modal-react';
 import MintModal from '../MintModal';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
-import { getDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
-import { dispatch } from 'store/store';
-import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
-import { message } from 'antd';
+import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
 import { sleep } from 'utils';
 import { useRouter } from 'next/navigation';
+import { walletInfo } from 'store/reducer/userInfo';
 
 interface IProps {
   className?: string;
@@ -99,24 +97,27 @@ function DropsMint(props: IProps) {
 
   const onMint = async () => {
     if (isLogin) {
+      if (!dropDetailInfo?.dropId) return;
       try {
         setMintLoading(true);
-        const res = await getDropQuota();
-        if (res.state === DropState.Canceled) {
-          setIsCancel(true);
-          setMintLoading(false);
-          message.error("The event has ended. You'll be automatically redirected to the Drops page.", 3000);
-          await sleep(3000);
-          // nav.back();
-        } else {
-          setIsCancel(false);
-          setMintLoading(false);
-          dispatch(setDropQuota({ ...res }));
-          if (res.state === DropState.End) {
-            message.error('The event has ended.');
+        const res = await updateDropQuota({
+          dropId: dropDetailInfo?.dropId,
+          address: walletInfo.address,
+        });
+        setMintLoading(false);
+        switch (res) {
+          case DropState.Canceled:
+            setIsCancel(true);
+            await sleep(3000);
+            // nav.back();
             return;
-          }
-          mintModal.show();
+          case DropState.End:
+            setIsCancel(false);
+            return;
+          default:
+            setIsCancel(false);
+            mintModal.show();
+            return;
         }
       } catch (error) {
         /* empty */

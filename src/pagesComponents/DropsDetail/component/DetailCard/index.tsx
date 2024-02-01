@@ -1,13 +1,14 @@
 import React, { ReactNode, useMemo } from 'react';
 import TwitterX from 'assets/images/icons/twitterX.svg';
 import Telegram from 'assets/images/icons/telegram.svg';
-import Facebook from 'assets/images/icons/facebook.svg';
+import Discord from 'assets/images/icons/discord.svg';
 import Internet from 'assets/images/icons/internet.svg';
 import Image from 'next/image';
 import clsx from 'clsx';
 import styles from './index.module.css';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import { SocialMediaType } from 'api/types';
+import Link from 'next/link';
 
 interface IProps {
   className?: string;
@@ -30,8 +31,8 @@ function DetailCard(props: IProps) {
       </div>
     ),
     [SocialMediaType.discord]: (
-      <div className={styles['detail-card-svg-facebook']}>
-        <Facebook className="w-[24px] h-[24px]" />
+      <div className={styles['detail-card-svg-discord']}>
+        <Discord className="w-[24px] h-[24px]" />
       </div>
     ),
     [SocialMediaType.web]: (
@@ -56,16 +57,20 @@ function DetailCard(props: IProps) {
         className="w-full aspect-square h-auto object-cover rounded-lg mt-[16px] mdTW:mt-[32px]"
         alt={'detailImage'}
       />
-      {dropDetailInfo?.socialMedia.length && (
+      {dropDetailInfo?.socialMedia.length ? (
         <div className="py-[16px] mt-0 mdTW:mt-[16px] flex items-center justify-between">
           <span className="text-base text-textSecondary font-medium">More Information</span>
           <div className={styles['detail-card-svg']}>
-            {dropDetailInfo?.socialMedia.map((item) => {
-              return socialMedia[item.type];
+            {dropDetailInfo?.socialMedia.map((item, index) => {
+              return (
+                <Link className={styles['detail-card-share']} target="_blank" key={index} href={item.link}>
+                  {socialMedia[item.type]}
+                </Link>
+              );
             })}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

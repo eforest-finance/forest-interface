@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import useGetState from 'store/state/getState';
@@ -16,7 +16,8 @@ interface IProps {
   hideButton?: boolean;
   buttonInfo?: {
     btnText?: string;
-    onConfirm?: <T, R>(params?: T) => R | void;
+    openLoading?: boolean;
+    onConfirm?: <T, R>(params?: T) => R | void | Promise<void>;
   };
   info: INftInfoCard;
   jumpInfo?: {
@@ -24,7 +25,7 @@ interface IProps {
     btnText?: string;
   };
   error?: {
-    title?: string;
+    title?: string | ReactNode;
     description?: string | ReactNode | string[];
     list?: INftInfoList[];
   };
@@ -44,11 +45,17 @@ function ResultModal({
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const aProps = useMemo(() => (isMobile ? {} : { target: '_blank', rel: 'noreferrer' }), []);
 
-  const onClick = () => {
+  const onClick = async () => {
     if (buttonInfo?.onConfirm) {
-      buttonInfo.onConfirm();
+      if (buttonInfo.openLoading) {
+        setLoading(true);
+      }
+      await buttonInfo.onConfirm();
+      setLoading(false);
       return;
     }
     modal.hide();
@@ -71,6 +78,7 @@ function ResultModal({
         <Button
           type="primary"
           size="ultra"
+          loading={loading}
           isFull={isSmallScreen ? true : false}
           className={`${!isSmallScreen && '!w-[256px]'}`}
           onClick={onClick}>
@@ -113,9 +121,12 @@ function ResultModal({
             <span className="text-functionalDanger font-semibold text-xl text-center mdTW:text-left">
               {error.title}
             </span>
-            <p className="text-base font-medium text-textSecondary mt-[8px] text-center mdTW:text-left">
-              {getDescriptionCom(error.description)}
-            </p>
+            {error.description ? (
+              <p className="text-base font-medium text-textSecondary mt-[8px] text-center mdTW:text-left">
+                {getDescriptionCom(error.description)}
+              </p>
+            ) : null}
+
             {error?.list?.length && (
               <div className="mt-[32px]">
                 {error.list?.map((item, index) => {
