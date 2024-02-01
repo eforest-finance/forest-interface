@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import st from './style.module.css';
 import useResponsive from 'hooks/useResponsive';
-import { Drawer, DrawerProps } from 'antd';
+import { Drawer } from 'antd';
 import ArrowDown from 'assets/images/events/arrow-down.svg';
 import { useState } from 'react';
 
