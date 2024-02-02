@@ -3,14 +3,20 @@ import { message } from 'antd';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { IClaimDropParams, IContractError, ISendResult } from 'contract/type';
 import { getResult } from 'utils/deserializeLog';
-import { UserDeniedMessage } from 'contract/formatErrorMsg';
+import { EventEnded, EventEndedBack, UserDeniedMessage } from 'contract/formatErrorMsg';
 import { ClaimDrop } from 'contract/drop';
 import { checkELFApprove } from 'utils/aelfUtils';
 import { SupportedELFChainId } from 'constants/chain';
 import { getForestContractAddress } from 'contract/forest';
+import { useRouter } from 'next/navigation';
+import { dispatch } from 'store/store';
+import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
+import { DropState } from 'api/types';
+import { timesDecimals } from 'utils/calculate';
 
 export const useClaimDrop = (chainId?: Chain) => {
   const { walletInfo, aelfInfo } = useGetState();
+  const navigator = useRouter();
 
   const claimDrop = async (
     params: IClaimDropParams & {
@@ -22,7 +28,7 @@ export const useClaimDrop = (chainId?: Chain) => {
         chainId: chainId,
         price: {
           symbol: 'ELF',
-          amount: params.price,
+          amount: timesDecimals(params.price, 8).toNumber(),
         },
         quantity: params.claimAmount,
         spender:
@@ -31,7 +37,7 @@ export const useClaimDrop = (chainId?: Chain) => {
       });
 
       if (!approveTokenResult) {
-        return 'failed';
+        return Promise.reject('failed');
       }
       const result = await ClaimDrop({
         dropId: params.dropId,
@@ -63,8 +69,18 @@ export const useClaimDrop = (chainId?: Chain) => {
         message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
         return Promise.reject(error);
       }
+      if (resError.errorMessage?.message.includes(EventEndedBack)) {
+        message.error(EventEndedBack, 3);
+        navigator.back();
+        return 'failed';
+      }
+      if (resError.errorMessage?.message.includes(EventEnded)) {
+        message.error(EventEnded);
+        dispatch(setDropQuota({ state: DropState.End }));
+        return 'failed';
+      }
       message.error(resError.errorMessage?.message);
-      return 'failed';
+      return 'error';
     }
   };
 

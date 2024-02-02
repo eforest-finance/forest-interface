@@ -10,7 +10,7 @@ import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import InputQuantity from '../InputQuantity';
 import Summary from 'components/Summary';
 import { divDecimals } from 'utils/calculate';
-import Balance from 'pagesComponents/Detail/component/BuyNowModal/components/Balance';
+import Balance from 'components/Balance';
 import useTokenData from 'hooks/useTokenData';
 import { getBalance } from 'pagesComponents/Detail/utils/getNftNumber';
 import useGetState from 'store/state/getState';
@@ -55,8 +55,9 @@ function MintModal(props?: IProps) {
   const [quantityErrorTip, setQuantityErrorTip] = useState('');
   const [tokenBalance, setTokenBalance] = useState<number>(0);
   const [mainTokenBalance, setMainTokenBalance] = useState<number>(0);
+  const [balanceLoading, setBalanceLoading] = useState<boolean>(false);
 
-  const { dropDetailInfo, dropQuota } = useDropDetailGetState();
+  const { dropDetailInfo } = useDropDetailGetState();
 
   const totalPrice = useMemo(() => {
     if (quantity && dropDetailInfo?.mintPrice) {
@@ -77,14 +78,12 @@ function MintModal(props?: IProps) {
   }, [dropDetailInfo?.mintPrice]);
 
   const maxQuantity = useMemo(() => {
-    const dropNftBalance = new BigNumber(dropQuota?.totalAmount || 0)
-      .minus(new BigNumber(dropQuota?.claimAmount || 0))
-      .toNumber();
-    const dropCurrentNftBalance = new BigNumber(dropQuota?.addressClaimLimit || 0)
-      .minus(new BigNumber(dropQuota?.addressClaimAmount || 0))
-      .toNumber();
-    return Math.min(dropNftBalance, dropCurrentNftBalance);
-  }, [dropQuota?.addressClaimAmount, dropQuota?.addressClaimLimit, dropQuota?.claimAmount, dropQuota?.totalAmount]);
+    const max = dropDetailInfo?.addressClaimLimit || 0;
+    if (BigNumber(max).isEqualTo(1)) {
+      setQuantity(1);
+    }
+    return max;
+  }, [dropDetailInfo?.addressClaimLimit]);
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value || BigNumber(e.target.value).isZero()) {
@@ -226,11 +225,15 @@ function MintModal(props?: IProps) {
       });
       if (claimDropRes === 'failed') {
         promptModal.hide();
+        return;
+      } else if (claimDropRes === 'error') {
+        promptModal.hide();
         showResultModal({
           status: 'failed',
         });
+        return;
       }
-      if (claimDropRes && claimDropRes !== 'failed') {
+      if (claimDropRes) {
         let status: 'all' | 'partially' = 'all';
 
         if (BigNumber(claimDropRes.currentAmount).lt(quantity)) {
@@ -239,13 +242,18 @@ function MintModal(props?: IProps) {
 
         const list = claimDropRes.claimDetailRecord?.value.map((item) => {
           return {
-            image: dropDetailInfo?.logoUrl,
+            image: dropDetailInfo?.logoUrl, // TODO
             collectionName: dropDetailInfo?.collectionName,
             nftName: item.tokenName,
             item: `Quantity: ${item.amount}`,
             priceTitle: 'Price Each',
             price: dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} 'ELF'` : 'Free',
             usdPrice: formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
+            onClick: () => {
+              // TODO
+              console.log('jump');
+              // nav.push(`/detail/buy/${item?.id ?? ''}/${item?.chainId ?? ''}`);
+            },
           };
         });
 
@@ -275,12 +283,12 @@ function MintModal(props?: IProps) {
 
       promptModal.show({
         nftInfo: {
-          image: dropDetailInfo?.logoUrl,
+          image: dropDetailInfo?.collectionLogo,
           nftName: dropDetailInfo?.collectionName,
           priceTitle: 'Total Price',
           price: `${formatTokenPrice(totalPrice)} ELF`,
           usdPrice: formatUSDPrice(usdTotalPrice),
-          item: formatTokenPrice(quantity),
+          item: `Quantity: ${formatTokenPrice(quantity)}`,
         },
         title: MintNftMessage.title,
         content: {
@@ -300,6 +308,7 @@ function MintModal(props?: IProps) {
   const initialization = async () => {
     try {
       if (!walletInfo.address) return;
+      setBalanceLoading(true);
       const res = await getBalance(
         {
           owner: walletInfo.address,
@@ -309,6 +318,7 @@ function MintModal(props?: IProps) {
       );
       const balance = divDecimals(Number(res), 8).toNumber();
       setTokenBalance(balance);
+      setBalanceLoading(false);
       const mainRes = await getBalance(
         {
           owner: walletInfo.aelfChainAddress || '',
@@ -321,16 +331,16 @@ function MintModal(props?: IProps) {
 
       setMainTokenBalance(mainBalance || 0);
     } catch (error) {
-      /* empty */
+      setBalanceLoading(false);
     }
   };
 
   const disabled = useMemo(() => {
-    if (quantity === 0 || quantityErrorTip || insufficientTip) {
+    if (quantity === 0 || quantityErrorTip || insufficientTip || !tokenBalance) {
       return true;
     }
     return false;
-  }, [quantity, quantityErrorTip]);
+  }, [insufficientTip, quantity, quantityErrorTip, tokenBalance]);
 
   useEffect(() => {
     if (modal.visible) {
@@ -383,7 +393,7 @@ function MintModal(props?: IProps) {
         />
       </div>
       <div className="mt-[24px] mdTW:mt-[32px]">
-        <Balance amount={tokenBalance} suffix="ELF" />
+        <Balance loading={balanceLoading} amount={tokenBalance} suffix="ELF" />
       </div>
     </Modal>
   );
