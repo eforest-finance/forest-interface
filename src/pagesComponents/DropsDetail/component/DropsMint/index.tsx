@@ -12,7 +12,6 @@ import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
 import { sleep } from 'utils';
 import { useRouter } from 'next/navigation';
-import moment from 'moment';
 
 interface IProps {
   className?: string;

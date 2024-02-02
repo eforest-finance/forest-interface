@@ -2,6 +2,8 @@ import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { IContractError } from './type';
 
 export const UserDeniedMessage = 'Request rejected. Forest needs your permission to continue';
+export const EventEndedBack = "The event has ended. You'll be automatically redirected to the Drops page";
+export const EventEnded = 'The event has ended';
 
 enum SourceErrorType {
   Error1 = 'Operation canceled',

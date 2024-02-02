@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useRef } from 'react';
 import Share from 'assets/images/icons/share.svg';
 import Calendar from 'assets/images/icons/calendar.svg';
 import styles from './index.module.css';
@@ -8,6 +8,7 @@ import ShareModal from '../ShareModal';
 import { useModal } from '@ebay/nice-modal-react';
 import { DropState } from 'api/types';
 import moment from 'moment';
+import { useIntersection } from 'react-use';
 
 interface IProps {
   name?: string;
@@ -57,14 +58,26 @@ function BasicInformation(props: IProps) {
     return moment(time).format('MM/DD/YYYY');
   };
 
+  const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
+
+  const basiInformationRef = useRef(null);
+  const intersection = useIntersection(basiInformationRef, {
+    root: document.body,
+    rootMargin: `0px 0px -${bottom}px 0px`,
+  });
+
   return (
     <div
+      ref={basiInformationRef}
       className={clsx(
         styles['basic-information'],
-        isSmallScreen && 'sticky z-40 top-[62.4px] left-0 border-0 border-b border-solid border-lineBorder',
+        isSmallScreen && 'sticky z-[999] top-[61px] left-0 border-0 border-solid border-lineBorder',
+        isSmallScreen && intersection?.isIntersecting && 'border-b',
         className,
       )}>
-      <div className="text-xl mdTW:text-4xl text-textPrimary font-semibold">{name}</div>
+      <div className="text-xl overflow-hidden whitespace-nowrap text-ellipsis mdTW:text-4xl text-textPrimary font-semibold text-center">
+        {name}
+      </div>
       <div className="mt-[16px] flex justify-between items-center">
         <div className={clsx(styles['basic-information-time'], 'flex items-center')}>
           {!isSmallScreen && <Calendar />}
