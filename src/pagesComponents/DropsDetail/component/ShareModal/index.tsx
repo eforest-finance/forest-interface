@@ -54,15 +54,18 @@ function ShareModal() {
 
   return (
     <Modal open={modal.visible} title="Share" footer={null} onCancel={modal.hide} afterClose={modal.remove}>
-      <div className="w-full overflow-hidden rounded-lg">
-        <Image
-          width={343}
-          height={343}
-          src={dropDetailInfo?.bannerUrl || ''}
-          alt="banner"
-          className="w-full h-auto object-cover"
-        />
-      </div>
+      {dropDetailInfo?.bannerUrl ? (
+        <div className="w-full overflow-hidden rounded-lg">
+          <Image
+            width={343}
+            height={343}
+            src={dropDetailInfo.bannerUrl}
+            alt="banner"
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      ) : null}
+
       <p className="text-xl mdTW:text-2xl text-textPrimary font-semibold mt-[64px] mdTW:mt-[32px] text-center">
         {dropDetailInfo?.dropName}
       </p>

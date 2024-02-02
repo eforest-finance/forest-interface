@@ -115,7 +115,6 @@ export const MintNftMessage = {
   },
   errorMessage: {
     title: 'Minting Failed',
-    tips: 'Minting of NFT(s) failed',
     description:
       'Minting failure could be due to network issues, transaction fee increases, or someone else minting the item before you.',
   },

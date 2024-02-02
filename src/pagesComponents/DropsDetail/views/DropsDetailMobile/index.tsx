@@ -9,20 +9,20 @@ import { useInitialization } from 'pagesComponents/DropsDetail/hooks/useInitiali
 import PageLoading from 'components/PageLoading';
 
 export default function DropsDetailMobile() {
-  useInitialization();
+  const { loading } = useInitialization();
   const { dropDetailInfo, dropQuota } = useDropDetailGetState();
 
-  return dropDetailInfo ? (
+  return !loading ? (
     <div className="!block !pt-[40px] !pb-[16px]">
       <div className="px-[16px]">
-        <Banner img={dropDetailInfo.bannerUrl} />
+        <Banner img={dropDetailInfo?.bannerUrl} />
       </div>
 
       <BasicInformation
         className="mt-[16px] px-[16px]"
-        name={dropDetailInfo.dropName}
-        startTime={dropDetailInfo.startTime}
-        expireTime={dropDetailInfo.expireTime}
+        name={dropDetailInfo?.dropName}
+        startTime={dropDetailInfo?.startTime}
+        expireTime={dropDetailInfo?.expireTime}
         status={dropQuota?.state}
       />
       <DetailCard className="mt-[32px] !px-[16px]" />

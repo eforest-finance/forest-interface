@@ -1,19 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { clearDropDetailInfo, setDropDetailInfo, setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import useGetState from 'store/state/getState';
 import { dispatch, store } from 'store/store';
 import { getDropDetail } from '../utils/getDropDetail';
 import { useParams } from 'next/navigation';
+import useDropDetailGetState from 'store/state/dropDetailGetState';
+import initializeProto from 'utils/initializeProto';
 
 export const useInitialization = () => {
-  const { walletInfo } = useGetState();
+  const { walletInfo, aelfInfo } = useGetState();
+  const { dropDetailInfo } = useDropDetailGetState();
   const { dropId } = useParams() as {
     dropId: string;
   };
 
+  const [loading, setLoading] = useState<boolean>(true);
+
   const getInfo = async () => {
     try {
       if (!dropId) return;
+      if (!dropDetailInfo) {
+        setLoading(true);
+      }
       const res = await getDropDetail({
         dropId,
         address: walletInfo.address,
@@ -31,8 +39,9 @@ export const useInitialization = () => {
           }),
         );
       }
+      setLoading(false);
     } catch (error) {
-      /* empty */
+      setLoading(false);
     }
   };
 
@@ -41,8 +50,16 @@ export const useInitialization = () => {
   }, [walletInfo.address]);
 
   useEffect(() => {
+    initializeProto(aelfInfo.dropSideAddress);
+  }, [aelfInfo.dropSideAddress]);
+
+  useEffect(() => {
     return () => {
       store.dispatch(clearDropDetailInfo());
     };
   }, []);
+
+  return {
+    loading,
+  };
 };

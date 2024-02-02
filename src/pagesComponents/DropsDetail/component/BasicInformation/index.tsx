@@ -61,7 +61,7 @@ function BasicInformation(props: IProps) {
     <div
       className={clsx(
         styles['basic-information'],
-        isSmallScreen && 'sticky top-[62.4px] left-0 border-0 border-b border-solid border-lineBorder',
+        isSmallScreen && 'sticky z-40 top-[62.4px] left-0 border-0 border-b border-solid border-lineBorder',
         className,
       )}>
       <div className="text-xl mdTW:text-4xl text-textPrimary font-semibold">{name}</div>

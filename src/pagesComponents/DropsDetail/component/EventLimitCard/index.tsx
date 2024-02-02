@@ -2,11 +2,11 @@ import React from 'react';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 import EventLimitInformation from '../EventLimitInformation';
-import DropsCountdown from 'components/DropsCountdown';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import BigNumber from 'bignumber.js';
 import { DropState } from 'api/types';
+import EventLimitCountdownPc from '../EventLimitCountdownPc';
 
 interface IProps {
   className?: string;
@@ -22,7 +22,7 @@ function EventLimitCard(props: IProps) {
 
   return (
     <div className={clsx('w-full bg-fillPageBg border border-solid border-lineBorder rounded-lg', className)}>
-      {!isSmallScreen && <DropsCountdown className="border-b" />}
+      {!isSmallScreen && <EventLimitCountdownPc className="border-b" />}
       <EventLimitInformation
         className="border-b"
         title="Limit"
