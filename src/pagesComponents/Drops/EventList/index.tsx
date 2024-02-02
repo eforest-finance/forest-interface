@@ -35,12 +35,20 @@ export function EventList() {
       if (params[0]?.state !== selectTypeState || pageIndex !== params[0]?.pageIndex) {
         return;
       }
-      setData((data) => data.concat(result.items));
+      if (pageIndex === 1) {
+        setData(result.items);
+      } else {
+        setData((data) => data.concat(result.items));
+      }
+
       setTotalCount(result.totalCount);
       setPageIndex((pageIndex) => ++pageIndex);
     },
     onError() {
-      setTotalCount(0);
+      if (pageIndex === 1) {
+        setData([]);
+        setTotalCount(0);
+      }
     },
     onFinally() {
       if (params[0]?.state !== selectTypeState || pageIndex !== params[0]?.pageIndex) {
@@ -55,7 +63,6 @@ export function EventList() {
     if (isInit) {
       setFirstLoaded(false);
       setPageIndex(1);
-      setData([]);
     }
 
     if (!isInit && loadingDataRef?.current) {
@@ -76,7 +83,7 @@ export function EventList() {
       setHasMore(true);
       return;
     }
-    const hasMore = data.length < totalCount;
+    const hasMore = data.length < totalCount && totalCount > pageSize;
     setHasMore(hasMore);
   }, [data, totalCount, firstLoaded]);
 
@@ -91,12 +98,19 @@ export function EventList() {
   }, [selectTypeState]);
 
   const loadMore = (
-    <div ref={loadingMoreRef}>{hasMore ? <LoadingMore className="!h-24" imgStyle="h-12 w-12" /> : null}</div>
+    <div ref={loadingMoreRef}>
+      {hasMore && !data.length ? <LoadingMore className="!h-24" imgStyle="h-12 w-12" /> : null}
+    </div>
   );
+
+  const loading = {
+    indicator: <LoadingMore className="!h-24 !left-0 !m-0" imgStyle="h-12 w-12" />,
+    spinning: !firstLoaded && loadingDataRef.current && !!data.length,
+  };
 
   const localeEmpty = {
     emptyText: (
-      <div className="flex flex-col -m-4 items-center h-[344px] justify-center border border-solid border-lineBorder rounded-lg">
+      <div className="flex flex-col -mx-4 items-center h-[344px] justify-center border border-solid border-lineBorder rounded-lg">
         <span className="text-base text-textPrimary font-medium">No event found</span>
         {selectTypeState !== 0 ? (
           <Button
@@ -115,16 +129,18 @@ export function EventList() {
     <>
       <div className="mt-[60px] mb-12">
         <div className="flex justify-between items-center">
-          <span className="text-textPrimary text-xl sml:text-4xl font-semibold">Events & Airdrops</span>
+          <span className="text-textPrimary text-xl sml:text-4xl font-semibold">Events</span>
           <SelectType onSelect={setSelectTypeState} value={selectTypeState} />
         </div>
       </div>
-      <div ref={listWrapperRef}>
+      <div ref={listWrapperRef} className="mb-2 sml:mb-16">
         <List
           loadMore={loadMore}
-          grid={{ gutter: 16, column: 4, xs: 2 }}
+          grid={{ gutter: 16, column: 4, xs: 2, sm: 2, md: 3 }}
           dataSource={data}
           locale={firstLoaded ? localeEmpty : { emptyText: ' ' }}
+          rowKey={(item) => item.dropId}
+          loading={loading}
           renderItem={(item) => {
             return (
               <List.Item>

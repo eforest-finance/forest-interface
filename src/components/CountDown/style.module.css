@@ -8,7 +8,7 @@
     @apply mt-4 flex items-center;
   }
   .count-down-value {
-    @apply w-10 h-10 sml:w-12 sml:h-12 flex items-center justify-center rounded-md text-2xl font-semibold bg-fillHoverBg;
+    @apply w-10 h-10 sml:w-12 sml:h-12 flex items-center text-textPrimary justify-center rounded-md text-2xl font-semibold bg-fillHoverBg;
   }
   .count-down-value-unit {
     @apply flex items-center justify-center text-xs text-textSecondary min-w-[20px] sml:min-w-[26px] mx-1;

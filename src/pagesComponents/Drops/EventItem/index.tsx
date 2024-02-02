@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import moment from 'moment';
 import useResponsive from 'hooks/useResponsive';
 import clsx from 'clsx';
 import { IActionDetail } from 'api/types';
 import { formatTokenPrice } from 'utils/format';
+import ImgLoading from 'components/ImgLoading';
 
 const COLLECTION_DEFAULT_IMG = 'https://forest-test.oss-cn-hongkong.aliyuncs.com/host/protocol-featured.jpg';
 
@@ -51,18 +51,13 @@ export function EventItem({
   return (
     <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover cursor-pointer">
       <div className="w-full aspect-square overflow-hidden relative">
-        <Image
-          className="w-full h-full object-cover hover:scale-110 transition-all"
-          alt="logo img"
-          width={308}
-          height={308}
-          src={logoUrl || imageUrl}></Image>
+        <ImgLoading src={logoUrl || imageUrl} className="w-full h-full object-cover hover:scale-110 transition-all" />
         {isXS && renderTime()}
       </div>
 
       <div className="px-4 py-3 sml:px-6 sml:py-4">
-        <div className="line-clamp-2 text-base text-ellipsis font-semibold sml:line-clamp-1 sml:text-xl">
-          {dropName}
+        <div className="line-clamp-2 min-h-[24px] text-base text-ellipsis text-textPrimary font-semibold sml:line-clamp-1 sml:text-xl sml:min-h-[28px]">
+          {dropName || '--'}
         </div>
         <div className="flex flex-col mt-2">
           {mintPrice === 0 ? (
@@ -75,7 +70,7 @@ export function EventItem({
               <span className="text-brandNormal ml-2">Free</span>
             </span>
           ) : (
-            <span className="text-sm font-medium text-brandNormal">{formatTokenPrice(mintPrice)} ELF</span>
+            <span className="text-sm font-medium text-brandNormal">{formatTokenPrice(mintPrice || '--')} ELF</span>
           )}
         </div>
         {!isXS ? <div className="flex flex-col mt-2">{renderTime()}</div> : null}

@@ -18,7 +18,25 @@ interface ISwiperProps {
   swiperData: IActionDetail[];
 }
 
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
+const TimeWarning = ({ startTime, expireTime }: IActionDetail) => {
+  const [, refresh] = useState(0);
+
+  let title;
+  let endTime;
+
+  if (moment().isBefore(moment(startTime))) {
+    title = 'Event starts in';
+    endTime = startTime;
+  } else if (moment().isSameOrAfter(moment(expireTime))) {
+    title = 'Event ended';
+    endTime = expireTime;
+  } else {
+    title = 'Event ends in';
+    endTime = expireTime;
+  }
+
+  return <CountDown title={title} value={endTime} onEnd={() => refresh((prev) => prev + 1)} />;
+};
 
 export function ActivitySwiper({ swiperData }: ISwiperProps) {
   const mySwiper = useRef<SwiperClass>();
@@ -60,22 +78,6 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
   if (!swiperData?.length) {
     return null;
   }
-
-  const renderCountDown = ({ startTime, expireTime }: IActionDetail) => {
-    let title;
-    let endTime;
-    if (moment().isBefore(moment(startTime))) {
-      title = 'Event starts in';
-      endTime = startTime;
-    } else if (moment().isSameOrAfter(moment(expireTime))) {
-      return <div className="text-base sml:text-lg text-textPrimary font-medium">Event ended</div>;
-    } else {
-      title = 'Event ends in';
-      endTime = expireTime;
-    }
-
-    return <CountDown title={title} value={endTime} />;
-  };
 
   return (
     <div className="relative -mx-5 sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
@@ -124,7 +126,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
                 <Link href={`/drops-detail/${item.dropId}`}>
                   <ImgLoading className="rounded-[12px] h-[300px]" src={item.bannerUrl || ''} />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
-                    {isXS ? renderCountDown(item) : null}
+                    {isXS ? <TimeWarning {...item} /> : null}
                   </div>
                   {isXS ? (
                     <div className="absolute left-0 bottom-[136px] w-full px-4 pb-6">
@@ -164,12 +166,14 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
                 <SwiperSlide key={item.dropId}>
                   <div className="flex bg-fillPageBg">
                     <div className="flex flex-col flex-1 mr-32">
-                      <div className="text-4xl font-semibold text-textPrimary line-clamp-1">{item.dropName || ''}</div>
-                      <p className="mt-4 text-textSecondary line-clamp-3 text-base font-medium">
+                      <div className="text-4xl h-10 font-semibold text-textPrimary line-clamp-1">
+                        {item.dropName || ''}
+                      </div>
+                      <p className="mt-4 h-[72px] text-textSecondary line-clamp-3 text-base font-medium">
                         {item.introduction || ''}
                       </p>
                     </div>
-                    {renderCountDown(item)}
+                    <TimeWarning {...item} />
                   </div>
                 </SwiperSlide>
               );
