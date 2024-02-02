@@ -6,7 +6,7 @@ import { getTxResult } from 'utils/aelfUtils';
 import { store } from 'store/store';
 import { formatErrorMsg } from './formatErrorMsg';
 
-const marketContractRequest = async <T, R>(
+const dropContractRequest = async <T, R>(
   method: string,
   params: T,
   options?: IContractOptions,
@@ -24,10 +24,10 @@ const marketContractRequest = async <T, R>(
       : addressList.side) as unknown as string;
     const curChain = options?.chain || info?.curChain;
 
-    console.log('=====marketContractRequest type: ', method, options?.type);
-    console.log('=====marketContractRequest address: ', method, address);
-    console.log('=====marketContractRequest curChain: ', method, curChain);
-    console.log('=====marketContractRequest params: ', method, params);
+    console.log('=====dropContractRequest type: ', method, options?.type);
+    console.log('=====dropContractRequest address: ', method, address);
+    console.log('=====dropContractRequest curChain: ', method, curChain);
+    console.log('=====dropContractRequest params: ', method, params);
 
     if (options?.type === ContractMethodType.VIEW) {
       const res: R = await webLoginInstance.contractViewMethod(curChain, {
@@ -36,7 +36,7 @@ const marketContractRequest = async <T, R>(
         args: params,
       });
 
-      console.log('=====marketContractRequest res: ', method, res);
+      console.log('=====dropContractRequest res: ', method, res);
 
       const result = res as IContractError;
       if (result?.error || result?.code || result?.Error) {
@@ -51,11 +51,11 @@ const marketContractRequest = async <T, R>(
         args: params,
       });
 
-      console.log('=====marketContractRequest res: ', method, res);
+      console.log('=====dropContractRequest res: ', method, res);
 
       const result = res as IContractError;
 
-      console.log('=====marketContractRequest result: ', method, JSON.stringify(result), result?.Error);
+      console.log('=====dropContractRequest result: ', method, JSON.stringify(result), result?.Error);
 
       if (result?.error || result?.code || result?.Error) {
         return Promise.reject(formatErrorMsg(result, method));
@@ -66,12 +66,12 @@ const marketContractRequest = async <T, R>(
       await sleep(1000);
       const transaction = await getTxResult(resTransactionId!, curChain);
 
-      console.log('=====marketContractRequest transaction: ', method, transaction);
+      console.log('=====dropContractRequest transaction: ', method, transaction);
 
       return Promise.resolve({ TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult });
     }
   } catch (error) {
-    console.error('=====marketContractRequest error: ', method, JSON.stringify(error), error);
+    console.error('=====dropContractRequest error: ', method, JSON.stringify(error), error);
     const resError = error as IContractError;
     return Promise.reject(formatErrorMsg(resError, method));
   }
@@ -79,7 +79,7 @@ const marketContractRequest = async <T, R>(
 
 export const ClaimDrop = async (params: IClaimDropParams, options?: IContractOptions): Promise<IContractError> => {
   try {
-    const res = (await marketContractRequest('ClaimDrop', params, options)) as IContractError;
+    const res = (await dropContractRequest('ClaimDrop', params, options)) as IContractError;
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject(error);

@@ -13,6 +13,7 @@ import { dispatch } from 'store/store';
 import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import { DropState } from 'api/types';
 import { timesDecimals } from 'utils/calculate';
+import BigNumber from 'bignumber.js';
 
 export const useClaimDrop = (chainId?: Chain) => {
   const { walletInfo, aelfInfo } = useGetState();
@@ -24,21 +25,26 @@ export const useClaimDrop = (chainId?: Chain) => {
     },
   ) => {
     try {
-      const approveTokenResult = await checkELFApprove({
-        chainId: chainId,
-        price: {
-          symbol: 'ELF',
-          amount: timesDecimals(params.price, 8).toNumber(),
-        },
-        quantity: params.claimAmount,
-        spender:
-          chainId === SupportedELFChainId.MAIN_NET ? getForestContractAddress().main : getForestContractAddress().side,
-        address: walletInfo.address || '',
-      });
+      if (!BigNumber(params.price).isEqualTo(0)) {
+        const approveTokenResult = await checkELFApprove({
+          chainId: chainId,
+          price: {
+            symbol: 'ELF',
+            amount: timesDecimals(params.price, 8).toNumber(),
+          },
+          quantity: params.claimAmount,
+          spender:
+            chainId === SupportedELFChainId.MAIN_NET
+              ? getForestContractAddress().main
+              : getForestContractAddress().side,
+          address: walletInfo.address || '',
+        });
 
-      if (!approveTokenResult) {
-        return Promise.reject('failed');
+        if (!approveTokenResult) {
+          return Promise.reject('failed');
+        }
       }
+
       const result = await ClaimDrop({
         dropId: params.dropId,
         claimAmount: params.claimAmount,
@@ -46,7 +52,7 @@ export const useClaimDrop = (chainId?: Chain) => {
       if (result) {
         const { TransactionId, TransactionResult } = (result.result || result) as ISendResult;
         if (TransactionResult) {
-          const res = await getResult(aelfInfo.dropSideAddress, 'ClaimDrop', TransactionResult, TransactionId);
+          const res = await getResult(aelfInfo.dropSideAddress, 'DropClaimAdded', TransactionResult, TransactionId);
           if (res) {
             return {
               ...res,
