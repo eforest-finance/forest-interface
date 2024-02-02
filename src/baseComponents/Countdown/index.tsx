@@ -17,7 +17,7 @@ interface ICountdownProps {
 }
 
 export enum CountdownType {
-  Hour = 'Hour',
+  Hours = 'Hours',
   Minutes = 'Minutes',
   Seconds = 'Seconds',
 }
@@ -26,7 +26,7 @@ function Countdown({ className, endTime, status = CountdownStatus.Normal, onChan
   const { hours, minutes, seconds } = useCountdown(endTime);
 
   const countdownValue: Record<CountdownType, string> = {
-    Hour: timeFillDigits(hours),
+    Hours: timeFillDigits(hours),
     Minutes: timeFillDigits(minutes),
     Seconds: timeFillDigits(seconds),
   };
@@ -36,12 +36,19 @@ function Countdown({ className, endTime, status = CountdownStatus.Normal, onChan
     [CountdownStatus.Danger]: 'text-functionalDanger',
   };
 
-  const countdownType: CountdownType[] = [CountdownType.Hour, CountdownType.Minutes, CountdownType.Seconds];
+  const countdownType: CountdownType[] = [CountdownType.Hours, CountdownType.Minutes, CountdownType.Seconds];
+
+  const renderTimeType = (count: number | string, type: CountdownType) => {
+    if (Number(count) > 1) {
+      return type;
+    }
+    return type.slice(0, type.length - 1);
+  };
 
   useEffect(() => {
     onChange &&
       onChange({
-        Hour: hours,
+        Hours: hours,
         Minutes: minutes,
         Seconds: seconds,
       });
@@ -53,7 +60,7 @@ function Countdown({ className, endTime, status = CountdownStatus.Normal, onChan
         return (
           <div key={item} className={styles['countdown-card']}>
             <div className={clsx(styles['countdown-card-time'], timeColor[status])}>{countdownValue[item]}</div>
-            <div className={styles['countdown-card-title']}>{item}</div>
+            <div className={styles['countdown-card-title']}>{renderTimeType(countdownValue[item], item)}</div>
           </div>
         );
       })}
