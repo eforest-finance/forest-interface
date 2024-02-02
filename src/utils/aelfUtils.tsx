@@ -127,7 +127,12 @@ export function getBlockHeight() {
   return getAElf().chain.getBlockHeight();
 }
 
-export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0): Promise<any> {
+export async function getTxResult(
+  TransactionId: string,
+  chainId: Chain,
+  reGetCount = 0,
+  retryCountWhenNotExist = 0,
+): Promise<any> {
   const rpcUrl = getRpcUrls()[chainId];
   const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
   if (txResult.error && txResult.errorMessage) {
@@ -138,6 +143,15 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     throw Error('Failed to retrieve transaction result.');
   }
 
+  if (txResult.Status.toLowerCase() === 'notexisted') {
+    if (retryCountWhenNotExist > 5) {
+      throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+    }
+    await sleep(1000);
+    retryCountWhenNotExist++;
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
+  }
+
   if (txResult.Status.toLowerCase() === 'pending') {
     // || txResult.Status.toLowerCase() === 'notexisted'
     if (reGetCount > 10) {
@@ -145,7 +159,7 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     }
     await sleep(1000);
     reGetCount++;
-    return getTxResult(TransactionId, chainId, reGetCount);
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
   }
 
   if (txResult.Status.toLowerCase() === 'mined') {
