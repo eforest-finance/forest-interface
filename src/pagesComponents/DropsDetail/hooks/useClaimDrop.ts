@@ -14,6 +14,7 @@ import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import { DropState } from 'api/types';
 import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
+import { sleep } from 'utils';
 
 export const useClaimDrop = (chainId?: Chain) => {
   const { walletInfo, aelfInfo } = useGetState();
@@ -77,7 +78,8 @@ export const useClaimDrop = (chainId?: Chain) => {
       }
       if (resError.errorMessage?.message.includes(EventEndedBack)) {
         message.error(EventEndedBack, 3);
-        navigator.back();
+        await sleep(3000);
+        navigator.replace('/drops');
         return 'failed';
       }
       if (resError.errorMessage?.message.includes(EventEnded)) {

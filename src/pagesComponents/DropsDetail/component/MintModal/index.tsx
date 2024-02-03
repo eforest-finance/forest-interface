@@ -157,7 +157,7 @@ function MintModal(props?: IProps) {
     switch (res) {
       case DropState.Canceled:
         await sleep(3000);
-        nav.back();
+        nav.replace('/drops');
         return;
       case DropState.End:
         resultModal.hide();

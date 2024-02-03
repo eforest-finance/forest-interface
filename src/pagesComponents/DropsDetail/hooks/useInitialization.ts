@@ -3,9 +3,13 @@ import { clearDropDetailInfo, setDropDetailInfo, setDropQuota } from 'store/redu
 import useGetState from 'store/state/getState';
 import { dispatch, store } from 'store/store';
 import { getDropDetail } from '../utils/getDropDetail';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import initializeProto from 'utils/initializeProto';
+import { message } from 'antd';
+import { EventEndedBack } from 'contract/formatErrorMsg';
+import { sleep } from 'utils';
+import { DropState } from 'api/types';
 
 export const useInitialization = () => {
   const { walletInfo, aelfInfo } = useGetState();
@@ -13,6 +17,7 @@ export const useInitialization = () => {
   const { dropId } = useParams() as {
     dropId: string;
   };
+  const nav = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -38,6 +43,12 @@ export const useInitialization = () => {
             state: res.state,
           }),
         );
+
+        if (res.state === DropState.Canceled) {
+          message.error(EventEndedBack, 3);
+          await sleep(3000);
+          nav.replace('/drops');
+        }
       }
       setLoading(false);
     } catch (error) {
