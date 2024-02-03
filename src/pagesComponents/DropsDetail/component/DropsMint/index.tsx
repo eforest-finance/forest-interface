@@ -108,7 +108,7 @@ function DropsMint(props: IProps) {
           case DropState.Canceled:
             setIsCancel(true);
             await sleep(3000);
-            nav.back();
+            nav.replace('/drops');
             return;
           case DropState.End:
             setIsCancel(false);
