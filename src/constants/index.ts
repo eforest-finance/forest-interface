@@ -19,6 +19,12 @@ export const CHAIN_ID_VALUE = {
   AELF: 9992731,
 };
 
+export const CHAIN_ID_TYPE: Record<string, string> = {
+  1931928: 'tDVW',
+  1866392: 'tDVV',
+  9992731: 'AELF',
+};
+
 export const currentRpcUrl = {
   AELF: 'rpcUrlAELF',
   tDVW: 'rpcUrlTDVW',

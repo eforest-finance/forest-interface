@@ -27,6 +27,7 @@ import { DropState } from 'api/types';
 import { useClaimDrop } from 'pagesComponents/DropsDetail/hooks/useClaimDrop';
 import { useRouter } from 'next/navigation';
 import { INftInfoList } from 'components/NftInfoList';
+import { CHAIN_ID_TYPE } from 'constants/index';
 
 interface IProps {
   initQuantity?: number;
@@ -239,20 +240,19 @@ function MintModal(props?: IProps) {
         if (BigNumber(claimDropRes.currentAmount).lt(quantity)) {
           status = 'partially';
         }
-
-        const list = claimDropRes.claimDetailRecord?.value.map((item) => {
+        const list = claimDropRes.claimDetailList?.value.map((item) => {
           return {
-            image: dropDetailInfo?.logoUrl, // TODO
+            image: item.image,
             collectionName: dropDetailInfo?.collectionName,
-            nftName: item.tokenName,
+            nftName: item.name,
             item: `Quantity: ${item.amount}`,
             priceTitle: 'Price Each',
             price: dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} 'ELF'` : 'Free',
             usdPrice: formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
             onClick: () => {
-              // TODO
-              console.log('jump');
-              // nav.push(`/detail/buy/${item?.id ?? ''}/${item?.chainId ?? ''}`);
+              const nftId = `${CHAIN_ID_TYPE[String(item.chainId)]}-${item.symbol}`;
+              resultModal.hide();
+              nav.push(`/detail/buy/${nftId ?? ''}/${aelfInfo.curChain}`);
             },
           };
         });

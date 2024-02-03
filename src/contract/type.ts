@@ -410,15 +410,19 @@ export interface IClaimDropParams {
 
 export interface IClaimDetailRecordList {
   symbol: string;
-  amount: number;
-  tokenName: string;
+  amount: string;
+  name: string;
+  chainId: number;
+  image: string;
 }
 
 export interface IClaimDropResult {
-  currentAmount: number;
-  totalAmount: number;
+  currentAmount: string;
+  totalAmount: string;
   dropId: string;
-  claimDetailRecord?: {
+  claimDetailList?: {
     value: IClaimDetailRecordList[];
   };
+  TransactionId: string;
+  address: string;
 }
