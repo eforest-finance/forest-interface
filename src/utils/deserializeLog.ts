@@ -119,7 +119,6 @@ export const getResult = async (
   const proto = Proto.getInstance().getProto();
   const currentProto = proto[contractAddress];
   if (currentProto) {
-    console.log('TransactionResult?.Logs', TransactionResult?.Logs);
     const log = TransactionResult?.Logs?.filter((item) => {
       return item.Name === logsName;
     })?.[0];
