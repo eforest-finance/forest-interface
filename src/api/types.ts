@@ -375,6 +375,7 @@ export interface ITokenParams {
   pubkey?: string;
   signature?: string;
   timestamp?: number;
+  version?: string;
   accountInfo?: Array<{ chainId: string; address: string }>;
   source: string;
 }

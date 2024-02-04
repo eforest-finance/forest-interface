@@ -27,8 +27,9 @@ export const useGetToken = () => {
     token?: string;
     expirationTime?: number;
   }>(storages.accountInfo);
-  const { loginState, wallet, getSignature, walletType, logout } = useWebLogin();
-  walletType === WalletType.portkey;
+  const { loginState, wallet, getSignature, walletType, logout, version } = useWebLogin();
+  console.log('version', version);
+
   const isLogin = loginState === WebLoginState.logined;
   const pathName = usePathname();
   const nav = useRouter();
@@ -112,6 +113,7 @@ export const useGetToken = () => {
       scope: 'NFTMarketServer',
       client_id: 'NFTMarketServer_App',
       timestamp,
+      version: version === 'v1' ? 'v1' : 'v2',
       signature: sign!.signature,
       ...extraParam,
     } as ITokenParams);
