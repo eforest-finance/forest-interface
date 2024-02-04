@@ -33,7 +33,6 @@ function EventLimitCountdownPc(props: IProps) {
   }, [dropDetailInfo?.expireTime, dropDetailInfo?.startTime, dropQuota?.state]);
 
   const onEnd = () => {
-    console.log('onEnd');
     const state = dropQuota?.state === DropState.Upcoming ? DropState.Live : DropState.End;
     dispatch(setDropQuota({ state }));
   };
