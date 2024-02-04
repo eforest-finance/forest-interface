@@ -124,7 +124,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
               key={item.dropId}>
               <div className="relative">
                 <Link href={`/drops-detail/${item.dropId}`}>
-                  <ImgLoading className="rounded-[12px] h-[300px]" src={item.bannerUrl || ''} />
+                  <ImgLoading className="h-[300px]" src={item.bannerUrl || ''} />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
                     {isXS ? <TimeWarning {...item} /> : null}
                   </div>
