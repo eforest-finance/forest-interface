@@ -5,20 +5,15 @@ import { IClaimDropParams, IContractError, ISendResult } from 'contract/type';
 import { getResult } from 'utils/deserializeLog';
 import { EventEnded, EventEndedBack, UserDeniedMessage } from 'contract/formatErrorMsg';
 import { ClaimDrop } from 'contract/drop';
-import { checkELFApprove } from 'utils/aelfUtils';
-import { SupportedELFChainId } from 'constants/chain';
-import { getForestContractAddress } from 'contract/forest';
-import { useRouter } from 'next/navigation';
+import { checkTokenApproveCurrying } from 'utils/aelfUtils';
 import { dispatch } from 'store/store';
 import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import { DropState } from 'api/types';
-import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
-import { sleep } from 'utils';
 
 export const useClaimDrop = (chainId?: Chain) => {
   const { walletInfo, aelfInfo } = useGetState();
-  const navigator = useRouter();
+  const checkELFApprove = checkTokenApproveCurrying();
 
   const claimDrop = async (
     params: IClaimDropParams & {
@@ -29,16 +24,12 @@ export const useClaimDrop = (chainId?: Chain) => {
       if (!BigNumber(params.price).isEqualTo(0)) {
         const approveTokenResult = await checkELFApprove({
           chainId: chainId,
-          price: {
-            symbol: 'ELF',
-            amount: timesDecimals(params.price, 8).toNumber(),
-          },
-          quantity: params.claimAmount,
-          spender:
-            chainId === SupportedELFChainId.MAIN_NET
-              ? getForestContractAddress().main
-              : getForestContractAddress().side,
+          symbol: 'ELF',
           address: walletInfo.address || '',
+          spender: aelfInfo.dropSideAddress,
+          amount: params.price,
+          decimals: 8,
+          approveSymbol: 'ELF',
         });
 
         if (!approveTokenResult) {
