@@ -27,6 +27,8 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice } from 'utils/format';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import { WalletType, useWebLogin } from 'aelf-web-login';
+import styles from './style.module.css';
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();

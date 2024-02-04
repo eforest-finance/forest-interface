@@ -31,9 +31,6 @@ import useCancelOffer from 'pagesComponents/Detail/hooks/useCancelOffer';
 import BigNumber from 'bignumber.js';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
-<<<<<<< HEAD
-export default function Offers(options: { rate: number; nftBalance: number }) {
-=======
 export const COLUMN_TITLE = {
   1155: {
     PRICE: 'Unit Price',
@@ -46,7 +43,6 @@ export const COLUMN_TITLE = {
 };
 
 export default function Offers(options: { rate: number }) {
->>>>>>> feature/dev-1.6.0
   const exchangeModal = useModal(ExchangeModal);
   const promptModal = useModal(PromptModal);
   const columWidth = useRef<Map<string, number>>();
