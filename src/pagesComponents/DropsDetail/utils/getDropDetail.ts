@@ -1,6 +1,8 @@
 import { fetchDropDetail } from 'api/fetch';
 import { DropState } from 'api/types';
 import moment from 'moment';
+import { setDropDetailInfo, setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
+import { dispatch } from 'store/store';
 
 export const getDropDetail = async ({ dropId, address }: { dropId: string; address?: string }) => {
   try {
@@ -24,12 +26,35 @@ export const getDropDetail = async ({ dropId, address }: { dropId: string; addre
       }
     }
 
-    console.log('=====fetchDropDetail res', res);
-
     return {
       ...res,
       state,
     };
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const updateDropDetail = async ({ dropId, address }: { dropId: string; address?: string }) => {
+  try {
+    const res = await getDropDetail({
+      dropId,
+      address,
+    });
+    if (res) {
+      dispatch(setDropDetailInfo(res));
+      dispatch(
+        setDropQuota({
+          dropId: res.dropId,
+          totalAmount: res.totalAmount,
+          claimAmount: res.claimAmount,
+          addressClaimLimit: res.addressClaimLimit,
+          addressClaimAmount: res.addressClaimAmount,
+          state: res.state,
+        }),
+      );
+    }
+    return res;
   } catch (error) {
     return Promise.reject(error);
   }

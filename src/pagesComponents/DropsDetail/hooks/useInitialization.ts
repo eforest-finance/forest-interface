@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { clearDropDetailInfo, setDropDetailInfo, setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
+import { clearDropDetailInfo } from 'store/reducer/dropDetail/dropDetailInfo';
 import useGetState from 'store/state/getState';
-import { dispatch, store } from 'store/store';
-import { getDropDetail } from '../utils/getDropDetail';
+import { store } from 'store/store';
+import { updateDropDetail } from '../utils/getDropDetail';
 import { useParams, useRouter } from 'next/navigation';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import initializeProto from 'utils/initializeProto';
@@ -13,7 +13,7 @@ import { DropState } from 'api/types';
 
 export const useInitialization = () => {
   const { walletInfo, aelfInfo } = useGetState();
-  const { dropDetailInfo } = useDropDetailGetState();
+  const { dropDetailInfo, dropQuota } = useDropDetailGetState();
   const { dropId } = useParams() as {
     dropId: string;
   };
@@ -27,34 +27,27 @@ export const useInitialization = () => {
       if (!dropDetailInfo) {
         setLoading(true);
       }
-      const res = await getDropDetail({
+      await updateDropDetail({
         dropId,
         address: walletInfo.address,
       });
-      if (res) {
-        dispatch(setDropDetailInfo(res));
-        dispatch(
-          setDropQuota({
-            dropId: res.dropId,
-            totalAmount: res.totalAmount,
-            claimAmount: res.claimAmount,
-            addressClaimLimit: res.addressClaimLimit,
-            addressClaimAmount: res.addressClaimAmount,
-            state: res.state,
-          }),
-        );
-        setLoading(false);
-
-        if (res.state === DropState.Canceled) {
-          message.error(EventEndedBack, 3);
-          await sleep(3000);
-          nav.replace('/drops');
-        }
-      }
+      setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   };
+
+  const onCanceled = async () => {
+    message.error(EventEndedBack, 3);
+    await sleep(3000);
+    nav.replace('/drops');
+  };
+
+  useEffect(() => {
+    if (dropQuota?.state === DropState.Canceled) {
+      onCanceled();
+    }
+  }, [dropQuota?.state]);
 
   useEffect(() => {
     getInfo();

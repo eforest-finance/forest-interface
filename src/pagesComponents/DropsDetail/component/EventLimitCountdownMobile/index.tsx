@@ -16,7 +16,6 @@ function EventLimitCountdownMobile(props: IProps) {
   const { className, value } = props;
 
   const onEnd = () => {
-    console.log('onEnd');
     const state = dropQuota?.state === DropState.Upcoming ? DropState.Live : DropState.End;
     dispatch(setDropQuota({ state }));
   };
