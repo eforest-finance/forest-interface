@@ -43,6 +43,7 @@ export const useInitialization = () => {
             state: res.state,
           }),
         );
+        setLoading(false);
 
         if (res.state === DropState.Canceled) {
           message.error(EventEndedBack, 3);
@@ -50,7 +51,6 @@ export const useInitialization = () => {
           nav.replace('/drops');
         }
       }
-      setLoading(false);
     } catch (error) {
       setLoading(false);
     }

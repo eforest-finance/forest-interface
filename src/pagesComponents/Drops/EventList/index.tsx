@@ -99,12 +99,12 @@ export function EventList() {
 
   const loadMore = (
     <div ref={loadingMoreRef}>
-      {hasMore && !data.length ? <LoadingMore className="!h-24" imgStyle="h-12 w-12" /> : null}
+      {hasMore && (!data.length || firstLoaded) ? <LoadingMore className="!h-24" imgStyle="h-12 w-12" /> : null}
     </div>
   );
 
   const loading = {
-    indicator: <LoadingMore className="!h-24 !left-0 !m-0" imgStyle="h-12 w-12" />,
+    indicator: <LoadingMore className="!h-24 !left-0 !m-0 !w-full" imgStyle="h-12 w-12" />,
     spinning: !firstLoaded && loadingDataRef.current && !!data.length,
   };
 

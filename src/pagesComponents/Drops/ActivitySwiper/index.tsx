@@ -124,7 +124,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
               key={item.dropId}>
               <div className="relative">
                 <Link href={`/drops-detail/${item.dropId}`}>
-                  <ImgLoading className="rounded-[12px] h-[300px]" src={item.bannerUrl || ''} />
+                  <ImgLoading className="h-[300px]" src={item.bannerUrl || ''} />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
                     {isXS ? <TimeWarning {...item} /> : null}
                   </div>
@@ -157,13 +157,13 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
             {...commonSwiperProps}
             effect={'fade'}
             modules={[EffectFade]}
-            className={styles['user-disabled']}
+            className={`${styles['user-disabled']} w-full`}
             onSwiper={(swiper) => {
               mySwiper2.current = swiper;
             }}>
             {swiperData.map((item) => {
               return (
-                <SwiperSlide key={item.dropId}>
+                <SwiperSlide key={item.dropId} className="w-full">
                   <div className="flex bg-fillPageBg">
                     <div className="flex flex-col flex-1 mr-32">
                       <div className="text-4xl h-10 font-semibold text-textPrimary line-clamp-1">
