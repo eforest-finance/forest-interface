@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { fetchDropQuota } from 'api/fetch';
 import { DropState } from 'api/types';
-import { EventEnded, EventEndedBack } from 'contract/formatErrorMsg';
+import { EventEnded } from 'contract/formatErrorMsg';
 import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import { dispatch } from 'store/store';
 
@@ -19,17 +19,28 @@ export const updateDropQuota = async (params: { dropId: string; address: string 
     console.log('=====getDropQuota 11111', params);
 
     const res = await getDropQuota(params);
+    let state = res.state;
     if (res.state === DropState.Canceled) {
-      message.error(EventEndedBack, 3);
-      return DropState.Canceled;
+      dispatch(
+        setDropQuota({
+          state: DropState.Canceled,
+        }),
+      );
+      state = DropState.Canceled;
     } else {
       dispatch(setDropQuota({ ...res }));
       if (res.state === DropState.End) {
         message.error(EventEnded);
-        return DropState.End;
+        state = DropState.End;
+      } else {
+        state = DropState.Live;
       }
-      return DropState.Live;
     }
+
+    return {
+      state,
+      dropQuota: res,
+    };
   } catch (error) {
     return Promise.reject(error);
   }
