@@ -49,7 +49,7 @@ function DetailCard(props: IProps) {
         className,
       )}>
       <h1 className="text-xl mdTW:text-2xl text-textPrimary font-semibold">About</h1>
-      <p className="text-base text-textSecondary font-medium mt-[16px]">{dropDetailInfo?.introduction}</p>
+      <p className="text-base text-textSecondary font-medium mt-[16px] break-all">{dropDetailInfo?.introduction}</p>
       {dropDetailInfo?.logoUrl ? (
         <Image
           src={dropDetailInfo.logoUrl}
