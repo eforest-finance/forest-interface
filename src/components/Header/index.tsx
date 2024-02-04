@@ -35,6 +35,8 @@ import DropMenu from 'baseComponents/DropMenu';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { hideHeaderPage } from 'constants/common';
 import { WalletType, useWebLogin } from 'aelf-web-login';
+import useGetState from 'store/state/getState';
+
 function Header() {
   const [theme, changeTheme] = useTheme();
   const nav = useRouter();
@@ -46,6 +48,7 @@ function Header() {
   const [visible, setVisible] = useState(false);
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
+  const { aelfInfo } = useGetState();
 
   const { walletType } = useWebLogin();
 
@@ -130,11 +133,14 @@ function Header() {
                       <span>Create a Collection</span>
                     </AuthNavLink>
                   </p>
-                  <p className="menu-item">
-                    <Link href={'/drops'}>
-                      <DropIcon /> <span>Drops</span>
-                    </Link>
-                  </p>
+
+                  {aelfInfo.showDropEntrance ? (
+                    <p className="menu-item">
+                      <Link href={'/drops'}>
+                        <DropIcon /> <span>Drops</span>
+                      </Link>
+                    </p>
+                  ) : null}
                 </div>
                 <div className="menu-wrap">
                   <p className="menu-item" onClick={onClose}>
@@ -233,9 +239,13 @@ function Header() {
                 }>
                 <span className="!cursor-default">Create</span>
               </DropMenu>
-              <Link href="/drops" className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
-                Drops
-              </Link>
+              {aelfInfo.showDropEntrance ? (
+                <Link
+                  href="/drops"
+                  className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
+                  Drops
+                </Link>
+              ) : null}
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
