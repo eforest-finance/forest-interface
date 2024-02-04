@@ -5,19 +5,19 @@ import EventLimitCountdownMobile from '../EventLimitCountdownMobile';
 import clsx from 'clsx';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import { DropState } from 'api/types';
-import BigNumber from 'bignumber.js';
 import { useModal } from '@ebay/nice-modal-react';
 import MintModal from '../MintModal';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
-import { sleep } from 'utils';
-import { useRouter } from 'next/navigation';
+import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
+import { message } from 'antd';
+import { DropMinted } from 'contract/formatErrorMsg';
 
 interface IProps {
   className?: string;
 }
 
-enum MintStateType {
+export enum MintStateType {
   'MintFree',
   'Mint',
   'SoldOut',
@@ -56,38 +56,12 @@ function DropsMint(props: IProps) {
   const { login, isLogin } = useCheckLoginAndToken();
   const [mintLoading, setMintLoading] = useState<boolean>(false);
   const [isCancel, setIsCancel] = useState<boolean>(false);
-  const nav = useRouter();
 
   const { dropDetailInfo, dropQuota } = useDropDetailGetState();
 
   const mintState = useMemo(() => {
-    const limitBig = new BigNumber(dropQuota?.addressClaimLimit || 0);
-    const amountBig = new BigNumber(dropQuota?.addressClaimAmount || 0);
-    const claimAmountBig = new BigNumber(dropQuota?.claimAmount || 0);
-    const totalAmountBig = new BigNumber(dropQuota?.totalAmount || 0);
-    const mintPrice = new BigNumber(dropDetailInfo?.mintPrice || 0);
-    switch (dropQuota?.state) {
-      case DropState.Upcoming:
-        return MintStateType.Upcoming;
-      case DropState.Live:
-        if (claimAmountBig.isEqualTo(totalAmountBig)) {
-          return MintStateType.SoldOut;
-        } else {
-          if (amountBig.isEqualTo(limitBig)) {
-            return MintStateType.Minted;
-          } else {
-            if (mintPrice.isEqualTo(0)) {
-              return MintStateType.MintFree;
-            } else {
-              return MintStateType.Mint;
-            }
-          }
-        }
-      case DropState.End:
-        return MintStateType.SoldOut;
-      default:
-        return MintStateType.SoldOut;
-    }
+    const state = getMintState(dropQuota, dropDetailInfo?.mintPrice);
+    return state;
   }, [dropDetailInfo?.mintPrice, dropQuota]);
 
   const disabled = useMemo(() => {
@@ -103,19 +77,23 @@ function DropsMint(props: IProps) {
           dropId: dropDetailInfo?.dropId,
           address: walletInfo.address,
         });
+        const state = res.state;
+        const mintState = getMintState(res.dropQuota, dropDetailInfo?.mintPrice);
         setMintLoading(false);
-        switch (res) {
+        switch (state) {
           case DropState.Canceled:
             setIsCancel(true);
-            await sleep(3000);
-            nav.replace('/drops');
             return;
           case DropState.End:
             setIsCancel(false);
             return;
           default:
             setIsCancel(false);
-            mintModal.show();
+            if (mintState === MintStateType.Mint || mintState === MintStateType.MintFree) {
+              mintModal.show();
+            } else {
+              message.error(DropMinted);
+            }
             return;
         }
       } catch (error) {

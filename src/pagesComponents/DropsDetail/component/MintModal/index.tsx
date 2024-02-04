@@ -28,6 +28,10 @@ import { useClaimDrop } from 'pagesComponents/DropsDetail/hooks/useClaimDrop';
 import { useRouter } from 'next/navigation';
 import { INftInfoList } from 'components/NftInfoList';
 import { CHAIN_ID_TYPE } from 'constants/index';
+import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
+import { MintStateType } from '../DropsMint';
+import { message } from 'antd';
+import { DropMinted } from 'contract/formatErrorMsg';
 
 interface IProps {
   initQuantity?: number;
@@ -154,17 +158,22 @@ function MintModal(props?: IProps) {
       dropId: dropDetailInfo.dropId,
       address: walletInfo.address,
     });
-    switch (res) {
+    const state = res.state;
+    const mintState = getMintState(res.dropQuota, dropDetailInfo?.mintPrice);
+
+    switch (state) {
       case DropState.Canceled:
-        await sleep(3000);
-        nav.replace('/drops');
         return;
       case DropState.End:
         resultModal.hide();
         return;
       default:
         resultModal.hide();
-        modal.show();
+        if (mintState === MintStateType.Mint || mintState === MintStateType.MintFree) {
+          modal.show();
+        } else {
+          message.error(DropMinted);
+        }
         return;
     }
   };
