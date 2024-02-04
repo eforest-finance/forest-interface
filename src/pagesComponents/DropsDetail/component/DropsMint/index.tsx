@@ -122,6 +122,7 @@ function DropsMint(props: IProps) {
         type="primary"
         className="!w-full mt-[16px] mdTW:mt-[32px]"
         size="ultra"
+        millisecondOfThrottle={300}
         onClick={onMint}>
         {MintButtonInfo[mintState].text}
       </Button>

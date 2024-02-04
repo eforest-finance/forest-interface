@@ -1,6 +1,5 @@
 import Modal from 'baseComponents/Modal';
 import React from 'react';
-import Image from 'next/image';
 import TwitterX from 'assets/images/icons/twitterX.svg';
 import Telegram from 'assets/images/icons/telegram.svg';
 import Facebook from 'assets/images/icons/facebook_32.svg';
@@ -12,6 +11,7 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import { useCopyToClipboard } from 'react-use';
 import { message } from 'antd';
+import SkeletonImage from 'baseComponents/SkeletonImage';
 
 function ShareModal() {
   const { infoState } = useGetState();
@@ -55,15 +55,7 @@ function ShareModal() {
   return (
     <Modal open={modal.visible} title="Share" footer={null} onCancel={modal.hide} afterClose={modal.remove}>
       {dropDetailInfo?.bannerUrl ? (
-        <div className="w-full h-[172px] overflow-hidden rounded-lg">
-          <Image
-            width={736}
-            height={172}
-            src={dropDetailInfo.bannerUrl}
-            alt="banner"
-            className="w-full h-[172px] object-cover"
-          />
-        </div>
+        <SkeletonImage className="w-full h-[172px] overflow-hidden rounded-lg" img={dropDetailInfo.bannerUrl} />
       ) : null}
 
       <p className="text-xl mdTW:text-2xl text-textPrimary font-semibold mt-[64px] mdTW:mt-[32px] text-center">
