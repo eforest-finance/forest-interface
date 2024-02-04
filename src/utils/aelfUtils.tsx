@@ -242,7 +242,7 @@ export const checkTokenApproveCurrying = () => {
       const allowanceBN = new BigNumber(allowance?.allowance);
 
       if (allowanceBN.lt(bigA)) {
-        return await approveELF(spender, approveSymbol || 'ELF', CONTRACT_AMOUNT, chainId);
+        return await approveELF(spender, approveSymbol || 'ELF', `${bigA.toNumber()}`, chainId);
       }
       return true;
     } catch (error) {
