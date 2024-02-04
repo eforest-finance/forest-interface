@@ -12,7 +12,6 @@ import PageLoading from 'components/PageLoading';
 export default function DropsDetailPc() {
   const { loading } = useInitialization();
   const { dropDetailInfo, dropQuota } = useDropDetailGetState();
-  console.log('=====dropDetailInfo loading', loading);
   return !loading ? (
     <div className="pt-[80px] px-[40px] pb-[20px] mx-auto max-w-[1360px] min-h-screen">
       <Banner img={dropDetailInfo?.bannerUrl} />

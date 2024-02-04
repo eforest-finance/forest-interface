@@ -26,8 +26,6 @@ export const getDropDetail = async ({ dropId, address }: { dropId: string; addre
       }
     }
 
-    console.log('=====fetchDropDetail res', res);
-
     return {
       ...res,
       state,

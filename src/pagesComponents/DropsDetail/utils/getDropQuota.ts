@@ -16,8 +16,6 @@ export const getDropQuota = async ({ dropId, address }: { dropId: string; addres
 
 export const updateDropQuota = async (params: { dropId: string; address: string }) => {
   try {
-    console.log('=====getDropQuota 11111', params);
-
     const res = await getDropQuota(params);
     let state = res.state;
     if (res.state === DropState.Canceled) {
