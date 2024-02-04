@@ -1,14 +1,14 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import TwitterX from 'assets/images/icons/twitterX.svg';
 import Telegram from 'assets/images/icons/telegram.svg';
 import Discord from 'assets/images/icons/discord.svg';
 import Internet from 'assets/images/icons/internet.svg';
-import Image from 'next/image';
 import clsx from 'clsx';
 import styles from './index.module.css';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
 import { SocialMediaType } from 'api/types';
 import Link from 'next/link';
+import SkeletonImage from 'baseComponents/SkeletonImage';
 
 interface IProps {
   className?: string;
@@ -51,12 +51,9 @@ function DetailCard(props: IProps) {
       <h1 className="text-xl mdTW:text-2xl text-textPrimary font-semibold">About</h1>
       <p className="text-base text-textSecondary font-medium mt-[16px] break-all">{dropDetailInfo?.introduction}</p>
       {dropDetailInfo?.logoUrl ? (
-        <Image
-          src={dropDetailInfo.logoUrl}
-          width={350}
-          height={350}
-          className="w-full aspect-square h-auto object-cover rounded-lg mt-[16px] mdTW:mt-[32px]"
-          alt={'detailImage'}
+        <SkeletonImage
+          className={'w-full aspect-square h-auto object-cover rounded-lg mt-[16px] mdTW:mt-[32px] overflow-hidden'}
+          img={dropDetailInfo.logoUrl}
         />
       ) : null}
 
