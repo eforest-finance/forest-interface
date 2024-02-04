@@ -156,12 +156,20 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistor
     }
     myChart.setOption(echartsOption);
     const resize = () => myChart.resize();
-    // const timer = setTimeout(resize, 100);
-    window.addEventListener('resize', resize);
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        console.log('Width:', width, 'Height:', height);
+        resize();
+      }
+    });
+
+    if (chart.current) {
+      resizeObserver.observe(chart.current);
+    }
 
     return () => {
-      // timer && clearTimeout(timer);
-      window.removeEventListener('resize', resize);
+      resizeObserver.disconnect();
     };
   }, [myChart]);
 

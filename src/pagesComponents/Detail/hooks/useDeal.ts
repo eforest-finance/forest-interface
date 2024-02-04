@@ -6,9 +6,37 @@ import { IContractError, IPrice } from 'contract/type';
 import { getForestContractAddress } from 'contract/forest';
 import { SupportedELFChainId } from 'constants/chain';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
+import useDetailGetState from 'store/state/detailGetState';
+import ResultModal from 'components/ResultModal';
+import { useModal } from '@ebay/nice-modal-react';
+import { isERC721 } from 'utils/isTokenIdReuse';
+import { handlePlurality } from 'utils/handlePlurality';
+import { DealMessage } from 'constants/promptMessage';
+import { UserDeniedMessage } from 'contract/formatErrorMsg';
 
 export default function useDeal(chainId?: Chain) {
   const { walletInfo } = useGetState();
+  const { detailInfo } = useDetailGetState();
+  const { nftInfo } = detailInfo;
+  const resultModal = useModal(ResultModal);
+
+  const showErrorModal = ({ quantity }: { quantity: number }) => {
+    resultModal.show({
+      previewImage: nftInfo?.previewImage || '',
+      title: DealMessage.errorMessage.title,
+      hideButton: true,
+      info: {
+        logoImage: nftInfo?.nftCollection?.logoImage || '',
+        subTitle: nftInfo?.nftCollection?.tokenName,
+        title: nftInfo?.tokenName,
+        extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+      },
+      error: {
+        title: DealMessage.errorMessage.tips,
+        description: DealMessage.errorMessage.description,
+      },
+    });
+  };
 
   const deal = async (parameter: { symbol: string; offerFrom: string; price: IPrice; quantity: number }) => {
     const approveTokenResult = await checkNFTApprove({
@@ -23,7 +51,7 @@ export default function useDeal(chainId?: Chain) {
       setTimeout(() => {
         message.destroy();
       }, 3000);
-      return 'error';
+      return 'failed';
     }
 
     try {
@@ -41,11 +69,18 @@ export default function useDeal(chainId?: Chain) {
       message.destroy();
       const { TransactionId } = result.result || result;
       messageHTML(TransactionId!, 'success', chainId);
-      return result;
+      return {
+        TransactionId,
+      };
     } catch (error) {
       message.destroy();
       const resError = error as IContractError;
-      return message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+      if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
+        message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+        return Promise.reject(error);
+      }
+      showErrorModal({ quantity: 0 });
+      return 'failed';
     }
   };
   return deal;

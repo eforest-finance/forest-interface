@@ -1,18 +1,8 @@
-import { Col, Row } from 'antd';
-import ELF from 'assets/images/ELF.png';
-import ADD from 'assets/images/+.svg';
-import SUBTRACT from 'assets/images/subtract.svg';
-
-import Logo from 'components/Logo';
 import useDeal from 'pagesComponents/Detail/hooks/useDeal';
-import { memo, useEffect, useMemo, useState } from 'react';
-import useMakeOffer from '../../hooks/useMakeOffer';
+import { ChangeEvent, memo, useEffect, useMemo, useState } from 'react';
 
-import styles from './style.module.css';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
-import { SERVICE_FEE } from 'constants/common';
-import ImgLoading from 'components/ImgLoading/ImgLoading';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
@@ -22,7 +12,20 @@ import { divDecimals } from 'utils/calculate';
 import { ZERO } from 'constants/misc';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';
+import PriceInfo, { PriceTypeEnum } from '../BuyNowModal/components/PriceInfo';
+import TotalPrice from '../BuyNowModal/components/TotalPrice';
+import DealSummary from './components/DealSummary';
+import InputQuantity from '../BuyNowModal/components/InputQuantity';
+import Balance from '../BuyNowModal/components/Balance';
+import PromptModal from 'components/PromptModal';
+import ResultModal from 'components/ResultModal';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import { DealMessage } from 'constants/promptMessage';
+import { isERC721 } from 'utils/isTokenIdReuse';
+import { handlePlurality } from 'utils/handlePlurality';
+import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
+import { getExploreLink } from 'utils';
+import styles from './index.module.css';
 
 export type ArtType = {
   id: number;
@@ -37,31 +40,28 @@ export type ArtType = {
   collection?: string;
 };
 
-function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance: number; exchangeType?: string }) {
+function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: number; nftBalance: number }) {
   const modal = useModal();
+  const promptModal = useModal(PromptModal);
+  const resultModal = useModal(ResultModal);
   const pathname = usePathname();
 
-  const { infoState } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
-  const { nftInfo } = detailInfo;
-  const { onClose, art, nftBalance, exchangeType } = options;
+  const { nftInfo, nftNumber } = detailInfo;
+  const { onClose, art, nftBalance } = options;
   const [loading, setLoading] = useState<boolean>(false);
   const [offerFromBalance, setOfferFromBalance] = useState<BigNumber>(ZERO);
+  const [quantityTip, setQuantityTip] = useState('');
 
   const maxQuantity = useMemo(() => {
-    if (exchangeType) {
-      const offerFromMaxQuantity = offerFromBalance.div(new BigNumber(art.price)).integerValue();
-      const res = BigNumber.minimum(offerFromMaxQuantity, art.quantity, nftBalance);
-      return Number(res);
-    } else {
-      return art?.quantity;
-    }
+    const offerFromMaxQuantity = offerFromBalance.div(new BigNumber(art.price)).integerValue();
+    const res = BigNumber.minimum(offerFromMaxQuantity, art.quantity, nftBalance);
+    return Number(res);
   }, [art?.quantity, nftBalance, offerFromBalance]);
 
   const deal = useDeal(nftInfo?.chainId);
-  const makeOffer = useMakeOffer(nftInfo?.chainId);
-  const exchangeMethod = exchangeType ? deal : makeOffer;
 
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -69,17 +69,20 @@ function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance
   const price = new BigNumber(art?.price || 0);
   const convertPrice = new BigNumber(art?.convertPrice || 0);
 
-  const onChangeQuantity = (type: '+' | '-') => {
-    type === '+' ? setQuantity((v) => (++v > maxQuantity ? maxQuantity : v)) : setQuantity((v) => (--v < 1 ? 1 : v));
-  };
-
   const onVisibleChange = () => {
     setQuantity(1);
   };
 
-  const getTotal = () => {
-    return price.times(quantity);
-  };
+  const totalPrice = useMemo(() => {
+    const priceBig = new BigNumber(price);
+    const quantityBig = new BigNumber(quantity || 0);
+    return priceBig.multipliedBy(quantityBig);
+  }, [price, quantity]);
+
+  const totalUSDPrice = useMemo(() => {
+    const totalPriceBig = new BigNumber(totalPrice);
+    return totalPriceBig.multipliedBy(options.rate);
+  }, [options.rate, totalPrice]);
 
   const getOfferFromBalance = async () => {
     const offerFromBalance = await GetBalance({
@@ -99,31 +102,102 @@ function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance
   };
 
   useEffect(() => {
-    if (exchangeType) {
-      getOfferFromBalance();
-    }
-  }, [art, exchangeType]);
+    getOfferFromBalance();
+  }, [art]);
 
   useEffect(onVisibleChange, [modal.visible]);
 
-  const onConfirm = async () => {
-    setLoading(true);
-    const mainAddress = await getAccountInfoSync();
-    if (!mainAddress) {
+  const onDeal = async () => {
+    try {
+      setLoading(true);
+      const mainAddress = await getAccountInfoSync();
+      if (!mainAddress) {
+        setLoading(false);
+        return Promise.reject();
+      }
+      const res = await deal({
+        symbol: art.symbol as string,
+        offerFrom: art.address,
+        price: { symbol: art.token.symbol as string, amount: new BigNumber(art.price).times(10 ** 8).toNumber() },
+        quantity: quantity,
+      });
+      if (res === 'failed') {
+        onCancel();
+        promptModal.hide();
+        return;
+      }
+      const { TransactionId } = res;
       setLoading(false);
+      onCancel();
+      promptModal.hide();
+      const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', nftInfo?.chainId) : '';
+      resultModal.show({
+        previewImage: nftInfo?.previewImage || '',
+        title: 'Offer Successfully Accepted!',
+        description: `You have accepted the offer for the ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
+        hideButton: true,
+        info: {
+          logoImage: nftInfo?.nftCollection?.logoImage || '',
+          subTitle: nftInfo?.nftCollection?.tokenName,
+          title: nftInfo?.tokenName,
+          extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        },
+        jumpInfo: {
+          url: explorerUrl,
+        },
+      });
+    } catch (error) {
+      setLoading(false);
+      return Promise.reject(error);
+    }
+  };
+
+  const onConfirm = async () => {
+    modal.hide();
+    promptModal.show({
+      nftInfo: {
+        image: nftInfo?.previewImage || '',
+        collectionName: nftInfo?.nftCollection?.tokenName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: isERC721(nftInfo!) ? 'Offer Amount' : 'Total Offer Amount',
+        price: `${formatTokenPrice(totalPrice)} ${art.token.symbol || 'ELF'}`,
+        usdPrice: formatUSDPrice(totalUSDPrice),
+        item: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+      },
+      title: DealMessage.title,
+      content: {
+        title: walletInfo.portkeyInfo ? DealMessage.portkey.title : DealMessage.default.title,
+        content: walletInfo.portkeyInfo ? DealMessage.portkey.message : DealMessage.default.message,
+      },
+      initialization: onDeal,
+      onClose: () => {
+        promptModal.hide();
+      },
+    });
+  };
+
+  const onQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || BigNumber(e.target.value).isZero()) {
+      setQuantity(0);
+      setQuantityTip('');
       return;
     }
-    await exchangeMethod({
-      symbol: art.symbol as string,
-      offerFrom: art.address,
-      offerTo: art.address,
-      price: { symbol: art.token.symbol as string, amount: new BigNumber(art.price).times(10 ** 8).toNumber() },
-      quantity: quantity,
-    });
-
-    onCancel();
-    setLoading(false);
+    const inputNumber = Number(formatInputNumber(e.target.value));
+    setQuantity(inputNumber);
+    if (BigNumber(inputNumber).gt(BigNumber(art.quantity))) {
+      setQuantityTip('The current maximum quotable quantity has been exceeded.');
+      return;
+    }
+    if (BigNumber(inputNumber).gt(BigNumber(maxQuantity))) {
+      setQuantityTip('Insufficient NFT balance.');
+      return;
+    }
+    setQuantityTip('');
   };
+
+  const dealDisabled = useMemo(() => {
+    return !quantity || quantityTip;
+  }, [quantityTip, quantity]);
 
   useEffect(() => {
     modal.hide();
@@ -131,103 +205,52 @@ function ExchangeModal(options: { onClose?: () => void; art: ArtType; nftBalance
 
   return (
     <Modal
-      className={`${styles['buy-modal']} ${isSmallScreen && styles['mobile-buy-modal']}`}
       footer={
-        <Button loading={loading} type="primary" size="ultra" onClick={onConfirm}>
-          Confirm {exchangeType ? 'transaction' : 'Checkout'}
+        <Button
+          disabled={!!dealDisabled}
+          loading={loading}
+          type="primary"
+          size="ultra"
+          onClick={onConfirm}
+          className="w-[256px]">
+          Deal the offer
         </Button>
       }
       onCancel={onCancel}
-      title={`Complete ${exchangeType ? 'transaction' : 'checkout'}`}
-      open={modal.visible}>
-      <Row className={`${styles['content-header']} text-[18px] font-medium`}>
-        <Col span={14}>Item</Col>
-        {isSmallScreen ? null : <Col span={10}>Subtotal</Col>}
-      </Row>
-      <div>
-        <Row className={styles['content-body']} gutter={[0, 24]}>
-          <Col
-            className={`!flex ${isSmallScreen ? styles['content-relative'] : styles['content-static']}`}
-            span={isSmallScreen ? 24 : 20}>
-            <ImgLoading
-              className={`${styles.art} rounded-[8px] ${isSmallScreen ? 'mr-[12px]' : 'mr-[24px]'}`}
-              src={nftInfo?.previewImage || ''}
+      afterClose={modal.remove}
+      title="Accept Offer"
+      open={modal.visible}
+      className={styles['deal-modal-custom']}>
+      <div className="content">
+        <PriceInfo quantity={quantity} price={art.price} convertPrice={art.convertPrice} type={PriceTypeEnum.DEAL} />
+        {BigNumber(maxQuantity).gt(1) && (
+          <div className="mt-[32px]">
+            <InputQuantity
+              defaultValue={1}
+              value={quantity === 0 ? '' : formatTokenPrice(quantity)}
+              onChange={onQuantityChange}
+              availableMount={art.quantity}
+              errorTip={quantityTip}
             />
-            <div className={`info ${isSmallScreen && styles['content-relative']} font-medium`}>
-              <p
-                className={`${
-                  isSmallScreen ? 'text-[14px] leading-[21px]' : 'text-[16px] leading-[24px]'
-                } text-[var(--brand-base)]`}>
-                {art?.collection}
-              </p>
-              <p
-                className={` text-[var(--color-primary)] ${
-                  isSmallScreen ? 'text-[16px] leading-[24px]' : 'text-[20px] leading-[30px]'
-                }`}>
-                {art?.name}
-              </p>
-              <p
-                className={`text-[12px] text-[var(--color-secondary)] leading-[18px] flex mt-[16px] ${styles.royalties}`}>
-                Service Fee: {SERVICE_FEE}
-                {/* <Tooltip title="The creator of this collection will receive 2.5% of the sale total from future sales of this item">
-                  <div className={`${isSmallScreen ? 'w-[10.5px]' : 'w-[14px]'}`}>
-                    <WarningMark />
-                  </div>
-                </Tooltip> */}
-              </p>
-              <div className={`${styles.counter} flex items-center`}>
-                <button disabled={quantity <= 1} onClick={() => onChangeQuantity('-')}>
-                  <SUBTRACT />
-                </button>
-                {quantity}
-                <button disabled={quantity >= maxQuantity} onClick={() => onChangeQuantity('+')}>
-                  <ADD />
-                </button>
-              </div>
-            </div>
-          </Col>
-          <Col className={styles['part-price']} span={isSmallScreen ? 24 : 4}>
-            {isSmallScreen && <p>Subtotal</p>}
-            <div
-              className={`w-[max-content] flex  ${
-                isSmallScreen ? 'items-center !justify-center' : 'flex-col items-end '
-              }`}>
-              <div className="leading-[24px] flex items-center !justify-center">
-                <Logo className={'w-[24px] h-[24px]'} src={ELF} />
-                &nbsp;
-                <span className="font-semibold text-[16px] leading-[24px]">{formatTokenPrice(price)}</span>
-              </div>
-              <span
-                className={`text-[var(--color-secondary)] leading-[18px] text-[12px] ${
-                  isSmallScreen ? 'ml-2' : 'mt-[2px]'
-                }`}>
-                {formatUSDPrice(convertPrice)}
-              </span>
-            </div>
-          </Col>
-        </Row>
-      </div>
-      <Row className={styles['content-bottom']}>
-        <Col span={14} className="text-[18px] font-medium">
-          <span
-            className={`leading-[27px] text-[var(--color-primary)] ${isSmallScreen ? 'text-[18px]' : 'text-[24px]'}`}>
-            Total
-          </span>
-        </Col>
-        <Col span={10}>
-          <div className={`${styles['total-price']} flex`}>
-            <Logo className={'w-[20px] h-[24px]'} src={ELF} />
-            <span className={`ml-[6px] text-[24px] font-semibold leading-[36px] text-[var(--brand-base)]`}>
-              {formatTokenPrice(getTotal())}
-            </span>
           </div>
-          <p className="leading-[24px] text-[var(--color-secondary)] text-[16px]">
-            {formatUSDPrice(convertPrice.times(quantity))}
-          </p>
-        </Col>
-      </Row>
+        )}
+
+        <div className="mt-[32px]">
+          <DealSummary />
+        </div>
+        <div className="mt-[32px]">
+          <TotalPrice
+            totalPrice={totalPrice.toNumber()}
+            convertTotalPrice={totalUSDPrice.toNumber()}
+            title="Total Earnings"
+          />
+        </div>
+        <div className="mt-[32px]">
+          <Balance itemDesc="Quantity of NFTs Owned" amount={nftNumber.nftBalance} />
+        </div>
+      </div>
     </Modal>
   );
 }
 
-export default memo(NiceModal.create(ExchangeModal));
+export default memo(NiceModal.create(ExchangeModalNew));

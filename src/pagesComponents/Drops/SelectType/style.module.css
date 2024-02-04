@@ -1,0 +1,40 @@
+.select-type {
+  @apply flex;
+
+  .item {
+    @apply p-3 min-w-[56px] mx-2 flex justify-center items-center;
+    @apply rounded-lg text-textSecondary font-semibold text-base cursor-pointer;
+
+    &.active {
+      @apply text-textPrimary bg-fillHoverBg;
+    }
+  }
+}
+
+.select-type-mobile {
+  @apply flex justify-center items-center px-4 py-3;
+  @apply border border-solid border-lineBorder rounded-lg cursor-pointer;
+}
+
+.select-drawer {
+  :global {
+    .ant-drawer-content {
+      @apply rounded-t-md bg-fillPageBg;
+    }
+    .ant-drawer-body {
+      @apply overflow-y-auto py-3 px-0;
+    }
+  }
+}
+
+.select-list-mobile {
+  @apply flex flex-col;
+  .item {
+    @apply flex px-6 py-5 cursor-pointer;
+    @apply text-base text-textSecondary font-semibold rounded-lg;
+
+    &.active {
+      @apply text-textPrimary bg-fillHoverBg;
+    }
+  }
+}

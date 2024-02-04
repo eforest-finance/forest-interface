@@ -1,12 +1,13 @@
 import { useParams } from 'next/navigation';
 import { useDetail } from './useDetail';
 import useTokenData from 'hooks/useTokenData';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
 import isTokenIdReuse from 'utils/isTokenIdReuse';
 import useIntervalRequestForBid from './useIntervalRequestForBid';
 import useGetNftNumber from './useGetNftNumber';
-import useIntervalRequestForListings from './useIntervalRequestForListings';
+import initializeProto from 'utils/initializeProto';
+import useGetState from 'store/state/getState';
 
 export const useInitializationDetail = () => {
   const elfRate = useTokenData();
@@ -16,6 +17,7 @@ export const useInitializationDetail = () => {
   };
   const { isCanBeBid, getDetail, isFetching } = useDetail({ id });
   const { detailInfo } = useDetailGetState();
+  const { aelfInfo } = useGetState();
   const { nftInfo, nftNumber } = detailInfo;
   const getNFTNumber = useGetNftNumber({
     nftSymbol: nftInfo?.nftSymbol,
@@ -29,7 +31,9 @@ export const useInitializationDetail = () => {
     getNFTNumber({ nftSymbol: nftInfo?.nftSymbol });
   });
 
-  useIntervalRequestForListings(id, chainId);
+  useEffect(() => {
+    initializeProto(aelfInfo.marketSideAddress);
+  }, [aelfInfo.marketSideAddress]);
 
   return {
     isFetching,

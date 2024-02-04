@@ -11,10 +11,6 @@ import BigNumber from 'bignumber.js';
 import useBatchBuyNow from 'pagesComponents/Detail/hooks/useBatchBuyNow';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 
-interface IValidListInfo {
-  curMax: number;
-  validList: FormatListingType[];
-}
 import moment from 'moment';
 import { divDecimals, timesDecimals } from 'utils/calculate';
 import PriceInfo, { PriceTypeEnum } from './components/PriceInfo';
@@ -24,17 +20,24 @@ import TotalPrice from './components/TotalPrice';
 import Balance from './components/Balance';
 import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
+import PromptModal from 'components/PromptModal';
+import ResultModal from 'components/ResultModal';
 import { BuyMessage } from 'constants/promptMessage';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { WalletType, useWebLogin } from 'aelf-web-login';
+import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
 import { handlePlurality } from 'utils/handlePlurality';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { usePathname } from 'next/navigation';
+import styles from './index.module.css';
+import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
+  const promptModal = useModal(PromptModal);
+  const resultModal = useModal(ResultModal);
   const title = 'Buy Now';
   const submitBtnText = 'Buy Now';
   const pathname = usePathname();
@@ -61,7 +64,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   const { tokenBalance, nftTotalSupply } = detailInfo.nftNumber;
 
   const mainChainNftBalance = useGetMainChainBalance({ tokenName: 'ELF' });
-  // const transferModal = useModal(CrossChainTransferModal);
+  const transferModal = useModal(CrossChainTransferModal);
 
   const convertTotalPrice = useMemo(() => {
     const totalPriceBig = new BigNumber(totalPrice);
@@ -142,11 +145,79 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         quantity,
       });
 
-      if (batchBuyNowRes === 'error') {
-        setLoading(false);
-        return;
+      console.log('batchBuyNowRes', batchBuyNowRes);
+
+      if (batchBuyNowRes && batchBuyNowRes !== 'failed') {
+        const explorerUrl = getExploreLink(batchBuyNowRes.TransactionId, 'transaction', nftInfo?.chainId);
+        if (batchBuyNowRes.allSuccessFlag) {
+          resultModal.show({
+            previewImage: nftInfo?.previewImage || '',
+            title: 'NFT Successfully Purchased!',
+            description: `You are now the owner of ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
+            buttonInfo: {
+              btnText: 'View NFT',
+              onConfirm: () => {
+                resultModal.hide();
+              },
+            },
+            info: {
+              logoImage: nftInfo?.nftCollection?.logoImage || '',
+              subTitle: nftInfo?.nftCollection?.tokenName,
+              title: nftInfo?.tokenName,
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+            },
+            jumpInfo: {
+              url: explorerUrl,
+            },
+          });
+        } else {
+          const length = batchBuyNowRes.failPriceList?.value.length || 1;
+          const list = batchBuyNowRes.failPriceList?.value.map((item) => {
+            const price = divDecimals(item.price.amount, 8);
+            const convertPrice = new BigNumber(price).multipliedBy(elfRate);
+
+            return {
+              image: nftInfo?.previewImage || '',
+              collectionName: nftInfo?.nftCollection?.tokenName,
+              nftName: nftInfo?.tokenName,
+              item: handlePlurality(Number(item.quantity), 'item'),
+              priceTitle: 'Each item price',
+              price: `${formatTokenPrice(price)} ${item.price.symbol || 'ELF'}`,
+              usdPrice: formatUSDPrice(convertPrice),
+            };
+          });
+          let errorCount = 0;
+          batchBuyNowRes.failPriceList?.value.forEach((item) => {
+            errorCount += Number(item.quantity);
+          });
+          resultModal.show({
+            previewImage: nftInfo?.previewImage || '',
+            title: 'Purchase Partially Completed',
+            buttonInfo: {
+              btnText: 'View NFT',
+              onConfirm: () => {
+                resultModal.hide();
+              },
+            },
+            info: {
+              logoImage: nftInfo?.nftCollection?.logoImage || '',
+              subTitle: nftInfo?.nftCollection?.tokenName,
+              title: nftInfo?.tokenName,
+              extra: isERC721(nftInfo!) ? undefined : handlePlurality(Number(quantity) - errorCount, 'item'),
+            },
+            jumpInfo: {
+              url: explorerUrl,
+            },
+            error: {
+              title: `Purchase of ${handlePlurality(errorCount, 'item')}  failed`,
+              description: `Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item before you.`,
+              list,
+            },
+          });
+        }
       }
 
+      promptModal.hide();
       setLoading(false);
       onCloseModal();
     } catch (error) {
@@ -164,7 +235,28 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         return;
       }
 
-      buyNow();
+      modal.hide();
+
+      promptModal.show({
+        nftInfo: {
+          image: nftInfo?.previewImage || '',
+          collectionName: nftInfo?.nftCollection?.tokenName,
+          nftName: nftInfo?.tokenName,
+          priceTitle: isERC721(nftInfo!) ? 'Listing Price' : 'Total Price',
+          price: `${formatTokenPrice(totalPrice)} ELF`,
+          usdPrice: formatUSDPrice(convertTotalPrice),
+          item: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        },
+        title: BuyMessage.title,
+        content: {
+          title: walletInfo.portkeyInfo ? BuyMessage.portkey.title : BuyMessage.default.title,
+          content: walletInfo.portkeyInfo ? BuyMessage.portkey.message : BuyMessage.default.message,
+        },
+        initialization: buyNow,
+        onClose: () => {
+          promptModal.hide();
+        },
+      });
     } else {
       login();
     }
@@ -248,30 +340,23 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   }, [buyItem, listings, maxQuantity, quantity, saleInfo]);
 
   const getListingsData = async (page: number) => {
-    console.log('getListingsData', page);
-
     if (quantity > (saleInfo?.availableQuantity || 0)) {
       return;
     }
     try {
       if (!nftInfo) return;
-      setLoading(true);
       const res = await getListings({
         page,
-        pageSize: 100,
         chainId: nftInfo.chainId,
         symbol: nftInfo.nftSymbol,
         excludedAddress: walletInfo.address,
       });
-      setLoading(false);
-
-      console.log('getListingsData', res);
-
       if (!res) return;
       setTotalCount(res.totalCount);
       const curMax = res.list.reduce((pre, val) => {
         return pre + val.quantity;
       }, 0);
+
       setListings([...listings, ...res.list]);
       setMaxQuantity((maxQuantity) => {
         return maxQuantity + curMax;
@@ -285,6 +370,11 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   useEffect(() => {
     if (modal.visible) {
       getListingsData(page);
+      getNFTNumber({
+        owner: walletInfo.address,
+        nftSymbol: nftInfo?.nftSymbol,
+        chainId: infoState.sideChain,
+      });
     }
   }, [page, modal.visible]);
 
@@ -315,9 +405,40 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
     setQuantity(inputNumber);
   };
 
+  const handleTransferShow = () => {
+    modal.hide();
+    transferModal.show({
+      type: CrossChainTransferType.token,
+      onClose: () => {
+        transferModal.hide();
+        modal.show();
+      },
+    });
+  };
+
   const insufficientTip = useMemo(() => {
     if (isSideChainBalanceInsufficient) {
-      return <div className="text-[12px] leading-[20px] font-normal text-functionalDanger">Insufficient balance.</div>;
+      if (isAllChainsBalanceInsufficient) {
+        return (
+          <div className="text-[12px] leading-[20px] font-normal text-functionalDanger">Insufficient balance.</div>
+        );
+      } else {
+        return (
+          <div className="text-[12px] leading-[20px] font-normal  text-functionalDanger">
+            <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>Insufficient balance.</span>
+            <>
+              <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>You can</span>{' '}
+              {isPortkeyConnected ? (
+                <span className="cursor-pointer !text-[var(--functional-link)]" onClick={handleTransferShow}>
+                  {`manually transfer tokens from MainChain to your SideChain address.`}
+                </span>
+              ) : (
+                'manually transfer tokens from MainChain to your SideChain address.'
+              )}
+            </>
+          </div>
+        );
+      }
     }
     return null;
   }, [isAllChainsBalanceInsufficient, isPortkeyConnected, isSideChainBalanceInsufficient]);
@@ -335,6 +456,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
 
   return (
     <Modal
+      className={styles['buy-modal-custom']}
       destroyOnClose
       afterClose={modal.remove}
       footer={

@@ -36,6 +36,8 @@ export interface OfferType {
   id: string;
   nftInfo: IListingNftInfo;
   purchaseToken: IPurchaseToken;
+  floorPrice?: number;
+  floorPriceSymbol?: string;
 }
 
 export type Owner = {

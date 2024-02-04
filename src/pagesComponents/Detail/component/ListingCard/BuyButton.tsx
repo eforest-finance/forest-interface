@@ -7,11 +7,12 @@ import useGetState from 'store/state/getState';
 import { divDecimals } from 'utils/calculate';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import Button from 'baseComponents/Button';
-import BuyNowModal from '../BuyNowModal';
-import OfferModal from '../OfferModal';
 import { useModal } from '@ebay/nice-modal-react';
 import clsx from 'clsx';
 import { useGetOwnerInfo } from 'pagesComponents/Detail/hooks/useGetOwnerInfo';
+import BuyNowModal from '../BuyNowModal/index';
+import OfferModal from '../OfferModal/index';
+import BigNumber from 'bignumber.js';
 
 interface IProps {
   rate: number;
@@ -56,9 +57,7 @@ function BuyButton(props: IProps) {
       isOnlyOwner ||
       !nftInfo?.showPriceType ||
       !nftInfo?.listingPrice ||
-      (isLogin &&
-        nftNumber.nftQuantity < nftNumber.nftBalance &&
-        divDecimals(nftNumber.tokenBalance?.valueOf(), 8).toNumber() < (nftInfo?.listingPrice || 0)) ||
+      (isLogin && BigNumber(nftNumber.nftQuantity).lt(BigNumber(nftNumber.nftBalance))) ||
       !nftInfo?.canBuyFlag
     );
   }, [
@@ -69,7 +68,6 @@ function BuyButton(props: IProps) {
     isLogin,
     nftNumber.nftQuantity,
     nftNumber.nftBalance,
-    nftNumber.tokenBalance,
   ]);
 
   if (!nftInfo) return null;

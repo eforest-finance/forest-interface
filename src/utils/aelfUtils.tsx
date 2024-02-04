@@ -12,6 +12,7 @@ import { CONTRACT_AMOUNT } from 'constants/common';
 import { store } from 'store/store';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { GetTotalEffectiveListedNFTAmount, GetTotalOfferAmount } from 'contract/market';
+import { SupportedELFChainId } from 'constants/chain';
 const { transform, decodeAddressRep } = AElf.utils;
 
 const httpProviders: any = {};
@@ -126,7 +127,12 @@ export function getBlockHeight() {
   return getAElf().chain.getBlockHeight();
 }
 
-export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0): Promise<any> {
+export async function getTxResult(
+  TransactionId: string,
+  chainId: Chain,
+  reGetCount = 0,
+  retryCountWhenNotExist = 0,
+): Promise<any> {
   const rpcUrl = getRpcUrls()[chainId];
   const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
   if (txResult.error && txResult.errorMessage) {
@@ -137,6 +143,15 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     throw Error('Failed to retrieve transaction result.');
   }
 
+  if (txResult.Status.toLowerCase() === 'notexisted') {
+    if (retryCountWhenNotExist > 5) {
+      throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+    }
+    await sleep(1000);
+    retryCountWhenNotExist++;
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
+  }
+
   if (txResult.Status.toLowerCase() === 'pending') {
     // || txResult.Status.toLowerCase() === 'notexisted'
     if (reGetCount > 10) {
@@ -144,7 +159,7 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     }
     await sleep(1000);
     reGetCount++;
-    return getTxResult(TransactionId, chainId, reGetCount);
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
   }
 
   if (txResult.Status.toLowerCase() === 'mined') {
@@ -438,6 +453,26 @@ export const decodeAddress = (address: string) => {
     } else {
       decodeAddressRep(address);
       return true;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const decodeTransferAddress = (address: string) => {
+  try {
+    if (!address) return false;
+    if (address.indexOf('_') > -1) {
+      const info = store.getState().aelfInfo.aelfInfo;
+      const parts = address.split('_');
+      if ((parts[0] === 'ELF' && parts[2] === info.curChain) || parts[2] === SupportedELFChainId.MAIN_NET) {
+        decodeAddressRep(parts[1]);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   } catch (error) {
     return false;

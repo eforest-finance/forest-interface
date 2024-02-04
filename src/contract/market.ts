@@ -4,6 +4,7 @@ import {
   IBatchBuyNowParams,
   IBatchDeListParams,
   ICancelOfferParams,
+  IClaimDropParams,
   IContractError,
   IContractOptions,
   IDealParams,
@@ -204,9 +205,12 @@ export const GetTotalEffectiveListedNFTAmount = async (
   }
 };
 
-export const BatchBuyNow = async (params: IBatchBuyNowParams, options?: IContractOptions): Promise<IContractError> => {
+export const BatchBuyNow = async (
+  params: IBatchBuyNowParams,
+  options?: IContractOptions,
+): Promise<IContractError & ISendResult> => {
   try {
-    const res = (await marketContractRequest('BatchBuyNow', params, options)) as IContractError;
+    const res = (await marketContractRequest('BatchBuyNow', params, options)) as IContractError & ISendResult;
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject(error);

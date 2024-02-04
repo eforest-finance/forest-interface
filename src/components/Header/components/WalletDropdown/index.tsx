@@ -22,6 +22,9 @@ import { SupportedELFChainId } from 'constants/chain';
 import { ZERO } from 'constants/misc';
 import { OmittedType, getOmittedStr } from 'utils';
 import React from 'react';
+import { WalletType, useWebLogin } from 'aelf-web-login';
+import Button from 'baseComponents/Button';
+import { useRouter } from 'next/navigation';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
 const BalanceCard = (option: {
@@ -74,6 +77,8 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
   const rate = useTokenData();
   const { walletInfo, aelfInfo } = useGetState();
   const account = walletInfo?.address || '';
+  const { walletType } = useWebLogin();
+  const router = useRouter();
 
   const {
     balance: { balance: aelfBalance },
@@ -128,21 +133,34 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
             <p className={styles.title}>Total balance</p>
             <p className={styles.value}>{formatUSDPrice(totalBalance.valueOf())} USD</p>
           </div>
-          <BalanceCard
-            icon="elf"
-            name={'ELF'}
-            rate={rate}
-            chainList={[
-              {
-                name: 'MainChain AELF',
-                balance: divDecimals(aelfBalance, 8),
-              },
-              {
-                name: `SideChain ${aelfInfo?.curChain}`,
-                balance: divDecimals(sideBalance, 8),
-              },
-            ]}
-          />
+          {walletType === WalletType.portkey ? (
+            <Button
+              isFull
+              size="ultra"
+              type="primary"
+              className={`mb-[24px] ${styles['view-asset-btn']}`}
+              onClick={() => {
+                router.push('/asset');
+              }}>
+              My Assets
+            </Button>
+          ) : (
+            <BalanceCard
+              icon="elf"
+              name={'ELF'}
+              rate={rate}
+              chainList={[
+                {
+                  name: 'MainChain AELF',
+                  balance: divDecimals(aelfBalance, 8),
+                },
+                {
+                  name: `SideChain ${aelfInfo?.curChain}`,
+                  balance: divDecimals(sideBalance, 8),
+                },
+              ]}
+            />
+          )}
         </div>
       ),
       key: 'balance',
