@@ -32,6 +32,7 @@ import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
 import { MintStateType } from '../DropsMint';
 import { message } from 'antd';
 import { DropMinted } from 'contract/formatErrorMsg';
+import { updateDropDetail } from 'pagesComponents/DropsDetail/utils/getDropDetail';
 
 interface IProps {
   initQuantity?: number;
@@ -256,7 +257,7 @@ function MintModal(props?: IProps) {
             nftName: item.name,
             item: `Quantity: ${item.amount}`,
             priceTitle: 'Price Each',
-            price: dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} 'ELF'` : 'Free',
+            price: dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} ELF` : 'Free',
             usdPrice: formatUSDPrice(dropDetailInfo?.mintPriceUsd || 0),
             onClick: () => {
               const nftId = `${CHAIN_ID_TYPE[String(item.chainId)]}-${item.symbol}`;
@@ -271,6 +272,10 @@ function MintModal(props?: IProps) {
           TransactionId: claimDropRes.TransactionId,
           status,
           list,
+        });
+        updateDropDetail({
+          dropId: dropDetailInfo.dropId,
+          address: walletInfo.address,
         });
       }
     } catch (error) {
