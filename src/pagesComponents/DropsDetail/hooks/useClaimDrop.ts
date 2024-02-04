@@ -77,9 +77,7 @@ export const useClaimDrop = (chainId?: Chain) => {
         return Promise.reject(error);
       }
       if (resError.errorMessage?.message.includes(EventEndedBack)) {
-        message.error(EventEndedBack, 3);
-        await sleep(3000);
-        navigator.replace('/drops');
+        dispatch(setDropQuota({ state: DropState.Canceled }));
         return 'failed';
       }
       if (resError.errorMessage?.message.includes(EventEnded)) {

@@ -370,6 +370,7 @@ function MintModal(props?: IProps) {
           type="primary"
           size="ultra"
           className="!w-[256px]"
+          millisecondOfThrottle={300}
           onClick={onConfirm}>
           Mint
         </Button>
