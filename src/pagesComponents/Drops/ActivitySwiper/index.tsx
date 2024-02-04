@@ -157,13 +157,13 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
             {...commonSwiperProps}
             effect={'fade'}
             modules={[EffectFade]}
-            className={styles['user-disabled']}
+            className={`${styles['user-disabled']} w-full`}
             onSwiper={(swiper) => {
               mySwiper2.current = swiper;
             }}>
             {swiperData.map((item) => {
               return (
-                <SwiperSlide key={item.dropId}>
+                <SwiperSlide key={item.dropId} className="w-full">
                   <div className="flex bg-fillPageBg">
                     <div className="flex flex-col flex-1 mr-32">
                       <div className="text-4xl h-10 font-semibold text-textPrimary line-clamp-1">
