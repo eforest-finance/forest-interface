@@ -73,7 +73,9 @@ export function EventItem({
               <span className="text-brandNormal ml-2">Free</span>
             </span>
           ) : (
-            <span className="text-sm font-medium text-brandNormal">{formatTokenPrice(mintPrice || '--')} ELF</span>
+            <span className="text-sm font-medium text-brandNormal break-words">
+              {formatTokenPrice(mintPrice || '--')} ELF
+            </span>
           )}
         </div>
         {!isXS ? <div className="flex flex-col mt-2">{renderTime()}</div> : null}

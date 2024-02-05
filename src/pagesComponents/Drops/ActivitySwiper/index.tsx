@@ -61,7 +61,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
     timerRef.current = setTimeout(() => {
       mySwiper.current?.autoplay.start();
       clearTimeout(timerRef.current);
-    }, 30000);
+    }, 25000);
   };
 
   const commonSwiperProps: SwiperProps = {
