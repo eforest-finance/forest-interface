@@ -602,8 +602,8 @@ export interface IDropDetailInfo {
   collectionLogo: string;
   collectionName: string;
   introduction: string;
-  mintPrice: number;
-  mintPriceUsd: number;
+  mintPrice: string;
+  mintPriceUsd: string;
   burn: boolean;
   startTime: number;
   expireTime: number;

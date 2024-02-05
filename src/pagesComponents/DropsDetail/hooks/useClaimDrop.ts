@@ -17,7 +17,7 @@ export const useClaimDrop = (chainId?: Chain) => {
 
   const claimDrop = async (
     params: IClaimDropParams & {
-      price: number;
+      price: string;
     },
   ) => {
     try {
