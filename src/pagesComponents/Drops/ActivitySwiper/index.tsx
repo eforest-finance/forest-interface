@@ -1,7 +1,6 @@
 import { Swiper, SwiperClass, SwiperProps, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
-import ImgLoading from 'components/ImgLoading';
 import useResponsive from 'hooks/useResponsive';
 import LeftArrow from 'assets/images/swiper/arrow-left-swiper.svg';
 import RrightArrow from 'assets/images/swiper/arrow-right-swiper.svg';
@@ -13,6 +12,7 @@ import { Autoplay, EffectFade } from 'swiper/modules';
 import { IActionDetail } from 'api/types';
 import moment from 'moment';
 import Link from 'next/link';
+import SkeletonImage from 'baseComponents/SkeletonImage';
 
 interface ISwiperProps {
   swiperData: IActionDetail[];
@@ -80,7 +80,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
   }
 
   return (
-    <div className="relative -mx-5 sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
+    <div className="relative -mx-5 overflow-hidden sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
       {!isXS && !first && !(swiperData.length === 1) && (
         <div
           className={clsx(styles.arrow, styles.leftArrow)}
@@ -120,11 +120,15 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
         {swiperData.map((item) => {
           return (
             <SwiperSlide
-              className={clsx(isXS && styles['calcWidth'], isXS && 'border border-solid border-lineBorder rounded-lg')}
+              className={clsx(
+                isXS && styles['calcWidth'],
+                isXS && 'border border-solid border-lineBorder rounded-lg',
+                'overflow-hidden',
+              )}
               key={item.dropId}>
               <div className="relative">
                 <Link href={`/drops-detail/${item.dropId}`}>
-                  <ImgLoading className="h-[300px]" src={item.bannerUrl || ''} />
+                  <SkeletonImage img={item.bannerUrl} className="h-[300px]" />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
                     {isXS ? <TimeWarning {...item} /> : null}
                   </div>

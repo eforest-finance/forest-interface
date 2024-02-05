@@ -3,7 +3,7 @@ import useResponsive from 'hooks/useResponsive';
 import clsx from 'clsx';
 import { IActionDetail } from 'api/types';
 import { formatTokenPrice } from 'utils/format';
-import ImgLoading from 'components/ImgLoading';
+import SkeletonImage from 'baseComponents/SkeletonImage';
 
 const COLLECTION_DEFAULT_IMG = 'https://forest-test.oss-cn-hongkong.aliyuncs.com/host/protocol-featured.jpg';
 
@@ -51,7 +51,7 @@ export function EventItem({
   return (
     <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover cursor-pointer">
       <div className="w-full aspect-square overflow-hidden relative">
-        <ImgLoading src={logoUrl || imageUrl} className="w-full h-full object-cover hover:scale-110 transition-all" />
+        <SkeletonImage img={logoUrl} className="w-full h-full object-cover hover:scale-110 transition-all" />
         {isXS && renderTime()}
       </div>
 
