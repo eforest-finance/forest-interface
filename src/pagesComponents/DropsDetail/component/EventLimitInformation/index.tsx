@@ -29,7 +29,10 @@ function EventLimitInformation(props: IProps) {
         <p className=" flex justify-between items-center">
           <span className="text-lg font-medium text-textPrimary">{title}</span>
           {tips && (
-            <Tooltip title={tips.tooltip}>
+            <Tooltip
+              title={tips.tooltip}
+              trigger={isSmallScreen ? 'click' : 'hover'}
+              placement={isSmallScreen ? 'topRight' : 'top'}>
               {isSmallScreen ? (
                 <div className="flex items-center cursor-pointer">
                   <TipsIcon />
