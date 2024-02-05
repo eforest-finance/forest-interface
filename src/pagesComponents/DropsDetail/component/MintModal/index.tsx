@@ -80,7 +80,13 @@ function MintModal(props?: IProps) {
   }, [totalPrice, elfRate]);
 
   const mintPrice = useMemo(() => {
-    return dropDetailInfo?.mintPrice ? `${formatTokenPrice(dropDetailInfo?.mintPrice)} ELF` : 'Free';
+    if (dropDetailInfo?.mintPrice !== undefined) {
+      return BigNumber(dropDetailInfo?.mintPrice).isEqualTo(0)
+        ? 'Free'
+        : `${formatTokenPrice(dropDetailInfo?.mintPrice)} ELF`;
+    } else {
+      return '-- ELF';
+    }
   }, [dropDetailInfo?.mintPrice]);
 
   const maxQuantity = useMemo(() => {

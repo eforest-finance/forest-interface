@@ -130,7 +130,9 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
                   </div>
                   {isXS ? (
                     <div className="absolute left-0 bottom-[136px] w-full px-4 pb-6">
-                      <span className="line-clamp-2 text-4xl text-white font-semibold">{item.dropName || ''}</span>
+                      <span className="line-clamp-2 text-4xl text-white font-semibold break-all">
+                        {item.dropName || ''}
+                      </span>
                     </div>
                   ) : null}
                 </Link>
@@ -166,10 +168,10 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
                 <SwiperSlide key={item.dropId} className="w-full">
                   <div className="flex bg-fillPageBg">
                     <div className="flex flex-col flex-1 mr-32">
-                      <div className="text-4xl h-10 font-semibold text-textPrimary line-clamp-1">
+                      <div className="text-4xl h-10 font-semibold text-textPrimary line-clamp-1 break-all">
                         {item.dropName || ''}
                       </div>
-                      <p className="mt-4 h-[72px] text-textSecondary line-clamp-3 text-base font-medium">
+                      <p className="mt-4 h-[72px] text-textSecondary line-clamp-3 text-base font-medium break-all">
                         {item.introduction || ''}
                       </p>
                     </div>
