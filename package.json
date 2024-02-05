@@ -15,11 +15,6 @@
     "dev:analyze": "PORT=4000 ANALYZE=true next dev",
     "prepare": "husky install"
   },
-  "resolutions": {
-    "@portkey/did-ui-react": "1.5.4-alpha.2",
-    "@portkey/detect-provider": "1.1.0-alpha.5",
-    "@portkey/provider-types": "1.1.0-alpha.5"
-  },
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
     "@microsoft/signalr": "^7.0.12",
