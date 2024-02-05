@@ -80,7 +80,7 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
   }
 
   return (
-    <div className="relative -mx-5 overflow-hidden sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
+    <div className="relative -mx-5 sml:mx-0 sml:rounded-lg sml:border sml:border-solid sml:border-lineBorder">
       {!isXS && !first && !(swiperData.length === 1) && (
         <div
           className={clsx(styles.arrow, styles.leftArrow)}
@@ -120,15 +120,11 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
         {swiperData.map((item) => {
           return (
             <SwiperSlide
-              className={clsx(
-                isXS && styles['calcWidth'],
-                isXS && 'border border-solid border-lineBorder rounded-lg',
-                'overflow-hidden',
-              )}
+              className={clsx(isXS && styles['calcWidth'], isXS && 'border border-solid border-lineBorder rounded-lg')}
               key={item.dropId}>
               <div className="relative">
                 <Link href={`/drops-detail/${item.dropId}`}>
-                  <SkeletonImage img={item.bannerUrl} className="h-[300px]" />
+                  <SkeletonImage img={item.bannerUrl} className="h-[300px] rounded-t-lg overflow-hidden" />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
                     {isXS ? <TimeWarning {...item} /> : null}
                   </div>
