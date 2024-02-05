@@ -223,6 +223,14 @@ function MintModal(props?: IProps) {
               description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
               list,
             },
+      onCancel: () => {
+        resultModal.hide();
+        if (!dropDetailInfo?.dropId) return;
+        updateDropDetail({
+          dropId: dropDetailInfo.dropId,
+          address: walletInfo.address,
+        });
+      },
     });
   };
 
@@ -272,10 +280,6 @@ function MintModal(props?: IProps) {
           TransactionId: claimDropRes.TransactionId,
           status,
           list,
-        });
-        updateDropDetail({
-          dropId: dropDetailInfo.dropId,
-          address: walletInfo.address,
         });
       }
     } catch (error) {

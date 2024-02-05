@@ -29,6 +29,7 @@ interface IProps {
     description?: string | ReactNode | string[];
     list?: INftInfoList[];
   };
+  onCancel?: <T, R>(params?: T) => R | void;
 }
 
 function ResultModal({
@@ -40,6 +41,7 @@ function ResultModal({
   hideButton = false,
   info,
   error,
+  onCancel,
 }: IProps) {
   const modal = useModal();
   const { infoState } = useGetState();
@@ -107,7 +109,7 @@ function ResultModal({
       title=" "
       open={modal.visible}
       onOk={modal.hide}
-      onCancel={modal.hide}
+      onCancel={onCancel || modal.hide}
       afterClose={modal.remove}
       footer={footer}>
       <div className="w-full h-full flex flex-col">
