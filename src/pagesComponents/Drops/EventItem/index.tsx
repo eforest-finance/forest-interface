@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { IActionDetail } from 'api/types';
 import { formatTokenPrice } from 'utils/format';
 import SkeletonImage from 'baseComponents/SkeletonImage';
+import BigNumber from 'bignumber.js';
 
 const COLLECTION_DEFAULT_IMG = 'https://forest-test.oss-cn-hongkong.aliyuncs.com/host/protocol-featured.jpg';
 
@@ -48,6 +49,8 @@ export function EventItem({
     }
   };
 
+  const isFree = new BigNumber(mintPrice).isEqualTo(0);
+
   return (
     <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover cursor-pointer">
       <div className="w-full aspect-square overflow-hidden relative">
@@ -60,7 +63,7 @@ export function EventItem({
           {dropName || '--'}
         </div>
         <div className="flex flex-col mt-2">
-          {mintPrice === 0 ? (
+          {isFree ? (
             <span
               className={clsx(
                 'font-medium text-textSecondary',
@@ -70,7 +73,9 @@ export function EventItem({
               <span className="text-brandNormal ml-2">Free</span>
             </span>
           ) : (
-            <span className="text-sm font-medium text-brandNormal">{formatTokenPrice(mintPrice || '--')} ELF</span>
+            <span className="text-sm font-medium text-brandNormal break-words">
+              {formatTokenPrice(mintPrice || '--')} ELF
+            </span>
           )}
         </div>
         {!isXS ? <div className="flex flex-col mt-2">{renderTime()}</div> : null}
