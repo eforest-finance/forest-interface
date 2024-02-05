@@ -339,8 +339,10 @@ export interface IConfigResponse {
 }
 export interface IConfigItems {
   networkType?: string;
+  networkTypeV2?: string;
   connectServer?: string;
   graphqlServer?: string;
+  graphqlServerV2?: string;
   portkeyServer?: string;
   mainChainAddress?: string;
   sideChainAddress?: string;
