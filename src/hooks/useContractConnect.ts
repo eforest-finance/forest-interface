@@ -28,7 +28,6 @@ export const useGetToken = () => {
     expirationTime?: number;
   }>(storages.accountInfo);
   const { loginState, wallet, getSignature, walletType, logout, version } = useWebLogin();
-  console.log('version', version);
 
   const isLogin = loginState === WebLoginState.logined;
   const pathName = usePathname();

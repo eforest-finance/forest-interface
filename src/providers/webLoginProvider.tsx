@@ -107,10 +107,9 @@ const jumpAppInH5 = (maxWaitingTime: number) => {
 
 export default ({ children }: { children: React.ReactNode }) => {
   const info = store.getState().aelfInfo.aelfInfo;
-  console.log('networkType---', info?.networkType);
 
   return (
-    <PortkeyProviderDynamic networkType={info.networkType}>
+    <PortkeyProviderDynamic networkType={info.networkType} networkTypeV2={info?.networkTypeV2}>
       <WebLoginProviderDynamic
         nightElf={{
           useMultiChain: true,

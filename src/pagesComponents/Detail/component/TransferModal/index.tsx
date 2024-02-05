@@ -11,7 +11,6 @@ import { decodeTransferAddress as aelfDecodeAddress } from 'utils/aelfUtils';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import { matchErrorMsg } from 'contract/formatErrorMsg';
-// import { checkWalletSecurity } from 'aelf-web-login';
 import { debounce } from 'lodash-es';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';

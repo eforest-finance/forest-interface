@@ -43,20 +43,6 @@ const Layout = dynamic(async () => {
     const { isSmallScreen, loading } = useSelector(selectInfo);
     const { isMD } = useResponsive();
     const [theme, initialTheme] = useTheme();
-
-    // const { callSendMethod: callAELFSendMethodV1, callViewMethod: callAELFViewMethodV1 } = useCallContractV1({
-    //   chainId: SupportedELFChainId.MAIN_NET,
-    //   rpcUrl: info?.rpcUrlAELF,
-    // });
-    // const { callSendMethod: callTDVVSendMethodV1, callViewMethod: callTDVVViewMethodV1 } = useCallContractV1({
-    //   chainId: SupportedELFChainId.TDVV_NET,
-    //   rpcUrl: info?.rpcUrlTDVV,
-    // });
-    // const { callSendMethod: callTDVWSendMethodV1, callViewMethod: callTDVWViewMethodV1 } = useCallContractV1({
-    //   chainId: SupportedELFChainId.TDVW_NET,
-    //   rpcUrl: info?.rpcUrlTDVW,
-    // });
-
     const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
     const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
     const webLoginContext = useWebLogin();
@@ -74,8 +60,6 @@ const Layout = dynamic(async () => {
       chainId: SupportedELFChainId.TDVW_NET,
       rpcUrl: info?.rpcUrlTDVW,
     });
-
-    console.log('version---', version);
 
     (window as any).logout = webLoginContext.logout;
     WebLoginInstance.get().setWebLoginContext(webLoginContext);

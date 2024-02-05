@@ -1,4 +1,3 @@
-// import detectProvider from '@portkey/detect-provider';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import { detectDiscoverProvider } from 'aelf-web-login';
 
