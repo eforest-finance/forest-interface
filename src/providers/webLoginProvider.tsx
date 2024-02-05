@@ -43,7 +43,7 @@ const WebLoginProviderDynamic = dynamic(
       portkeyV2: {
         networkType,
         useLocalStorage: true,
-        graphQLUrl: info.graphqlServer,
+        graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
         socialLogin: {},
         loginConfig: {
