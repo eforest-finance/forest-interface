@@ -2,7 +2,7 @@ import { DropState, IDropQuotaResponse } from 'api/types';
 import BigNumber from 'bignumber.js';
 import { MintStateType } from '../component/DropsMint';
 
-export const getMintState = (dropQuota: IDropQuotaResponse | null, mintPrice?: number) => {
+export const getMintState = (dropQuota: IDropQuotaResponse | null, mintPrice?: string) => {
   const limitBig = new BigNumber(dropQuota?.addressClaimLimit || 0);
   const amountBig = new BigNumber(dropQuota?.addressClaimAmount || 0);
   const claimAmountBig = new BigNumber(dropQuota?.claimAmount || 0);
