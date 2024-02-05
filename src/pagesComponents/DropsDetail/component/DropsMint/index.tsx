@@ -108,7 +108,7 @@ function DropsMint(props: IProps) {
     <div
       className={clsx(
         isSmallScreen &&
-          'fixed bottom-0 left-0 w-full border-0 border-t border-solid border-t-lineBorder bg-fillPageBg p-[16px] z-40',
+          'fixed bottom-0 left-0 w-full border-0 border-t border-solid border-t-lineBorder bg-fillPageBg p-[16px] z-[999]',
         className,
       )}>
       {isSmallScreen && (
