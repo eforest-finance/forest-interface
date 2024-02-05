@@ -350,11 +350,11 @@ function MintModal(props?: IProps) {
   };
 
   const disabled = useMemo(() => {
-    if (quantity === 0 || quantityErrorTip || insufficientTip || !tokenBalance) {
+    if (quantity === 0 || quantityErrorTip || insufficientTip || balanceLoading) {
       return true;
     }
     return false;
-  }, [insufficientTip, quantity, quantityErrorTip, tokenBalance]);
+  }, [insufficientTip, quantity, quantityErrorTip, balanceLoading]);
 
   useEffect(() => {
     if (modal.visible) {
