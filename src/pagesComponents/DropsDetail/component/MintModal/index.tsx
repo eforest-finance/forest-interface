@@ -31,7 +31,7 @@ import { CHAIN_ID_TYPE } from 'constants/index';
 import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
 import { MintStateType } from '../DropsMint';
 import { message } from 'antd';
-import { DropMinted } from 'contract/formatErrorMsg';
+import { CrossChainTransferMsg, DropMinted } from 'contract/formatErrorMsg';
 import { updateDropDetail } from 'pagesComponents/DropsDetail/utils/getDropDetail';
 
 interface IProps {
@@ -146,10 +146,10 @@ function MintModal(props?: IProps) {
               <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer !text-[var(--functional-link)]" onClick={handleTransferShow}>
-                  {`manually transfer tokens from MainChain to your SideChain address.`}
+                  {CrossChainTransferMsg}
                 </span>
               ) : (
-                'manually transfer tokens from MainChain to your SideChain address.'
+                CrossChainTransferMsg
               )}
             </>
           </div>
@@ -395,7 +395,7 @@ function MintModal(props?: IProps) {
         nftName={dropDetailInfo?.collectionName}
         priceTitle="Price"
         item={`Quantity: ${quantity}`}
-        price={`${formatTokenPrice(quantityErrorTip ? 0 : totalPrice)} ELF`}
+        price={`${formatTokenPrice(totalPrice)} ELF`}
         usdPrice={`${formatUSDPrice(usdTotalPrice)}`}
         imageSizeType="cover"
       />
@@ -404,7 +404,7 @@ function MintModal(props?: IProps) {
           maxQuantity={formatTokenPrice(maxQuantity)}
           value={quantity === 0 ? '' : formatTokenPrice(quantity)}
           onChange={handleQuantityChange}
-          errorTip={insufficientTip || quantityErrorTip}
+          errorTip={quantityErrorTip || insufficientTip}
         />
       ) : null}
       <div className="mt-[52px] mdTW:mt-[60px]">
