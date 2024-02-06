@@ -64,14 +64,7 @@ export function EventItem({
         </div>
         <div className="flex flex-col mt-2">
           {isFree ? (
-            <span
-              className={clsx(
-                'font-medium text-textSecondary',
-                isXS ? 'flex justify-between text-xs flex-1' : 'text-sm',
-              )}>
-              Price
-              <span className="text-brandNormal ml-2">Free</span>
-            </span>
+            <span className="text-sm font-medium text-brandNormal break-words">Free</span>
           ) : (
             <span className="text-sm font-medium text-brandNormal break-words">
               {formatTokenPrice(mintPrice || '--')} ELF
