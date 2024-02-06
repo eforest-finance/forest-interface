@@ -191,7 +191,7 @@ function MintModal(props?: IProps) {
     status: 'all' | 'partially' | 'failed';
   }) => {
     const { TransactionId, list, status } = params;
-    const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction') : '';
+    const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', aelfInfo.curChain) : '';
     const title = {
       all: MintNftMessage.successMessage.title,
       partially: MintNftMessage.partiallyMessage.title,
