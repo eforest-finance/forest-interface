@@ -107,9 +107,6 @@ export const MintNftMessage = {
     title: transactionPending,
     message: 'Please confirm the minting in the wallet.',
   },
-  successMessage: {
-    title: 'NFT Successfully Minted!',
-  },
   partiallyMessage: {
     title: 'Minting Partially Completed',
   },

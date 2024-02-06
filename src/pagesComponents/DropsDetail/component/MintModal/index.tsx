@@ -189,11 +189,13 @@ function MintModal(props?: IProps) {
     TransactionId?: string;
     list?: INftInfoList[];
     status: 'all' | 'partially' | 'failed';
+    quantity?: string;
   }) => {
-    const { TransactionId, list, status } = params;
+    const { TransactionId, list, status, quantity = 0 } = params;
     const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', aelfInfo.curChain) : '';
+    const text = BigNumber(quantity).gt(1) ? 'NFTs' : 'NFT';
     const title = {
-      all: MintNftMessage.successMessage.title,
+      all: `${text} Successfully Minted!`,
       partially: MintNftMessage.partiallyMessage.title,
       failed: MintNftMessage.errorMessage.title,
     };
@@ -217,15 +219,11 @@ function MintModal(props?: IProps) {
       error:
         status === 'failed'
           ? {
-              title: `Minting of ${BigNumber(quantity).gt(1) ? 'NFTs' : 'NFT'} failed`,
+              title: `Minting of ${text} failed`,
               description: MintNftMessage.errorMessage.description,
             }
           : {
-              title: (
-                <span className="text-textPrimary">{`${
-                  list?.length && list?.length > 1 ? 'NFTs' : 'NFT'
-                } Minted`}</span>
-              ),
+              title: <span className="text-textPrimary">{`${text} Minted`}</span>,
               description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
               list,
             },
@@ -286,6 +284,7 @@ function MintModal(props?: IProps) {
           TransactionId: claimDropRes.TransactionId,
           status,
           list,
+          quantity: claimDropRes.currentAmount,
         });
       }
     } catch (error) {
