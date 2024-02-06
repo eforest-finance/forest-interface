@@ -118,6 +118,7 @@ export default ({ children }: { children: React.ReactNode }) => {
         portkey={{
           autoShowUnlock: false,
           checkAccountInfoSync: true,
+          design: 'CryptoDesign',
         }}
         extraWallets={['discover', 'elf']}
         discover={{
