@@ -32,6 +32,7 @@ function EventLimitInformation(props: IProps) {
           {tips && (
             <Tooltip
               title={tips.tooltip}
+              align={isSmallScreen ? { offset: [16, 0] } : {}}
               trigger={isSmallScreen ? 'click' : 'hover'}
               placement={isSmallScreen ? 'topRight' : 'top'}>
               {isSmallScreen ? (
