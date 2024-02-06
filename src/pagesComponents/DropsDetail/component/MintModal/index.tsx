@@ -204,7 +204,7 @@ function MintModal(props?: IProps) {
       title: title[status],
       hideButton: status === 'all' ? true : false,
       info: {
-        title: dropDetailInfo?.collectionName,
+        subTitle: dropDetailInfo?.collectionName,
       },
       jumpInfo: explorerUrl
         ? {
@@ -406,7 +406,7 @@ function MintModal(props?: IProps) {
           errorTip={quantityErrorTip || insufficientTip}
         />
       ) : null}
-      <div className="mt-[52px] mdTW:mt-[60px]">
+      <div className="mt-[24px] mdTW:mt-[60px]">
         <Summary
           preSummaryListList={[
             {
@@ -416,7 +416,7 @@ function MintModal(props?: IProps) {
           ]}
         />
       </div>
-      <div className="mt-[24px] mdTW:mt-[32px]">
+      <div className="mt-[24px] mb-[24px] mdTW:mt-[32px]">
         <Balance loading={balanceLoading} amount={tokenBalance} suffix="ELF" />
       </div>
     </Modal>

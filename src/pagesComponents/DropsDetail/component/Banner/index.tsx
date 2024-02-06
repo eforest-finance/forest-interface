@@ -15,10 +15,7 @@ function Banner(props: IProps) {
 
   return (
     <SkeletonImage
-      className={clsx(
-        'w-full overflow-hidden aspect-square mdTW:aspect-[128/30] rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mdTW:rounded-br-none mdTW:rounded-bl-none',
-        className,
-      )}
+      className={clsx('w-full overflow-hidden aspect-square mdTW:aspect-[128/30] rounded-lg ', className)}
       img={img}
     />
   );

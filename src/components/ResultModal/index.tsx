@@ -67,14 +67,14 @@ function ResultModal({
   const JumpInfo = useMemo(
     () =>
       jumpInfo ? (
-        <a href={jumpInfo.url} {...aProps} className="flex items-center">
+        <a href={jumpInfo.url} {...aProps} className="flex items-center text-textSecondary">
           {jumpInfo.btnText || 'View on aelf Explorer'} <Jump className="fill-textSecondary w-4 h-4 ml-2" />
         </a>
       ) : null,
     [aProps, jumpInfo],
   );
 
-  const footer = (
+  const footer = hideButton ? null : (
     <div className="w-full flex flex-col items-center">
       {!hideButton && (
         <Button
@@ -114,12 +114,12 @@ function ResultModal({
       footer={footer}>
       <div className="w-full h-full flex flex-col">
         <NftInfoCard previewImage={previewImage} info={info} />
-        <div className="flex flex-col items-center mt-12">
+        <div className="flex flex-col items-center mt-[24px] mdTW:mt-[48px]">
           <span className="text-textPrimary font-semibold text-2xl text-center">{title}</span>
           <p className="text-base font-medium text-textSecondary mt-4 text-center">{getDescriptionCom(description)}</p>
         </div>
         {error && (
-          <div className="flex flex-col flex-1 w-full border-0 mdTW:border border-solid border-lineBorder rounded-lg px-0 mdTW:px-[32px] py-[32px] my-[32px]">
+          <div className="flex flex-col flex-1 w-full border-0 mdTW:border border-solid border-lineBorder rounded-lg px-0 mdTW:px-[32px] py-[32px] mt-0 mdTW:mt-[32px] mb-[32px]">
             <span className="text-functionalDanger font-semibold text-xl text-center mdTW:text-left">
               {error.title}
             </span>

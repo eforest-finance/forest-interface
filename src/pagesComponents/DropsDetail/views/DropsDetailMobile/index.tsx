@@ -25,7 +25,7 @@ export default function DropsDetailMobile() {
         expireTime={dropDetailInfo?.expireTime}
         status={dropQuota?.state}
       />
-      <DetailCard className="mt-[32px] !px-[16px]" />
+      <DetailCard className="mt-[16px] !px-[16px]" />
       <EventInformation className="px-[16px]" />
       <DropsMint className="px-[16px]" />
       <CollectionInformation className="mt-[32px] px-[16px]" />

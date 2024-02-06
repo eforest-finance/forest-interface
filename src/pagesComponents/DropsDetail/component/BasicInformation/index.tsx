@@ -75,7 +75,7 @@ function BasicInformation(props: IProps) {
         isSmallScreen && intersection?.isIntersecting && 'border-b',
         className,
       )}>
-      <div className="text-xl overflow-hidden whitespace-nowrap text-ellipsis mdTW:text-4xl text-textPrimary font-semibold text-center">
+      <div className="text-xl overflow-hidden whitespace-nowrap text-ellipsis mdTW:text-4xl text-textPrimary font-semibold">
         {name}
       </div>
       <div className="mt-[16px] flex justify-between items-center">

@@ -3,6 +3,7 @@ import TipsIcon from 'assets/images/icons/tips.svg';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 import { Tooltip } from 'antd';
+import styles from './index.module.css';
 
 interface IProps {
   className?: string;
@@ -34,12 +35,16 @@ function EventLimitInformation(props: IProps) {
               trigger={isSmallScreen ? 'click' : 'hover'}
               placement={isSmallScreen ? 'topRight' : 'top'}>
               {isSmallScreen ? (
-                <div className="flex items-center cursor-pointer">
+                <div className={clsx(styles['tips-icon'], 'flex items-center cursor-pointer')}>
                   <TipsIcon />
                 </div>
               ) : (
-                <div className="flex items-center border border-solid border-lineDividers bg-fillHoverBg p-[8px] rounded-[8px] cursor-pointer">
-                  <span className="mr-[10px]">{tips.title}</span>
+                <div
+                  className={clsx(
+                    styles['tips-icon'],
+                    'flex items-center border border-solid border-lineDividers bg-fillHoverBg p-[8px] rounded-[8px] cursor-pointer',
+                  )}>
+                  <span className="mr-[10px] text-textSecondary">{tips.title}</span>
                   <TipsIcon />
                 </div>
               )}
