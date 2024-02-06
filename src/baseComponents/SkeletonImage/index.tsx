@@ -22,8 +22,10 @@ function SkeletonImage(props: ISkeletonImage) {
   };
 
   return (
-    <div className={className}>
-      {(loading || !img) && <Skeleton.Image className="!w-full !h-full" active={img ? skeletonActive : false} />}
+    <div className={clsx('relative', className)}>
+      {(loading || !img) && (
+        <Skeleton.Image className="absolute top-0 left-0 !w-full !h-full" active={img ? skeletonActive : false} />
+      )}
       {img && (
         <Image
           width={343}
