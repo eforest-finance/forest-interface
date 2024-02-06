@@ -1,5 +1,5 @@
 import {
-  useDidComponent,
+  useComponentFlex,
   useGetAccount,
   useWebLogin,
   useWebLoginEvent,
@@ -34,7 +34,7 @@ export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
   const { discoverProvider } = useDiscoverProvider();
 
-  const { did } = useDidComponent();
+  const { did } = useComponentFlex();
 
   const getAccount = useCallback(async () => {
     try {
