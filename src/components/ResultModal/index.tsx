@@ -74,21 +74,36 @@ function ResultModal({
     [aProps, jumpInfo],
   );
 
-  const footer = hideButton ? null : (
-    <div className="w-full flex flex-col items-center">
-      {!hideButton && (
-        <Button
-          type="primary"
-          size="ultra"
-          loading={loading}
-          isFull={isSmallScreen ? true : false}
-          className={`${!isSmallScreen && '!w-[256px]'}`}
-          onClick={onClick}>
-          {buttonInfo?.btnText || 'View'}
-        </Button>
-      )}
+  const footerPc =
+    hideButton && !jumpInfo ? null : (
+      <div className="w-full flex flex-col items-center">
+        {!hideButton ? (
+          <Button
+            type="primary"
+            size="ultra"
+            loading={loading}
+            isFull={isSmallScreen ? true : false}
+            className={`${!isSmallScreen && '!w-[256px]'}`}
+            onClick={onClick}>
+            {buttonInfo?.btnText || 'View'}
+          </Button>
+        ) : null}
 
-      {!isSmallScreen ? <div className="mt-[16px]">{JumpInfo}</div> : null}
+        {jumpInfo ? <div className="mt-[16px]">{JumpInfo}</div> : null}
+      </div>
+    );
+
+  const footerMobile = hideButton ? null : (
+    <div className="w-full flex flex-col items-center">
+      <Button
+        type="primary"
+        size="ultra"
+        loading={loading}
+        isFull={isSmallScreen ? true : false}
+        className={`${!isSmallScreen && '!w-[256px]'}`}
+        onClick={onClick}>
+        {buttonInfo?.btnText || 'View'}
+      </Button>
     </div>
   );
 
@@ -111,7 +126,7 @@ function ResultModal({
       onOk={modal.hide}
       onCancel={onCancel || modal.hide}
       afterClose={modal.remove}
-      footer={footer}>
+      footer={isSmallScreen ? footerMobile : footerPc}>
       <div className="w-full h-full flex flex-col">
         <NftInfoCard previewImage={previewImage} info={info} />
         <div className="flex flex-col items-center mt-[24px] mdTW:mt-[48px]">
