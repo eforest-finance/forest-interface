@@ -94,12 +94,13 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
 
       <Swiper
         key={'activitySwiper'}
+        className="rounded-lg overflow-hidden"
         {...commonSwiperProps}
         modules={[Autoplay]}
         breakpoints={{
           600: {
             slidesPerView: 1,
-            spaceBetween: 16,
+            spaceBetween: 0,
             slidesPerGroup: 1,
             centeredSlides: false,
           },
@@ -120,11 +121,14 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
         {swiperData.map((item) => {
           return (
             <SwiperSlide
-              className={clsx(isXS && styles['calcWidth'], isXS && 'border border-solid border-lineBorder rounded-lg')}
+              className={clsx(
+                isXS && styles['calcWidth'],
+                isXS && 'border border-solid border-lineBorder rounded-lg overflow-hidden',
+              )}
               key={item.dropId}>
               <div className="relative">
                 <Link href={`/drops-detail/${item.dropId}`}>
-                  <SkeletonImage img={item.bannerUrl} className="h-[300px] rounded-t-lg overflow-hidden" />
+                  <SkeletonImage img={item.bannerUrl} className="h-[300px] overflow-hidden" />
                   <div className={isXS ? 'h-[136px] pl-6 pt-6 pb-8' : 'h-48'}>
                     {isXS ? <TimeWarning {...item} /> : null}
                   </div>

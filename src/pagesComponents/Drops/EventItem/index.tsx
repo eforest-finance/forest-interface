@@ -52,7 +52,7 @@ export function EventItem({
   const isFree = new BigNumber(mintPrice).isEqualTo(0);
 
   return (
-    <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:shadow-hover cursor-pointer">
+    <div className="rounded-lg flex flex-col border border-solid border-lineBorder overflow-hidden hover:bg-cardHover cursor-pointer">
       <div className="w-full aspect-square overflow-hidden relative">
         <SkeletonImage img={logoUrl} className="w-full h-full object-cover hover:scale-110 transition-all" />
         {isXS && renderTime()}
