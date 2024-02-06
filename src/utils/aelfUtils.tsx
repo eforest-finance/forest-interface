@@ -364,6 +364,51 @@ export const checkNFTApprove = async (options: {
   }
 };
 
+export const checkELFAllowance = async (options: {
+  spender: string;
+  address: string;
+  chainId?: Chain;
+  symbol?: string;
+  decimals?: number;
+  amount: string;
+}) => {
+  const { chainId, symbol = 'ELF', address, spender, amount, decimals = 8 } = options;
+  try {
+    const allowance = await GetAllowance(
+      {
+        symbol: symbol,
+        owner: address,
+        spender: spender,
+      },
+      {
+        chain: chainId,
+      },
+    );
+
+    if (allowance.error) {
+      message.error(allowance.errorMessage?.message || allowance.error.toString() || DEFAULT_ERROR);
+      return false;
+    }
+
+    const bigA = timesDecimals(amount, decimals ?? 8);
+
+    const allowanceBN = new BigNumber(allowance?.allowance);
+
+    if (allowanceBN.lt(bigA)) {
+      const approveAmount = isNightEl() ? CONTRACT_AMOUNT : bigA.toNumber();
+      return await approveELF(spender, symbol, `${approveAmount}`, chainId);
+    }
+    return true;
+  } catch (error) {
+    message.destroy();
+    const resError = error as unknown as IContractError;
+    if (resError) {
+      message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+    }
+    return false;
+  }
+};
+
 type ApproveFunc = (params: {
   nftInfo: { symbol: string; tokenId: number | string };
   owner?: string;

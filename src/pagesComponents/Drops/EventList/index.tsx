@@ -111,14 +111,14 @@ export function EventList() {
   const localeEmpty = {
     emptyText: (
       <div className="flex flex-col -mx-4 items-center h-[344px] justify-center border border-solid border-lineBorder rounded-lg">
-        <span className="text-base text-textPrimary font-medium">No event found</span>
+        <span className="text-base text-textPrimary font-medium">No events found</span>
         {selectTypeState !== 0 ? (
           <Button
             type="primary"
             size="ultra"
             className="text-textPrimary w-[207px] mt-6"
             onClick={() => setSelectTypeState(0)}>
-            Back to all events
+            Back to All events
           </Button>
         ) : null}
       </div>

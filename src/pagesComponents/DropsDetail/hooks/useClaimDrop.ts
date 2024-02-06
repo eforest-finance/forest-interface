@@ -5,7 +5,7 @@ import { IClaimDropParams, IContractError, ISendResult } from 'contract/type';
 import { getResult } from 'utils/deserializeLog';
 import { EventEnded, EventEndedBack, UserDeniedMessage } from 'contract/formatErrorMsg';
 import { ClaimDrop } from 'contract/drop';
-import { checkTokenApproveCurrying } from 'utils/aelfUtils';
+import { checkELFAllowance } from 'utils/aelfUtils';
 import { dispatch } from 'store/store';
 import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import { DropState } from 'api/types';
@@ -13,7 +13,6 @@ import BigNumber from 'bignumber.js';
 
 export const useClaimDrop = (chainId?: Chain) => {
   const { walletInfo, aelfInfo } = useGetState();
-  const checkELFApprove = checkTokenApproveCurrying();
 
   const claimDrop = async (
     params: IClaimDropParams & {
@@ -22,14 +21,12 @@ export const useClaimDrop = (chainId?: Chain) => {
   ) => {
     try {
       if (!BigNumber(params.price).isEqualTo(0)) {
-        const approveTokenResult = await checkELFApprove({
-          chainId: chainId,
-          symbol: 'ELF',
-          address: walletInfo.address || '',
+        const approveTokenResult = await checkELFAllowance({
           spender: aelfInfo.dropSideAddress,
-          amount: params.price,
-          decimals: 8,
-          approveSymbol: 'ELF',
+          address: walletInfo.address || '',
+          chainId,
+          symbol: 'ELF',
+          amount: BigNumber(params.price).times(params.claimAmount).toString(),
         });
 
         if (!approveTokenResult) {
@@ -76,7 +73,6 @@ export const useClaimDrop = (chainId?: Chain) => {
         dispatch(setDropQuota({ state: DropState.End }));
         return 'failed';
       }
-      message.error(resError.errorMessage?.message);
       return 'error';
     }
   };
