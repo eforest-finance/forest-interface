@@ -8,7 +8,7 @@ import Button from 'baseComponents/Button';
 import { useModal } from '@ebay/nice-modal-react';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import TransferModal from '../TransferModal';
-import { useDidComponent, useWebLogin } from 'aelf-web-login';
+import { useComponentFlex, useWebLogin } from 'aelf-web-login';
 import TransferIcon from 'assets/images/icon/transfer.svg';
 import clsx from 'clsx';
 import { SaleModalForERC721, SaleModalForERC1155 } from '../SaleModal';
@@ -31,7 +31,7 @@ function SellButton() {
 
   const { maxQuantity, listItems, listedNFTInfoList } = useGetListItemsForSale(nftInfo as INftInfo);
 
-  const { PortkeyAssetProvider } = useDidComponent();
+  const { PortkeyAssetProvider } = useComponentFlex();
 
   const isEditMode = useMemo(() => {
     if (!nftInfo) return false;

@@ -1,4 +1,4 @@
-import { useDidComponent, useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
+import { useComponentFlex, useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import storages from '../storages';
@@ -151,7 +151,7 @@ export const useContractConnect = () => {
 
   const getAccountInAELF = useGetAccount('AELF');
 
-  const { did } = useDidComponent();
+  const { did } = useComponentFlex();
 
   function getAelfChainAddress() {
     if (walletType === WalletType.portkey) {
