@@ -26,7 +26,7 @@ function ShareModal() {
     {
       icon: <TwitterX />,
       className: styles['share-modal-svg-twitter'],
-      text: 'Twitter',
+      text: 'X',
       href: `https://twitter.com/intent/tweet?url=${href}`,
     },
     {
