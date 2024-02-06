@@ -63,7 +63,7 @@ function MintModal(props?: IProps) {
   const [mainTokenBalance, setMainTokenBalance] = useState<number>(0);
   const [balanceLoading, setBalanceLoading] = useState<boolean>(false);
 
-  const { dropDetailInfo } = useDropDetailGetState();
+  const { dropDetailInfo, dropQuota } = useDropDetailGetState();
 
   const totalPrice = useMemo(() => {
     if (quantity && dropDetailInfo?.mintPrice) {
@@ -90,12 +90,18 @@ function MintModal(props?: IProps) {
   }, [dropDetailInfo?.mintPrice]);
 
   const maxQuantity = useMemo(() => {
-    const max = dropDetailInfo?.addressClaimLimit || 0;
+    const totalAmountBig = BigNumber(dropQuota?.totalAmount || 0);
+    const claimAmountBig = BigNumber(dropQuota?.claimAmount || 0);
+    const addressClaimAmountBig = BigNumber(dropQuota?.addressClaimAmount || 0);
+    const addressClaimLimitBig = BigNumber(dropQuota?.addressClaimLimit || 0);
+    const dropBalance = BigNumber(totalAmountBig).minus(claimAmountBig);
+    const dropCurBalance = BigNumber(addressClaimLimitBig).minus(addressClaimAmountBig);
+    const max = BigNumber.minimum(dropBalance, dropCurBalance, addressClaimLimitBig).toNumber();
     if (BigNumber(max).isEqualTo(1)) {
       setQuantity(1);
     }
     return max;
-  }, [dropDetailInfo?.addressClaimLimit]);
+  }, [dropQuota?.addressClaimAmount, dropQuota?.addressClaimLimit, dropQuota?.claimAmount, dropQuota?.totalAmount]);
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value || BigNumber(e.target.value).isZero()) {
