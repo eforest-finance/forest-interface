@@ -33,6 +33,7 @@ import { getExploreLink } from 'utils';
 import { usePathname } from 'next/navigation';
 import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
+import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
@@ -430,10 +431,10 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer !text-[var(--functional-link)]" onClick={handleTransferShow}>
-                  {`manually transfer tokens from MainChain to your SideChain address.`}
+                  {CrossChainTransferMsg}
                 </span>
               ) : (
-                'manually transfer tokens from MainChain to your SideChain address.'
+                CrossChainTransferMsg
               )}
             </>
           </div>

@@ -31,7 +31,7 @@ import { CHAIN_ID_TYPE } from 'constants/index';
 import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
 import { MintStateType } from '../DropsMint';
 import { message } from 'antd';
-import { DropMinted } from 'contract/formatErrorMsg';
+import { CrossChainTransferMsg, DropMinted } from 'contract/formatErrorMsg';
 import { updateDropDetail } from 'pagesComponents/DropsDetail/utils/getDropDetail';
 
 interface IProps {
@@ -146,10 +146,10 @@ function MintModal(props?: IProps) {
               <span className={isPortkeyConnected ? '!text-[var(--text-primary)]' : ''}>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer !text-[var(--functional-link)]" onClick={handleTransferShow}>
-                  {`manually transfer tokens from MainChain to your SideChain address.`}
+                  {CrossChainTransferMsg}
                 </span>
               ) : (
-                'manually transfer tokens from MainChain to your SideChain address.'
+                CrossChainTransferMsg
               )}
             </>
           </div>
@@ -189,11 +189,13 @@ function MintModal(props?: IProps) {
     TransactionId?: string;
     list?: INftInfoList[];
     status: 'all' | 'partially' | 'failed';
+    quantity?: string;
   }) => {
-    const { TransactionId, list, status } = params;
-    const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction') : '';
+    const { TransactionId, list, status, quantity = 0 } = params;
+    const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', aelfInfo.curChain) : '';
+    const text = BigNumber(quantity).gt(1) ? 'NFTs' : 'NFT';
     const title = {
-      all: MintNftMessage.successMessage.title,
+      all: `${text} Successfully Minted!`,
       partially: MintNftMessage.partiallyMessage.title,
       failed: MintNftMessage.errorMessage.title,
     };
@@ -217,15 +219,11 @@ function MintModal(props?: IProps) {
       error:
         status === 'failed'
           ? {
-              title: `Minting of ${BigNumber(quantity).gt(1) ? 'NFTs' : 'NFT'} failed`,
+              title: `Minting of ${text} failed`,
               description: MintNftMessage.errorMessage.description,
             }
           : {
-              title: (
-                <span className="text-textPrimary">{`${
-                  list?.length && list?.length > 1 ? 'NFTs' : 'NFT'
-                } Minted`}</span>
-              ),
+              title: <span className="text-textPrimary">{`${text} Minted`}</span>,
               description: status === 'all' ? '' : MintNftMessage.errorMessage.description,
               list,
             },
@@ -286,6 +284,7 @@ function MintModal(props?: IProps) {
           TransactionId: claimDropRes.TransactionId,
           status,
           list,
+          quantity: claimDropRes.currentAmount,
         });
       }
     } catch (error) {
@@ -395,7 +394,7 @@ function MintModal(props?: IProps) {
         nftName={dropDetailInfo?.collectionName}
         priceTitle="Price"
         item={`Quantity: ${quantity}`}
-        price={`${formatTokenPrice(quantityErrorTip ? 0 : totalPrice)} ELF`}
+        price={`${formatTokenPrice(totalPrice)} ELF`}
         usdPrice={`${formatUSDPrice(usdTotalPrice)}`}
         imageSizeType="cover"
       />
@@ -404,7 +403,7 @@ function MintModal(props?: IProps) {
           maxQuantity={formatTokenPrice(maxQuantity)}
           value={quantity === 0 ? '' : formatTokenPrice(quantity)}
           onChange={handleQuantityChange}
-          errorTip={insufficientTip || quantityErrorTip}
+          errorTip={quantityErrorTip || insufficientTip}
         />
       ) : null}
       <div className="mt-[52px] mdTW:mt-[60px]">
