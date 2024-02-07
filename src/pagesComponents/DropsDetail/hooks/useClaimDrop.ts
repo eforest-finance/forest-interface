@@ -73,6 +73,7 @@ export const useClaimDrop = (chainId?: Chain) => {
         dispatch(setDropQuota({ state: DropState.End }));
         return 'failed';
       }
+      message.error(resError.errorMessage?.message);
       return 'error';
     }
   };
