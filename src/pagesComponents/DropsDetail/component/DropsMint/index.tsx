@@ -12,6 +12,7 @@ import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota'
 import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
 import { message } from 'antd';
 import { DropMinted } from 'contract/formatErrorMsg';
+import { useWebLogin } from 'aelf-web-login';
 
 interface IProps {
   className?: string;
@@ -56,6 +57,7 @@ function DropsMint(props: IProps) {
   const { login, isLogin } = useCheckLoginAndToken();
   const [mintLoading, setMintLoading] = useState<boolean>(false);
   const [isCancel, setIsCancel] = useState<boolean>(false);
+  const { wallet } = useWebLogin();
 
   const { dropDetailInfo, dropQuota } = useDropDetailGetState();
 
@@ -71,11 +73,17 @@ function DropsMint(props: IProps) {
   const onMint = async () => {
     if (isLogin) {
       if (!dropDetailInfo?.dropId) return;
+
+      const userWalletAddress = walletInfo.address || wallet.address;
+      if (!userWalletAddress) {
+        return;
+      }
+
       try {
         setMintLoading(true);
         const res = await updateDropQuota({
           dropId: dropDetailInfo?.dropId,
-          address: walletInfo.address,
+          address: userWalletAddress,
         });
         const state = res.state;
         const mintState = getMintState(res.dropQuota, dropDetailInfo?.mintPrice);

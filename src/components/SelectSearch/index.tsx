@@ -89,7 +89,7 @@ const SelectSearch = (props: ISelectSearchProps) => {
       });
     },
     debounceTime,
-    [searchText, fetchData],
+    [searchText, requestList],
   );
 
   const renderOptions = data?.map((item) => {
