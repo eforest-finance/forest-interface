@@ -28,8 +28,8 @@ function SkeletonImage(props: ISkeletonImage) {
       )}
       {img && (
         <Image
-          width={343}
-          height={343}
+          width={2560}
+          height={2560}
           src={img}
           alt="image"
           className={clsx('w-full h-full', imageType[imageSizeType])}
