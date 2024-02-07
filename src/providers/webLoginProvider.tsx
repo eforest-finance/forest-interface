@@ -111,6 +111,9 @@ export default ({ children }: { children: React.ReactNode }) => {
           autoShowUnlock: false,
           checkAccountInfoSync: true,
           design: 'CryptoDesign',
+          keyboard: {
+            v2: true,
+          },
         }}
         extraWallets={['discover', 'elf']}
         discover={{
