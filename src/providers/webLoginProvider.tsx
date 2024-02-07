@@ -122,19 +122,6 @@ export default ({ children }: { children: React.ReactNode }) => {
           autoLogoutOnNetworkMismatch: true,
           autoLogoutOnAccountMismatch: true,
           autoLogoutOnChainMismatch: true,
-          onClick: (continueDefaultBehaviour) => {
-            const mobileType = isMobile(navigator.userAgent);
-            const isMobileDevice =
-              mobileType.apple.phone ||
-              mobileType.android.phone ||
-              mobileType.apple.tablet ||
-              mobileType.android.tablet;
-            if (isMobileDevice) {
-              jumpAppInH5(mobileType.apple.phone ? 200 : 1000);
-              return;
-            }
-            continueDefaultBehaviour();
-          },
         }}>
         {children}
       </WebLoginProviderDynamic>
