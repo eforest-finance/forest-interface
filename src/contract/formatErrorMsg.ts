@@ -31,10 +31,10 @@ export enum TargetErrorType {
 }
 
 const stringifyMsg = (message: string | object | unknown) => {
-  if (typeof message === 'string') {
-    return message;
+  if (typeof message === 'object') {
+    return JSON.stringify(message);
   }
-  return JSON.stringify(message);
+  return message;
 };
 
 export const matchErrorMsg = <T>(message: T, method?: string) => {
