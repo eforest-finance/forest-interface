@@ -31,10 +31,6 @@ const WebLoginProviderDynamic = dynamic(
         useLocalStorage: true,
         graphQLUrl: info.graphqlServer,
         connectUrl: connectUrlV1,
-        loginConfig: {
-          recommendIndexes: [0, 1],
-          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Phone', 'Email'],
-        },
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
           baseURL: info.portkeyServerV1,
@@ -46,10 +42,6 @@ const WebLoginProviderDynamic = dynamic(
         graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
         socialLogin: {},
-        loginConfig: {
-          recommendIndexes: [0, 1],
-          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Phone', 'Email'],
-        },
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
           baseURL: info.portkeyServerV2,
