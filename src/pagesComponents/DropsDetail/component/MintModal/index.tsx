@@ -31,7 +31,7 @@ import { CHAIN_ID_TYPE } from 'constants/index';
 import { getMintState } from 'pagesComponents/DropsDetail/utils/getMintState';
 import { MintStateType } from '../DropsMint';
 import { message } from 'antd';
-import { CrossChainTransferMsg, DropMinted } from 'contract/formatErrorMsg';
+import { CrossChainTransferMsg, DropMinted, EventEnded } from 'contract/formatErrorMsg';
 import { updateDropDetail } from 'pagesComponents/DropsDetail/utils/getDropDetail';
 
 interface IProps {
@@ -184,6 +184,8 @@ function MintModal(props?: IProps) {
         resultModal.hide();
         if (mintState === MintStateType.Mint || mintState === MintStateType.MintFree) {
           modal.show();
+        } else if (mintState === MintStateType.SoldOut) {
+          message.error(EventEnded);
         } else {
           message.error(DropMinted);
         }
