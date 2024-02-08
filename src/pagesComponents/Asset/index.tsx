@@ -12,6 +12,7 @@ export default function MyAsset() {
   const router = useRouter();
   const { loginState, walletType } = useWebLogin();
   const { walletInfo, aelfInfo } = useGetState();
+  const { isShowRampBuy, isShowRampSell } = aelfInfo;
   const isLogin = loginState === WebLoginState.logined;
   const isPortkeyConnect = walletType === WalletType.portkey;
 
@@ -36,6 +37,9 @@ export default function MyAsset() {
         caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         didStorageKeyName={APP_NAME}>
         <Asset
+          isShowRamp={isShowRampBuy || isShowRampSell}
+          isShowRampBuy={isShowRampBuy}
+          isShowRampSell={isShowRampSell}
           faucet={{
             faucetContractAddress: aelfInfo?.faucetContractAddress,
           }}
