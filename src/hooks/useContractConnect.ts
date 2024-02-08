@@ -1,4 +1,4 @@
-import { useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
+import { useComponentFlex, useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import storages from '../storages';
@@ -8,7 +8,7 @@ import { fetchToken } from 'api/fetch';
 import { message } from 'antd';
 import { getOriginalAddress } from 'utils';
 import { ITokenParams } from 'api/types';
-import { did } from '@portkey/did-ui-react';
+// import { did } from '@portkey/did-ui-react';
 import { SupportedELFChainId } from 'constants/chain';
 import { cloneDeep } from 'lodash-es';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
@@ -27,7 +27,8 @@ export const useGetToken = () => {
     token?: string;
     expirationTime?: number;
   }>(storages.accountInfo);
-  const { loginState, wallet, getSignature, walletType, logout } = useWebLogin();
+  const { loginState, wallet, getSignature, walletType, logout, version } = useWebLogin();
+
   const isLogin = loginState === WebLoginState.logined;
   const pathName = usePathname();
   const nav = useRouter();
@@ -111,6 +112,7 @@ export const useGetToken = () => {
       scope: 'NFTMarketServer',
       client_id: 'NFTMarketServer_App',
       timestamp,
+      version: version === 'v1' ? 'v1' : 'v2',
       signature: sign!.signature,
       ...extraParam,
     } as ITokenParams);
@@ -148,6 +150,8 @@ export const useContractConnect = () => {
   const isEagerly = loginState === WebLoginState.eagerly;
 
   const getAccountInAELF = useGetAccount('AELF');
+
+  const { did } = useComponentFlex();
 
   function getAelfChainAddress() {
     if (walletType === WalletType.portkey) {

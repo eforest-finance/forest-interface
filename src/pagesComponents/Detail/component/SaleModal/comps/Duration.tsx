@@ -151,6 +151,7 @@ export function Duration(props: IDurationProps) {
       </span>
       <div className={`mt-4 flex -mx-2 ${!isSmallScreen ? 'flex-row' : 'flex-col'}`}>
         <Select
+          getPopupContainer={(v) => v}
           className={`!mx-2 !h-[56px] ${!isSmallScreen ? 'flex-1' : ''}`}
           value={expirationType}
           optionLabelProp="label"

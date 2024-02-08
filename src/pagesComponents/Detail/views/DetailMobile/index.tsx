@@ -1,6 +1,6 @@
 'use client';
 import { Tabs } from 'antd';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import DetailCard from 'pagesComponents/Detail/component/DetailCard';
 import Listings from 'pagesComponents/Detail/component/Listings';
@@ -20,10 +20,14 @@ import ListingCard from 'pagesComponents/Detail/component/ListingCard';
 import BigNumber from 'bignumber.js';
 import { useIntersection } from 'react-use';
 import clsx from 'clsx';
+import useDetailGetState from 'store/state/detailGetState';
+import { store } from 'store/store';
+import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 
 export default function DetailMobile() {
-  const { isFetching, elfRate, isERC721, nftBalance, nftQuantity, tokenBalance, intervalDataForBid } =
-    useInitializationDetail();
+  const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
+
+  const [showSticky, setShowSticky] = useState<boolean>(false);
 
   const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
 
@@ -32,7 +36,22 @@ export default function DetailMobile() {
     root: document.body,
     rootMargin: `0px 0px -${bottom}px 0px`,
   });
-  intersection?.isIntersecting && console.log('tabRef intersection', intersection);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (!tabsRef?.current) return;
+      const { top } = (tabsRef?.current as HTMLElement).getBoundingClientRect();
+      setShowSticky(top < 63);
+    };
+    document.body.addEventListener('scroll', onScroll);
+    return () => {
+      document.body.removeEventListener('scroll', onScroll);
+    }
+  }, []);
+
+  const {
+    detailInfo: { currentTab },
+  } = useDetailGetState();
 
   return (
     <div className={`${styles.detail} ${styles['mobile-detail']}`}>
@@ -46,7 +65,6 @@ export default function DetailMobile() {
             {intervalDataForBid?.isBidding ? (
               <div className="mt-[40px]">
                 <BidCardWrapper intervalDataForBid={intervalDataForBid} tokenBalance={new BigNumber(tokenBalance)} />
-                {/* <BidCardAndList intervalDataForBid={intervalDataForBid} tokenBalance={new BigNumber(tokenBalance)} /> */}
               </div>
             ) : (
               <>
@@ -57,12 +75,19 @@ export default function DetailMobile() {
         )}
         <div ref={tabsRef} className="mt-10">
           <Tabs
-            className={clsx(styles['fixedTabs'], intersection?.isIntersecting && styles['has-sticky'])}
+            activeKey={currentTab}
+            onChange={(activeKey) => {
+              store.dispatch(setCurrentTab(activeKey));
+            }}
+            className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
             animated={false}>
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Listings & offers" key="listingOffers">
+            <Tabs.TabPane
+              tab={intervalDataForBid?.isBidding ? 'Offers' : 'Listings & offers'}
+              key="listingOffers"
+              forceRender={true}>
               {!isFetching && (
                 <>
                   {intervalDataForBid?.isBidding ? (
@@ -71,21 +96,18 @@ export default function DetailMobile() {
                     </div>
                   ) : (
                     <>
-                      <Listings
-                        nftBalance={nftBalance}
-                        nftQuantity={nftQuantity}
-                        myBalance={new BigNumber(tokenBalance)}
-                        rate={elfRate}
-                      />
-                      <Offers nftBalance={nftBalance} rate={elfRate} />
+                      <Listings rate={elfRate} />
+                      <Offers rate={elfRate} />
                     </>
                   )}
                 </>
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Price History" key="priceHistory">
-              <PriceHistory />
-            </Tabs.TabPane>
+            {!intervalDataForBid?.isBidding && (
+              <Tabs.TabPane tab="Price History" key="priceHistory">
+                <PriceHistory />
+              </Tabs.TabPane>
+            )}
             <Tabs.TabPane tab="Activity" key="activity">
               <Activity />
             </Tabs.TabPane>

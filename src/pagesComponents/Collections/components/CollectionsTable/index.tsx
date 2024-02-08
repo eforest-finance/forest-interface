@@ -27,8 +27,8 @@ export default function CollectionTable() {
 
   const [dataSource, setDataSource] = useState<TableDataItem[]>();
   const [sort, setSort] = useState<ISortProps>({
-    sort: '',
-    sortType: SortTypeEnum.default,
+    sort: 'ownerTotal',
+    sortType: SortTypeEnum.desc,
   });
 
   const params = useMemo(() => {

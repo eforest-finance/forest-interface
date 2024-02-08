@@ -17,6 +17,7 @@ import WhiteListInfoReducer, { whiteListInfoSlice } from 'store/reducer/saleInfo
 import SaleInfoReducer, { saleInfoSlice } from 'store/reducer/saleInfo/saleInfo';
 import SyncChainModalReducer, { syncChainModalSlice } from 'store/reducer/syncChainModal';
 import sellModalsInfosSliceReducer, { sellModalsInfosSlice } from 'store/reducer/saleInfo/sellModalsInfo';
+import dropDetailInfoReducer, { dropDetailInfoSlice } from 'store/reducer/dropDetail/dropDetailInfo';
 
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux';
 
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   [whiteListInfoSlice.name]: WhiteListInfoReducer,
   [syncChainModalSlice.name]: SyncChainModalReducer,
   [sellModalsInfosSlice.name]: sellModalsInfosSliceReducer,
+  [dropDetailInfoSlice.name]: dropDetailInfoReducer,
 });
 
 const makeStore = () => {
@@ -51,7 +53,7 @@ const makeStore = () => {
       getDefaultMiddleware({
         serializableCheck: false,
       }),
-    devTools: process.env.NODE_ENV !== 'production',
+    // devTools: process.env.NODE_ENV !== 'production',
   });
 
   return {

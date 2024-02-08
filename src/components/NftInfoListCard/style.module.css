@@ -1,0 +1,3 @@
+.nft-list-card-text-ellipsis {
+  @apply w-full overflow-hidden whitespace-nowrap text-ellipsis;
+}

@@ -25,10 +25,13 @@ export default function FilterBtn({
         {position === 'top' ? 'filter' : 'Filter'}
       </Button>
       <Drawer
+        zIndex={200}
         className={`${styles['filter-btn-wrapper']} ${isSmallScreen ? styles['filter-btn-wrapper-mobile'] : ''}`}
         placement={'right'}
         closable={false}
+        maskClosable
         maskStyle={{ background: 'none' }}
+        mask={false}
         open={isCollapsed}>
         <ItemsSider />
       </Drawer>

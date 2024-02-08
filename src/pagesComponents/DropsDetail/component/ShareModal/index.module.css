@@ -1,0 +1,56 @@
+/* stylelint-disable no-descending-specificity */
+.share-modal-svg {
+  @apply w-full flex items-center justify-around mt-[48px] mdTW:mt-[32px];
+  >div {
+    @apply w-full flex flex-col items-center justify-center;
+    .share-card {
+      @apply flex flex-col justify-center items-center cursor-pointer;
+      .share-icon {
+        @apply w-[64px] h-[64px] rounded-[64px] border-solid border border-lineBorder flex justify-center items-center;
+      }
+      &:hover {
+        .share-icon {
+          @apply bg-fillHoverBg;
+        }
+      }
+    }
+    
+  }
+
+  .text {
+    @apply mt-[8px] text-sm mdTW:text-base text-textSecondary font-normal; 
+  }
+
+  svg {
+    @apply w-[32px] h-[32px];
+  }
+
+  .share-modal-svg-twitter {
+    path {
+      @apply fill-[var(--share-svg-hover)] stroke-[var(--share-svg-hover)];
+    }
+  }
+  .share-modal-svg-copy {
+    path, rect {
+      @apply stroke-[var(--share-svg-hover)];
+    }
+  }
+  .share-modal-svg-telegram {
+    path:first-child {
+      @apply fill-[#28A8E9];
+    }
+  }
+}
+
+.share-modal-svg-mobile {
+  svg {
+    @apply scale-75;
+  }
+  >div {
+    .share-card {
+      .share-icon {
+        @apply w-[48px] h-[48px];
+      }
+    }
+  }
+}

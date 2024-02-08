@@ -1,5 +1,8 @@
 /* stylelint-disable no-descending-specificity */
 .date-picker-wrap {
+  :global(.ant-picker-header-view){
+    @apply !pointer-events-none;
+  }
   :global(.ant-picker-panel-container) {
     @apply bg-[var(--bg-menu)] border-[var(--line-box)] border-solid border rounded-[12px];
     :global(.ant-picker-panel) {

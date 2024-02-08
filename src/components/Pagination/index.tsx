@@ -9,6 +9,8 @@ import DownArrow from 'assets/images/down-arrow-thin.svg';
 import useResponsive from 'hooks/useResponsive';
 import Button from 'baseComponents/Button';
 import { Select } from 'baseComponents/Select';
+import { DEFAULT_PAGE_SIZE } from 'constants/index';
+
 function JumpButton({
   disabled,
   className,
@@ -52,9 +54,9 @@ export interface IEpPaginationProps extends PaginationProps {
 
 export default function EpPagination({
   current,
-  pageSize = 10,
+  pageSize = DEFAULT_PAGE_SIZE,
   defaultCurrent = 1,
-  defaultPageSize = 10,
+  defaultPageSize = DEFAULT_PAGE_SIZE,
   total,
   showSizeChanger = true,
   pageChange,
@@ -129,7 +131,7 @@ export default function EpPagination({
     onChange && onChange(1, value);
   };
 
-  return hideOnSinglePage && total <= 10 ? (
+  return hideOnSinglePage && total <= pageSizeValue ? (
     <div></div>
   ) : (
     <div className={clsx(styles.pagination, isMobile && styles.paginationMobile)}>

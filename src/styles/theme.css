@@ -229,8 +229,9 @@
   --fill-hover-bg: #f8f8f8;
   --fill-click-bg: #eaeaea;
   --fill-page-bg: #fff;
-  --fill-mask-1: rgb(255 255 255 / 60%);
-  --fill-mask-2: rgb(255 255 255 / 80%);
+  --fill-mask-1: rgb(0 0 0 / 60%);
+  --fill-mask-2: rgb(0 0 0 / 80%);
+  --share-svg-hover: #000;
 }
 
 .dark-theme {
@@ -368,6 +369,7 @@
   --fill-hover-bg: #212121;
   --fill-click-bg: #303030;
   --fill-page-bg: #1a1a1a;
-  --fill-mask-1: rgb(255 255 255 / 60%);
-  --fill-mask-2: rgb(255 255 255 / 80%);
+  --fill-mask-1: rgb(0 0 0 / 60%);
+  --fill-mask-2: rgb(0 0 0 / 80%);
+  --share-svg-hover: #fff;
 }

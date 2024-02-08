@@ -1,6 +1,6 @@
 import { Drawer, Layout, Menu, Space } from 'antd';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
 import WalletMenu from './components/WalletMenu';
 import { useRouter, usePathname } from 'next/navigation';
@@ -20,6 +20,7 @@ import Profile from 'assets/images/profile.svg';
 import MyCollection from 'assets/images/myCollection.svg';
 import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
+import DropIcon from 'assets/images/events/drops.svg';
 
 import './style.css';
 import styles from './style.module.css';
@@ -32,6 +33,10 @@ import { isPortkeyApp } from 'utils/isMobile';
 import Button from 'baseComponents/Button';
 import DropMenu from 'baseComponents/DropMenu';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
+import { hideHeaderPage } from 'constants/common';
+import { WalletType, useWebLogin } from 'aelf-web-login';
+import useGetState from 'store/state/getState';
+
 function Header() {
   const [theme, changeTheme] = useTheme();
   const nav = useRouter();
@@ -43,6 +48,17 @@ function Header() {
   const [visible, setVisible] = useState(false);
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
+  const { aelfInfo } = useGetState();
+
+  const { walletType } = useWebLogin();
+
+  const hidden = useMemo(() => {
+    const path = pathname?.split('/')?.[1];
+    if (hideHeaderPage.includes(path)) {
+      return true;
+    }
+    return false;
+  }, [pathname]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -77,7 +93,9 @@ function Header() {
 
   return (
     <Layout.Header
-      className={`${isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'} w-[100%] !p-0 !bg-transparent`}>
+      className={`${hidden && 'hidden'} ${
+        isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
+      } w-[100%] !p-0 !bg-transparent`}>
       <div className={`${styles['marketplace-header']} ${isSmallScreen ? styles['mobile-header-wrapper'] : ''}`}>
         <Link href={'/'}>
           <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
@@ -88,6 +106,7 @@ function Header() {
               <Frame />
             </div>
             <Drawer
+              zIndex={300}
               className="header-drawer"
               extra={
                 <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>
@@ -114,6 +133,14 @@ function Header() {
                       <span>Create a Collection</span>
                     </AuthNavLink>
                   </p>
+
+                  {aelfInfo.showDropEntrance ? (
+                    <p className="menu-item">
+                      <Link href={'/drops'}>
+                        <DropIcon /> <span>Drops</span>
+                      </Link>
+                    </p>
+                  ) : null}
                 </div>
                 <div className="menu-wrap">
                   <p className="menu-item" onClick={onClose}>
@@ -138,7 +165,13 @@ function Header() {
                       onClose={onClose}
                       open={childVisible}>
                       <h1 className="drawer-title font-semibold">Wallet</h1>
-                      <WalletMenu />
+                      <WalletMenu
+                        onclick={() => {
+                          if (walletType === WalletType.portkey) {
+                            onClose();
+                          }
+                        }}
+                      />
                       <div className="return-wrap">
                         <Button type="default" onClick={onChildClose}>
                           Return
@@ -206,6 +239,13 @@ function Header() {
                 }>
                 <span className="!cursor-default">Create</span>
               </DropMenu>
+              {aelfInfo.showDropEntrance ? (
+                <Link
+                  href="/drops"
+                  className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
+                  Drops
+                </Link>
+              ) : null}
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
