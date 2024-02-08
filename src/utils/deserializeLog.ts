@@ -1,4 +1,7 @@
+import { IClaimDropResult, ITransactionResult } from 'contract/type';
 import AElf from './aelf';
+import { Proto } from './proto';
+import { SentryMessageType, captureMessage } from './captureMessage';
 
 export interface ITransactionLog {
   Address: string;
@@ -73,3 +76,85 @@ export async function deserializeLog(log: ITransactionLog, proto: any) {
     return Promise.reject(error);
   }
 }
+
+const sendMessage = <T, R>({
+  contractAddress,
+  TransactionResult,
+  TransactionId,
+  errorMsg,
+  proto,
+  name,
+}: {
+  contractAddress: string;
+  TransactionResult: ITransactionResult;
+  TransactionId: string;
+  errorMsg?: R;
+  proto?: T;
+  name: string;
+}) => {
+  captureMessage({
+    type: SentryMessageType.HTTP,
+    params: {
+      name,
+      method: 'get',
+      query: {
+        contractAddress,
+        TransactionId,
+      },
+      description: {
+        TransactionResult,
+        proto,
+        errorMsg,
+      },
+    },
+  });
+};
+
+export const getResult = async (
+  contractAddress: string,
+  logsName: string,
+  TransactionResult: ITransactionResult,
+  TransactionId: string,
+) => {
+  const proto = Proto.getInstance().getProto();
+  const currentProto = proto[contractAddress];
+  if (currentProto) {
+    const log = TransactionResult?.Logs?.filter((item) => {
+      return item.Name === logsName;
+    })?.[0];
+    if (log) {
+      try {
+        const logResult: IClaimDropResult = await deserializeLog(log, currentProto);
+        return logResult;
+      } catch (error) {
+        sendMessage({
+          name: `${logsName} DeserializeLog`,
+          contractAddress,
+          TransactionResult,
+          TransactionId,
+          errorMsg: error,
+        });
+        return false;
+      }
+    } else {
+      sendMessage({
+        name: `${logsName} DeserializeLog`,
+        contractAddress,
+        TransactionResult,
+        TransactionId,
+        errorMsg: 'no log events',
+      });
+      return false;
+    }
+  } else {
+    sendMessage({
+      name: `${logsName} DeserializeLog`,
+      contractAddress,
+      TransactionResult,
+      TransactionId,
+      errorMsg: 'no proto',
+      proto,
+    });
+    return false;
+  }
+};

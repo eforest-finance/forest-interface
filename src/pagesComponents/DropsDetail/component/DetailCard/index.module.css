@@ -1,0 +1,48 @@
+/* stylelint-disable no-descending-specificity */
+.detail-card-svg {
+  @apply flex items-center;
+  .detail-card-share {
+    @apply w-[24px] h-[24px] flex justify-center items-center ml-[24px] lgTW:ml-[40px] cursor-pointer;
+  }
+
+  .detail-card-svg-twitter {
+    path {
+      @apply fill-textSecondary stroke-textSecondary;
+    }
+    &:hover {
+      path {
+        @apply fill-[var(--share-svg-hover)] stroke-[var(--share-svg-hover)];
+      }
+    }
+  }
+  .detail-card-svg-internet {
+    path {
+      @apply fill-textSecondary;
+    }
+    &:hover {
+      path {
+        @apply fill-[var(--share-svg-hover)];
+      }
+    }
+  }
+  .detail-card-svg-telegram {
+    path:first-child {
+      @apply fill-textSecondary;
+    }
+    &:hover {
+      path:first-child {
+        @apply fill-[#28A8E9];
+      }
+    }
+  }
+  .detail-card-svg-discord {
+    path {
+      @apply scale-[0.4] fill-textSecondary;
+    }
+    &:hover {
+      path {
+        @apply fill-[#5865F2];
+      }
+    }
+  }
+}

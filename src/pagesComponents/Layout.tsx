@@ -43,6 +43,11 @@ const Layout = dynamic(async () => {
     const { isSmallScreen, loading } = useSelector(selectInfo);
     const { isMD } = useResponsive();
     const [theme, initialTheme] = useTheme();
+    const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
+    const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
+    const webLoginContext = useWebLogin();
+    const { version } = webLoginContext;
+
     const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } = useCallContract({
       chainId: SupportedELFChainId.MAIN_NET,
       rpcUrl: info?.rpcUrlAELF,
@@ -56,28 +61,8 @@ const Layout = dynamic(async () => {
       rpcUrl: info?.rpcUrlTDVW,
     });
 
-    const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
-    const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
-    const webLoginContext = useWebLogin();
     (window as any).logout = webLoginContext.logout;
     WebLoginInstance.get().setWebLoginContext(webLoginContext);
-    WebLoginInstance.get().setContractMethod([
-      {
-        chain: SupportedELFChainId.MAIN_NET,
-        sendMethod: callAELFSendMethod,
-        viewMethod: callAELFViewMethod,
-      },
-      {
-        chain: SupportedELFChainId.TDVV_NET,
-        sendMethod: callTDVVSendMethod,
-        viewMethod: callTDVVViewMethod,
-      },
-      {
-        chain: SupportedELFChainId.TDVW_NET,
-        sendMethod: callTDVWSendMethod,
-        viewMethod: callTDVWViewMethod,
-      },
-    ]);
 
     const getToken = useGetToken();
     const getUserInfo = useUserInfo();
@@ -129,6 +114,23 @@ const Layout = dynamic(async () => {
     useEffect(() => {
       console.log('webLoginContext.loginState', webLoginContext.loginState);
       if (webLoginContext.loginState === WebLoginState.logined) {
+        WebLoginInstance.get().setContractMethod([
+          {
+            chain: SupportedELFChainId.MAIN_NET,
+            sendMethod: callAELFSendMethod,
+            viewMethod: callAELFViewMethod,
+          },
+          {
+            chain: SupportedELFChainId.TDVV_NET,
+            sendMethod: callTDVVSendMethod,
+            viewMethod: callTDVVViewMethod,
+          },
+          {
+            chain: SupportedELFChainId.TDVW_NET,
+            sendMethod: callTDVWSendMethod,
+            viewMethod: callTDVWViewMethod,
+          },
+        ]);
         // getSynchronizedResults();
       }
     }, [webLoginContext.loginState]);

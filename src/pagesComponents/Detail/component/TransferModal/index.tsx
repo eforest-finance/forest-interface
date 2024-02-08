@@ -11,7 +11,6 @@ import { decodeTransferAddress as aelfDecodeAddress } from 'utils/aelfUtils';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import { matchErrorMsg } from 'contract/formatErrorMsg';
-import { WalletType, checkWalletSecurity, useWebLogin } from 'aelf-web-login';
 import { debounce } from 'lodash-es';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';
@@ -27,6 +26,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice } from 'utils/format';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import { WalletType, useWebLogin } from 'aelf-web-login';
 import styles from './style.module.css';
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
@@ -62,25 +62,26 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   }, [nftInfo?.previewImage]);
 
   const getWalletSecurity = async () => {
-    if (walletInfo.portkeyInfo && walletInfo.portkeyInfo?.caInfo?.caHash) {
-      try {
-        const walletSecurity = await checkWalletSecurity({
-          originChainId: walletInfo.portkeyInfo.chainId,
-          targetChainId: aelfInfo.curChain,
-          caHash: walletInfo.portkeyInfo.caInfo.caHash,
-        });
-        if (walletSecurity.status === 'TransferSafe' || walletSecurity.status === 'OriginChainSafe') {
-          return true;
-        } else {
-          message.error(matchErrorMsg(walletSecurity.message));
-          return false;
-        }
-      } catch (error) {
-        return true;
-      }
-    } else {
-      return true;
-    }
+    // if (walletInfo.portkeyInfo && walletInfo.portkeyInfo?.caInfo?.caHash) {
+    //   try {
+    //     const walletSecurity = await checkWalletSecurity({
+    //       originChainId: walletInfo.portkeyInfo.chainId,
+    //       targetChainId: aelfInfo.curChain,
+    //       caHash: walletInfo.portkeyInfo.caInfo.caHash,
+    //     });
+    //     if (walletSecurity.status === 'TransferSafe' || walletSecurity.status === 'OriginChainSafe') {
+    //       return true;
+    //     } else {
+    //       message.error(matchErrorMsg(walletSecurity.message));
+    //       return false;
+    //     }
+    //   } catch (error) {
+    //     return true;
+    //   }
+    // } else {
+    //   return true;
+    // }
+    return true;
   };
 
   const [loading, setLoading] = useState<boolean>(false);

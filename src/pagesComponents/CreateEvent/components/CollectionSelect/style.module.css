@@ -1,0 +1,28 @@
+.option-item-custom {
+  @apply flex justify-between items-center px-3 py-4 cursor-pointer;
+
+  &.selected {
+    @apply bg-fillHoverBg;
+  }
+
+  .info-card {
+    @apply flex flex-row items-center;
+  }
+  .info-expire {
+    @apply inline-block text-xs leading-[18px] text-[#796F94] font-normal;
+  }
+}
+
+.collection-select {
+  @apply !h-auto;
+}
+.collection-select-popup {
+  :global {
+    .ant-select-item-option {
+      @apply !p-0 !border-0 !border-b !border-solid !border-lineDividers hover:bg-fillHoverBg;
+    }
+    .ant-select-item-option:first-child {
+      display: none;
+    }
+  }
+}

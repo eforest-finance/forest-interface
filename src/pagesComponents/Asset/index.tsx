@@ -1,7 +1,6 @@
-import { Asset, PortkeyAssetProvider } from '@portkey/did-ui-react';
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
-import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
+import { WalletType, WebLoginState, useComponentFlex, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useTimeoutFn } from 'react-use';
 
@@ -17,6 +16,8 @@ export default function MyAsset() {
   const isPortkeyConnect = walletType === WalletType.portkey;
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
+
+  const { PortkeyAssetProvider, Asset } = useComponentFlex();
 
   useTimeoutFn(() => {
     if (!isLogin || !isPortkeyConnect) {

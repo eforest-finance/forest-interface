@@ -96,3 +96,23 @@ export const CancelOfferMessage = {
     message: 'Please cancel the offer in the wallet.',
   },
 };
+
+export const MintNftMessage = {
+  title: 'Mint NFT',
+  portkey: {
+    title: transactionPending,
+    message: confirmationAuto,
+  },
+  default: {
+    title: transactionPending,
+    message: 'Please confirm the minting in the wallet.',
+  },
+  partiallyMessage: {
+    title: 'Minting Partially Completed',
+  },
+  errorMessage: {
+    title: 'Minting Failed',
+    description:
+      'Minting failure could be due to network issues, transaction fee increases, or someone else minting the item before you.',
+  },
+};

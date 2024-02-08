@@ -127,7 +127,12 @@ export function getBlockHeight() {
   return getAElf().chain.getBlockHeight();
 }
 
-export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0): Promise<any> {
+export async function getTxResult(
+  TransactionId: string,
+  chainId: Chain,
+  reGetCount = 0,
+  retryCountWhenNotExist = 0,
+): Promise<any> {
   const rpcUrl = getRpcUrls()[chainId];
   const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
   if (txResult.error && txResult.errorMessage) {
@@ -138,6 +143,15 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     throw Error('Failed to retrieve transaction result.');
   }
 
+  if (txResult.Status.toLowerCase() === 'notexisted') {
+    if (retryCountWhenNotExist > 5) {
+      throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+    }
+    await sleep(1000);
+    retryCountWhenNotExist++;
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
+  }
+
   if (txResult.Status.toLowerCase() === 'pending') {
     // || txResult.Status.toLowerCase() === 'notexisted'
     if (reGetCount > 10) {
@@ -145,7 +159,7 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     }
     await sleep(1000);
     reGetCount++;
-    return getTxResult(TransactionId, chainId, reGetCount);
+    return getTxResult(TransactionId, chainId, reGetCount, retryCountWhenNotExist);
   }
 
   if (txResult.Status.toLowerCase() === 'mined') {
@@ -228,7 +242,7 @@ export const checkTokenApproveCurrying = () => {
       const allowanceBN = new BigNumber(allowance?.allowance);
 
       if (allowanceBN.lt(bigA)) {
-        return await approveELF(spender, approveSymbol || 'ELF', CONTRACT_AMOUNT, chainId);
+        return await approveELF(spender, approveSymbol || 'ELF', `${bigA.toNumber()}`, chainId);
       }
       return true;
     } catch (error) {
@@ -340,6 +354,51 @@ export const checkNFTApprove = async (options: {
       const amount = isNightEl() ? CONTRACT_AMOUNT : Number(bigA);
       return await approve(spender, symbol, `${amount}`, chainId);
     }
+  } catch (error) {
+    message.destroy();
+    const resError = error as unknown as IContractError;
+    if (resError) {
+      message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+    }
+    return false;
+  }
+};
+
+export const checkELFAllowance = async (options: {
+  spender: string;
+  address: string;
+  chainId?: Chain;
+  symbol?: string;
+  decimals?: number;
+  amount: string;
+}) => {
+  const { chainId, symbol = 'ELF', address, spender, amount, decimals = 8 } = options;
+  try {
+    const allowance = await GetAllowance(
+      {
+        symbol: symbol,
+        owner: address,
+        spender: spender,
+      },
+      {
+        chain: chainId,
+      },
+    );
+
+    if (allowance.error) {
+      message.error(allowance.errorMessage?.message || allowance.error.toString() || DEFAULT_ERROR);
+      return false;
+    }
+
+    const bigA = timesDecimals(amount, decimals ?? 8);
+
+    const allowanceBN = new BigNumber(allowance?.allowance);
+
+    if (allowanceBN.lt(bigA)) {
+      const approveAmount = isNightEl() ? CONTRACT_AMOUNT : bigA.toNumber();
+      return await approveELF(spender, symbol, `${approveAmount}`, chainId);
+    }
+    return true;
   } catch (error) {
     message.destroy();
     const resError = error as unknown as IContractError;

@@ -294,6 +294,10 @@ export default function CreateCollection() {
         delete requestParams.seedOwnedSymbol;
       }
 
+      if (!requestParams.address) {
+        return null;
+      }
+
       try {
         const res = await fetchSymbolList(requestParams);
         const items = res.items.map((item) => {

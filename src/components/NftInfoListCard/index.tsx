@@ -13,10 +13,11 @@ export interface INftInfoListCard {
   priceTitle?: string;
   price?: string | number;
   usdPrice?: string | number;
+  imageSizeType?: 'cover' | 'contain';
 }
 
 const NftInfoListCard = (props: INftInfoListCard) => {
-  const { collectionName, nftName, item, priceTitle, price, usdPrice } = props;
+  const { collectionName, nftName, item, priceTitle, price, usdPrice, imageSizeType = 'contain' } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
@@ -26,24 +27,27 @@ const NftInfoListCard = (props: INftInfoListCard) => {
       <div className="flex justify-between pb-[16px] overflow-hidden">
         <div className="flex items-center mr-[16px] overflow-hidden flex-1">
           {props.image && (
-            <div className="w-[84px] h-[84px] mr-[16px] flex justify-center items-center rounded-md border border-solid border-lineBorder">
+            <div className="w-[84px] h-[84px] mr-[16px] flex justify-center items-center overflow-hidden rounded-md border border-solid border-lineBorder">
               <ImgLoading
                 src={props.image}
                 nextImageProps={{
                   width: 84,
                   height: 84,
                 }}
-                imageSizeType="contain"
-                className="!rounded-none"
+                imageSizeType={imageSizeType}
+                className="!rounded-none !w-[84px] !h-[84px]"
               />
             </div>
           )}
 
           {!isSmallScreen && (
-            <div className="flex flex-1 flex-col justify-between items-start overflow-hidden">
-              <p className={clsx('text-base font-medium text-textSecondary', styles['nft-list-card-text-ellipsis'])}>
-                {collectionName}
-              </p>
+            <div className="flex flex-1 flex-col min-h-full justify-around items-start overflow-hidden">
+              {collectionName && (
+                <p className={clsx('text-base font-medium text-textSecondary', styles['nft-list-card-text-ellipsis'])}>
+                  {collectionName}
+                </p>
+              )}
+
               <p className={clsx('text-xl font-semibold text-textPrimary', styles['nft-list-card-text-ellipsis'])}>
                 {nftName}
               </p>

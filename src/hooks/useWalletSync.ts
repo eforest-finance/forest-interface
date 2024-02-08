@@ -1,4 +1,12 @@
-import { useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
+import {
+  useComponentFlex,
+  useGetAccount,
+  useWebLogin,
+  useWebLoginEvent,
+  WalletType,
+  WebLoginEvents,
+  WebLoginState,
+} from 'aelf-web-login';
 import { store, dispatch, useSelector } from 'store/store';
 import storages from 'storages';
 import { message } from 'antd';
@@ -9,7 +17,7 @@ import { getOriginalAddress } from 'utils';
 import { setWalletInfo } from 'store/reducer/userInfo';
 import { TipsMessage } from 'constants/message';
 import { ChainId } from '@portkey/types';
-import { did } from '@portkey/did-ui-react';
+// import { did } from '@portkey/did-ui-react';
 import { MethodsWallet } from '@portkey/provider-types';
 import { useGetToken } from './useContractConnect';
 import { selectInfo, setHasToken } from 'store/reducer/info';
@@ -25,6 +33,8 @@ export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
   const { discoverProvider } = useDiscoverProvider();
+
+  const { did } = useComponentFlex();
 
   const getAccount = useCallback(async () => {
     try {

@@ -7,6 +7,10 @@
   @apply fill-[var(--brand-base)];
 }
 
+.portkey-ui-asset-wrapper {
+  background-color: white;
+}
+
 .aelf-web-logout-dialog {
   background-color: #fff;
 }

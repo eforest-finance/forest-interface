@@ -2,6 +2,10 @@ import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { IContractError } from './type';
 
 export const UserDeniedMessage = 'Request rejected. Forest needs your permission to continue';
+export const EventEndedBack = "The event has ended. You'll be automatically redirected to the Drops page";
+export const EventEnded = 'The event has ended';
+export const DropMinted = 'Unable to mint additional NFTs. You have reached your maximum limit';
+export const CrossChainTransferMsg = 'manually transfer tokens from MainChain to your SideChain address.';
 
 enum SourceErrorType {
   Error1 = 'Operation canceled',
@@ -25,6 +29,13 @@ export enum TargetErrorType {
   Error6 = 'The allowance you set is less than required. Please reset it',
   Error7 = UserDeniedMessage,
 }
+
+const stringifyMsg = (message: string | object | unknown) => {
+  if (typeof message === 'object') {
+    return JSON.stringify(message);
+  }
+  return message;
+};
 
 export const matchErrorMsg = <T>(message: T, method?: string) => {
   // console.log('errorMsg', message);
@@ -131,7 +142,7 @@ export const formatErrorMsg = (result: IContractError, method?: string) => {
       ...result,
       error: result.code,
       errorMessage: {
-        message: JSON.stringify(result.message),
+        message: stringifyMsg(result.message),
       },
     };
   } else if (result.Error) {
@@ -139,7 +150,7 @@ export const formatErrorMsg = (result: IContractError, method?: string) => {
       ...result,
       error: '401',
       errorMessage: {
-        message: JSON.stringify(result.Error).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
+        message: stringifyMsg(result.Error).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
       },
     };
   } else if (typeof result.error !== 'number' && typeof result.error !== 'string') {
@@ -148,7 +159,7 @@ export const formatErrorMsg = (result: IContractError, method?: string) => {
         ...result,
         error: '401',
         errorMessage: {
-          message: JSON.stringify(result.error.message).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
+          message: stringifyMsg(result.error.message).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
         },
       };
     }
