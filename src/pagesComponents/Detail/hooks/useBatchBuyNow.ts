@@ -2,15 +2,131 @@ import { message } from 'antd';
 import { checkELFApprove, messageHTML } from 'utils/aelfUtils';
 import { BatchBuyNow } from 'contract/market';
 import useGetState from 'store/state/getState';
-import { IBatchBuyNowParams, IContractError, IPrice } from 'contract/type';
+import {
+  IBatchBuyNowParams,
+  IBatchBuyNowResult,
+  IContractError,
+  IPrice,
+  ISendResult,
+  ITransactionResult,
+} from 'contract/type';
 import { getForestContractAddress } from 'contract/forest';
 import { SupportedELFChainId } from 'constants/chain';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
+import { Proto } from 'utils/proto';
+import { deserializeLog } from 'utils/deserializeLog';
+import { SentryMessageType, captureMessage } from 'utils/captureMessage';
+import { UserDeniedMessage } from 'contract/formatErrorMsg';
+import ResultModal from 'components/ResultModal';
+import { useModal } from '@ebay/nice-modal-react';
+import useDetailGetState from 'store/state/detailGetState';
+import { BuyMessage } from 'constants/promptMessage';
+import { isERC721 } from 'utils/isTokenIdReuse';
+import { handlePlurality } from 'utils/handlePlurality';
 
 export default function useBatchBuyNow(chainId?: Chain) {
-  const { walletInfo } = useGetState();
+  const { walletInfo, aelfInfo } = useGetState();
+  const { detailInfo } = useDetailGetState();
+  const { nftInfo } = detailInfo;
   const { login, isLogin } = useCheckLoginAndToken();
+  const resultModal = useModal(ResultModal);
+
+  const showErrorModal = ({ quantity }: { quantity: number }) => {
+    resultModal.show({
+      previewImage: nftInfo?.previewImage || '',
+      title: BuyMessage.errorMessage.title,
+      hideButton: true,
+      info: {
+        logoImage: nftInfo?.nftCollection?.logoImage || '',
+        subTitle: nftInfo?.nftCollection?.tokenName,
+        title: nftInfo?.tokenName,
+        extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+      },
+      error: {
+        title: BuyMessage.errorMessage.tips,
+        description: BuyMessage.errorMessage.description,
+      },
+    });
+  };
+
+  const sendMessage = <T, R>({
+    contractAddress,
+    TransactionResult,
+    TransactionId,
+    errorMsg,
+    proto,
+    name,
+  }: {
+    contractAddress: string;
+    TransactionResult: ITransactionResult;
+    TransactionId: string;
+    errorMsg?: R;
+    proto?: T;
+    name: string;
+  }) => {
+    captureMessage({
+      type: SentryMessageType.HTTP,
+      params: {
+        name,
+        method: 'get',
+        query: {
+          contractAddress,
+          TransactionId,
+        },
+        description: {
+          TransactionResult,
+          proto,
+          errorMsg,
+        },
+      },
+    });
+  };
+
+  const getResult = async (contractAddress: string, TransactionResult: ITransactionResult, TransactionId: string) => {
+    const proto = Proto.getInstance().getProto();
+    const currentProto = proto[contractAddress];
+    if (currentProto) {
+      const log = TransactionResult?.Logs?.filter((item) => {
+        return item.Name === 'BatchBuyNowResult';
+      })?.[0];
+      if (log) {
+        try {
+          const logResult: IBatchBuyNowResult = await deserializeLog(log, currentProto);
+          return logResult;
+        } catch (error) {
+          sendMessage({
+            name: 'BatchBuyNowResultDeserializeLog',
+            contractAddress,
+            TransactionResult,
+            TransactionId,
+            errorMsg: error,
+          });
+          return false;
+        }
+      } else {
+        sendMessage({
+          name: 'BatchBuyNowResultDeserializeLog',
+          contractAddress,
+          TransactionResult,
+          TransactionId,
+          errorMsg: 'no log events',
+        });
+        return false;
+      }
+    } else {
+      sendMessage({
+        name: 'BatchBuyNowResultDeserializeProto',
+        contractAddress,
+        TransactionResult,
+        TransactionId,
+        errorMsg: 'no proto',
+        proto,
+      });
+      return false;
+    }
+  };
+
   const batchBuyNow = async (
     parameter: IBatchBuyNowParams & {
       price: IPrice;
@@ -28,7 +144,7 @@ export default function useBatchBuyNow(chainId?: Chain) {
       });
 
       if (!approveTokenResult) {
-        return 'error';
+        return 'failed';
       }
 
       try {
@@ -37,21 +153,32 @@ export default function useBatchBuyNow(chainId?: Chain) {
           fixPriceList: parameter.fixPriceList,
         });
         if (result) {
-          if (result?.error) {
-            message.error(result.errorMessage?.message || result.error?.toString() || DEFAULT_ERROR);
-            return 'error';
+          const { TransactionId, TransactionResult } = (result.result || result) as ISendResult;
+          if (TransactionResult) {
+            const res = await getResult(aelfInfo.marketSideAddress, TransactionResult, TransactionId);
+            if (res) {
+              return {
+                ...res,
+                TransactionId,
+              };
+            } else {
+              message.error(DEFAULT_ERROR);
+              return 'failed';
+            }
           }
-          const { TransactionId } = result.result || result;
-          messageHTML(TransactionId!, 'success', chainId);
-          return result;
         } else {
           message.error(DEFAULT_ERROR);
-          return 'error';
+          return 'failed';
         }
       } catch (error) {
+        message.destroy();
         const resError = error as unknown as IContractError;
-        message.error(resError.errorMessage?.message || DEFAULT_ERROR);
-        return 'error';
+        if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
+          message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+          return Promise.reject(error);
+        }
+        showErrorModal({ quantity: 0 });
+        return 'failed';
       }
     } else {
       login();

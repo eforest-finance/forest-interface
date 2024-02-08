@@ -326,9 +326,23 @@ export interface IResetWhitelistParams {
   projectId: string;
 }
 
+export interface ITransactionLog {
+  Address: string;
+  Name: string;
+  Indexed: string[];
+  NonIndexed: string;
+}
+
+export interface ITransactionResult {
+  TransactionId: string;
+  Status: string;
+  Logs: ITransactionLog[];
+  [props: string]: any;
+}
+
 export interface ISendResult {
   TransactionId: string;
-  TransactionResult: string;
+  TransactionResult: ITransactionResult;
 }
 
 export interface IGetProxyAccountByProxyAccountAddressRes {
@@ -337,6 +351,18 @@ export interface IGetProxyAccountByProxyAccountAddressRes {
     address: string;
   }[];
   proxyAccountHash: string;
+}
+
+interface IFailPriceList {
+  quantity: number;
+  price: IPrice;
+}
+
+export interface IBatchBuyNowResult {
+  allSuccessFlag: boolean;
+  failPriceList?: {
+    value: IFailPriceList[];
+  };
 }
 
 export interface IForwardCallParams {
@@ -375,4 +401,28 @@ export interface IBatchDeListParams {
   symbol: string;
   price: IPrice;
   batchDelistType: BatchDeListType;
+}
+
+export interface IClaimDropParams {
+  dropId: string;
+  claimAmount: number;
+}
+
+export interface IClaimDetailRecordList {
+  symbol: string;
+  amount: string;
+  name: string;
+  chainId: number;
+  image: string;
+}
+
+export interface IClaimDropResult {
+  currentAmount: string;
+  totalAmount: string;
+  dropId: string;
+  claimDetailList?: {
+    value: IClaimDetailRecordList[];
+  };
+  TransactionId: string;
+  address: string;
 }

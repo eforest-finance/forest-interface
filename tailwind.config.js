@@ -75,6 +75,7 @@ module.exports = {
         hover: withOpacityValue('--brand-btn-hover'),
         disable: withOpacityValue('--forest-brand-disable'),
         content: withOpacityValue('--brand-base'),
+        cardHover: 'var(--card-bg-hover)',
       },
       ringColor: {},
       boxShadow: {

@@ -1,6 +1,6 @@
 import Required from 'assets/images/required.svg';
 import clsx from 'clsx';
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, ReactNode, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 
@@ -10,7 +10,7 @@ export default function FormItem(options: {
   require?: boolean;
   description?: ReactElement | string;
   error?: {
-    msg: string;
+    msg: ReactNode;
   };
   children?: ReactElement;
 }) {

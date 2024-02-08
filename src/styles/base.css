@@ -69,3 +69,7 @@ code {
     height: 5px;
   }
 }
+
+.ant-message {
+  @apply z-[100100];
+}

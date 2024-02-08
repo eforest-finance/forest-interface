@@ -522,7 +522,7 @@ export default function CreateItem() {
   const renderSyncChainModal = () => {
     if (!modalState.isVisible) return null;
 
-    const symbol = getSymbolByTokenId(itemInfo!.tokenId!);
+    const collectionSymbol = itemInfo?.symbol;
 
     const successUrl = state?.usr?.protocolId ? `/explore-items/${state?.usr?.protocolId}` : `/account#Created`;
 
@@ -534,7 +534,7 @@ export default function CreateItem() {
         title={'Create an Item'}
         logoImage={previewImageUrl || uploadFile?.url}
         tokenName={itemInfo?.alias}
-        collectionName={symbol}
+        collectionName={collectionSymbol}
         createParamsData={createParamsData}
         isFinished={modalState.isFinished}
         successUrl={successUrl}

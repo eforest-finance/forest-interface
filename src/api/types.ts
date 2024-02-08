@@ -94,8 +94,8 @@ export interface IListingsParams {
   symbol: string;
   skipCount: number;
   maxResultCount: number;
-  address?: string;
   excludedAddress?: string;
+  address?: string;
 }
 
 export interface IListingsResponse {
@@ -339,8 +339,10 @@ export interface IConfigResponse {
 }
 export interface IConfigItems {
   networkType?: string;
+  networkTypeV2?: string;
   connectServer?: string;
   graphqlServer?: string;
+  graphqlServerV2?: string;
   portkeyServer?: string;
   mainChainAddress?: string;
   sideChainAddress?: string;
@@ -356,6 +358,7 @@ export interface IConfigItems {
   rpcUrlTDVW?: string;
   identityPoolID?: string;
   tsm?: string;
+  faucetContractAddress?: string;
 }
 
 export interface IUserSettingParams {
@@ -374,6 +377,7 @@ export interface ITokenParams {
   pubkey?: string;
   signature?: string;
   timestamp?: number;
+  version?: string;
   accountInfo?: Array<{ chainId: string; address: string }>;
   source: string;
 }
@@ -553,6 +557,8 @@ export interface INftSaleInfoItem {
   lastDealPrice?: number;
   lastDealPriceSymbol?: string;
   listingPrice?: number;
+  maxOfferPrice?: number;
+  availableQuantity?: number;
 }
 export interface INftSaleInfoParams {
   id: string;
@@ -560,4 +566,73 @@ export interface INftSaleInfoParams {
 }
 export interface INftSaleInfoResponse {
   data: INftSaleInfoItem;
+}
+
+export enum SocialMediaType {
+  tweet = 'tweet',
+  discord = 'discord',
+  telegram = 'telegram',
+  web = 'web',
+}
+
+export interface ISocialMedia {
+  type: SocialMediaType;
+  link: string;
+}
+
+export enum DropState {
+  'Upcoming',
+  'Live',
+  'Canceled',
+  'End',
+}
+
+export interface IDropQuotaResponse {
+  dropId: string;
+  totalAmount: number;
+  claimAmount: number;
+  addressClaimLimit: number;
+  addressClaimAmount: number;
+  state: DropState;
+}
+
+export interface IDropDetailInfo {
+  dropId: string;
+  dropName: string;
+  bannerUrl: string;
+  logoUrl: string;
+  collectionId: string;
+  collectionLogo: string;
+  collectionName: string;
+  introduction: string;
+  mintPrice: string;
+  mintPriceUsd: string;
+  burn: boolean;
+  startTime: number;
+  expireTime: number;
+  socialMedia: ISocialMedia[];
+}
+
+export type IDropDetailResponse = IDropDetailInfo & IDropQuotaResponse;
+export interface IActionDetail {
+  dropId: string;
+  dropName: string;
+  bannerUrl?: string;
+  logoUrl?: string;
+  introduction: string;
+  mintPrice: number;
+  mintPriceUsd?: number;
+  startTime: number;
+  expireTime: number;
+}
+
+export interface IDropListParams {
+  pageIndex: number;
+  pageSize: number;
+  state: number;
+}
+
+export interface IDropListRes {
+  totalCount: number;
+  items: IActionDetail[];
 }

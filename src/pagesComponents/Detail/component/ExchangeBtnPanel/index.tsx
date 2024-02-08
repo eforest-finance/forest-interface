@@ -5,7 +5,7 @@ import useGetState from 'store/state/getState';
 
 import styles from './style.module.css';
 import Button from 'baseComponents/Button';
-import { PortkeyAssetProvider } from 'aelf-web-login';
+import { useComponentFlex } from 'aelf-web-login';
 import getMaxNftQuantityOfSell from 'utils/getMaxNftQuantityOfSell';
 import useDetailGetState from 'store/state/detailGetState';
 import { message } from 'antd';
@@ -25,6 +25,8 @@ export default function ExchangeBtnPanel(options: {
   const { nftInfo } = detailInfo;
   const { isSmallScreen } = infoState;
   const [sellLoading, setSellLoading] = useState<boolean>(false);
+
+  const { PortkeyAssetProvider } = useComponentFlex();
 
   const TransferButton = useMemo(
     () => (

@@ -10,7 +10,6 @@ export const getOffersInfo = async (
   page: number,
   pageSize: number = DEFAULT_PAGE_SIZE,
 ) => {
-  console.log('getOffers');
   try {
     const result = await getOffers({
       page,

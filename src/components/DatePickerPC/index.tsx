@@ -27,6 +27,7 @@ export default function DatePickerPC(options: {
 
   return (
     <DatePicker
+      getPopupContainer={(v) => v}
       defaultValue={currentDefaultValue}
       showNow={false}
       value={value}

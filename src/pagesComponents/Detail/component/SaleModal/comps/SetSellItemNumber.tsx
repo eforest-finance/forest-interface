@@ -10,27 +10,30 @@ export function SetSellItemNumber(props: ISetSellItemNumberProps) {
   const { maxNumber, inputChangeHandler, value, status } = useSellItemNumber(props);
   const renderError = () => {
     return (
-      <div className="mt-2 text-xs flex justify-between">
+      <div className="mt-2 text-xs">
         <span className="text-error">{status !== 'error' ? '' : 'Please enter a correct quantity.'}</span>
-        <span className="text-textSecondary">{thousandsNumber(maxNumber)} available</span>
       </div>
     );
   };
   return (
     <div className={`${isSmallScreen ? 'mt-6' : 'mt-8'}`}>
       <span className="font-medium text-textPrimary text-lg rounded-lg">Quantity of Items</span>
-      <Input
-        size="large"
-        className="mt-4"
-        allowClear={true}
-        value={formatTokenPrice(value || '')}
-        status={status}
-        onKeyDown={(e) => {
-          /\d|\.|Backspace|ArrowRight|ArrowLeft|ArrowUp|ArrowDown/.test(e.key) || e.preventDefault();
-        }}
-        onChange={inputChangeHandler}
-        placeholder="Enter the quantity of items to list"
-      />
+      <div className="mt-4 relative">
+        <Input
+          size="large"
+          allowClear={true}
+          value={formatTokenPrice(value || '')}
+          status={status}
+          onKeyDown={(e) => {
+            /\d|\.|Backspace|ArrowRight|ArrowLeft|ArrowUp|ArrowDown/.test(e.key) || e.preventDefault();
+          }}
+          onChange={inputChangeHandler}
+          placeholder="Enter the quantity of items to list"
+        />
+        <span className="text-textSecondary text-xs absolute right-0 top-[-28px]">
+          {thousandsNumber(maxNumber)} available
+        </span>
+      </div>
       {renderError()}
     </div>
   );

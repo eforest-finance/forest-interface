@@ -39,13 +39,13 @@ import {
   IBidInfosResponse,
   IAuctionInfoResponse,
   IMinMarkupPriceResponse,
-  ITransactionFeeResponse,
   CompositeNftInfosParams,
   INftInfoOwnersParams,
   INftInfoOwnersResponse,
   INftSaleInfoParams,
-  INftSaleInfoResponse,
   INftSaleInfoItem,
+  IDropDetailResponse,
+  IDropQuotaResponse,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -56,6 +56,7 @@ import {
 } from 'pagesComponents/Collections/Hooks/useSearchCollections';
 import { IRecommendedCollections } from 'pagesComponents/Collections/Hooks/useRecommendedCollections';
 import { INftCollectionInfo } from 'hooks/useIsMinter';
+import { ITransitionFee } from 'pagesComponents/Detail/hooks/useGetTransitionFee';
 
 export const fetchChainsList = async (): Promise<Chain[]> => {
   return request.get<Chain[]>('app/chains');
@@ -232,7 +233,7 @@ export const fetchMinMarkupPrice = async (params: { Symbol: string }) => {
 };
 
 export const fetchTransactionFee = async () => {
-  return request.get<ITransactionFeeResponse>('app/seed/transaction-fee');
+  return request.get<ITransitionFee>('app/seed/transaction-fee');
 };
 
 export const fetchNftInfoOwners = async (params: INftInfoOwnersParams) => {
@@ -241,4 +242,12 @@ export const fetchNftInfoOwners = async (params: INftInfoOwnersParams) => {
 
 export const fetchNftSalesInfo = async (params: INftSaleInfoParams) => {
   return request.get<INftSaleInfoItem>('app/nft/nft-for-sale', { params });
+};
+
+export const fetchDropDetail = async (params: { dropId: string; address?: string }) => {
+  return request.get<IDropDetailResponse>('app/drop/detail', { params });
+};
+
+export const fetchDropQuota = async (params: { dropId: string; address: string }) => {
+  return request.get<IDropQuotaResponse>('app/drop/quota', { params });
 };
