@@ -1,6 +1,8 @@
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { IContractError } from './type';
 
+export const UserDeniedMessage = 'Request rejected. Forest needs your permission to continue';
+
 enum SourceErrorType {
   Error1 = 'Operation canceled',
   Error2 = 'You closed the prompt without any action',
@@ -15,13 +17,13 @@ export const cancelListingMessage =
   'All your NFTs are now listed. Please cancel the listings before initiating a new listing.';
 
 export enum TargetErrorType {
-  Error1 = 'Request rejected. Forest needs your permission to continue',
-  Error2 = 'Request rejected. Forest needs your permission to continue',
-  Error3 = 'Request rejected. Forest needs your permission to continue',
-  Error4 = 'Request rejected. Forest needs your permission to continue',
+  Error1 = UserDeniedMessage,
+  Error2 = UserDeniedMessage,
+  Error3 = UserDeniedMessage,
+  Error4 = UserDeniedMessage,
   Error5 = 'Wallet not logged in',
   Error6 = 'The allowance you set is less than required. Please reset it',
-  Error7 = 'Request rejected. Forest needs your permission to continue',
+  Error7 = UserDeniedMessage,
 }
 
 export const matchErrorMsg = <T>(message: T, method?: string) => {
@@ -60,6 +62,47 @@ export const matchErrorMsg = <T>(message: T, method?: string) => {
           break;
         case 'PlaceBid':
           resMessage = `${TargetErrorType.Error6}.`;
+          break;
+        default:
+          resMessage = message;
+          break;
+      }
+      return resMessage;
+    }
+
+    if (message.includes('Insufficient funds')) {
+      switch (method) {
+        case 'BatchBuyNow':
+        case 'MakeOffer':
+          resMessage = `You can't make the purchase due to an insufficient balance.`;
+          break;
+        default:
+          resMessage = message;
+          break;
+      }
+      return resMessage;
+    }
+
+    if (message.includes('Insufficient NFT balance.')) {
+      switch (method) {
+        case 'Deal':
+          resMessage = `You can't accept the offer due to an insufficient NFT balance.`;
+          break;
+        default:
+          resMessage = message;
+          break;
+      }
+      return resMessage;
+    }
+
+    if (
+      message.includes('Insufficient balance of') &&
+      message.includes('Need balance') &&
+      message.includes('Current balance')
+    ) {
+      switch (method) {
+        case 'Transfer':
+          resMessage = `You can't make the transfer due to insufficient NFT balance.`;
           break;
         default:
           resMessage = message;

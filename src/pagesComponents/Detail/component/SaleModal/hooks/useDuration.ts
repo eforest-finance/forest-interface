@@ -12,6 +12,7 @@ export interface IDurationProps {
   onChange?: (data: IDurationData) => void;
   defaultExpirationData?: IDurationData;
   tooltip?: string;
+  checkDateValidate?: (date: Moment) => string;
 }
 
 export const optionList = [
@@ -53,7 +54,11 @@ export const optionList = [
   },
 ];
 
-export function useDurationService({ onChange, defaultExpirationData }: IDurationProps) {
+export function useDurationService({
+  onChange,
+  defaultExpirationData,
+  checkDateValidate: checkDateValidateProp,
+}: IDurationProps) {
   const defaultExpirationType = useMemo(() => {
     if (!defaultExpirationData || !defaultExpirationData?.type) return '';
     if (defaultExpirationData.showPrevious) {
@@ -139,6 +144,11 @@ export function useDurationService({ onChange, defaultExpirationData }: IDuratio
     setShowPreviousText(false);
   };
   const checkDateValidate = (date: Moment) => {
+    if (checkDateValidateProp) {
+      const errorTip = checkDateValidateProp(date);
+      setErrorTip(errorTip);
+      return;
+    }
     const timeDifference = date.diff(moment());
     const minutesDifference = moment.duration(timeDifference).asMinutes();
     const months = moment.duration(timeDifference).asMonths();

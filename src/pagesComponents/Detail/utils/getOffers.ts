@@ -1,9 +1,10 @@
 import { fetchNftOffers } from 'api/fetch';
+import BigNumber from 'bignumber.js';
 import { DEFAULT_PAGE_SIZE } from 'constants/index';
-import { MILLISECONDS_PER_DAY } from 'constants/time';
-import moment from 'moment';
 import { FormatOffersType } from 'store/types/reducer';
 import { OfferType } from 'types/nftTypes';
+import { formatTokenPrice } from 'utils/format';
+import getExpiryTime from 'utils/getExpiryTime';
 
 interface IProps {
   page?: number;
@@ -11,6 +12,21 @@ interface IProps {
   nftId: string;
   chainId: Chain;
 }
+
+const getFloorPricePercentage = (floorPrice: number, currentOffer: number) => {
+  const floorPriceBig = new BigNumber(floorPrice);
+  const currentOfferBig = new BigNumber(currentOffer);
+  if (floorPriceBig.lt(0)) {
+    return '-';
+  }
+
+  const res = currentOfferBig.minus(floorPriceBig).div(floorPriceBig).multipliedBy(100);
+  if (res.gt(0)) {
+    return `${formatTokenPrice(res, { decimalPlaces: 0 })}% above`;
+  } else {
+    return `${formatTokenPrice(res.abs(), { decimalPlaces: 0 })}% below`;
+  }
+};
 
 const getOffers = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, nftId, chainId }: IProps) => {
   try {
@@ -34,8 +50,11 @@ const getOffers = async ({ page = 1, pageSize = DEFAULT_PAGE_SIZE, nftId, chainI
         decimals: item?.purchaseToken?.decimals,
         price: item?.price,
         quantity: item?.quantity,
-        expiration: ((item?.expireTime - moment().valueOf()) / MILLISECONDS_PER_DAY).toFixed(0).toString(),
+        expiration: getExpiryTime(item.expireTime),
         expireTime: item?.expireTime,
+        floorPricePercentage: getFloorPricePercentage(item.floorPrice || -1, item?.price),
+        floorPrice: item.floorPrice || -1,
+        floorPriceSymbol: item.floorPriceSymbol || 'ELF',
         from: item?.from
           ? {
               ...item?.from,

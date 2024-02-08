@@ -7,7 +7,7 @@ import { message } from 'antd';
 
 import getMaxNftQuantityOfSell from 'utils/getMaxNftQuantityOfSell';
 import { getDurationParamsForListingContractByDuration } from '../utils/getCurListDuration';
-import checkListValidity, { EditStatusType } from '../utils/checkListValidity';
+import checkListValidity, { EditStatusType, inValidListErrorMessage } from '../utils/checkListValidity';
 import batchDeList from '../utils/batchDeList';
 
 import { ListWithFixedPrice as ListWithFixedPriceByContract } from 'contract/market';
@@ -24,18 +24,21 @@ import { IDurationData } from './useDuration';
 import { fetchNftSalesInfo } from 'api/fetch';
 import { useRequest } from 'ahooks';
 import useTokenData from 'hooks/useTokenData';
-import { ApproveListingModal } from '../modal/ApproveListingModal';
-import { ApproveCancelListingModal } from '../modal/ApproveCancelListingModal';
 import { ListingSuccessModal } from '../modal/ListingSuccessModal';
 import { EditListingSuccessModal } from '../modal/EditListingSuccessModal';
-import { InValidListMsgModal } from '../modal/InValidListMsgModal';
 import { SaleListingModal } from '../../SaleListingModal';
 import { NiceModalHandler, useModal } from '@ebay/nice-modal-react';
-import { setApproveListingModalRetry, setInvalidListingModalRetry } from 'store/reducer/saleInfo/sellModalsInfo';
-import { dispatch } from 'store/store';
 import moment from 'moment';
 import { getExploreLink } from 'utils';
 import BigNumber from 'bignumber.js';
+import PromptModal from 'components/PromptModal';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import { handlePlurality } from 'utils/handlePlurality';
+import { CancelListingMessage, ListingMessage } from 'constants/promptMessage';
+import { elementScrollToView } from 'utils/domUtils';
+import { store, useSelector } from 'store/store';
+import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { selectInfo } from 'store/reducer/info';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
@@ -78,11 +81,8 @@ export function useGetListItemsForSale(nftInfo: INftInfo) {
   const [maxQuantity, setMaxQuantity] = useState<number>(0);
   const [listItems, setListItems] = useState<number>(0);
 
-  const [loadingMaxQuantity, setLoadingMaxQuantity] = useState<boolean>(false);
-
   const getMaxNftQuantity = useCallback(async () => {
     if (nftInfo?.nftSymbol && walletInfo.address) {
-      setLoadingMaxQuantity(true);
       const res = await getMaxNftQuantityOfSell(nftInfo?.chainId, nftInfo, walletInfo.address);
       if (!res) {
         return;
@@ -93,7 +93,6 @@ export function useGetListItemsForSale(nftInfo: INftInfo) {
       setMaxQuantity(!isERC721(nftInfo) ? res.max : 1);
       setListedNFTInfoList(res.listedNFTInfoList);
       setListItems(res.listItems);
-      setLoadingMaxQuantity(false);
     }
   }, [nftInfo, walletInfo.address]);
 
@@ -120,36 +119,34 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   const { nftSaleInfo } = useGetNftSaleInfo(nftInfo.id);
   const { listItems, listedNFTInfoList, maxQuantity: availableItemForSell } = useGetListItemsForSale(nftInfo);
   const [listingBtnDisable, setListBtnDisable] = useState<boolean>(false);
-  const [floorPrice, setFloorPrice] = useState<Number | undefined>(0);
-  const [recentDealPrice, setRecentDealPrice] = useState<Number | undefined>();
   const [listingPrice, setListingPrice] = useState<IPrice>(defaultData?.listingPrice || {});
   const [duration, setDuration] = useState<IDurationData>(defaultData?.duration || {});
-  const [isLoading, setLoading] = useState<boolean>();
   const [itemsForSell, setItemsForSell] = useState<number>(isERC721(nftInfo) ? 1 : 0);
   const elfRate = useTokenData();
 
-  const approveListingModal = useModal(ApproveListingModal);
+  const promptModal = useModal(PromptModal);
+  const inValidListPromptModal = useModal(PromptModal);
   const listingSuccessModal = useModal(ListingSuccessModal);
   const editListingSuccessModal = useModal(EditListingSuccessModal);
-  const invalidListModal = useModal(InValidListMsgModal);
   const saleListingModal = useModal(SaleListingModal);
-  const approveCancelListingModal = useModal(ApproveCancelListingModal);
+
+  const { isSmallScreen } = useSelector(selectInfo);
 
   const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   const listFail = (error?: IContractError) => {
     if (error) message.error(error.errorMessage?.message || DEFAULT_ERROR);
-    setLoading(false);
   };
 
   const hideAllModal = () => {
-    approveListingModal.hide();
+    promptModal.hide();
+    inValidListPromptModal.hide();
     listingSuccessModal.hide();
     editListingSuccessModal.hide();
-    invalidListModal.hide();
     saleListingModal.hide();
-    approveCancelListingModal.hide();
     sellModalInstance.hide();
+    store.dispatch(setCurrentTab('listingOffers'));
+    elementScrollToView(document.getElementById('listings'), isSmallScreen ? 'start' : 'center');
   };
 
   const listWithFixedPrice = async (amount: number, status?: EditStatusType) => {
@@ -167,14 +164,8 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       });
 
       if (!approveRes) {
-        if (mode === 'edit') {
-          dispatch(setInvalidListingModalRetry(true));
-          dispatch(setApproveListingModalRetry(true));
-        } else {
-          dispatch(setApproveListingModalRetry(true));
-        }
         listFail();
-        return;
+        return Promise.reject(DEFAULT_ERROR);
       }
 
       const durationList = getDurationParamsForListingContractByDuration(duration);
@@ -195,22 +186,14 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         },
       );
       if (result?.error || !result) {
-        if (mode === 'edit') {
-          dispatch(setInvalidListingModalRetry(true));
-          dispatch(setApproveListingModalRetry(true));
-        } else {
-          dispatch(setApproveListingModalRetry(true));
-        }
         listFail(result || DEFAULT_ERROR);
-        return;
+        return Promise.reject(result || DEFAULT_ERROR);
       }
-
-      setLoading(false);
 
       const { TransactionId } = result.result || result;
       messageHTML(TransactionId || '', 'success', nftInfo.chainId);
       const explorerUrl = getExploreLink(TransactionId!, 'transaction', nftInfo.chainId);
-      approveListingModal.hide();
+      promptModal.hide();
       if (mode === 'edit') {
         editListingSuccessModal.show({
           nftInfo,
@@ -224,13 +207,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     } catch (error) {
       const resError = error as IContractError;
       message.error(resError.errorMessage?.message || DEFAULT_ERROR);
-      setLoading(false);
-      if (mode === 'edit') {
-        dispatch(setInvalidListingModalRetry(true));
-        dispatch(setApproveListingModalRetry(true));
-      } else {
-        dispatch(setApproveListingModalRetry(true));
-      }
+      return Promise.reject(error);
     }
   };
 
@@ -241,8 +218,19 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     }
 
     sellModalInstance.hide();
-    approveCancelListingModal.show({
-      handle: async () => {
+    promptModal.show({
+      nftInfo: {
+        image: nftSaleInfo?.logoImage,
+        collectionName: nftSaleInfo?.collectionName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: handlePlurality(listedNFTInfoList.length, 'Listing'),
+      },
+      title: CancelListingMessage.title,
+      content: {
+        title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
+        content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
+      },
+      initialization: async () => {
         await batchDeList(
           {
             symbol: nftInfo.nftSymbol,
@@ -254,16 +242,16 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
           },
           nftInfo.chainId,
         );
-        approveCancelListingModal.hide();
+        promptModal.hide();
       },
-      itemsNumberForDel: -1,
-      isBatch: true,
-      listingsNumber: listedNFTInfoList.length,
+      onClose: () => {
+        promptModal.hide();
+      },
     });
   };
 
   const onReEditListing = () => {
-    approveListingModal.hide();
+    promptModal.hide();
     sellModalInstance.show({
       nftInfo,
       type: 'add',
@@ -271,6 +259,40 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         listingPrice,
         duration,
         itemsForSell,
+      },
+    });
+  };
+
+  const showListingPromptModal = (props: { amount: number; extendStatus?: EditStatusType }) => {
+    const { amount, extendStatus } = props;
+    promptModal.show({
+      nftInfo: {
+        image: nftSaleInfo?.logoImage,
+        collectionName: nftSaleInfo?.collectionName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: isERC721(nftInfo!) ? 'Listing Price' : 'Listing Price Per Item',
+        price: `${listingPrice.price ? formatTokenPrice(listingPrice.price) : '--'} ELF`,
+        usdPrice: listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --',
+        item: isERC721(nftInfo!) ? undefined : handlePlurality(itemsForSell, 'item'),
+      },
+      title: ListingMessage.title,
+      content: {
+        title: walletInfo.portkeyInfo ? ListingMessage.portkey.title : ListingMessage.default.title,
+        content: walletInfo.portkeyInfo ? ListingMessage.portkey.message : ListingMessage.default.message,
+      },
+      buttonConfig: [
+        {
+          btnText: 'Try Again',
+          onConfirm: async () => await listWithFixedPrice(amount, extendStatus),
+        },
+        {
+          btnText: 'Edit Listing',
+          onConfirm: onReEditListing,
+        },
+      ],
+      initialization: async () => await listWithFixedPrice(amount, extendStatus),
+      onClose: () => {
+        promptModal.hide();
       },
     });
   };
@@ -289,24 +311,16 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         },
         nftInfo.chainId,
       );
-    } catch (_) {
-      dispatch(setInvalidListingModalRetry(true));
+    } catch (error) {
+      return Promise.reject(error);
     }
     if (!res) {
-      dispatch(setInvalidListingModalRetry(true));
-      return;
+      return Promise.reject(DEFAULT_ERROR);
     }
-
-    invalidListModal.hide();
-    approveListingModal.show({
-      nftSaleInfo,
-      itemsForSell,
-      listingPrice: listingPrice.price,
-      listingUSDPrice: listingUSDPrice,
-      onRetry: async () => await listWithFixedPrice(amount),
-      onReEdit: onReEditListing,
+    inValidListPromptModal.hide();
+    showListingPromptModal({
+      amount,
     });
-    listWithFixedPrice(amount);
   };
   const onEditListingForERC721 = async () => {
     if (!checkInputDataBeforeSubmit()) return;
@@ -319,10 +333,6 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     sellModalInstance.hide();
     const amount = 1;
     const durationList = getDurationParamsForListingContractByDuration(duration);
-
-    dispatch(setInvalidListingModalRetry(false));
-    dispatch(setApproveListingModalRetry(false));
-
     const { status, invalidList, extendStatus } = await checkListValidity(
       `${listingPrice?.price}`,
       listedNFTInfoList,
@@ -331,23 +341,30 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
 
     console.log('checkListValidity', status);
     if (status === BatchDeListType.GREATER_THAN) {
-      approveListingModal.show({
-        nftSaleInfo,
-        itemsForSell,
-        listingPrice: listingPrice.price,
-        listingUSDPrice: listingUSDPrice,
-        onRetry: async () => await listWithFixedPrice(amount, extendStatus),
-        onReEdit: onReEditListing,
+      showListingPromptModal({
+        amount,
+        extendStatus,
       });
-      listWithFixedPrice(amount, extendStatus);
     } else {
-      invalidListModal.show({
-        nftInfo,
-        validType: status,
-        invalidList,
-        onRetry: () => delNotValidListingAndContinueListing(status, 1),
+      inValidListPromptModal.show({
+        nftInfo: {
+          image: nftInfo?.previewImage || '',
+          collectionName: nftInfo.nftCollection?.tokenName,
+          nftName: nftInfo?.tokenName,
+          priceTitle: handlePlurality(invalidList.length, 'Listing'),
+        },
+        title: CancelListingMessage.title,
+        content: {
+          title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
+          content: walletInfo.portkeyInfo
+            ? inValidListErrorMessage.portkey[status]
+            : inValidListErrorMessage.default[status],
+        },
+        initialization: () => delNotValidListingAndContinueListing(status, 1),
+        onClose: () => {
+          promptModal.hide();
+        },
       });
-      delNotValidListingAndContinueListing(status, 1);
     }
   };
 
@@ -385,37 +402,23 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     }
 
     if (!walletInfo.address || !nftInfo.nftSymbol || !checkInputDataBeforeSubmit()) return;
-    dispatch(setApproveListingModalRetry(false));
 
     sellModalInstance.hide();
 
     if (isERC721(nftInfo)) {
       const amount = 1;
       if (mode === 'add') {
-        approveListingModal.show({
-          nftSaleInfo,
-          itemsForSell,
-          listingPrice: listingPrice.price,
-          listingUSDPrice: listingUSDPrice,
-          onRetry: async () => await listWithFixedPrice(amount),
-          onReEdit: onReEditListing,
+        showListingPromptModal({
+          amount,
         });
-        listWithFixedPrice(amount);
-        return;
       }
     }
 
     if (!isERC721(nftInfo)) {
       const amount = itemsForSell;
-      approveListingModal.show({
-        nftSaleInfo,
-        itemsForSell,
-        listingPrice: listingPrice.price,
-        listingUSDPrice: listingUSDPrice,
-        onRetry: async () => await listWithFixedPrice(amount),
-        onReEdit: onReEditListing,
+      showListingPromptModal({
+        amount,
       });
-      listWithFixedPrice(amount);
     }
   };
 
@@ -435,8 +438,6 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   return {
     nftSaleInfo,
     listingBtnDisable,
-    floorPrice,
-    recentDealPrice,
     listingPrice,
     setListingPrice,
     listItems,

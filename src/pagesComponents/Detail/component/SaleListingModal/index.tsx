@@ -20,7 +20,7 @@ function SaleListingModalConstructor(nftInfo: INftInfo) {
   const { isSmallScreen } = infoState;
   const elfRate = useTokenData();
 
-  const { cancelAllListings, cancelListingItem, loading, listings } = useListingService(nftInfo, modal);
+  const { cancelAllListings, cancelListingItem, loading, listings } = useListingService(nftInfo, elfRate, modal);
 
   const footer = (
     <Button type="primary" size="ultra" className="w-[256px]" onClick={cancelAllListings}>
@@ -119,7 +119,7 @@ function SaleListingModalConstructor(nftInfo: INftInfo) {
         loading={loading}
         columns={columns}
         scroll={{ x: 792, y: 326 }}
-        emptyText="No listings yet"
+        emptyText="No listings yet."
         dataSource={listings || []}
       />
     </BaseModal>

@@ -60,6 +60,13 @@
   .not__found__pc {
     min-height: calc(100vh - 80px);
   }
+
+  .text-primary {
+    @apply text-[20px] leading-[28px] font-semibold text-[var(--text-primary)];
+  }
+  .text-secondary {
+    @apply text-[16px] leading-[24px] font-normal text-[var(--text-secondary)];
+  }
 }
 
 .ant-row.aelf-web-logout-dialog-content {

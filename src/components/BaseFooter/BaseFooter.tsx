@@ -10,6 +10,7 @@ import { fetchFooterNavItems } from 'api/fetch';
 
 import Logo from 'assets/images/night/forestLogo.svg';
 import LogoLight from 'assets/images/light/forestLogo.svg';
+import { hideFooterPage } from 'constants/common';
 
 type MediaItemType = {
   id: number;
@@ -27,17 +28,10 @@ export default function BaseFooter() {
   const [footerNav, setFooterNav] = useState<MediaItemType[]>();
   const hidden = useMemo(() => {
     const path = pathname?.split('/')?.[1];
-
-    switch (path) {
-      case 'explore-items':
-      case 'account':
-      case 'collections':
-      case 'my-collections':
-        return true;
-
-      default:
-        return false;
+    if (hideFooterPage.includes(path)) {
+      return true;
     }
+    return false;
   }, [pathname]);
 
   const showMargin = useMemo(() => {

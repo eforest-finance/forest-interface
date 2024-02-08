@@ -148,6 +148,11 @@
         }
       }
     }
+    .view-asset-btn {
+      span {
+        @apply !font-semibold !text-[var(--text-white)] !text-[16px];
+      }
+    }
   }
 }
 

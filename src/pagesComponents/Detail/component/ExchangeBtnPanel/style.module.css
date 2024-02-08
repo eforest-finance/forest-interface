@@ -1,6 +1,0 @@
-.exchange-btn-panel button {
-  @apply h-auto mr-[16px] !py-[10px] !px-[16px];
-}
-.exchange-btn-panel button:last-child {
-  @apply m-0;
-}
