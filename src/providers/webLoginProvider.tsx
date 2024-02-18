@@ -20,6 +20,7 @@ const WebLoginProviderDynamic = dynamic(
     const connectUrlV1 = info?.connectUrlV1;
     const connectUrlV2 = info?.connectUrlV2;
     const networkType = info?.networkType;
+    const networkTypeV2 = info?.networkTypeV2;
 
     const weblogin = await import('aelf-web-login').then((module) => module);
 
@@ -37,7 +38,7 @@ const WebLoginProviderDynamic = dynamic(
         },
       },
       portkeyV2: {
-        networkType,
+        networkType: networkTypeV2,
         useLocalStorage: true,
         graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
