@@ -1,12 +1,10 @@
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
-import { WalletType, WebLoginState, useComponentFlex, useWebLogin } from 'aelf-web-login';
+import { WalletType, WebLoginState, useComponentFlex, useAppNameFlex, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useTimeoutFn } from 'react-use';
 
 const PORTKEY_LOGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';
-
-const APP_NAME = 'forest';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -15,6 +13,8 @@ export default function MyAsset() {
   const { isShowRampBuy, isShowRampSell } = aelfInfo;
   const isLogin = loginState === WebLoginState.logined;
   const isPortkeyConnect = walletType === WalletType.portkey;
+
+  const appName = useAppNameFlex();
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
 
@@ -34,9 +34,8 @@ export default function MyAsset() {
       <PortkeyAssetProvider
         originChainId={originChainId as Chain}
         pin={walletInfo?.portkeyInfo?.pin}
-        // caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
-        // didStorageKeyName={APP_NAME}
-      >
+        caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
+        didStorageKeyName={appName}>
         <Asset
           isShowRamp={isShowRampBuy || isShowRampSell}
           isShowRampBuy={isShowRampBuy}
