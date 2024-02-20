@@ -13,6 +13,7 @@ import { IActionDetail } from 'api/types';
 import moment from 'moment';
 import Link from 'next/link';
 import SkeletonImage from 'baseComponents/SkeletonImage';
+import { useUnmount } from 'react-use';
 
 interface ISwiperProps {
   swiperData: IActionDetail[];
@@ -63,6 +64,10 @@ export function ActivitySwiper({ swiperData }: ISwiperProps) {
       clearTimeout(timerRef.current);
     }, 25000);
   };
+
+  useUnmount(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+  });
 
   const commonSwiperProps: SwiperProps = {
     spaceBetween: 16,
