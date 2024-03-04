@@ -174,7 +174,7 @@ export default function SetItems() {
             symbol: price?.token?.symbol || '',
             amount: Number(timesDecimals(price?.price, price?.token?.decimals)),
           },
-          quantity: amount,
+          quantity: timesDecimals(amount, nftInfo?.decimals || '0').toNumber(),
           duration,
           whitelists: enableWhiteList
             ? {

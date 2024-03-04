@@ -151,7 +151,7 @@ export function useDurationService({
     }
     const timeDifference = date.diff(moment());
     const minutesDifference = moment.duration(timeDifference).asMinutes();
-    const months = moment.duration(timeDifference).asMonths();
+    const months = Math.floor(moment.duration(timeDifference).asMonths());
     if (minutesDifference < 15) {
       setErrorTip('The listing duration should be at least 15 minutes.');
     } else if (months > 6) {

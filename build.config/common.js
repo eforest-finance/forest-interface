@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   compiler: {
     emotion: true,
   },

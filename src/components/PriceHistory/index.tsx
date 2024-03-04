@@ -135,7 +135,6 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistor
   }, [nftInfo?.id, firstTime]);
 
   useEffect(() => {
-    console.log(chart.current, 'chart.current');
     if (!chart.current) {
       return;
     }

@@ -16,6 +16,7 @@ export default function useMakeOffer(chainId?: Chain) {
     symbol: string;
     offerTo?: string;
     quantity: number;
+    quantityForApprove: number;
     price: IPrice;
     expireTime?: number;
   }) => {
@@ -24,7 +25,7 @@ export default function useMakeOffer(chainId?: Chain) {
         const approveTokenResult = await checkELFApprove({
           chainId: chainId,
           price: parameter.price,
-          quantity: parameter.quantity,
+          quantity: parameter.quantityForApprove,
           spender:
             chainId === SupportedELFChainId.MAIN_NET
               ? getForestContractAddress().main

@@ -13,7 +13,7 @@ import CollapseForPC from 'components/Collapse';
 import Table from 'baseComponents/Table';
 import Button from 'baseComponents/Button';
 import useDefaultActiveKey from 'pagesComponents/Detail/hooks/useDefaultActiveKey';
-import ExchangeModal from '../ExchangeModal/index';
+import ExchangeModal, { ArtType } from '../ExchangeModal/index';
 import { useModal } from '@ebay/nice-modal-react';
 import { getOffersInfo } from './utils/getOffersInfo';
 import useIntervalRequestForOffers from 'pagesComponents/Detail/hooks/useIntervalRequestForOffers';
@@ -143,12 +143,13 @@ export default function Offers(options: { rate: number }) {
   const onDeal = (record: FormatOffersType) => {
     if (nftInfo) {
       const convertPrice = record?.price * (record?.token?.symbol === 'ELF' ? rate : 1);
-      const art = {
+      const art: ArtType = {
         id: nftInfo?.nftTokenId,
         name: nftInfo?.tokenName || '',
         token: { symbol: record?.token.symbol },
         symbol: nftInfo!.nftSymbol,
         collection: nftInfo.nftCollection?.tokenName,
+        nftDecimals: Number(nftInfo?.decimals || 0),
         decimals: record?.decimals,
         price: record?.price,
         quantity: record?.quantity,

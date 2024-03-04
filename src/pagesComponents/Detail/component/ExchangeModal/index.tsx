@@ -32,6 +32,7 @@ export type ArtType = {
   name: string;
   token: { symbol: string };
   decimals: number;
+  nftDecimals?: number | string;
   quantity: number;
   price: number;
   convertPrice: number;
@@ -119,7 +120,9 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
         symbol: art.symbol as string,
         offerFrom: art.address,
         price: { symbol: art.token.symbol as string, amount: new BigNumber(art.price).times(10 ** 8).toNumber() },
-        quantity: quantity,
+        quantity: BigNumber(quantity)
+          .times(10 ** Number(art.nftDecimals || 0))
+          .toNumber(),
       });
       if (res === 'failed') {
         onCancel();

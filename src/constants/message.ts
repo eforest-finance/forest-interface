@@ -1,3 +1,3 @@
 export const TipsMessage = {
-  Synchronizing: 'Syncing on-chain account info',
+  Synchronizing: 'Synchronising data on the blockchain. Please wait a few seconds. ',
 };

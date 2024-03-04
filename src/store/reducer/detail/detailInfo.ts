@@ -8,11 +8,13 @@ export const initializationNftNumber = {
   tokenBalance: 0,
   nftQuantity: 0,
   nftTotalSupply: 0,
+  nftDecimals: 0,
   loading: false,
 };
 
 const initialState: ItemState = {
   nftInfo: null,
+  nftTraitInfos: null,
   nftNumber: initializationNftNumber,
   listings: null,
   offers: null,
@@ -46,6 +48,9 @@ export const detailInfoSlice = createSlice({
     setCurrentTab: (state, action) => {
       state.currentTab = action.payload;
     },
+    setNftTraitInfos: (state, action) => {
+      state.nftTraitInfos = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -59,8 +64,15 @@ export const detailInfoSlice = createSlice({
   },
 });
 
-export const { setNftInfo, setListings, setOffers, setNftNumber, setUpdateDetailLoading, setCurrentTab } =
-  detailInfoSlice.actions;
+export const {
+  setNftInfo,
+  setListings,
+  setOffers,
+  setNftNumber,
+  setUpdateDetailLoading,
+  setCurrentTab,
+  setNftTraitInfos,
+} = detailInfoSlice.actions;
 
 export const getDetailInfo = (state: AppState): ItemState => state.detailInfo;
 

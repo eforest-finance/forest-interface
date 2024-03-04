@@ -46,6 +46,8 @@ import {
   INftSaleInfoItem,
   IDropDetailResponse,
   IDropQuotaResponse,
+  ICollecionTraitsInfoRes,
+  ICollecionGenerationInfoRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -78,6 +80,10 @@ export const fetchUserInfo = async (params: { address: string }): Promise<UserIn
 
 export const fetchNftInfo = async (params: { id: string; address: string }): Promise<INftInfo> => {
   return request.get<INftInfo>('app/nft/nft-info', { params });
+};
+
+export const fetchNftTraitsInfo = async (params: { id: string }) => {
+  return request.get<IDropQuotaResponse>('app/trait/nft-traits-info', { params });
 };
 
 export const fetchGetTokenData = async (params: { symbol: string }): Promise<ITokenData> => {
@@ -128,13 +134,8 @@ export const fetchNftInfos = async (params: Partial<INftInfoParams>): Promise<It
 };
 
 // like fetchNftInfos, this is new port;
-export const fetchCompositeNftInfos = async (params: Partial<CompositeNftInfosParams>): Promise<ItemsSource> => {
-  return request.get<ItemsSource>('app/nft/composite-nft-infos', {
-    params,
-    paramsSerializer: function (params) {
-      return qs.stringify(params, { arrayFormat: 'repeat' });
-    },
-  });
+export const fetchCompositeNftInfos = async (params: Partial<CompositeNftInfosParams>) => {
+  return request.post<Partial<CompositeNftInfosParams>, ItemsSource>('app/nft/composite-nft-infos', params);
 };
 
 export const fetchGetTags = async (params: IWhiteListTagsParams) => {
@@ -250,4 +251,25 @@ export const fetchDropDetail = async (params: { dropId: string; address?: string
 
 export const fetchDropQuota = async (params: { dropId: string; address: string }) => {
   return request.get<IDropQuotaResponse>('app/drop/quota', { params });
+};
+
+export const fetchCollectionAllTraitsInfos = async (nftCollectionId: string) => {
+  return request.post<
+    {
+      id: string;
+      skipCount: number;
+      maxResultCount: number;
+    },
+    ICollecionTraitsInfoRes
+  >('app/trait/nft-collection-traits-info', {
+    id: nftCollectionId,
+    skipCount: 0,
+    maxResultCount: 32,
+  });
+};
+
+export const fetchCollectionGenerationInfos = async (nftCollectionId: string) => {
+  return request.get<ICollecionGenerationInfoRes>('app/trait/nft-collection-generation-info', {
+    params: { id: nftCollectionId },
+  });
 };

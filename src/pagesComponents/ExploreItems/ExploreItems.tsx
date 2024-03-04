@@ -18,14 +18,19 @@ import clsx from 'clsx';
 import { CollapseForPC, CollapseForPhone } from './components/FilterContainer';
 import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
 import ScrollContent from './components/ScrollContent';
-import { fetchCompositeNftInfos } from 'api/fetch';
+import { fetchCollectionGenerationInfos, fetchCompositeNftInfos } from 'api/fetch';
 import { getPageNumber } from 'utils/calculate';
-import { CompositeNftInfosParams } from 'api/types';
+import { CompositeNftInfosParams, ICollectionTraitInfo } from 'api/types';
 import { INftInfo } from 'types/nftTypes';
 import useResponsive from 'hooks/useResponsive';
 import FilterTags from './components/FilterTags';
 import Loading from 'components/SyncChainModal/loading';
 import useGetState from 'store/state/getState';
+import SearchCheckBoxGroups from './components/SearchCheckBoxGroups';
+import { useRequest } from 'ahooks';
+import { fetchCollectionAllTraitsInfos } from 'api/fetch';
+import { useSearchParams } from 'next/navigation';
+import { getFilterFromSearchParams } from './util';
 
 export default function ExploreItems({
   nftCollectionId,
@@ -34,6 +39,10 @@ export default function ExploreItems({
   nftCollectionId: string;
   totalChange: (value: number) => void;
 }) {
+  const params = useSearchParams();
+  const filterParamStr = params.get('filterParams');
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr);
+
   const [size, setSize] = useState<BoxSizeEnum>(BoxSizeEnum.large);
   // 1024 below is the mobile display
   const { isLG } = useResponsive();
@@ -45,7 +54,10 @@ export default function ExploreItems({
   const filterList = getFilterList(nftType, aelfInfo.curChain);
   const [sort, setSort] = useState<string>(dropDownCollectionsMenu.data[0].value as string);
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
-  const [filterSelect, setFilterSelect] = useState<IFilterSelect>(defaultFilter);
+
+  const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
+    Object.assign({}, defaultFilter, paramsFromUrlForFilter),
+  );
   const [current, SetCurrent] = useState<number>(1);
   const [dataSource, setDataSource] = useState<INftInfo[]>([]);
   const isLoadMore = useRef<boolean>(false);
@@ -65,6 +77,13 @@ export default function ExploreItems({
       MaxResultCount: pageSize,
     };
   }, [current, filterSelect, SearchParam, nftCollectionId, sort, nftType]);
+
+  const { data: traitsInfo } = useRequest(() => fetchCollectionAllTraitsInfos(nftCollectionId), {
+    refreshDeps: [nftCollectionId],
+  });
+  const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
+    refreshDeps: [nftCollectionId],
+  });
 
   const fetchData = useCallback(
     async (params: Partial<CompositeNftInfosParams>, loadMore?: boolean, isTotal?: boolean) => {
@@ -103,14 +122,89 @@ export default function ExploreItems({
     (val: ItemsSelectSourceType) => {
       setFilterSelect({ ...filterSelect, ...val });
       const filter = getFilter({ ...filterSelect, ...val });
+      console.log('filterChange', filterSelect, filter);
       SetCurrent(1);
-      fetchData({ ...requestParams, ...filter, SkipCount: getPageNumber(1, pageSize) });
+      const params = {
+        ...filter,
+        Sorting: sort,
+        SearchParam,
+        CollectionType: nftType,
+        CollectionId: nftCollectionId,
+        MaxResultCount: pageSize,
+      };
+      fetchData({ ...params, SkipCount: getPageNumber(1, pageSize) });
     },
-    [filterSelect, fetchData, requestParams],
+    [filterSelect, fetchData, requestParams, pageSize],
   );
+
+  const getTraitSelectorData = (
+    traitsArrayInfo: ICollectionTraitInfo[],
+    filterChange: (val: ItemsSelectSourceType) => void,
+    filterSelectData: IFilterSelect,
+  ) => {
+    const traitsChildItems = traitsArrayInfo.map((itemTraitInfo) => {
+      const defaultValue = (filterSelectData?.[`${FilterKeyEnum.Traits}-${itemTraitInfo.key}`]?.data || []).map(
+        (itm: { label: string; value: string }) => itm.value,
+      );
+      return {
+        key: itemTraitInfo.key,
+        label: (
+          <div className="flex justify-between mr-12">
+            <span>{itemTraitInfo.key}</span>
+            <span>{itemTraitInfo.valueCount}</span>
+          </div>
+        ),
+        children: [
+          {
+            key: `${itemTraitInfo.key}-1`,
+            label: (
+              <SearchCheckBoxGroups
+                key={itemTraitInfo.key}
+                parentKey={itemTraitInfo.key}
+                values={defaultValue}
+                onChange={filterChange}
+                dataSource={itemTraitInfo.values}
+              />
+            ),
+          },
+        ],
+      };
+    });
+
+    return {
+      key: FilterKeyEnum.Traits,
+      label: FilterKeyEnum.Traits,
+      children: traitsChildItems,
+    };
+  };
+
   const collapseItems = useMemo(() => {
-    return filterList?.map((item) => {
+    const resTargetList = [...filterList];
+    if (!traitsInfo?.items?.length) {
+      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Traits);
+      resTargetList.splice(index, 1);
+    }
+
+    if (!generationInfos?.items?.length) {
+      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Generation);
+      resTargetList.splice(index, 1);
+    }
+
+    return resTargetList?.map((item) => {
       const defaultValue = filterSelect[item.key]?.data;
+
+      if (item.key === FilterKeyEnum.Traits) {
+        return getTraitSelectorData(traitsInfo?.items || [], filterChange, filterSelect);
+      }
+
+      if (item.key === FilterKeyEnum.Generation) {
+        item.data = (generationInfos?.items || []).map((itm) => ({
+          value: `${itm.generation}`,
+          label: `${itm.generation}`,
+          extra: `${itm.generationItemsCount}`,
+        }));
+      }
+
       const Comp: React.FC<ICompProps> = getComponentByType(item.type);
       return {
         key: item.key,
@@ -132,7 +226,7 @@ export default function ExploreItems({
         ],
       };
     });
-  }, [filterChange, filterList, filterSelect]);
+  }, [filterChange, filterList, filterSelect, traitsInfo, generationInfos]);
 
   const sizeChange = (value: BoxSizeEnum) => {
     setSize(value);
@@ -152,9 +246,17 @@ export default function ExploreItems({
     setSearchParam('');
     setFilterSelect({ ...defaultFilter });
     const filter = getFilter({ ...defaultFilter });
-    fetchData({ ...requestParams, ...filter, SkipCount: getPageNumber(1, pageSize), SearchParam: '' });
+    const params = {
+      ...filter,
+      Sorting: sort,
+      SearchParam: '',
+      CollectionType: nftType,
+      CollectionId: nftCollectionId,
+      MaxResultCount: pageSize,
+    };
+    fetchData({ ...params, SkipCount: getPageNumber(1, pageSize) });
     if (isLG) setCollapsed(false);
-  }, [setFilterSelect, isLG, requestParams, defaultFilter, fetchData]);
+  }, [setFilterSelect, isLG, defaultFilter, fetchData, pageSize, sort, nftType, nftCollectionId]);
 
   const symbolChange = (e: any) => {
     setSearchParam(e.target.value);
@@ -240,7 +342,7 @@ export default function ExploreItems({
           ) : (
             <Layout.Sider
               collapsedWidth={0}
-              className={clsx('!bg-[var(--bg-page)] m-0', collapsed && '!mr-[32px]')}
+              className={clsx('!bg-[var(--bg-page)] m-0', collapsed && '!mr-[32px]', styles['fixed-left'])}
               width={collapsed ? 360 : 0}
               trigger={null}>
               {collapsed && <CollapseForPC items={collapseItems} defaultOpenKeys={Object.values(FilterKeyEnum)} />}
@@ -249,7 +351,7 @@ export default function ExploreItems({
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div>
+              <div className=" sticky top-36 z-50 bg-fillPageBg overflow-hidden">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}

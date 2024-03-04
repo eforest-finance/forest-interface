@@ -20,6 +20,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { CancelListingMessage } from 'constants/promptMessage';
 import { UserDeniedMessage } from 'contract/formatErrorMsg';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import { timesDecimals } from 'utils/calculate';
 
 export function useListingService(
   nftInfo: INftInfo,
@@ -97,13 +98,19 @@ export function useListingService(
     });
   };
 
-  const delist = async (parameter: { symbol: string; quantity: number; price: IPrice; startTime: ITimestamp }) => {
+  const delist = async (parameter: {
+    symbol: string;
+    quantity: number;
+    price: IPrice;
+    startTime: ITimestamp;
+    nftDecimals: number;
+  }) => {
     const chainId = nftInfo.chainId;
     try {
       const result = await Delist(
         {
           symbol: parameter.symbol,
-          quantity: parameter.quantity,
+          quantity: timesDecimals(parameter.quantity, parameter.nftDecimals || '0').toNumber(),
           price: { ...parameter.price, amount: new BigNumber(parameter.price.amount).times(10 ** 8).toNumber() },
           startTime: parameter.startTime,
         },
@@ -132,6 +139,7 @@ export function useListingService(
       await delist({
         symbol: nftInfo?.nftSymbol || '',
         quantity: data.quantity,
+        nftDecimals: Number(nftInfo?.decimals || 0),
         price: {
           symbol: (data as FormatListingType)?.purchaseToken?.symbol,
           amount: data?.price as number,

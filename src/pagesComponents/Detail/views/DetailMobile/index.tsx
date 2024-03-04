@@ -3,10 +3,12 @@ import { Tabs } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 import DetailCard from 'pagesComponents/Detail/component/DetailCard';
+import { TraitsInfoCard } from 'pagesComponents/Detail/component/DetailCard/TraitsCard';
+import { GenerationInfoCard } from 'pagesComponents/Detail/component/DetailCard/GenerationInfoCard';
+
 import Listings from 'pagesComponents/Detail/component/Listings';
 import PriceHistory from 'components/PriceHistory';
 import RecommendList from 'components/RecommendList';
-
 import styles from './style.module.css';
 import Offers from '../../component/Offers';
 import Picture from '../../component/Picture/Picture';
@@ -46,11 +48,11 @@ export default function DetailMobile() {
     document.body.addEventListener('scroll', onScroll);
     return () => {
       document.body.removeEventListener('scroll', onScroll);
-    }
+    };
   }, []);
 
   const {
-    detailInfo: { currentTab },
+    detailInfo: { currentTab, nftTraitInfos },
   } = useDetailGetState();
 
   return (
@@ -83,7 +85,13 @@ export default function DetailMobile() {
             animated={false}>
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
+              <GenerationInfoCard />
             </Tabs.TabPane>
+            {nftTraitInfos?.traitInfos?.length ? (
+              <Tabs.TabPane tab="Traits" key="traits">
+                <TraitsInfoCard />
+              </Tabs.TabPane>
+            ) : null}
             <Tabs.TabPane
               tab={intervalDataForBid?.isBidding ? 'Offers' : 'Listings & offers'}
               key="listingOffers"

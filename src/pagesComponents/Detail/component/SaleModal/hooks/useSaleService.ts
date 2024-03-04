@@ -40,6 +40,7 @@ import { store, useSelector } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { selectInfo } from 'store/reducer/info';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import useDetailGetState from 'store/state/detailGetState';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -76,6 +77,8 @@ export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPre
 
 export function useGetListItemsForSale(nftInfo: INftInfo) {
   const { walletInfo } = useGetState();
+  const { detailInfo } = useDetailGetState();
+  const decimals = detailInfo?.nftInfo?.decimals || 0;
 
   const [listedNFTInfoList, setListedNFTInfoList] = useState<IListedNFTInfo[]>([]);
   const [maxQuantity, setMaxQuantity] = useState<number>(0);
@@ -94,7 +97,7 @@ export function useGetListItemsForSale(nftInfo: INftInfo) {
       setListedNFTInfoList(res.listedNFTInfoList);
       setListItems(res.listItems);
     }
-  }, [nftInfo, walletInfo.address]);
+  }, [nftInfo, walletInfo.address, decimals]);
 
   useEffect(() => {
     getMaxNftQuantity();
@@ -150,6 +153,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   };
 
   const listWithFixedPrice = async (amount: number, status?: EditStatusType) => {
+    console.log('listWithFixedPrice', amount);
     try {
       const spender =
         nftInfo?.chainId === SupportedELFChainId.MAIN_NET
@@ -159,7 +163,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         symbol: nftInfo!.nftSymbol,
         address: walletInfo?.address,
         spender,
-        amount,
+        amount: timesDecimals(amount, nftInfo?.decimals || '0').toNumber(),
         chainId: nftInfo.chainId,
       });
 
@@ -169,6 +173,12 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       }
 
       const durationList = getDurationParamsForListingContractByDuration(duration);
+      console.log(
+        'ListWithFixedPriceByContract',
+        amount,
+        nftInfo.decimals,
+        timesDecimals(amount, nftInfo.decimals || '0').toNumber(),
+      );
       const result = await ListWithFixedPriceByContract(
         {
           symbol: nftInfo.nftSymbol,
@@ -176,7 +186,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
             symbol: listingPrice?.token?.symbol || '',
             amount: Number(timesDecimals(listingPrice?.price, listingPrice?.token?.decimals)),
           },
-          quantity: amount,
+          quantity: timesDecimals(amount, nftInfo?.decimals || '0').toNumber(),
           duration: durationList,
           whitelists: null,
           isWhitelistAvailable: false,
@@ -265,6 +275,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
 
   const showListingPromptModal = (props: { amount: number; extendStatus?: EditStatusType }) => {
     const { amount, extendStatus } = props;
+    console.log('showListingPromptModal', amount);
     promptModal.show({
       nftInfo: {
         image: nftSaleInfo?.logoImage,
@@ -382,7 +393,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       const timeDifference = moment(duration.value).diff(moment());
       console.log('duration test', duration.value);
       const minutesDifference = moment.duration(timeDifference).asMinutes();
-      const months = moment.duration(timeDifference).asMonths();
+      const months = Math.floor(moment.duration(timeDifference).asMonths());
       if (minutesDifference < 15) {
         message.error('The listing duration should be at least 15 minutes.');
         return false;

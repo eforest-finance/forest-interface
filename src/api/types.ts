@@ -241,6 +241,11 @@ export interface CompositeNftInfosParams {
   ChainList: ('AELF' | 'tDVV')[];
   SkipCount: number;
   Sorting: string;
+  generation: number[];
+  traits: Array<{
+    key: string;
+    values: string[];
+  }>;
 }
 
 export interface IWhiteListTagsParams {
@@ -635,4 +640,29 @@ export interface IDropListParams {
 export interface IDropListRes {
   totalCount: number;
   items: IActionDetail[];
+}
+
+export interface ICollectionTraitValue {
+  value: string;
+  itemsCount: number;
+}
+export interface ICollectionTraitInfo {
+  key: string;
+  valueCount: number;
+  values: ICollectionTraitValue[];
+}
+export interface ICollecionTraitsInfoRes {
+  totalCount: number;
+  id: string;
+  items: ICollectionTraitInfo[];
+}
+
+export interface ICollecionGenerationInfo {
+  generation: number;
+  generationItemsCount: number;
+}
+export interface ICollecionGenerationInfoRes {
+  totalCount: number;
+  id: string;
+  items: ICollecionGenerationInfo[];
 }

@@ -129,9 +129,9 @@ function ScrollContent(props: IContentProps) {
         {...ListProps}
       />
       {loading ? <LoadingMore className="absolute z-100 bottom-[20px]" /> : null}
-      {!hasMore && loadingMore && ListProps?.dataSource?.length && (
+      {!hasMore && loadingMore && ListProps?.dataSource?.length ? (
         <div className="text-center w-full text-textDisable font-medium text-base pb-[20px]">No more data</div>
-      )}
+      ) : null}
     </div>
   );
 }
