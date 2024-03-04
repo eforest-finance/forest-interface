@@ -1,10 +1,8 @@
 /* stylelint-disable no-descending-specificity */
 .marketplace-header {
   @apply fixed top-0 z-[999];
-  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-[var(--bg-header)];
-  @apply flex items-center justify-between;
-
-  box-shadow: 0 4px 8px var(--box-shadow-header);
+  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-fillPageBg;
+  @apply flex items-center justify-between border-0 border-b border-solid border-lineBorder;
 }
 
 .mobile-forest-logo svg {

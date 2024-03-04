@@ -1,7 +1,6 @@
-import { Asset, PortkeyAssetProvider } from '@portkey/did-ui-react';
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
-import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
+import { WalletType, WebLoginState, useComponentFlex, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useTimeoutFn } from 'react-use';
 
@@ -13,10 +12,13 @@ export default function MyAsset() {
   const router = useRouter();
   const { loginState, walletType } = useWebLogin();
   const { walletInfo, aelfInfo } = useGetState();
+  const { isShowRampBuy, isShowRampSell } = aelfInfo;
   const isLogin = loginState === WebLoginState.logined;
   const isPortkeyConnect = walletType === WalletType.portkey;
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
+
+  const { PortkeyAssetProvider, Asset } = useComponentFlex();
 
   useTimeoutFn(() => {
     if (!isLogin || !isPortkeyConnect) {
@@ -32,9 +34,13 @@ export default function MyAsset() {
       <PortkeyAssetProvider
         originChainId={originChainId as Chain}
         pin={walletInfo?.portkeyInfo?.pin}
-        caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
-        didStorageKeyName={APP_NAME}>
+        // caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
+        // didStorageKeyName={APP_NAME}
+      >
         <Asset
+          isShowRamp={isShowRampBuy || isShowRampSell}
+          isShowRampBuy={isShowRampBuy}
+          isShowRampSell={isShowRampSell}
           faucet={{
             faucetContractAddress: aelfInfo?.faucetContractAddress,
           }}

@@ -23,6 +23,7 @@ const { Footer } = Layout;
 export default function BaseFooter() {
   const [theme] = useTheme();
   const { isSmallScreen } = useSelector(selectInfo);
+  const [marginBottom, setMarginBottom] = useState<string>('mb-[80px]');
 
   const pathname = usePathname();
   const [footerNav, setFooterNav] = useState<MediaItemType[]>();
@@ -37,7 +38,12 @@ export default function BaseFooter() {
   const showMargin = useMemo(() => {
     if (!isSmallScreen) return false;
     const path = pathname?.split('/')?.[1];
-    return ['settings', 'sale-info', 'detail'].includes(path);
+    if (['drops-detail'].includes(path)) {
+      setMarginBottom('mb-[130px]');
+    } else {
+      setMarginBottom('mb-[80px]');
+    }
+    return ['settings', 'sale-info', 'detail', 'drops-detail'].includes(path);
   }, [pathname, isSmallScreen]);
 
   const getFooterNav = useCallback(async () => {
@@ -55,7 +61,7 @@ export default function BaseFooter() {
     <Footer
       className={`${styles['footer-wrapper']} ${isSmallScreen && styles['mobile-footer-wrapper']} ${
         hidden && 'hidden'
-      } ${showMargin ? 'mb-[80px]' : ''}`}>
+      } ${showMargin ? marginBottom : ''}`}>
       <div className={`${styles['footer-content']}`}>
         <div className={`${styles['footer-left']} flex flex-col justify-between`}>
           <div className="w-[138px] h-[28px]">{ProjectLogo}</div>

@@ -1,6 +1,4 @@
 'use client';
-
-import { PortkeyProvider } from '@portkey/did-ui-react';
 import { scheme } from '@portkey/utils';
 import dynamic from 'next/dynamic';
 import isMobile from 'utils/isMobile';
@@ -8,29 +6,48 @@ import { store } from 'store/store';
 
 const APP_NAME = 'forest';
 
+const PortkeyProviderDynamic = dynamic(
+  async () => {
+    const weblogin = await import('aelf-web-login').then((module) => module);
+    return weblogin.PortkeyProvider;
+  },
+  { ssr: false },
+) as any;
+
 const WebLoginProviderDynamic = dynamic(
   async () => {
     const info = store.getState().aelfInfo.aelfInfo;
+    const connectUrlV1 = info?.connectUrlV1;
+    const connectUrlV2 = info?.connectUrlV2;
+    const networkType = info?.networkType;
+    const networkTypeV2 = info?.networkTypeV2;
 
     const weblogin = await import('aelf-web-login').then((module) => module);
 
     weblogin.setGlobalConfig({
       appName: APP_NAME,
       chainId: info.curChain,
+      networkType,
       portkey: {
         useLocalStorage: true,
         graphQLUrl: info.graphqlServer,
-        connectUrl: info.connectServer,
-        socialLogin: {
-          // Portkey: {
-          //   websiteName: APP_NAME,
-          //   websiteIcon: `${window.location.origin}/logo192.png`,
-          // },
-        },
+        connectUrl: connectUrlV1,
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
-          baseURL: info.portkeyServer,
+          baseURL: info.portkeyServerV1,
         },
+      },
+      portkeyV2: {
+        networkType: networkTypeV2,
+        useLocalStorage: true,
+        graphQLUrl: info.graphqlServerV2,
+        connectUrl: connectUrlV2,
+        socialLogin: {},
+        requestDefaults: {
+          timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
+          baseURL: info.portkeyServerV2,
+        },
+        serviceUrl: info.portkeyServerV2,
       },
       aelfReact: {
         appName: APP_NAME,
@@ -50,7 +67,6 @@ const WebLoginProviderDynamic = dynamic(
         },
       },
       defaultRpcUrl: (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) || info?.rpcUrlTDVW,
-      networkType: info?.networkType,
     });
     return weblogin.WebLoginProvider;
   },
@@ -84,8 +100,9 @@ const jumpAppInH5 = (maxWaitingTime: number) => {
 
 export default ({ children }: { children: React.ReactNode }) => {
   const info = store.getState().aelfInfo.aelfInfo;
+
   return (
-    <PortkeyProvider networkType={info?.networkType}>
+    <PortkeyProviderDynamic networkType={info.networkType} networkTypeV2={info?.networkTypeV2}>
       <WebLoginProviderDynamic
         nightElf={{
           useMultiChain: true,
@@ -94,6 +111,10 @@ export default ({ children }: { children: React.ReactNode }) => {
         portkey={{
           autoShowUnlock: false,
           checkAccountInfoSync: true,
+          design: 'CryptoDesign',
+          keyboard: {
+            v2: true,
+          },
         }}
         extraWallets={['discover', 'elf']}
         discover={{
@@ -102,22 +123,9 @@ export default ({ children }: { children: React.ReactNode }) => {
           autoLogoutOnNetworkMismatch: true,
           autoLogoutOnAccountMismatch: true,
           autoLogoutOnChainMismatch: true,
-          onClick: (continueDefaultBehaviour) => {
-            const mobileType = isMobile(navigator.userAgent);
-            const isMobileDevice =
-              mobileType.apple.phone ||
-              mobileType.android.phone ||
-              mobileType.apple.tablet ||
-              mobileType.android.tablet;
-            if (isMobileDevice) {
-              jumpAppInH5(mobileType.apple.phone ? 200 : 1000);
-              return;
-            }
-            continueDefaultBehaviour();
-          },
         }}>
         {children}
       </WebLoginProviderDynamic>
-    </PortkeyProvider>
+    </PortkeyProviderDynamic>
   );
 };

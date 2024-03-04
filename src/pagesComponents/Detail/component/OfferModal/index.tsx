@@ -35,6 +35,8 @@ import { getExploreLink } from 'utils';
 import { Moment } from 'moment';
 import { store } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
+import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
 
 function OfferModal(options: { onClose?: () => void; rate: number }) {
   const modal = useModal();
@@ -246,6 +248,13 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     setPrice('');
     setQuantity('1');
     setQuantityTip('');
+    if (modal.visible) {
+      getNFTNumber({
+        owner: walletInfo.address,
+        nftSymbol: nftInfo?.nftSymbol,
+        chainId: infoState.sideChain,
+      });
+    }
   }, [modal.visible]);
 
   const setOfferPrice = (price: IPrice) => {
@@ -301,10 +310,10 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
               <span>You can</span>{' '}
               {isPortkeyConnected ? (
                 <span className="cursor-pointer text-functionalLink" onClick={handleTransferShow}>
-                  {`manually transfer tokens from MainChain to your SideChain address.`}
+                  {CrossChainTransferMsg}
                 </span>
               ) : (
-                'manually transfer tokens from MainChain to your SideChain address.'
+                CrossChainTransferMsg
               )}
             </>
           </span>,

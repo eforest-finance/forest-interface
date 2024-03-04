@@ -4,6 +4,7 @@ import {
   IBatchBuyNowParams,
   IBatchDeListParams,
   ICancelOfferParams,
+  IClaimDropParams,
   IContractError,
   IContractOptions,
   IDealParams,

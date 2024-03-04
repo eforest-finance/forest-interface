@@ -39,13 +39,13 @@ import {
   IBidInfosResponse,
   IAuctionInfoResponse,
   IMinMarkupPriceResponse,
-  ITransactionFeeResponse,
   CompositeNftInfosParams,
   INftInfoOwnersParams,
   INftInfoOwnersResponse,
   INftSaleInfoParams,
-  INftSaleInfoResponse,
   INftSaleInfoItem,
+  IDropDetailResponse,
+  IDropQuotaResponse,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -242,4 +242,12 @@ export const fetchNftInfoOwners = async (params: INftInfoOwnersParams) => {
 
 export const fetchNftSalesInfo = async (params: INftSaleInfoParams) => {
   return request.get<INftSaleInfoItem>('app/nft/nft-for-sale', { params });
+};
+
+export const fetchDropDetail = async (params: { dropId: string; address?: string }) => {
+  return request.get<IDropDetailResponse>('app/drop/detail', { params });
+};
+
+export const fetchDropQuota = async (params: { dropId: string; address: string }) => {
+  return request.get<IDropQuotaResponse>('app/drop/quota', { params });
 };

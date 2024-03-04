@@ -14,10 +14,11 @@ export interface INftInfoList {
   priceTitle?: string;
   price?: string;
   usdPrice?: string;
+  onClick?: <T>(params?: T) => void;
 }
 
 const NftInfoList = (props: INftInfoList) => {
-  const { collectionName, nftName, item, priceTitle, price, usdPrice } = props;
+  const { collectionName, nftName, item, priceTitle, price, usdPrice, onClick } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
@@ -30,7 +31,9 @@ const NftInfoList = (props: INftInfoList) => {
   }, [item]);
 
   return (
-    <div className="flex justify-between pb-[16px] overflow-hidden">
+    <div
+      className={clsx('flex justify-between pb-[16px] overflow-hidden', onClick && 'cursor-pointer')}
+      onClick={onClick}>
       <div className="flex items-center mr-[16px] overflow-hidden flex-1">
         {props?.image && (
           <div className="overflow-hidden w-[48px] h-[48px] mdTW:w-[84px] mdTW:h-[84px] flex justify-center items-center mr-[16px] rounded-md border border-solid border-lineBorder">
