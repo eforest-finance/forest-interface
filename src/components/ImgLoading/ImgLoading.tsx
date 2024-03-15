@@ -1,4 +1,4 @@
-import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
+import { ReactNode, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import loadingImage from 'assets/images/loading.png';
 import loadingImageL from 'assets/images/loadingL.png';
 import nftPreview from 'assets/images/nftPreview.jpg';
@@ -6,9 +6,10 @@ import Image from 'next/image';
 import { useTheme } from 'hooks/useTheme';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
-import { isBase64Url, isUrl } from 'utils/reg';
+import { isBase64Url, isUrl, ipfsURLToS3AndIpfsURL } from 'utils/reg';
 
 import styles from './ImgLoading.module.css';
+import useGetState from 'store/state/getState';
 interface ImgLoadingProps {
   src: string;
   loading?: ReactNode;
@@ -33,7 +34,11 @@ function ImgLoading({
 }: ImgLoadingProps) {
   const [theme] = useTheme();
   const { isSmallScreen } = useSelector(selectInfo);
+  const { aelfInfo } = useGetState();
   const [loadableStatus, setLoadableStatus] = useState<boolean>(isUrl(src));
+  const imgSrcs = useMemo(() => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL), [src]);
+  const [srcIndex, setSrcIndex] = useState<number>(0);
+
   const defaultLoadingWrapper = useMemo(() => {
     return (
       <Image
@@ -43,6 +48,15 @@ function ImgLoading({
       />
     );
   }, [theme]);
+
+  const nextSrc = useCallback(() => {
+    const _index = srcIndex + 1;
+    if (!imgSrcs[_index]) {
+      setLoadableStatus(false);
+      return;
+    }
+    setSrcIndex(_index);
+  }, [srcIndex, imgSrcs]);
 
   useEffect(() => {
     setLoadableStatus(isUrl(src) || isBase64Url(src));
@@ -56,12 +70,12 @@ function ImgLoading({
       {!notReady ? (
         <Image
           className={`show-image w-full object-cover ${nextImageProps?.className}`}
-          src={loadableStatus ? src : nftPreview}
+          src={loadableStatus ? imgSrcs[srcIndex] : nftPreview}
           alt="show image"
           loading="lazy"
           width={nextImageProps?.width || 400}
           height={nextImageProps?.height || 400}
-          onError={() => setLoadableStatus(false)}
+          onError={nextSrc}
         />
       ) : null}
       {notReady && (

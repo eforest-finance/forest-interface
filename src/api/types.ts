@@ -364,6 +364,7 @@ export interface IConfigItems {
   identityPoolID?: string;
   tsm?: string;
   faucetContractAddress?: string;
+  ipfsToS3ImageURL?: string;
 }
 
 export interface IUserSettingParams {

@@ -44,11 +44,11 @@ export function TraitsInfoCard() {
             };
             const str = `filterParams=${encodeURI(JSON.stringify(filterParams))}`;
             return (
-              <Link href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}?${str}`}>
+              <Link key={traitInfo.key} href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}?${str}`}>
                 <div className="flex flex-col items-center rounded-md py-[9px] px-[6px] bg-fillHoverBg cursor-pointer">
                   <div className=" text-textPrimary text-xs font-medium">{traitInfo.key}</div>
                   <Tooltip title={traitInfo.value}>
-                    <div className=" text-textPrimary text-sm font-semibold mt-[6px] cursor-pointer">
+                    <div className="w-full text-center text-textPrimary text-sm font-semibold mt-[6px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">
                       {traitInfo.value}
                     </div>
                   </Tooltip>
@@ -66,12 +66,21 @@ export function TraitsInfoCard() {
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-2">
+        <div className="grid grid-cols-1 gap-2 border-0 border-t !border-solid border-lineBorder pt-2">
           {nftTraitInfos.traitInfos.map((traitInfo) => {
             const fllorPriceStr = getFloorPriceStr(traitInfo);
+            const filterParams = {
+              [FilterKeyEnum.Traits]: [
+                {
+                  key: traitInfo.key,
+                  values: [traitInfo.value],
+                },
+              ],
+            };
+            const str = `filterParams=${encodeURI(JSON.stringify(filterParams))}`;
             return (
-              <Link href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}`}>
-                <div className="flex flex-col items-center rounded-md p-4 bg-fillHoverBg cursor-pointer">
+              <Link key={traitInfo.key} href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}?${str}`}>
+                <div className="flex flex-col items-center rounded-md p-4 mx-2 bg-fillHoverBg cursor-pointer">
                   <div className="flex w-full justify-between">
                     <span className="text-textPrimary text-xs font-medium">{traitInfo.key}</span>
                     <span className=" text-textSecondary text-xs mt-[2px]">
