@@ -1,5 +1,5 @@
 import { useParams } from 'next/navigation';
-import { useDetail } from './useDetail';
+import { useDetail, useGetNftTraitInfo } from './useDetail';
 import useTokenData from 'hooks/useTokenData';
 import { useEffect, useMemo } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
@@ -15,6 +15,7 @@ export const useInitializationDetail = () => {
     id: string;
     chainId: Chain;
   };
+  useGetNftTraitInfo({ id });
   const { isCanBeBid, getDetail, isFetching } = useDetail({ id });
   const { detailInfo } = useDetailGetState();
   const { aelfInfo } = useGetState();

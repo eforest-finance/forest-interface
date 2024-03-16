@@ -7,6 +7,6 @@
     @apply border-[var(--line-box)];
   }
   :global(.ant-tabs-nav) {
-    @apply !mb-[32px];
+    @apply !mb-0 sticky top-0 z-50 !bg-fillPageBg;
   }
 }

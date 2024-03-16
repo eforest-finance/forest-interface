@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js';
 import CheckBoxGroups, { CheckboxChoiceProps } from './components/CheckBoxGroups';
+import SearchBoxBroups, { SearchCheckboxChoiceProps } from './components/SearchCheckBoxGroups';
 import RangeSelect, { RangeSelectProps } from './components/RangeSelect';
 import { SupportedELFChainId } from 'constants/chain';
 import { formatTokenPrice } from 'utils/format';
+import { ICollectionTraitInfo, ICollectionTraitValue } from 'api/types';
 
 export enum SeedTypesEnum {
   seed,
@@ -12,12 +14,14 @@ export enum SeedTypesEnum {
 export enum FilterType {
   Checkbox = 'Checkbox',
   Range = 'Range',
+  SearchCheckbox = 'SearchCheckbox',
 }
 
 export type SourceItemType = {
   value: string | number;
   label: string;
   disabled?: boolean;
+  extra?: string | number;
 };
 
 export enum FilterKeyEnum {
@@ -25,6 +29,8 @@ export enum FilterKeyEnum {
   Chain = 'Chain',
   Symbol = 'Symbol',
   Price = 'Price',
+  Generation = 'Generation',
+  Traits = 'Traits',
 }
 
 export type CheckboxItemType = {
@@ -109,9 +115,23 @@ export const getFilterList = (type: string, ChainId: string): Array<CheckboxItem
         { value: SymbolTypeEnum.NFT, label: 'NFT' },
       ],
     },
+    {
+      key: FilterKeyEnum.Traits,
+      title: FilterKeyEnum.Traits,
+      showClearAll: true,
+      type: FilterType.SearchCheckbox,
+      data: [],
+    },
+    {
+      key: FilterKeyEnum.Generation,
+      title: FilterKeyEnum.Generation,
+      showClearAll: true,
+      type: FilterType.Checkbox,
+      data: [],
+    },
   ];
   if (type === 'nft') {
-    filterList.pop();
+    filterList.splice(3, 1);
     filterList[0].data.splice(1, 1);
   }
   return filterList;
@@ -134,6 +154,15 @@ export interface IFilterSelect {
     type: FilterType.Range;
     data: RangeType[];
   };
+  [FilterKeyEnum.Generation]: {
+    type: FilterType.Checkbox;
+    data: SourceItemType[];
+  };
+  [FilterKeyEnum.Traits]: {
+    type: FilterType.Checkbox;
+    data: SourceItemType[];
+  };
+  [key: string]: any;
 }
 
 export const getDefaultFilter = (ChainId: string): IFilterSelect => {
@@ -156,6 +185,14 @@ export const getDefaultFilter = (ChainId: string): IFilterSelect => {
       ],
     },
     [FilterKeyEnum.Symbol]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Generation]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Traits]: {
       type: FilterType.Checkbox,
       data: [],
     },
@@ -191,10 +228,17 @@ export type RangeSelectType = {
   type: FilterType.Range;
   data: RangeType[];
 };
-export type ItemsSelectSourceType = { [x: string]: CheckboxSelectType | RangeSelectType };
+export type ItemsSelectSourceType = {
+  [x: string]: CheckboxSelectType | RangeSelectType;
+};
 export type CheckboxSelectType = {
   type: FilterType.Checkbox;
   data: SourceItemType[];
+};
+
+export type SearchCheckboxGroupSelectType = {
+  type: FilterType.SearchCheckbox;
+  data: ICollectionTraitValue[];
 };
 
 export interface ICompProps {
@@ -209,9 +253,11 @@ export const getComponentByType = (type: FilterType) => {
   const map: {
     [FilterType.Checkbox]: React.FC<CheckboxChoiceProps>;
     [FilterType.Range]: React.FC<RangeSelectProps>;
+    [FilterType.SearchCheckbox]: React.FC<SearchCheckboxChoiceProps>;
   } = {
     [FilterType.Checkbox]: CheckBoxGroups,
     [FilterType.Range]: RangeSelect,
+    [FilterType.SearchCheckbox]: SearchBoxBroups,
   };
   return map[type] as React.FC<ICompProps>;
 };
@@ -222,7 +268,9 @@ const bigStr = (str: string) => {
 
 export const getFilter = (filterSelect: IFilterSelect) => {
   const status = filterSelect.Status.data.map((item) => item.value);
-  return {
+  const generation = filterSelect.Generation.data.map((item) => item.value);
+  const traits = getTraitsInfo();
+  const params = {
     ChainList: filterSelect.Chain.data.map((item) => item.value as 'AELF' | 'tDVV'),
     SymbolTypeList: filterSelect.Symbol.data.map((item) => item.value as number),
     PriceLow: bigStr(filterSelect.Price.data[0].min),
@@ -231,6 +279,39 @@ export const getFilter = (filterSelect: IFilterSelect) => {
     HasAuctionFlag: status.includes(CollectionsStatus['On Auction']),
     HasOfferFlag: status.includes(CollectionsStatus['Has Offers']),
   };
+  if (generation.length) {
+    Object.assign(params, {
+      generation,
+    });
+  }
+  if (traits?.length) {
+    Object.assign(params, {
+      traits,
+    });
+  }
+
+  return params;
+
+  function getTraitsInfo() {
+    let targetKeys = Object.keys(filterSelect).filter((key) => key.includes(FilterKeyEnum.Traits));
+    if (!targetKeys.length) return null;
+    const res: Array<{
+      key: string;
+      values: string[];
+    }> = [];
+
+    targetKeys.forEach((key) => {
+      const [_, subKey] = key.split('-');
+      if (!subKey || !filterSelect?.[key]?.data?.length) return;
+      res.push({
+        key: subKey,
+        values: filterSelect[key].data.map((item: SourceItemType) => item.value),
+      });
+    });
+    console.log('getTraitsInfo', res);
+
+    return res;
+  }
 };
 
 export type TagItemType = {
@@ -247,10 +328,18 @@ export const getTagList = (filterSelect: IFilterSelect, search: string) => {
     if (type === FilterType.Checkbox) {
       data.forEach((element: SourceItemType) => {
         if (!element.disabled) {
-          result.push({
-            type: key,
-            ...element,
-          });
+          if (typeof element === 'object') {
+            result.push({
+              type: key,
+              ...element,
+            });
+          } else {
+            result.push({
+              type: key,
+              value: element,
+              label: element,
+            });
+          }
         }
       });
     } else if (type === FilterType.Range) {
@@ -268,6 +357,15 @@ export const getTagList = (filterSelect: IFilterSelect, search: string) => {
             `${key === FilterKeyEnum.Price ? '' : 'Length: '}` + label + `${key === FilterKeyEnum.Price ? ' ELF' : ''}`,
         });
       }
+    } else if (type === FilterType.SearchCheckbox) {
+      data.forEach((element: SourceItemType) => {
+        if (!element.disabled) {
+          result.push({
+            type: key,
+            ...element,
+          });
+        }
+      });
     }
   }
   if (search) {

@@ -1,4 +1,4 @@
-import { INftInfo, IListingNftInfo, From, To } from 'types/nftTypes';
+import { INftInfo, IListingNftInfo, From, To, INftTraitInfo } from 'types/nftTypes';
 
 export type FormatListingType = {
   price: number;
@@ -35,11 +35,13 @@ export type NftNumberType = {
   tokenBalance: number | string;
   nftQuantity: number | string;
   nftTotalSupply: number | string;
+  nftDecimals: number | string;
   loading: boolean;
 };
 
 export type ItemState = {
   nftInfo: INftInfo | null;
+  nftTraitInfos: INftTraitInfo | null;
   listings: {
     items: FormatListingType[] | null;
     totalCount: number;

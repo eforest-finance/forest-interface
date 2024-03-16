@@ -35,23 +35,6 @@ export const viewport = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <head>
-        <Script strategy="afterInteractive" id="rem-px">{`
-        (function () {
-            if (process.env.NEXT_PUBLIC_APP_ENV === 'development') {
-              const script = document.createElement('script');
-              script.type = 'text/javascript';
-              script.src = 'https://unpkg.com/vconsole@latest/dist/vconsole.min.js';
-              document.body.appendChild(script);
-              script.onload = () => {
-                setTimeout(() => {
-                  new window.VConsole();
-                }, 0);
-              };
-            }
-        })();
-      `}</Script>
-      </head>
       <body>
         <Provider>
           <Layout>{children}</Layout>

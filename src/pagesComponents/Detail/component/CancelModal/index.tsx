@@ -91,6 +91,7 @@ function CancelModal(options: {
       await delist({
         symbol: nftInfo?.nftSymbol || '',
         quantity: data?.quantity || 0,
+        nftDecimals: nftInfo?.decimals || 0,
         price: {
           symbol: (data as FormatListingType)?.purchaseToken?.symbol,
           amount: data?.price as number,

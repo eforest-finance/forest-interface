@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity  */
 .items-side-menu {
-  @apply !border-none bg-[var(--bg-menu)] h-fit overflow-y-auto overflow-x-hidden text-[var(--text-item)];
+  @apply !border-none bg-[var(--bg-menu)] h-fit text-[var(--text-item)];
 }
 
 .items-side-menu :global(.ant-menu-submenu-selected) {
@@ -11,12 +11,16 @@
   @apply !border-l-0 !border-r-0 !pb-[8px] !border-t-0 border-b-[1px] border-solid border-[var(--line-box)];
 }
 
+.items-side-menu :global(.ant-menu-sub .ant-menu-submenu) {
+  @apply !border-b-0;
+}
+
 .items-side-menu :global(.ant-menu-submenu-active) {
   @apply text-[var(--text-item)];
 }
 
 .items-side-menu :global(.ant-menu-sub):global(.ant-menu-inline) {
-  @apply bg-[var(--bg-dark)];
+  @apply bg-[var(--bg-menu)];
 }
 
 .items-side-menu:global(.ant-menu) :global(.ant-menu-item) {
@@ -37,7 +41,7 @@
   }
 }
 
-.items-side-menu :global(.ant-menu-submenu-open .ant-menu-submenu-title .ant-menu-submenu-expand-icon) {
+.items-side-menu :global(.ant-menu-submenu-open > .ant-menu-submenu-title > .ant-menu-submenu-expand-icon) {
   svg {
     @apply rotate-0;
   }

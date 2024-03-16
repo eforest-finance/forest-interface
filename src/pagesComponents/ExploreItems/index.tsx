@@ -25,7 +25,7 @@ export default function ExploreItemsIndex() {
             <span className={styles.tab__item__total}>({total})</span>
           </div>
         ),
-        key: collectionsInfo?.id || '',
+        key: `${nftCollectionId}`,
         children: (
           <ExploreItems
             nftCollectionId={nftCollectionId as string}

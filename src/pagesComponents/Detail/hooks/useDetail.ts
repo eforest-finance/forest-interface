@@ -1,10 +1,11 @@
 import { store } from 'store/store';
-import { setNftInfo, setUpdateDetailLoading } from 'store/reducer/detail/detailInfo';
-import { fetchAuctionInfo } from 'api/fetch';
+import { setNftInfo, setNftTraitInfos, setUpdateDetailLoading } from 'store/reducer/detail/detailInfo';
+import { fetchAuctionInfo, fetchNftTraitsInfo } from 'api/fetch';
 import { openModal } from 'store/reducer/errorModalInfo';
 import useGetState from 'store/state/getState';
 import { useEffect, useState } from 'react';
 import getNftInfo from '../utils/getNftInfo';
+import { useMount } from 'react-use';
 
 interface IProps {
   id: string;
@@ -61,4 +62,20 @@ export const useDetail = (params: IProps) => {
   }, [id, walletInfo.address]);
 
   return { isCanBeBid, getDetail, isFetching };
+};
+
+export const useGetNftTraitInfo = ({ id }: IProps) => {
+  const getNftTraitInfo = async () => {
+    const result = await fetchNftTraitsInfo({
+      id,
+    });
+
+    if (result) {
+      store.dispatch(setNftTraitInfos(result));
+    }
+  };
+
+  useMount(() => {
+    getNftTraitInfo();
+  });
 };

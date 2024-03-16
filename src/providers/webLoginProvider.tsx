@@ -43,6 +43,10 @@ const WebLoginProviderDynamic = dynamic(
         graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
         socialLogin: {},
+        loginConfig: {
+          recommendIndexes: [0, 2],
+          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Email'],
+        },
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
           baseURL: info.portkeyServerV2,

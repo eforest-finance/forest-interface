@@ -69,6 +69,10 @@ function FilterTags({
     <div className={clsx(styles['filter-tags'])}>
       <div className={styles['filter-tags-container']}>
         {tagList.map((tag) => {
+          const prefix =
+            tag.type.includes(FilterKeyEnum.Traits) || tag.type.includes(FilterKeyEnum.Generation)
+              ? tag.type.replace(`${FilterKeyEnum.Traits}-`, '')
+              : '';
           return (
             <div key={tag.label} className={styles['tag-item']}>
               {tag.type === 'search' ? (
@@ -76,11 +80,18 @@ function FilterTags({
                   <Ellipsis
                     className={clsx(styles['tag-label'], 'break-words')}
                     direction="middle"
-                    content={getOmittedStr(tag.label, OmittedType.CUSTOM, { prevLen: 7, endLen: 6, limitLen: 13 })}
+                    content={getOmittedStr(tag.label || tag.toString(), OmittedType.CUSTOM, {
+                      prevLen: 7,
+                      endLen: 6,
+                      limitLen: 13,
+                    })}
                   />
                 </div>
               ) : (
-                <span className={styles['tag-label']}>{tag.label}</span>
+                <span className={styles['tag-label']}>
+                  {prefix ? `${prefix}:` : ''}
+                  {tag.label}
+                </span>
               )}
               <CloseBtn
                 className={clsx(tag.disabled ? 'cursor-not-allowed' : 'cursor-pointer')}

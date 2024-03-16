@@ -138,6 +138,7 @@ export interface INftInfo {
   whitelistPriceToken: SaleTokens | null;
   minter: ICreator | null;
   owner: ICreator | null;
+  decimals: string | number;
   nftCollection: {
     chainId: Chain;
     creator: ICreator;
@@ -168,6 +169,28 @@ export interface INftInfo {
     issuedTransactionId?: string;
     deployTime?: number;
     mintLimit?: number;
+  };
+}
+
+export interface INftTraitInfo {
+  id: string;
+  generation: number | string;
+  traitInfos: ITraitInfo[];
+}
+
+export interface ITraitInfo {
+  id: string;
+  key: string;
+  value: string;
+  itemsCount: number;
+  allItemsCount: number;
+  itemFloorPrice: number;
+  itemFloorPriceToken: {
+    chainId: Chain;
+    address: string;
+    symbol: string;
+    decimals: number;
+    id: string;
   };
 }
 

@@ -3,6 +3,7 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { CheckboxItemType, FilterType, ItemsSelectSourceType, SourceItemType } from '../../type';
 import { memo, useCallback, useMemo } from 'react';
 import styles from './style.module.css';
+import { formatTokenPrice } from 'utils/format';
 
 export interface CheckboxChoiceProps {
   dataSource?: CheckboxItemType;
@@ -31,10 +32,13 @@ function CheckBoxGroups({ dataSource, defaultValue, onChange }: CheckboxChoicePr
     const data = dataSource?.data || [];
     return data.map((item: SourceItemType) => {
       return (
-        <Col className="px-[8px] py-[17px]" key={item.value} span={24}>
+        <Col className="px-[8px] py-[17px] flex justify-between items-center" key={item.value} span={24}>
           <Checkbox value={item.value} disabled={item.disabled}>
             {item.label}
           </Checkbox>
+          {item.extra ? (
+            <span className="mr-2 text-sm font-medium text-textSecondary">{formatTokenPrice(item.extra)}</span>
+          ) : null}
         </Col>
       );
     });

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { GetBalance, GetTokenInfo } from 'contract/multiToken';
 import { IGetBalanceParams, IGetTokenInfoParams } from 'contract/type';
 import { setNftNumber } from 'store/reducer/detail/detailInfo';
@@ -20,6 +21,7 @@ export const getTokenInfo = async ({ symbol }: IGetTokenInfoParams, chainId: Cha
     return {
       supply: res.supply, // Quantity issued
       totalSupply: res.totalSupply, // Quantity created
+      decimals: res.decimals, //decimals
     };
   } catch (error) {
     return {
@@ -55,11 +57,30 @@ export const getNFTNumber = async ({
         getTokenInfo({ symbol: nftSymbol }, chainId),
       ]);
 
+      const nftDecimals = Number(res[2]?.decimals || 0);
+      const nftQuantity = Math.floor(
+        BigNumber(res[2]?.supply || 0)
+          .dividedBy(10 ** nftDecimals)
+          .toNumber(),
+      );
+      const nftTotalSupply = Math.floor(
+        BigNumber(res[2]?.totalSupply || 0)
+          .dividedBy(10 ** nftDecimals)
+          .toNumber(),
+      );
+
+      const nftBalance = Math.floor(
+        BigNumber(res[1] || 0)
+          .dividedBy(10 ** nftDecimals)
+          .toNumber(),
+      );
+
       changeNftNumber({
-        nftBalance: res[1],
+        nftBalance,
         tokenBalance: res[0],
-        nftQuantity: res[2]?.supply || 0,
-        nftTotalSupply: res[2]?.totalSupply || 0,
+        nftQuantity,
+        nftTotalSupply,
+        nftDecimals,
         loading: false,
       });
     } else {
