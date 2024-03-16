@@ -173,12 +173,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       }
 
       const durationList = getDurationParamsForListingContractByDuration(duration);
-      console.log(
-        'ListWithFixedPriceByContract',
-        amount,
-        nftInfo.decimals,
-        timesDecimals(amount, nftInfo.decimals || '0').toNumber(),
-      );
+
       const result = await ListWithFixedPriceByContract(
         {
           symbol: nftInfo.nftSymbol,
