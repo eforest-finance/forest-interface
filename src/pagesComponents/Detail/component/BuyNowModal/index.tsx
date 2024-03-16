@@ -127,7 +127,6 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       } else {
         buyListingData = buyListings;
       }
-      console.log('buyNowklq', buyListings, quantity, nftInfo?.decimals);
 
       const batchBuyNowRes = await batchBuyNow({
         symbol: nftInfo!.nftSymbol,
