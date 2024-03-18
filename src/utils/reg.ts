@@ -16,5 +16,9 @@ export function ipfsURLToS3AndIpfsURL(url: string, s3ImagePrefixUri: string): st
     const hash = URLObj.pathname.replace('/ipfs/', '');
     return [`${s3ImagePrefixUri}/${hash}`, url];
   }
+  if (URLObj.protocol.toLowerCase() === 'ipfs:') {
+    const hash = url.match(/^ipfs:(\/\/)?(.*)$/i)?.[2];
+    return [`${s3ImagePrefixUri}/${hash}`, `https://ipfs.io/ipfs/${hash}`];
+  }
   return [url];
 }
