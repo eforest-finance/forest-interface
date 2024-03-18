@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
 import styles from './style.module.css';
 import { COLLECTION_DEFAULT_IMG } from 'constants/FileConfig';
-import { unitConverter } from 'utils/unitConverter';
 import useColumns from 'hooks/useColumns';
 import { BoxSizeEnum } from '../CollectionItemsSearch';
 import LoadingMore from 'components/Loading';
@@ -129,9 +128,9 @@ function ScrollContent(props: IContentProps) {
         {...ListProps}
       />
       {loading ? <LoadingMore className="absolute z-100 bottom-[20px]" /> : null}
-      {!hasMore && loadingMore && ListProps?.dataSource?.length && (
+      {!hasMore && loadingMore && ListProps?.dataSource?.length ? (
         <div className="text-center w-full text-textDisable font-medium text-base pb-[20px]">No more data</div>
-      )}
+      ) : null}
     </div>
   );
 }

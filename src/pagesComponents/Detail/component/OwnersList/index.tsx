@@ -11,6 +11,7 @@ import useGetState from 'store/state/getState';
 import AvatarDefault from 'assets/images/avatar-default.png';
 import Image from 'next/image';
 import { formatTokenPrice } from 'utils/format';
+import { DEFAULT_PAGE_SIZE } from 'constants/index';
 
 interface IProps {
   id: string;
@@ -38,7 +39,7 @@ function OwnersList({ id, chainId, visible, onCancel }: IProps) {
       const res = await getOwnersList({ id, chainId, page });
       if (res) {
         setData([...data, ...res.list]);
-        if (data.length + res.list.length >= res.totalCount) {
+        if (data.length + res.list.length >= res.totalCount || res.list.length < DEFAULT_PAGE_SIZE) {
           setHasMore(false);
         }
         setPage((page) => ++page);

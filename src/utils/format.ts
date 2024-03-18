@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { number } from 'echarts';
 
 export function formatTime({
   minDigits = 2,
@@ -97,4 +98,10 @@ export function formatNumber(
     return numberBig.div(KUnit).toFixed(decimalPlaces, roundingMode).replace(regexp, '$1') + 'K';
   }
   return BigNumber.isBigNumber(number) ? number.toNumber() : number;
+}
+
+export function formatShowEmptyValue(value: number | string | undefined, str = '-') {
+  if (value === '0' || value === 0) return value;
+  if (Number(value) === -1 || !value) return str;
+  return value;
 }

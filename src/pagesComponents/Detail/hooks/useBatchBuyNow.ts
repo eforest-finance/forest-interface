@@ -24,6 +24,7 @@ import useDetailGetState from 'store/state/detailGetState';
 import { BuyMessage } from 'constants/promptMessage';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { handlePlurality } from 'utils/handlePlurality';
+import { timesDecimals } from 'utils/calculate';
 
 export default function useBatchBuyNow(chainId?: Chain) {
   const { walletInfo, aelfInfo } = useGetState();
@@ -131,13 +132,14 @@ export default function useBatchBuyNow(chainId?: Chain) {
     parameter: IBatchBuyNowParams & {
       price: IPrice;
       quantity: number;
+      nftDecimals: number;
     },
   ) => {
     if (isLogin) {
       const approveTokenResult = await checkELFApprove({
         chainId: chainId,
         price: parameter.price,
-        quantity: parameter.quantity,
+        quantity: timesDecimals(parameter.quantity, parameter.nftDecimals || '0').toNumber(),
         spender:
           chainId === SupportedELFChainId.MAIN_NET ? getForestContractAddress().main : getForestContractAddress().side,
         address: walletInfo.address || '',

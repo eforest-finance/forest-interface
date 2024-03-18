@@ -12,7 +12,8 @@ import moment from 'moment';
 import useJumpExplorer from 'hooks/useJumpExplorer';
 import { Ellipsis } from 'antd-mobile';
 import useGetState from 'store/state/getState';
-import { formatTokenPrice } from 'utils/format';
+import { formatTokenPrice, formatShowEmptyValue } from 'utils/format';
+import BigNumber from 'bignumber.js';
 
 enum FilterKeyEnum {
   Description = 'Description',
@@ -38,6 +39,10 @@ export default function DetailCard() {
   }, [walletInfo.address, nftInfo?.minter]);
 
   const items = useMemo(() => {
+    const totalQuantity = BigNumber(nftInfo?.totalQuantity || 0)
+      .dividedBy(10 ** Number(nftInfo?.decimals || 0))
+      .toFixed(0)
+      .toString();
     const arr = [
       {
         key: FilterKeyEnum.Description,
@@ -151,9 +156,9 @@ export default function DetailCard() {
             </p>
             <p>
               <span>Total Supply</span>
-              <Tooltip title={nftInfo?.totalQuantity} overlayInnerStyle={{ textAlign: 'center' }}>
+              <Tooltip title={formatTokenPrice(totalQuantity || '')} overlayInnerStyle={{ textAlign: 'center' }}>
                 <span className="font-medium text-[var(--text10)] max-w-[176px] lg:max-w-[200px]">
-                  <Ellipsis direction="middle" content={formatTokenPrice(nftInfo?.totalQuantity || '')} />
+                  <Ellipsis direction="middle" content={formatTokenPrice(totalQuantity || '')} />
                 </span>
               </Tooltip>
             </p>
@@ -207,34 +212,41 @@ export default function DetailCard() {
                 {nftInfo?.inscriptionInfo.tick || '-'}
               </span>
             </p>
-            <p>
-              <span>Inscription ID</span>
-              <span
-                className="font-medium text-brandNormal cursor-pointer"
-                onClick={() =>
-                  nftInfo?.inscriptionInfo?.issuedTransactionId &&
-                  jump(nftInfo.chainId, `/tx/${nftInfo.inscriptionInfo.issuedTransactionId}`)
-                }>
-                {nftInfo?.inscriptionInfo.issuedTransactionId
-                  ? getOmittedStr(nftInfo?.inscriptionInfo.issuedTransactionId, OmittedType.CUSTOM, {
-                      prevLen: 6,
-                      endLen: 6,
-                      limitLen: 15,
-                    })
-                  : '-'}
-              </span>
-            </p>
-            <p>
-              <span>Deployment Time</span>
-              <span className="font-medium text-[var(--text10)]">
-                {nftInfo?.inscriptionInfo.deployTime
-                  ? `${moment(nftInfo.inscriptionInfo.deployTime).format('MMM DD YYYY HH:mm:ss')}`
-                  : '-'}
-              </span>
-            </p>
+            {!nftInfo?.inscriptionInfo.issuedTransactionId ? null : (
+              <p>
+                <span>Inscription ID</span>
+                <span
+                  className="font-medium text-brandNormal cursor-pointer"
+                  onClick={() =>
+                    nftInfo?.inscriptionInfo?.issuedTransactionId &&
+                    jump(nftInfo.chainId, `/tx/${nftInfo.inscriptionInfo.issuedTransactionId}`)
+                  }>
+                  {nftInfo?.inscriptionInfo.issuedTransactionId
+                    ? getOmittedStr(nftInfo?.inscriptionInfo.issuedTransactionId, OmittedType.CUSTOM, {
+                        prevLen: 6,
+                        endLen: 6,
+                        limitLen: 15,
+                      })
+                    : '-'}
+                </span>
+              </p>
+            )}
+            {!nftInfo.inscriptionInfo.deployTime ? null : (
+              <p>
+                <span>Deployment Time</span>
+                <span className="font-medium text-[var(--text10)]">
+                  {nftInfo?.inscriptionInfo.deployTime
+                    ? `${moment(nftInfo.inscriptionInfo.deployTime).format('MMM DD YYYY HH:mm:ss')}`
+                    : '-'}
+                </span>
+              </p>
+            )}
+
             <p>
               <span>Limit Per Mint</span>
-              <span className="font-medium text-[var(--text10)]">{nftInfo?.inscriptionInfo.mintLimit || '-'}</span>
+              <span className="font-medium text-[var(--text10)]">
+                {formatShowEmptyValue(nftInfo?.inscriptionInfo.mintLimit)}
+              </span>
             </p>
           </div>
         ),

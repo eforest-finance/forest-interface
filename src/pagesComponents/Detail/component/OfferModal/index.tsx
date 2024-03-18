@@ -157,7 +157,9 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
       if (nftInfo && quantity && price) {
         const res = await makeOffer({
           symbol: nftInfo?.nftSymbol,
-          quantity: Number(quantity),
+          //quantity: Number(quantity),
+          quantity: timesDecimals(quantity, nftInfo.decimals || '0').toNumber(),
+          quantityForApprove: Number(quantity),
           price: {
             symbol: token,
             amount: Number(timesDecimals(price, 8)),
@@ -329,7 +331,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   const checkDate = (duration: number | string) => {
     const timeDifference = moment(duration).diff(moment());
     const minutesDifference = moment.duration(timeDifference).asMinutes();
-    const months = moment.duration(timeDifference).asMonths();
+    const months = Math.floor(moment.duration(timeDifference).asMonths());
     if (minutesDifference < 15) {
       message.error('The duration should be at least 15 minutes.');
       return false;
@@ -345,7 +347,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
     const timeDifference = date.diff(moment());
     const minutesDifference = moment.duration(timeDifference).asMinutes();
 
-    const months = moment.duration(timeDifference).asMonths();
+    const months = Math.floor(moment.duration(timeDifference).asMonths());
     if (minutesDifference < 15) {
       return 'The duration should be at least 15 minutes.';
     } else if (months > 6) {

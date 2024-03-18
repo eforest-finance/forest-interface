@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   compiler: {
     emotion: true,
   },
@@ -18,6 +18,10 @@ module.exports = {
       {
         protocol: 'https',
         hostname: '**.aliyuncs.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ipfs.io',
       },
     ],
   },

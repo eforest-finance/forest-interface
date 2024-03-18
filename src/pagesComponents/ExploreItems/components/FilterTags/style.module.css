@@ -1,5 +1,5 @@
 .filter-tags {
-  @apply w-full flex items-center mdl:mb-[16px] mb-[24px];
+  @apply w-full flex items-center mdl:mb-[16px] mb-[24px] sticky top-0;
   .filter-tags-container {
     @apply flex flex-wrap items-center gap-[12px];
     .tag-item {

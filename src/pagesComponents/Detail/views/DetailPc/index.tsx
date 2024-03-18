@@ -1,6 +1,12 @@
 'use client';
 import { Col, Row } from 'antd';
-import DetailCard from 'pagesComponents/Detail/component/DetailCard';
+// import DetailCard from 'pagesComponents/Detail/component/DetailCard';
+import { DescriptionCard } from 'pagesComponents/Detail/component/DetailCard/DescriptionCard';
+import { DetailCard as DetailCardNew } from 'pagesComponents/Detail/component/DetailCard/DetailsCard';
+import { InscriptionInfoCard } from 'pagesComponents/Detail/component/DetailCard/InscriptionInfoCard';
+import { CreateTokenInfoCard } from 'pagesComponents/Detail/component/DetailCard/CreateTokenInfoCard';
+import { TraitsInfoCard } from 'pagesComponents/Detail/component/DetailCard/TraitsCard';
+import { GenerationInfoCard } from 'pagesComponents/Detail/component/DetailCard/GenerationInfoCard';
 import Listings from 'pagesComponents/Detail/component/Listings';
 import PriceHistory from 'components/PriceHistory';
 import RecommendList from 'components/RecommendList';
@@ -24,6 +30,7 @@ import {
   setListings,
   setNftInfo,
   setNftNumber,
+  setNftTraitInfos,
   setOffers,
 } from 'store/reducer/detail/detailInfo';
 
@@ -37,6 +44,7 @@ function DetailPc() {
     return () => {
       store.dispatch(setNftInfo(null));
       store.dispatch(setListings(null));
+      store.dispatch(setNftTraitInfos(null));
       store.dispatch(setNftNumber(initializationNftNumber));
       store.dispatch(setOffers(null));
     };
@@ -48,7 +56,13 @@ function DetailPc() {
         <div className={styles['top-panel']}>
           <div className={styles['left-wrap']}>
             <Picture />
-            <DetailCard />
+            {/* <DetailCard /> */}
+            <DescriptionCard />
+            <TraitsInfoCard />
+            <GenerationInfoCard />
+            <DetailCardNew />
+            <CreateTokenInfoCard />
+            <InscriptionInfoCard />
           </div>
           <div className={styles['right-wrap']}>
             <Creator />

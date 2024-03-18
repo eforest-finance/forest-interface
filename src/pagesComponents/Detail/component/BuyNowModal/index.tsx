@@ -113,7 +113,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       if (buyItem) {
         const buyListing: IFixPriceList = {
           offerTo: buyItem.ownerAddress,
-          quantity: quantity,
+          quantity: timesDecimals(quantity, nftInfo?.decimals || '0').toNumber(),
           price: {
             symbol: buyItem.purchaseToken.symbol,
             amount: buyItem.price,
@@ -127,6 +127,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       } else {
         buyListingData = buyListings;
       }
+      console.log('buyNowklq', buyListings, quantity, nftInfo?.decimals);
 
       const batchBuyNowRes = await batchBuyNow({
         symbol: nftInfo!.nftSymbol,
@@ -144,6 +145,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
           amount: new BigNumber(timesDecimals(averagePrice, 8)).toNumber(),
         },
         quantity,
+        nftDecimals: Number(nftInfo?.decimals || 0),
       });
 
       console.log('batchBuyNowRes', batchBuyNowRes);
@@ -283,7 +285,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       if (list.quantity <= quantity - curQuantity) {
         const buyListing: IFixPriceList = {
           offerTo: list.ownerAddress,
-          quantity: list.quantity,
+          quantity: timesDecimals(list.quantity, nftInfo?.decimals || '0').toNumber(),
           price: {
             symbol: list.purchaseToken.symbol,
             amount: list.price,
@@ -302,7 +304,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       } else {
         const buyListing: IFixPriceList = {
           offerTo: list.ownerAddress,
-          quantity: quantity - curQuantity,
+          quantity: timesDecimals(quantity - curQuantity, nftInfo?.decimals || '0').toNumber(),
           price: {
             symbol: list.purchaseToken.symbol,
             amount: list.price,
