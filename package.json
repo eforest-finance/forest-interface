@@ -16,9 +16,9 @@
     "prepare": "husky install"
   },
   "resolutions": {
-    "@portkey/did-ui-react": "2.1.0",
-    "@portkey/detect-provider": "^2.0.0-alpha.5",
-    "@portkey/provider-types": "^2.0.0-alpha.5"
+    "@portkey/did-ui-react": "2.2.0",
+    "@portkey/detect-provider": "^2.1.0",
+    "@portkey/provider-types": "^2.1.0"
   },
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
@@ -29,12 +29,12 @@
     "@portkey-v1/services": "1.5.4-alpha.20",
     "@portkey-v1/types": "1.5.4-alpha.20",
     "@portkey-v1/utils": "1.5.4-alpha.20",
-    "@portkey/contracts": "2.1.0",
-    "@portkey/did-ui-react": "2.1.0",
-    "@portkey/request": "2.1.0",
-    "@portkey/services": "2.1.0",
-    "@portkey/types": "2.1.0",
-    "@portkey/utils": "2.1.0",
+    "@portkey/contracts": "2.2.0",
+    "@portkey/did-ui-react": "2.2.0",
+    "@portkey/request": "2.2.0",
+    "@portkey/services": "2.2.0",
+    "@portkey/types": "2.2.0",
+    "@portkey/utils": "2.2.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@sentry/nextjs": "^7.19.0",
     "@types/lodash-es": "^4.17.8",

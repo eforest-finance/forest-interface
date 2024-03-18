@@ -118,11 +118,17 @@ export default function ExploreItems({
     fetchData(requestParams, false, true);
   }, [nftCollectionId]);
 
+  const resetScrollTop = () => {
+    const scrollEle = document.querySelector('#explore__container');
+    scrollEle?.scrollTo(0, Math.min(isLG ? 230 : 190, scrollEle.scrollTop));
+  };
+
   const filterChange = useCallback(
     (val: ItemsSelectSourceType) => {
       setFilterSelect({ ...filterSelect, ...val });
       const filter = getFilter({ ...filterSelect, ...val });
       console.log('filterChange', filterSelect, filter);
+      resetScrollTop();
       SetCurrent(1);
       const params = {
         ...filter,
@@ -242,6 +248,7 @@ export default function ExploreItems({
     },
   );
   const clearAll = useCallback(() => {
+    resetScrollTop();
     SetCurrent(1);
     setSearchParam('');
     setFilterSelect({ ...defaultFilter });

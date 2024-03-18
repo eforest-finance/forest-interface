@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
 import styles from './style.module.css';
 import { COLLECTION_DEFAULT_IMG } from 'constants/FileConfig';
-import { unitConverter } from 'utils/unitConverter';
 import useColumns from 'hooks/useColumns';
 import { BoxSizeEnum } from '../CollectionItemsSearch';
 import LoadingMore from 'components/Loading';

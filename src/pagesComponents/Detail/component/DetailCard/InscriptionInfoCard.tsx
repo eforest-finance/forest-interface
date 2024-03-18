@@ -32,31 +32,35 @@ export function InscriptionInfoCard() {
                 {nftInfo?.inscriptionInfo.tick || '-'}
               </span>
             </p>
-            <p>
-              <span>Inscription ID</span>
-              <span
-                className="font-medium text-brandNormal cursor-pointer"
-                onClick={() =>
-                  nftInfo?.inscriptionInfo?.issuedTransactionId &&
-                  jump(nftInfo.chainId, `/tx/${nftInfo.inscriptionInfo.issuedTransactionId}`)
-                }>
-                {nftInfo?.inscriptionInfo.issuedTransactionId
-                  ? getOmittedStr(nftInfo?.inscriptionInfo.issuedTransactionId, OmittedType.CUSTOM, {
-                      prevLen: 6,
-                      endLen: 6,
-                      limitLen: 15,
-                    })
-                  : '-'}
-              </span>
-            </p>
-            <p>
-              <span>Deployment Time</span>
-              <span className="font-medium text-[var(--text10)]">
-                {nftInfo?.inscriptionInfo.deployTime
-                  ? `${moment(nftInfo.inscriptionInfo.deployTime).format('MMM DD YYYY HH:mm:ss')}`
-                  : '-'}
-              </span>
-            </p>
+            {!nftInfo?.inscriptionInfo.issuedTransactionId ? null : (
+              <p>
+                <span>Inscription ID</span>
+                <span
+                  className="font-medium text-brandNormal cursor-pointer"
+                  onClick={() =>
+                    nftInfo?.inscriptionInfo?.issuedTransactionId &&
+                    jump(nftInfo.chainId, `/tx/${nftInfo.inscriptionInfo.issuedTransactionId}`)
+                  }>
+                  {nftInfo?.inscriptionInfo.issuedTransactionId
+                    ? getOmittedStr(nftInfo?.inscriptionInfo.issuedTransactionId, OmittedType.CUSTOM, {
+                        prevLen: 6,
+                        endLen: 6,
+                        limitLen: 15,
+                      })
+                    : '-'}
+                </span>
+              </p>
+            )}
+            {!nftInfo.inscriptionInfo.deployTime ? null : (
+              <p>
+                <span>Deployment Time</span>
+                <span className="font-medium text-[var(--text10)]">
+                  {nftInfo?.inscriptionInfo.deployTime
+                    ? `${moment(nftInfo.inscriptionInfo.deployTime).format('MMM DD YYYY HH:mm:ss')}`
+                    : '-'}
+                </span>
+              </p>
+            )}
             <p>
               <span>Limit Per Mint</span>
               <span className="font-medium text-[var(--text10)]">

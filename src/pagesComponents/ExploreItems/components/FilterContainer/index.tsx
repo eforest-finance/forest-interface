@@ -1,9 +1,10 @@
-import { Button, Divider, Drawer, Menu, MenuProps } from 'antd';
+import { Divider, Drawer, Menu, MenuProps } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import CloseBtn from 'assets/images/explore/close.svg';
 import ExpandIcon from 'assets/images/explore/item-arrow-up.svg';
+import BaseButton from 'baseComponents/Button';
 
 function CollapseForPC(props: MenuProps) {
   return (
@@ -44,13 +45,13 @@ const CollapseForPhone = ({
     return (
       <>
         <Divider className="!m-0 !mt-0 border-box" />
-        <div className={styles['clear-all']}>
-          <Button className={clsx(styles['range-default-button'], 'flex-1 !h-[56px] rounded-lg')} onClick={clearAll}>
+        <div className="flex items-center px-2 py-4">
+          <BaseButton size="ultra" className="flex-1 mx-2" onClick={clearAll}>
             Clear All
-          </Button>
-          <Button className="!h-[56px] flex-1 font-medium ml-[16px] rounded-lg" type="primary" onClick={doneChange}>
+          </BaseButton>
+          <BaseButton size="ultra" className="flex-1 mx-2" type="primary" onClick={doneChange}>
             Done
-          </Button>
+          </BaseButton>
         </div>
       </>
     );

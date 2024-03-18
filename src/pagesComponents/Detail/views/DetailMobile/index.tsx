@@ -30,6 +30,7 @@ export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
 
   const [showSticky, setShowSticky] = useState<boolean>(false);
+  const scrollTopWhenStickyRef = useRef<number>(0);
 
   const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
 
@@ -39,11 +40,20 @@ export default function DetailMobile() {
     rootMargin: `0px 0px -${bottom}px 0px`,
   });
 
+  const resetScrollTopOnTabChange = () => {
+    if (scrollTopWhenStickyRef.current < 1) return;
+    if (document.body.scrollTop < scrollTopWhenStickyRef.current) return;
+    document.body.scrollTo(0, scrollTopWhenStickyRef.current);
+  };
+
   useEffect(() => {
     const onScroll = () => {
       if (!tabsRef?.current) return;
       const { top } = (tabsRef?.current as HTMLElement).getBoundingClientRect();
       setShowSticky(top < 63);
+      if (top < 63 && !scrollTopWhenStickyRef.current) {
+        scrollTopWhenStickyRef.current = document.body.scrollTop;
+      }
     };
     document.body.addEventListener('scroll', onScroll);
     return () => {
@@ -80,6 +90,7 @@ export default function DetailMobile() {
             activeKey={currentTab}
             onChange={(activeKey) => {
               store.dispatch(setCurrentTab(activeKey));
+              resetScrollTopOnTabChange();
             }}
             className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
             animated={false}>

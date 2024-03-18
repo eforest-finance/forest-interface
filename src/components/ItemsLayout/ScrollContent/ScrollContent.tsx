@@ -113,6 +113,9 @@ export default function ScrollContent() {
 
   return (
     <div className={styles['scroll-content-wrapper']}>
+      <div className="m-6 -mb-2 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
+        Your NFT possessions with quantities less than 1 are hidden.
+      </div>
       <div className={`relative pb-[80px] min-h-[160px] ${!search ? 'no-filter-tag' : ''}`} id="scrollableDiv">
         {(!itemsSource || itemsSource?.items?.length < 1) && !loading && (
           <div className={`${styles['scroll-items-empty']} flex justify-center items-center`}>No Items to Display.</div>

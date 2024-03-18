@@ -19,6 +19,10 @@ module.exports = {
         protocol: 'https',
         hostname: '**.aliyuncs.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'ipfs.io',
+      },
     ],
   },
   // i18n: {
