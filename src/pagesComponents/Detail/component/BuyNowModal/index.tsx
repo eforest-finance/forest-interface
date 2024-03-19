@@ -348,6 +348,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
     }
     try {
       if (!nftInfo) return;
+      setLoading(true);
       const res = await getListings({
         page,
         chainId: nftInfo.chainId,
@@ -364,8 +365,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       setMaxQuantity((maxQuantity) => {
         return maxQuantity + curMax;
       });
-    } catch (error) {
-      /* empty */
+    } finally {
       setLoading(false);
     }
   };

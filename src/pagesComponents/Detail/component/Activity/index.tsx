@@ -302,7 +302,7 @@ export default function Activity() {
                 offsetHeader: 0,
               }}
               emptyText={!tableLoading ? 'No activities yet' : ''}
-              loading={loading}
+              loading={false}
               columns={columns || []}
               scroll={{ x: 630 }}
               pagination={false}

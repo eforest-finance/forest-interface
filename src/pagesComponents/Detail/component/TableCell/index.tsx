@@ -12,10 +12,9 @@ function TableCell(props: { content: string | ReactNode; isLink?: boolean; toolt
     <div
       className={`flex items-center text-sm font-medium ${
         isLink ? 'text-brandNormal cursor-pointer' : 'text-textPrimary cursor-default'
-      } ${isSmallScreen && '!text-base !font-semibold'}`}
-      onClick={onClick}>
+      } ${isSmallScreen && '!text-base !font-semibold'}`}>
       <Tooltip title={!isSmallScreen && tooltip}>
-        <span>{content}</span>
+        <span onClick={onClick}>{content}</span>
       </Tooltip>
     </div>
   );

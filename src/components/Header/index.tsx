@@ -36,6 +36,7 @@ import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { hideHeaderPage } from 'constants/common';
 import { WalletType, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
+import { useUpdateEffect } from 'ahooks';
 
 function Header() {
   const [theme, changeTheme] = useTheme();
@@ -88,6 +89,10 @@ function Header() {
       },
     });
   };
+
+  useUpdateEffect(() => {
+    onClose();
+  }, [pathname]);
 
   const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
 
