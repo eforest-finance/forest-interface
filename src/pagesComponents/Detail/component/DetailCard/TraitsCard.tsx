@@ -43,7 +43,7 @@ export function TraitsInfoCard() {
     }
   }, [nftTraitInfos]);
 
-  const items = useMemo(() => {
+  const itemsForCollapseComp = useMemo(() => {
     const arr = [];
     const getFloorPriceStr = (traitInfo: ITraitInfo) => {
       return `Floor: ${formatShowEmptyValue(traitInfo?.itemFloorPrice)} ${
@@ -129,7 +129,13 @@ export function TraitsInfoCard() {
     return arr;
   }, [nftTraitInfos, nftInfo]);
 
-  if (!items.length) return null;
+  if (!itemsForCollapseComp.length) return null;
 
-  return <CollapseForPC defaultActiveKey={FilterKeyEnum.Traits} items={items} wrapClassName={styles['detail-card']} />;
+  return (
+    <CollapseForPC
+      defaultActiveKey={FilterKeyEnum.Traits}
+      items={itemsForCollapseComp}
+      wrapClassName={styles['detail-card']}
+    />
+  );
 }
