@@ -4,6 +4,7 @@ import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import storages from 'storages';
 import { AUTHORISATION_FAILED } from 'constants/errorMessage';
+import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
 
 interface ResponseType<T> {
   code: string;
@@ -19,11 +20,14 @@ class Request {
     this.instance = axios.create(Object.assign({}, this.baseConfig, config));
 
     this.instance.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+      async (config: AxiosRequestConfig) => {
         // add token
-        const token = JSON.parse(localStorage.getItem(storages.accountInfo) || '{}').token;
-        if (token && !config.baseURL?.includes('cms')) {
-          config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
+        const baseURL = config.baseURL || '';
+        if (!['/connect', '/cms'].includes(baseURL) && ['/api'].includes(baseURL)) {
+          const token = await WalletAndTokenInfo.getToken(config.url || '');
+          if (token) {
+            config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
+          }
         }
         return config;
       },
