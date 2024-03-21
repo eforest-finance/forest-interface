@@ -42,6 +42,13 @@ export function TraitsInfoCard() {
       console.warn('getRarity error', err);
     }
   }, [nftTraitInfos]);
+  const getItemPercent = ({ itemsCount, allItemsCount }: ITraitInfo) => {
+    const num = itemsCount / allItemsCount;
+    if (isNaN(num) || num < 0) {
+      return '-';
+    }
+    return `${(num * 100).toFixed(2)}%`;
+  };
 
   const itemsForCollapseComp = useMemo(() => {
     const arr = [];
@@ -74,7 +81,7 @@ export function TraitsInfoCard() {
                     </div>
                   </Tooltip>
                   <div className=" text-textSecondary text-xs mt-[2px]">
-                    {traitInfo.itemsCount}({((traitInfo.itemsCount / traitInfo.allItemsCount) * 100).toFixed(2)}%)
+                    {traitInfo.itemsCount}({getItemPercent(traitInfo)})
                   </div>
                   <Tooltip title={fllorPriceStr}>
                     <div className=" w-full text-center text-xs h-5 text-textSecondary mt-[6px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">
@@ -105,7 +112,7 @@ export function TraitsInfoCard() {
                   <div className="flex w-full justify-between">
                     <span className="text-textPrimary text-xs font-medium">{traitInfo.key}</span>
                     <span className=" text-textSecondary text-xs mt-[2px]">
-                      {traitInfo.itemsCount}({((traitInfo.itemsCount / traitInfo.allItemsCount) * 100).toFixed(2)}%)
+                      {traitInfo.itemsCount}({getItemPercent(traitInfo)})
                     </span>
                   </div>
                   <div className="flex w-full justify-between mt-2">
