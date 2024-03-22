@@ -358,7 +358,7 @@ export default function ExploreItems({
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div className=" sticky top-36 z-50 bg-fillPageBg overflow-hidden">
+              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}
