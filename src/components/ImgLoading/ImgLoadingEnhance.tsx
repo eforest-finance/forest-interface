@@ -11,7 +11,10 @@ export function ImageEnhance({
 } & ImgHTMLAttributes<HTMLImageElement>) {
   const [srcIndex, setSrcIndex] = useState<number>(0);
   const { aelfInfo } = useGetState();
-  const srcs = useMemo(() => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL), [src, aelfInfo.ipfsToS3ImageURL]);
+  const srcs = useMemo(
+    () => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL),
+    [src, aelfInfo.ipfsToS3ImageURL],
+  );
   const imageUrl = useMemo(() => srcs[srcIndex], [srcIndex, srcs]);
   const nextSrc: ReactEventHandler<HTMLImageElement> = useCallback(
     (e) => {

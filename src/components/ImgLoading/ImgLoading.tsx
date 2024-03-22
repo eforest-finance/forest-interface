@@ -36,7 +36,10 @@ function ImgLoading({
   const { isSmallScreen } = useSelector(selectInfo);
   const { aelfInfo } = useGetState();
   const [loadableStatus, setLoadableStatus] = useState<boolean>(isUrl(src));
-  const imgSrcs = useMemo(() => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL), [src]);
+  const imgSrcs = useMemo(
+    () => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL),
+    [src],
+  );
   const [srcIndex, setSrcIndex] = useState<number>(0);
 
   const defaultLoadingWrapper = useMemo(() => {

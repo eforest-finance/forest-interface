@@ -365,6 +365,7 @@ export interface IConfigItems {
   tsm?: string;
   faucetContractAddress?: string;
   ipfsToS3ImageURL?: string;
+  ipfsToSchrodingerURL?: string;
 }
 
 export interface IUserSettingParams {

@@ -9,12 +9,12 @@ export const isBase64Url = (url: string) => {
   return base64UrlRegex.test(url);
 };
 
-export function ipfsURLToS3AndIpfsURL(url: string, s3ImagePrefixUri: string): string[] {
+export function ipfsURLToS3AndIpfsURL(url: string, s3ImagePrefixUri: string, ipfsToSchrodingerURL: string): string[] {
   const URLObj = new URL(url);
   const host = URLObj.host.toLowerCase();
   if (host === 'ipfs.io') {
     const hash = URLObj.pathname.replace('/ipfs/', '');
-    return [`${s3ImagePrefixUri}/${hash}`, url];
+    return [`${s3ImagePrefixUri}/${hash}`, `${ipfsToSchrodingerURL}/${hash}`, url];
   }
   return [url];
 }
