@@ -21,6 +21,14 @@ module.exports = {
       },
       {
         protocol: 'https',
+        hostname: '**.schrodingernft.ai',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.schrodingerai.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'ipfs.io',
       },
     ],
