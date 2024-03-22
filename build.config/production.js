@@ -6,7 +6,7 @@ module.exports = {
   compiler: {
     emotion: true,
     removeConsole: {
-      exclude: ['error'],
+      exclude: ['error', 'info'],
     },
   },
   experimental: {

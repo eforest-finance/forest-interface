@@ -3,10 +3,12 @@ import styles from './style.module.css';
 import useDetailGetState from 'store/state/detailGetState';
 import useGetState from 'store/state/getState';
 import { Tooltip } from 'antd';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { formatShowEmptyValue } from 'utils/format';
 import { ITraitInfo } from 'types/nftTypes';
 import Link from 'next/link';
+import { getRarity } from 'utils/getTraitsForUI';
+import { IoTTwinMaker } from 'aws-sdk';
 
 enum FilterKeyEnum {
   Description = 'Description',
@@ -21,6 +23,25 @@ export function TraitsInfoCard() {
   const { isSmallScreen } = infoState;
 
   const { nftTraitInfos, nftInfo } = detailInfo;
+
+  useEffect(() => {
+    if (!nftTraitInfos) return;
+    let map: {
+      [key: string]: string;
+    } = {
+      'Weapon(Left Hand)': 'Weapon',
+      'Accessory(Right Hand)': 'Accessory',
+      Wing: 'Wings',
+      Moustauch: 'Mustache',
+    };
+    const keys = nftTraitInfos.traitInfos.map((itm) => map[itm.key.trim()] || itm.key.trim());
+    const values = nftTraitInfos.traitInfos.map((itm) => itm.value);
+    try {
+      getRarity(keys, values);
+    } catch (err) {
+      console.warn('getRarity error', err);
+    }
+  }, [nftTraitInfos]);
 
   const items = useMemo(() => {
     const arr = [];
