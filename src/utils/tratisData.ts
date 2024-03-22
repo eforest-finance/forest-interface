@@ -1,4 +1,8 @@
-const traitsData = {
+const traitsData: {
+  [key: string]: {
+    [key: string]: number;
+  };
+} = {
   Theme: {
     'Chinese Spring Festival': 0.0333,
     'Vibrant Indian Diwali celebration': 0.0333,

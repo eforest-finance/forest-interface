@@ -1,7 +1,7 @@
 import { traitsData } from './tratisData';
 import BigNumber from 'bignumber.js';
 
-const traitsTypeData = {
+const traitsTypeData: { [key: string]: number } = {
   Background: 100,
   Clothes: 100,
   Breed: 100,
@@ -31,8 +31,8 @@ const levels = [
   0.0016666, 0.0018, 0.002, 0.005, 0.0085,
 ];
 
-function getRarity(typeArray, valueArray, consoleFn) {
-  const levelsObject = {};
+function getRarity(typeArray: string[], valueArray: string[]) {
+  const levelsObject: { [key: string | number]: { amount: number; rarity: string } } = {};
   levels.forEach((level, index) => {
     levelsObject[index] = {
       amount: 0,
@@ -53,7 +53,13 @@ function getRarity(typeArray, valueArray, consoleFn) {
         .toString()} %; total rarity: ${rarity} %, level: ${levels.indexOf(rarity)}`,
     );
   });
-  console.info('rarityInfo', levelsObject);
+  const levelsObjectFormatted: any = {};
+  Object.keys(levelsObject).forEach((key) => {
+    const item = levelsObject[key];
+    levelsObjectFormatted[key] = `amount: ${item.amount}, rarity: ${item.rarity}`;
+  });
+
+  console.info('rarityInfo', JSON.stringify(levelsObjectFormatted, null, 4));
 }
 
 export { getRarity };

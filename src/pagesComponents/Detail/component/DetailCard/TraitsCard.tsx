@@ -8,7 +8,6 @@ import { formatShowEmptyValue } from 'utils/format';
 import { ITraitInfo } from 'types/nftTypes';
 import Link from 'next/link';
 import { getRarity } from 'utils/getTraitsForUI';
-import { IoTTwinMaker } from 'aws-sdk';
 
 enum FilterKeyEnum {
   Description = 'Description',
@@ -33,6 +32,7 @@ export function TraitsInfoCard() {
       'Accessory(Right Hand)': 'Accessory',
       Wing: 'Wings',
       Moustauch: 'Mustache',
+      Mustaches: 'Mustache',
     };
     const keys = nftTraitInfos.traitInfos.map((itm) => map[itm.key.trim()] || itm.key.trim());
     const values = nftTraitInfos.traitInfos.map((itm) => itm.value);
