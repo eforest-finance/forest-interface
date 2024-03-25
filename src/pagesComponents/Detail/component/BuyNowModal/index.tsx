@@ -141,7 +141,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         }),
         price: {
           symbol: 'ELF',
-          amount: new BigNumber(timesDecimals(averagePrice, 8)).toNumber(),
+          amount: new BigNumber(timesDecimals(averagePrice, '0')).toNumber(), // elf price no need decimals
         },
         quantity,
         nftDecimals: Number(nftInfo?.decimals || 0),
