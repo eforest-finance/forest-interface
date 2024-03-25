@@ -463,7 +463,9 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       afterClose={modal.remove}
       footer={
         <Button
-          disabled={isSideChainBalanceInsufficient || !!quantityErrorTip || !quantity}
+          disabled={
+            isSideChainBalanceInsufficient || !!quantityErrorTip || !quantity || (!buyListings.length && !buyItem)
+          }
           loading={loading}
           type="primary"
           size="ultra"
