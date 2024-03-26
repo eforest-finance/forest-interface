@@ -10,13 +10,14 @@ import { useSelector } from 'store/store';
 import styles from './settings.module.css';
 import useSaveSettings from './hooks/useSaveSettings';
 import useUsernameCheck from './hooks/useUsernameCheck';
-import { useDebounce, useUnmount } from 'react-use';
+import { useUnmount } from 'react-use';
 import useUserInfo from 'hooks/useUserInfo';
 import AWSManagerInstance from 'utils/S3';
 import { emailReg, instagramReg, twitterReg } from 'constants/common';
 import Input from 'baseComponents/Input';
 import Button from 'baseComponents/Button';
 import { useLogoutListener } from 'hooks/useLogoutListener';
+import { useDebounceFn } from 'ahooks';
 
 export default function Settings() {
   const {
@@ -116,18 +117,20 @@ export default function Settings() {
     [],
   );
 
-  const checkUsernameUsed = useCallback(async () => {
-    if (!form.username.value) return;
-    setUsernameCheck({ checked: false, isUsed: false });
-    const result = await checkName(form.username.value);
-    if (!result) {
+  const { run: checkUsernameUsed } = useDebounceFn(
+    async (userName: string) => {
+      if (!userName) return;
       setUsernameCheck({ checked: false, isUsed: false });
-      // return message.error('Network Error');
-    }
-    setUsernameCheck({ checked: true, isUsed: !result });
-  }, [checkName, form.username.value]);
-
-  useDebounce(checkUsernameUsed, 500, [form.username.value]);
+      const result = await checkName(userName);
+      if (!result) {
+        setUsernameCheck({ checked: false, isUsed: false });
+      }
+      setUsernameCheck({ checked: true, isUsed: !result });
+    },
+    {
+      leading: true,
+    },
+  );
 
   const uploadButton = uploading ? (
     <LoadingOutlined />
@@ -274,7 +277,10 @@ export default function Settings() {
                     showCount
                     size="large"
                     value={form.username.value}
-                    onChange={(e) => onFormChange(e, 'username')}
+                    onChange={(e) => {
+                      onFormChange(e, 'username');
+                      checkUsernameUsed(e.target.value);
+                    }}
                     minLength={1}
                     maxLength={20}
                     status={nameErrorStatus ? 'error' : ''}
