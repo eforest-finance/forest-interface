@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, HttpTransportType, HubConnectionState } from '@microsoft/signalr';
 // import { IBidInfo, IBidInfosResponse } from './types';
 
 type SignalRParams = {
@@ -106,6 +106,9 @@ export default class SignalR {
   };
 
   sendEvent = (name: string, ...rest: any[]) => {
+    if (this.connection?.state !== HubConnectionState.Connected) {
+      return;
+    }
     try {
       if (rest.length === 0) {
         this.connection?.invoke(name);

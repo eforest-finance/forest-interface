@@ -729,7 +729,9 @@ export default function CreateItem() {
           error={formError?.quantity}
           description="The number of items that can be created. ">
           <Input
-            type="number"
+            onKeyDown={(e) => {
+              /\d|\.|Backspace|ArrowRight|ArrowLeft|ArrowUp|ArrowDown/.test(e.key) || e.preventDefault();
+            }}
             status={formError?.quantity && 'error'}
             className={`${isSmallScreen ? '!w-full !mt-[11.5px]' : '!w-[510px] !mt-[16px]'}`}
             placeholder="Quantity"
