@@ -24,19 +24,20 @@ export function TraitsInfoCard() {
   const { nftTraitInfos, nftInfo } = detailInfo;
 
   useEffect(() => {
-    if (!nftTraitInfos) return;
-    let map: {
-      [key: string]: string;
-    } = {
-      'Weapon(Left Hand)': 'Weapon',
-      'Accessory(Right Hand)': 'Accessory',
-      Wing: 'Wings',
-      Moustauch: 'Mustache',
-      Mustaches: 'Mustache',
-    };
-    const keys = nftTraitInfos.traitInfos.map((itm) => map[itm.key.trim()] || itm.key.trim());
-    const values = nftTraitInfos.traitInfos.map((itm) => itm.value);
+    if (!nftTraitInfos?.traitInfos?.length) return;
     try {
+      let map: {
+        [key: string]: string;
+      } = {
+        'Weapon(Left Hand)': 'Weapon',
+        'Accessory(Right Hand)': 'Accessory',
+        Wing: 'Wings',
+        Moustauch: 'Mustache',
+        Mustaches: 'Mustache',
+      };
+      const keys = nftTraitInfos.traitInfos.map((itm) => map[itm.key.trim()] || itm.key.trim());
+      const values = nftTraitInfos.traitInfos.map((itm) => itm.value);
+
       getRarity(keys, values);
     } catch (err) {
       console.warn('getRarity error', err);
