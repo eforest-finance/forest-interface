@@ -82,12 +82,12 @@ class Request {
           case 502:
           case 503:
           case 504:
-            errMessage = `${error.response?.status}: something went wrong in server`;
+            errMessage = `${error?.response?.status}: something went wrong in server`;
             break;
 
           default:
             errMessage = `${
-              error.response?.status ? error.response?.status + ': ' : ''
+              error?.response?.status ? error?.response?.status + ': ' : ''
             }something went wrong, please try again later`;
             break;
         }
