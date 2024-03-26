@@ -59,7 +59,7 @@ export function EventItem({
       </div>
 
       <div className="px-4 py-3 sml:px-6 sml:py-4">
-        <div className="line-clamp-2 min-h-[24px] text-base text-ellipsis text-textPrimary font-semibold sml:line-clamp-1 sml:text-xl sml:min-h-[28px]">
+        <div className="line-clamp-1 min-h-[24px] text-base text-ellipsis text-textPrimary font-semibold sml:line-clamp-1 sml:text-xl sml:min-h-[28px]">
           {dropName || '--'}
         </div>
         <div className="flex flex-col mt-2">

@@ -50,18 +50,14 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
         <div className={styles.card__content}>
           <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
           <div className={styles.token__name}>{dataSource?.tokenName}</div>
-          {dataSource?.priceDescription ? (
-            <div className={clsx(styles.token__price, priceClassName)}>
-              <span className={styles.token__label}>{dataSource?.priceDescription}</span>
-              <span className={styles.token__price__text}>
-                {(dataSource?.price || dataSource?.price === 0) && dataSource?.price >= 0
-                  ? formatTokenPrice(dataSource.price) + ' ELF'
-                  : '-'}
-              </span>
-            </div>
-          ) : (
-            <div className="h-[76px] mdb:h-[40px]"></div>
-          )}
+          <div className={clsx(styles.token__price, priceClassName)}>
+            <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+            <span className={styles.token__price__text}>
+              {(dataSource?.price || dataSource?.price === 0) && dataSource?.price >= 0
+                ? formatTokenPrice(dataSource.price) + ' ELF'
+                : '--'}
+            </span>
+          </div>
         </div>
       </Card>
     </Link>
