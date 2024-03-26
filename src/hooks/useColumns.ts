@@ -7,7 +7,7 @@ export default function useColumns(collapsed: boolean, size: BoxSizeEnum) {
   const columns = useMemo(() => {
     let result = 0;
     if (isMin) {
-      result = 1;
+      result = 2;
     } else if (isMD) {
       result = 2;
     } else if (isLG) {
