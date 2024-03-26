@@ -127,7 +127,6 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       } else {
         buyListingData = buyListings;
       }
-      console.log('buyNowklq', buyListings, quantity, nftInfo?.decimals);
 
       const batchBuyNowRes = await batchBuyNow({
         symbol: nftInfo!.nftSymbol,
@@ -142,7 +141,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         }),
         price: {
           symbol: 'ELF',
-          amount: new BigNumber(timesDecimals(averagePrice, 8)).toNumber(),
+          amount: new BigNumber(timesDecimals(averagePrice, '0')).toNumber(), // elf price no need decimals
         },
         quantity,
         nftDecimals: Number(nftInfo?.decimals || 0),
@@ -348,6 +347,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
     }
     try {
       if (!nftInfo) return;
+      setLoading(true);
       const res = await getListings({
         page,
         chainId: nftInfo.chainId,
@@ -364,8 +364,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       setMaxQuantity((maxQuantity) => {
         return maxQuantity + curMax;
       });
-    } catch (error) {
-      /* empty */
+    } finally {
       setLoading(false);
     }
   };
@@ -464,7 +463,9 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       afterClose={modal.remove}
       footer={
         <Button
-          disabled={isSideChainBalanceInsufficient || !!quantityErrorTip || !quantity}
+          disabled={
+            isSideChainBalanceInsufficient || !!quantityErrorTip || !quantity || (!buyListings.length && !buyItem)
+          }
           loading={loading}
           type="primary"
           size="ultra"
