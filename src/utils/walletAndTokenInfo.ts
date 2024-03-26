@@ -3,13 +3,6 @@ import { message } from 'antd';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
 import storages from 'storages';
-import {
-  checkAccountExpired,
-  createToken,
-  getAccountInfoFromStorage,
-  isCurrentPageNeedToken,
-  isNeedCheckToken,
-} from './token';
 import { ICreateTokenParams } from 'types';
 
 export default class WalletAndTokenInfo {
@@ -35,6 +28,13 @@ export default class WalletAndTokenInfo {
 
   public static getToken(requestPath: string) {
     return new Promise(async (resolve, reject) => {
+      const {
+        isCurrentPageNeedToken,
+        getAccountInfoFromStorage,
+        isNeedCheckToken,
+        checkAccountExpired,
+        createToken,
+      } = require('./token');
       if (!isCurrentPageNeedToken()) {
         return resolve(false);
       }
