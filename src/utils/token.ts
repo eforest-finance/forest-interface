@@ -22,7 +22,11 @@ export const getAccountInfoFromStorage = (): IAccountInfo => {
 };
 
 export const isNeedCheckToken = (requestPath: string): boolean => {
-  if (needCheckTokenUrl.includes(requestPath)) {
+  let url = requestPath;
+  if (requestPath && requestPath[0] === '/') {
+    url = requestPath.substring(1);
+  }
+  if (needCheckTokenUrl.includes(url)) {
     return true;
   }
   return false;
