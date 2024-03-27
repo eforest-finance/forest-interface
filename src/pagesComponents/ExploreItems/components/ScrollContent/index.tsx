@@ -40,7 +40,7 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
             )}
             <div className="relative border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
               <ImageEnhance
-                className=" !rounded-lg w-full aspect-square"
+                className=" !rounded-t-lg w-full aspect-square"
                 width={'100%'}
                 src={dataSource?.previewImage || ''}
               />
