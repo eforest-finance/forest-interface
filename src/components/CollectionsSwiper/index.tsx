@@ -43,7 +43,7 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
       )}
 
       <Swiper
-        spaceBetween={8}
+        spaceBetween={0}
         slidesPerView={'auto'}
         centeredSlides={false}
         slidesPerGroupSkip={1}
