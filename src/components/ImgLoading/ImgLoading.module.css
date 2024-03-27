@@ -17,3 +17,13 @@
 .img-loading-wrapper.marketplace-mobile .loading-image-default-wrapper :global .error-image {
   @apply w-[28.571px] h-[28.571px];
 }
+.img-enhance-wrapper {
+  @apply relative;
+}
+.img-enhance-wrapper :global(.ant-image-placeholder) {
+  @apply bg-fillPageBg;
+
+  :global(.ant-skeleton-image .ant-skeleton-image-svg) {
+    @apply !mx-2;
+  }
+}

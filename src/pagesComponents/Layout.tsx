@@ -29,6 +29,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
+import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
 
 // Import the functions you need from the SDKs you need
 
@@ -149,6 +150,7 @@ const Layout = dynamic(async () => {
     useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
       store.dispatch(setHasToken(false));
       logout();
+      WalletAndTokenInfo.reset();
     });
 
     useWebLoginEvent(WebLoginEvents.DISCOVER_DISCONNECTED, () => {
@@ -160,6 +162,11 @@ const Layout = dynamic(async () => {
       const resError = error as IContractError;
       message.error(formatErrorMsg(resError).errorMessage.message);
     });
+
+    useEffect(() => {
+      WalletAndTokenInfo.setWallet(webLoginContext.walletType, webLoginContext.wallet, webLoginContext.version);
+      WalletAndTokenInfo.setSignMethod(webLoginContext.getSignature);
+    }, [webLoginContext]);
 
     useBroadcastChannel();
 

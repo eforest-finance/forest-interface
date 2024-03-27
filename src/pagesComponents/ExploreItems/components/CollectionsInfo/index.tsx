@@ -8,16 +8,15 @@ import { Ellipsis } from 'antd-mobile';
 import DownIcon from 'assets/images/explore/more-down.svg';
 import UpIcon from 'assets/images/explore/show-up.svg';
 import useJumpExplorer from 'hooks/useJumpExplorer';
-import CustomImg from 'components/CustomImg';
+import { ImageEnhance } from 'components/ImgLoading';
+import clsx from 'clsx';
 
 function SeedImg({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo }) {
   const { isLG } = useResponsive();
   return (
     <div className="mdl:w-[120px] mdl:h-[120px] w-[80Px] rounded-[12px] h-[80Px] mr-[32px]">
-      <CustomImg
-        width={isLG ? 80 : 120}
-        height={isLG ? 80 : 120}
-        className="w-full h-full rounded-[12px]"
+      <ImageEnhance
+        className={clsx(isLG ? '!w-20 !h-20' : 'w-[120px] h-[120px]', '!rounded-lg')}
         src={collectionsInfo?.logoImage || ''}
       />
     </div>
