@@ -43,9 +43,9 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
       )}
 
       <Swiper
-        spaceBetween={8}
+        spaceBetween={0}
         slidesPerView={'auto'}
-        centeredSlides={true}
+        centeredSlides={false}
         slidesPerGroupSkip={1}
         breakpoints={{
           600: {
@@ -72,9 +72,11 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
         onSwiper={(swiper) => {
           mySwiper.current = swiper;
         }}>
-        {swiperData.map((item) => {
+        {swiperData.map((item, idx) => {
           return (
-            <SwiperSlide className={(isXS && '!w-[82%]') || ''} key={item.id}>
+            <SwiperSlide
+              className={clsx(isXS ? '!w-40 ml-4' : '', isXS && idx === swiperData.length - 1 ? 'mr-4' : '')}
+              key={item.id}>
               <div className="relative">
                 <Link href={`/explore-items/${item.id}`}>
                   <ImgLoading className="rounded-[12px]" src={item.imgUrl} />

@@ -22,4 +22,8 @@
 }
 .img-enhance-wrapper :global(.ant-image-placeholder) {
   @apply bg-fillPageBg;
+
+  :global(.ant-skeleton-image .ant-skeleton-image-svg) {
+    @apply !mx-2;
+  }
 }
