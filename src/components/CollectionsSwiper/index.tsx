@@ -43,10 +43,11 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
       )}
 
       <Swiper
-        spaceBetween={0}
+        spaceBetween={8}
         slidesPerView={'auto'}
         centeredSlides={false}
         slidesPerGroupSkip={1}
+        wrapperClass={clsx(isXS && 'mx-4')}
         breakpoints={{
           600: {
             slidesPerView: 2,
@@ -75,12 +76,12 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
         {swiperData.map((item, idx) => {
           return (
             <SwiperSlide
-              className={clsx(isXS ? '!w-40 ml-4' : '', isXS && idx === swiperData.length - 1 ? 'mr-4' : '')}
+              className={clsx(isXS ? '!w-40' : '', isXS && idx === swiperData.length - 1 ? 'mr-8' : '')}
               key={item.id}>
               <div className="relative">
                 <Link href={`/explore-items/${item.id}`}>
                   <ImgLoading className="rounded-[12px]" src={item.imgUrl} />
-                  <div className="absolute bottom-[16px] w-full px-[16px] text-[16px] font-semibold leading-[24px] text-white">
+                  <div className="absolute bottom-[16px] w-full px-[16px] text-[16px] font-semibold leading-[24px] text-white line-clamp-1 break-all">
                     {item.tokenName}
                   </div>
                 </Link>
