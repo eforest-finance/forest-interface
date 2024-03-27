@@ -45,7 +45,7 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
                 nextImageProps={{ className: '!object-contain' }}
               /> */}
               <ImageEnhance
-                className=" !rounded-lg w-full aspect-square"
+                className=" !rounded-t-lg w-full aspect-square"
                 width={'100%'}
                 src={dataSource?.previewImage || ''}
               />
