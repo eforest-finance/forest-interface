@@ -7,7 +7,7 @@ import { useEffect, useMemo } from 'react';
 import { formatShowEmptyValue } from 'utils/format';
 import { ITraitInfo } from 'types/nftTypes';
 import Link from 'next/link';
-import { getRarity } from 'utils/getTraitsForUI';
+import { getRarity, getRarityEnhance } from 'utils/getTraitsForUI';
 
 enum FilterKeyEnum {
   Description = 'Description',
@@ -21,7 +21,7 @@ export function TraitsInfoCard() {
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
 
-  const { nftTraitInfos, nftInfo } = detailInfo;
+  const { nftTraitInfos, nftInfo, nftRankingInfos } = detailInfo;
 
   useEffect(() => {
     if (!nftTraitInfos?.traitInfos?.length) return;
@@ -43,12 +43,23 @@ export function TraitsInfoCard() {
       console.warn('getRarity error', err);
     }
   }, [nftTraitInfos]);
-  const getItemPercent = ({ itemsCount, allItemsCount }: ITraitInfo) => {
+  const getItemPercent = ({ itemsCount, allItemsCount, key, value }: ITraitInfo) => {
     const num = itemsCount / allItemsCount;
     if (isNaN(num) || num < 0) {
       return '-';
     }
-    return `${(num * 100).toFixed(2)}%`;
+    const percentOfItemsCount = `${(num * 100).toFixed(2)}%`;
+
+    if (!nftRankingInfos) {
+      return percentOfItemsCount;
+    }
+
+    const rarityNumber = getRarityEnhance(key, value, nftRankingInfos);
+    if (!rarityNumber || isNaN(Number(rarityNumber))) return percentOfItemsCount;
+
+    const percentOfRarity = `${(Number(rarityNumber) * 100).toFixed(2)}%`;
+
+    return `${percentOfItemsCount}(${percentOfRarity})`;
   };
 
   const itemsForCollapseComp = useMemo(() => {
@@ -72,6 +83,7 @@ export function TraitsInfoCard() {
               ],
             };
             const str = `filterParams=${encodeURI(JSON.stringify(filterParams))}`;
+
             return (
               <Link key={traitInfo.key} href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}?${str}`}>
                 <div className="flex flex-col items-center rounded-md py-[9px] px-[6px] bg-fillHoverBg cursor-pointer">
@@ -81,9 +93,8 @@ export function TraitsInfoCard() {
                       {traitInfo.value}
                     </div>
                   </Tooltip>
-                  <div className=" text-textSecondary text-xs mt-[2px]">
-                    {traitInfo.itemsCount}({getItemPercent(traitInfo)})
-                  </div>
+                  <div className=" text-textSecondary text-xs mt-[2px]">{traitInfo.itemsCount}</div>
+                  <div className=" text-textSecondary text-xs mt-[2px]">{getItemPercent(traitInfo)}</div>
                   <Tooltip title={fllorPriceStr}>
                     <div className=" w-full text-center text-xs h-5 text-textSecondary mt-[6px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">
                       {fllorPriceStr}
@@ -113,7 +124,7 @@ export function TraitsInfoCard() {
                   <div className="flex w-full justify-between">
                     <span className="text-textPrimary text-xs font-medium">{traitInfo.key}</span>
                     <span className=" text-textSecondary text-xs mt-[2px]">
-                      {traitInfo.itemsCount}({getItemPercent(traitInfo)})
+                      {traitInfo.itemsCount} - {getItemPercent(traitInfo)}
                     </span>
                   </div>
                   <div className="flex w-full justify-between mt-2">
@@ -135,7 +146,7 @@ export function TraitsInfoCard() {
     }
 
     return arr;
-  }, [nftTraitInfos, nftInfo]);
+  }, [nftTraitInfos, nftInfo, nftRankingInfos]);
 
   if (!itemsForCollapseComp.length) return null;
 

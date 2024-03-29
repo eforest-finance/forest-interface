@@ -48,6 +48,8 @@ import {
   IDropQuotaResponse,
   ICollecionTraitsInfoRes,
   ICollecionGenerationInfoRes,
+  INftRankingInfo,
+  INftRankingInfoParams,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -271,5 +273,11 @@ export const fetchCollectionAllTraitsInfos = async (nftCollectionId: string) => 
 export const fetchCollectionGenerationInfos = async (nftCollectionId: string) => {
   return request.get<ICollecionGenerationInfoRes>('app/trait/nft-collection-generation-info', {
     params: { id: nftCollectionId },
+  });
+};
+
+export const fetchNftRankingInfoApi = async (params: INftRankingInfoParams) => {
+  return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params, {
+    baseURL: '/scrodinger/api',
   });
 };

@@ -1,11 +1,21 @@
-import { store } from 'store/store';
-import { setNftInfo, setNftTraitInfos, setUpdateDetailLoading } from 'store/reducer/detail/detailInfo';
-import { fetchAuctionInfo, fetchNftTraitsInfo } from 'api/fetch';
+import { dispatch, store } from 'store/store';
+import {
+  setNftInfo,
+  setNftTraitInfos,
+  setUpdateDetailLoading,
+  setNftRankingInfos,
+} from 'store/reducer/detail/detailInfo';
+import { fetchAuctionInfo, fetchNftRankingInfoApi, fetchNftTraitsInfo } from 'api/fetch';
 import { openModal } from 'store/reducer/errorModalInfo';
 import useGetState from 'store/state/getState';
 import { useEffect, useState } from 'react';
 import getNftInfo from '../utils/getNftInfo';
 import { useMount } from 'react-use';
+import { useRequest } from 'ahooks';
+import useDetailGetState from 'store/state/detailGetState';
+import { useWebLogin } from 'aelf-web-login';
+import { addPrefixSuffix } from 'utils';
+import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 
 interface IProps {
   id: string;
@@ -78,4 +88,29 @@ export const useGetNftTraitInfo = ({ id }: IProps) => {
   useMount(() => {
     getNftTraitInfo();
   });
+};
+
+export const useGetTraitRankingInfo = () => {
+  const { detailInfo } = useDetailGetState();
+  const { nftTraitInfos } = detailInfo;
+  const { wallet } = useWebLogin();
+  const { run, data } = useRequest(fetchNftRankingInfoApi, {
+    manual: true,
+  });
+
+  useEffect(() => {
+    if (!data?.length) return;
+    dispatch(setNftRankingInfos(data[0]));
+  }, [data]);
+
+  useEffect(() => {
+    const traitInfos = nftTraitInfos?.traitInfos;
+    if (!traitInfos?.length || !wallet?.address) {
+      return;
+    }
+
+    const params = getParamsByTraitPairsDictionary(traitInfos);
+
+    run({ address: addPrefixSuffix(wallet.address), catsTraits: [params] });
+  }, [nftTraitInfos?.traitInfos, wallet?.address]);
 };
