@@ -1,5 +1,7 @@
+import { INftRankingInfo, IRankData } from 'api/types';
 import { traitsData } from './tratisData';
 import BigNumber from 'bignumber.js';
+import { ITraitInfo } from 'types/nftTypes';
 
 const traitsTypeData: { [key: string]: number } = {
   Background: 100,
@@ -62,6 +64,39 @@ function getRarity(typeArray: string[], valueArray: string[]) {
   console.info('rarityInfo', JSON.stringify(levelsObjectFormatted, null, 4));
 }
 
-export { getRarity };
+function getRarityEnhance(key: string, value: string, sourceData: INftRankingInfo) {
+  const oneGenerationKeys = ['Background', 'Clothes', 'Breed'];
+  if (oneGenerationKeys.includes(key.trim())) {
+    return sourceData?.rankGenOne?.traitsProbability?.[value];
+  }
+  return sourceData?.rankTwoToNine?.traitsProbability?.[value];
+}
+
+function getParamsByTraitPairsDictionary(traitInfos: ITraitInfo[]) {
+  const map: {
+    [key: string]: string;
+  } = {
+    'Weapon(Left Hand)': 'Weapon',
+    'Accessory(Right Hand)': 'Accessory',
+    Wing: 'Wings',
+    Moustauch: 'Mustache',
+    Mustaches: 'Mustache',
+  };
+  const oneGeneration = [
+    traitInfos.slice(0, 3).map((trait) => map[trait.key.trim()] || trait.key.replace(/\(.*\)/, '').trim()),
+    traitInfos.slice(0, 3).map((trait) => trait.value.trim()),
+  ];
+  const twoToGeneration =
+    traitInfos.length > 3
+      ? [
+          traitInfos.slice(3).map((trait) => map[trait.key.trim()] || trait.key.replace(/\(.*\)/, '').trim()),
+          traitInfos.slice(3).map((trait) => trait.value.trim()),
+        ]
+      : [];
+  const params = [oneGeneration, twoToGeneration];
+  return params;
+}
+
+export { getRarity, getRarityEnhance, getParamsByTraitPairsDictionary };
 
 // getRarity(['Background', 'Clothes', 'Mustache', 'Mouth'], ['Lime LIght', 'Admirals Coat', 'Split Beard', 'Wincing']);

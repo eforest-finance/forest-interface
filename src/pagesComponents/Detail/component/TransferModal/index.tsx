@@ -28,6 +28,7 @@ import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import { WalletType, useWebLogin } from 'aelf-web-login';
 import styles from './style.module.css';
+import { timesDecimals } from 'utils/calculate';
 
 function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const modal = useModal();
@@ -109,7 +110,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
           const result = await transfer({
             symbol: nftInfo?.nftSymbol,
             spender: inputAddress,
-            amount: Number(inputQuantity) || 1,
+            amount: timesDecimals(Number(inputQuantity) || 1, nftInfo?.decimals || '0').toNumber(),
           });
           if (result && result.TransactionId) {
             onCloseModal();

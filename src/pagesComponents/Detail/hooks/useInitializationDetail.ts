@@ -1,5 +1,5 @@
 import { useParams } from 'next/navigation';
-import { useDetail, useGetNftTraitInfo } from './useDetail';
+import { useDetail, useGetNftTraitInfo, useGetTraitRankingInfo } from './useDetail';
 import useTokenData from 'hooks/useTokenData';
 import { useEffect, useMemo } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
@@ -16,10 +16,13 @@ export const useInitializationDetail = () => {
     chainId: Chain;
   };
   useGetNftTraitInfo({ id });
+
   const { isCanBeBid, getDetail, isFetching } = useDetail({ id });
   const { detailInfo } = useDetailGetState();
   const { aelfInfo } = useGetState();
   const { nftInfo, nftNumber } = detailInfo;
+
+  useGetTraitRankingInfo();
   const getNFTNumber = useGetNftNumber({
     nftSymbol: nftInfo?.nftSymbol,
     chainId,

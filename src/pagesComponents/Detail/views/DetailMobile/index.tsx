@@ -25,6 +25,7 @@ import clsx from 'clsx';
 import useDetailGetState from 'store/state/detailGetState';
 import { store } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { RankingInfoCard } from 'pagesComponents/Detail/component/DetailCard/RankingInfoCard';
 
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
@@ -97,6 +98,7 @@ export default function DetailMobile() {
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
               <GenerationInfoCard />
+              <RankingInfoCard />
             </Tabs.TabPane>
             {nftTraitInfos?.traitInfos?.length ? (
               <Tabs.TabPane tab="Traits" key="traits">

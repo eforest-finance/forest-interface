@@ -94,7 +94,7 @@
       @apply mdTW:!pt-[64px]  mdTW:!pb-[32px] mdTW:!px-[48px];
     }
     .ant-modal-body {
-      @apply mdTW:!p-0 mdTW:!text-[24px] mdTW:!leading-[32px] mdTW:!font-semibold mdTW:!text-[var(--text-primary)];
+      @apply overflow-hidden mdTW:!p-0 mdTW:!text-[24px] mdTW:!leading-[32px] mdTW:!font-semibold mdTW:!text-[var(--text-primary)];
     }
     .ant-modal-footer {
       @apply mdTW:!pt-[64px] mdTW:!pb-0;

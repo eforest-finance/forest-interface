@@ -15,6 +15,7 @@ export const initializationNftNumber = {
 const initialState: ItemState = {
   nftInfo: null,
   nftTraitInfos: null,
+  nftRankingInfos: null,
   nftNumber: initializationNftNumber,
   listings: null,
   offers: null,
@@ -51,6 +52,9 @@ export const detailInfoSlice = createSlice({
     setNftTraitInfos: (state, action) => {
       state.nftTraitInfos = action.payload;
     },
+    setNftRankingInfos: (state, action) => {
+      state.nftRankingInfos = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -72,6 +76,7 @@ export const {
   setUpdateDetailLoading,
   setCurrentTab,
   setNftTraitInfos,
+  setNftRankingInfos,
 } = detailInfoSlice.actions;
 
 export const getDetailInfo = (state: AppState): ItemState => state.detailInfo;

@@ -668,3 +668,23 @@ export interface ICollecionGenerationInfoRes {
   id: string;
   items: ICollecionGenerationInfo[];
 }
+
+export interface INftRankingInfoParams {
+  address: string;
+  catsTraits: string[][][][];
+}
+
+export interface IRankData {
+  rank: number;
+  total: number;
+  probability: string;
+  percent: string;
+  traitsProbability?: {
+    [key: string]: number | string;
+  };
+}
+export interface INftRankingInfo {
+  rankGenOne: IRankData;
+  rankTwoToNine: IRankData;
+  rank: IRankData;
+}
