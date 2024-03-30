@@ -277,7 +277,5 @@ export const fetchCollectionGenerationInfos = async (nftCollectionId: string) =>
 };
 
 export const fetchNftRankingInfoApi = async (params: INftRankingInfoParams) => {
-  return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params, {
-    baseURL: '/scrodinger/api',
-  });
+  return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params);
 };
