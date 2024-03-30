@@ -170,6 +170,11 @@ export interface INftInfo {
     deployTime?: number;
     mintLimit?: number;
   };
+  generation: number;
+  traitPairsDictionary: Array<{
+    [key: string]: string;
+  }>;
+  _rankStrForShow?: string;
 }
 
 export interface INftTraitInfo {

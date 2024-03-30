@@ -18,10 +18,10 @@ import clsx from 'clsx';
 import { CollapseForPC, CollapseForPhone } from './components/FilterContainer';
 import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
 import ScrollContent from './components/ScrollContent';
-import { fetchCollectionGenerationInfos, fetchCompositeNftInfos } from 'api/fetch';
+import { fetchCollectionGenerationInfos, fetchCompositeNftInfos, fetchNftRankingInfoApi } from 'api/fetch';
 import { getPageNumber } from 'utils/calculate';
-import { CompositeNftInfosParams, ICollectionTraitInfo } from 'api/types';
-import { INftInfo } from 'types/nftTypes';
+import { CompositeNftInfosParams, ICollectionTraitInfo, INftRankingInfo } from 'api/types';
+import { INftInfo, ITraitInfo } from 'types/nftTypes';
 import useResponsive from 'hooks/useResponsive';
 import FilterTags from './components/FilterTags';
 import Loading from 'components/SyncChainModal/loading';
@@ -31,6 +31,10 @@ import { useRequest } from 'ahooks';
 import { fetchCollectionAllTraitsInfos } from 'api/fetch';
 import { useSearchParams } from 'next/navigation';
 import { getFilterFromSearchParams } from './util';
+import { useWebLogin } from 'aelf-web-login';
+import { addPrefixSuffix } from 'utils';
+import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
+import { thousandsNumber } from 'utils/unitConverter';
 
 export default function ExploreItems({
   nftCollectionId,
@@ -42,6 +46,7 @@ export default function ExploreItems({
   const params = useSearchParams();
   const filterParamStr = params.get('filterParams');
   const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr);
+  const { wallet } = useWebLogin();
 
   const [size, setSize] = useState<BoxSizeEnum>(BoxSizeEnum.large);
   // 1024 below is the mobile display
@@ -85,6 +90,48 @@ export default function ExploreItems({
     refreshDeps: [nftCollectionId],
   });
 
+  const fetchRankingDataOfNft = useCallback(
+    async (nftItemArr: INftInfo[]) => {
+      // if (!wallet.address) return nftItemArr;
+      const needShowRankingNftArr = nftItemArr.filter(
+        (itm) => itm.generation === 9 && itm.traitPairsDictionary?.length >= 11,
+      );
+      if (!needShowRankingNftArr.length) return nftItemArr;
+      const batchTraitsParams = needShowRankingNftArr.map((nftInfo) => {
+        const traitInfos = nftInfo.traitPairsDictionary;
+
+        const params = getParamsByTraitPairsDictionary(traitInfos as unknown as ITraitInfo[]);
+
+        return params;
+      });
+
+      let resData: INftRankingInfo[] = [];
+      try {
+        resData = await fetchNftRankingInfoApi({
+          address: addPrefixSuffix(wallet.address),
+          catsTraits: batchTraitsParams as string[][][][],
+        });
+      } catch (error) {}
+
+      if (!resData?.length) {
+        return nftItemArr;
+      }
+      needShowRankingNftArr.forEach((item, index) => {
+        const data = resData?.[index]?.rank;
+        if (data.rank) {
+          let str = `${thousandsNumber(data.rank)}`;
+          if (data.total) {
+            str += ` / ${thousandsNumber(data.total)}`;
+          }
+          item._rankStrForShow = str;
+        }
+      });
+
+      return nftItemArr;
+    },
+    [wallet.address],
+  );
+
   const fetchData = useCallback(
     async (params: Partial<CompositeNftInfosParams>, loadMore?: boolean, isTotal?: boolean) => {
       if (loadMore) {
@@ -95,13 +142,14 @@ export default function ExploreItems({
       }
       try {
         const res = await fetchCompositeNftInfos(params);
+        const items = await fetchRankingDataOfNft(res.items);
         setTotal(res.totalCount);
         if (isTotal) totalChange && totalChange(res.totalCount);
         if (isLoadMore.current) {
-          setDataSource([...dataSource, ...res.items]);
+          setDataSource([...dataSource, ...items]);
           setLoadingMore(true);
         } else {
-          setDataSource(res.items);
+          setDataSource(items);
           setLoadingMore(false);
         }
         setLoading(false);
@@ -111,12 +159,24 @@ export default function ExploreItems({
         setMoreLoading(false);
       }
     },
-    [dataSource, totalChange],
+    [dataSource, totalChange, fetchRankingDataOfNft],
   );
 
   useEffect(() => {
     fetchData(requestParams, false, true);
-  }, [nftCollectionId]);
+  }, [nftCollectionId, wallet?.address]);
+
+  useEffect(() => {
+    if (!wallet.address) return;
+    SetCurrent(1);
+    fetchData(
+      Object.assign({}, requestParams, {
+        SkipCount: 0,
+      }),
+      false,
+      true,
+    );
+  }, [wallet?.address]);
 
   const resetScrollTop = () => {
     const scrollEle = document.querySelector('#explore__container');
