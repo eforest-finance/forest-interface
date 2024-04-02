@@ -10,7 +10,13 @@ export const isBase64Url = (url: string) => {
 };
 
 export function ipfsURLToS3AndIpfsURL(url: string, s3ImagePrefixUri: string, ipfsToSchrodingerURL: string): string[] {
-  const URLObj = new URL(url);
+  let URLObj = null;
+  try {
+    URLObj = new URL(url);
+  } catch (error) {
+    return [url];
+  }
+
   const host = URLObj.host.toLowerCase();
   if (host === 'ipfs.io') {
     const hash = URLObj.pathname.replace('/ipfs/', '');

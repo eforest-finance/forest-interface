@@ -1,5 +1,5 @@
 import { Card, List, ListProps } from 'antd';
-import ImgLoading from 'components/ImgLoading';
+import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
 import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
 import styles from './style.module.css';
@@ -38,12 +38,17 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
             {convertType !== 'image' && (
               <div className={styles['mark']}>{dataSource?.fileExtension?.toUpperCase()}</div>
             )}
-            <div className="border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
-              <ImgLoading
-                className="rounded-[12px]"
-                src={dataSource?.previewImage || COLLECTION_DEFAULT_IMG}
-                nextImageProps={{ className: '!object-contain' }}
+            <div className="relative border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
+              <ImageEnhance
+                className=" !rounded-t-lg w-full aspect-square"
+                width={'100%'}
+                src={dataSource?.previewImage || ''}
               />
+              {!dataSource?._rankStrForShow ? null : (
+                <div className="absolute bottom-0 left-0 w-full py-1 text-center text-xxs text-white font-medium bg-fillMask1">
+                  Rank: {dataSource?._rankStrForShow}
+                </div>
+              )}
             </div>
           </>
         }>

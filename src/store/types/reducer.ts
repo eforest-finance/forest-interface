@@ -1,3 +1,4 @@
+import { INftRankingInfo } from 'api/types';
 import { INftInfo, IListingNftInfo, From, To, INftTraitInfo } from 'types/nftTypes';
 
 export type FormatListingType = {
@@ -42,6 +43,7 @@ export type NftNumberType = {
 export type ItemState = {
   nftInfo: INftInfo | null;
   nftTraitInfos: INftTraitInfo | null;
+  nftRankingInfos: INftRankingInfo | null;
   listings: {
     items: FormatListingType[] | null;
     totalCount: number;

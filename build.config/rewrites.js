@@ -32,6 +32,7 @@ if (process.env.NEXT_PUBLIC_APP_ENV === 'development') {
 }
 if (process.env.NEXT_PUBLIC_APP_ENV === 'test') {
   rewrite = [
+    { source: '/api/probability/:path*', destination: 'https://schrodingerai.com/api/probability/:path*' },
     { source: '/api/:path*', destination: 'https://test.eforest.finance/api/:path*' },
     { source: '/cms/:path*', destination: 'https://test.eforest.finance/cms/:path*' },
     { source: '/connect/:path*', destination: 'https://test.eforest.finance/connect/:path*' },

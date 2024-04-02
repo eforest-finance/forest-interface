@@ -1,25 +1,19 @@
 import { useComponentFlex, useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 import storages from '../storages';
 import { dispatch, store } from 'store/store';
 import { setWalletInfo } from 'store/reducer/userInfo';
-import { fetchToken } from 'api/fetch';
 import { message } from 'antd';
 import { getOriginalAddress } from 'utils';
-import { ITokenParams } from 'api/types';
-// import { did } from '@portkey/did-ui-react';
 import { SupportedELFChainId } from 'constants/chain';
 import { cloneDeep } from 'lodash-es';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
-import { usePathname, useRouter } from 'next/navigation';
 import { setHasToken, setLoading } from 'store/reducer/info';
 import { useModal } from '@ebay/nice-modal-react';
 import LoginModal from 'components/LoginModal';
-const AElf = require('aelf-sdk');
-
-const signTip = `Welcome to Forest! Click to sign in to Forest and accept its Terms of Service and Privacy Policy. This request will not trigger a blockchain transaction or cost any gas fees.`;
+import { checkAccountExpired, createToken, getAccountInfoFromStorage, isCurrentPageNeedToken } from 'utils/token';
 
 export const useGetToken = () => {
   const [, setAccountInfo] = useLocalStorage<{
@@ -30,8 +24,6 @@ export const useGetToken = () => {
   const { loginState, wallet, getSignature, walletType, logout, version } = useWebLogin();
 
   const isLogin = loginState === WebLoginState.logined;
-  const pathName = usePathname();
-  const nav = useRouter();
   const loginModal = useModal(LoginModal);
 
   const closeLoading = () => {
@@ -43,94 +35,39 @@ export const useGetToken = () => {
   };
 
   const getToken = useCallback(async () => {
-    if (['/term-service', '/privacy-policy'].includes(pathName)) {
+    if (!isCurrentPageNeedToken()) {
       return Promise.resolve();
     }
 
-    const accountInfo = JSON.parse(localStorage.getItem(storages.accountInfo) || '{}');
-    if (accountInfo?.token && Date.now() < accountInfo?.expirationTime && accountInfo.account === wallet.address) {
+    const accountInfo = getAccountInfoFromStorage();
+
+    if (!checkAccountExpired(accountInfo, wallet.address)) {
       store.dispatch(setHasToken(true));
       return Promise.resolve();
     } else {
       store.dispatch(setHasToken(false));
       localStorage.removeItem(storages.accountInfo);
     }
-    const timestamp = Date.now();
 
-    let sign = null;
+    const res = await createToken({
+      signMethod: getSignature,
+      walletInfo: wallet,
+      walletType,
+      version,
+      onError: (error) => {
+        const resError = error as unknown as IContractError;
+        loginModal.hide();
+        message.error(formatErrorMsg(resError).errorMessage?.message);
+        console.log('=====signResError', resError);
+        closeLoading();
+        isLogin && logout({ noModal: true });
+        return Promise.reject(resError);
+      },
+    });
 
-    // const sha256Str = `${signTip} ${AElf.utils.sha256(`${wallet.address}-${timestamp}`)}`;
-
-    try {
-      sign = await getSignature({
-        appName: 'forest',
-        address: wallet.address,
-        signInfo: walletType === WalletType.portkey ? AElf.utils.sha256(signTip) : signTip,
-      });
-    } catch (error) {
-      const resError = error as IContractError;
-      loginModal.hide();
-      message.error(formatErrorMsg(resError).errorMessage?.message);
-      console.log('=====resError', resError);
-      closeLoading();
-      isLogin && logout({ noModal: true });
-      return Promise.reject(resError);
-    }
-
-    if (sign?.error) {
-      const resError = sign as unknown as IContractError;
-      loginModal.hide();
-      message.error(formatErrorMsg(resError).errorMessage?.message);
-      console.log('=====signResError', resError);
-      closeLoading();
-      isLogin && logout({ noModal: true });
-      return Promise.reject(resError);
-    }
-    let extraParam = {};
-    if (walletType === WalletType.elf) {
-      extraParam = {
-        pubkey: wallet.publicKey,
-        source: 'nightElf',
-      };
-    }
-    if (walletType === WalletType.portkey || walletType === WalletType.discover) {
-      const accounts = Object.entries((wallet?.portkeyInfo || wallet.discoverInfo || { accounts: {} })?.accounts);
-      const accountInfo = accounts.map(([chainId, address]) => ({
-        chainId,
-        address: getOriginalAddress(walletType === WalletType.portkey ? address : address[0]),
-      }));
-      console.log('accountInfo', accountInfo);
-
-      extraParam = {
-        source: 'portkey',
-        accountInfo: JSON.stringify(accountInfo),
-      };
-    }
-
-    const res = await fetchToken({
-      grant_type: 'signature',
-      scope: 'NFTMarketServer',
-      client_id: 'NFTMarketServer_App',
-      timestamp,
-      version: version === 'v1' ? 'v1' : 'v2',
-      signature: sign!.signature,
-      ...extraParam,
-    } as ITokenParams);
-
-    if (res.access_token) {
-      localStorage.setItem(
-        storages.accountInfo,
-        JSON.stringify({
-          account: wallet.address,
-          token: res.access_token,
-          expirationTime: timestamp + res.expires_in * 1000,
-        }),
-      );
-      setAccountInfo({
-        account: wallet.address,
-        token: res.access_token,
-        expirationTime: timestamp + res.expires_in * 1000,
-      });
+    if (res) {
+      localStorage.setItem(storages.accountInfo, JSON.stringify(res));
+      setAccountInfo(res);
       loginModal.hide();
       store.dispatch(setHasToken(true));
       return Promise.resolve();
@@ -138,7 +75,7 @@ export const useGetToken = () => {
 
     closeLoading();
     return Promise.reject();
-  }, [loginState, getSignature, wallet, setAccountInfo]);
+  }, [wallet, getSignature, walletType, version, loginModal, isLogin, logout, setAccountInfo]);
 
   return getToken;
 };
@@ -189,7 +126,9 @@ export const useContractConnect = () => {
         };
       }
       if (walletType === WalletType.portkey) {
-        walletInfo.portkeyInfo = wallet.portkeyInfo;
+        walletInfo.portkeyInfo = Object.assign({}, wallet.portkeyInfo, {
+          walletInfo: undefined,
+        });
       }
 
       getAelfChainAddress()

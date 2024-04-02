@@ -7,7 +7,7 @@ import SortDefault from 'assets/images/explore/sort-arrow-default.svg';
 import SortDown from 'assets/images/explore/arrow-down.svg';
 import SortUp from 'assets/images/explore/arrow-up.svg';
 import { debounce } from 'lodash-es';
-import CustomImg from 'components/CustomImg';
+import { ImageEnhance } from 'components/ImgLoading';
 import { formatNumber, formatTokenPrice } from 'utils/format';
 export enum SortTypeEnum {
   asc,
@@ -67,16 +67,12 @@ export default function getColumns(
           key: 'tokenName',
           render: (text, record) => (
             <div className="flex items-center">
-              {/* <Image
-                sizes="(max-width: 768px) 40px, (max-width: 1200px) 40px"
-                width={40}
-                height={40}
-                src={record.logoImage}
-                alt=""></Image> */}
-              <div className="mr-[8px]">
-                <CustomImg src={record.logoImage} className="shrink-0 w-[40px] h-[40px] !rounded-[6px]" alt="" />
+              <div className="mr-2">
+                <ImageEnhance
+                  src={record.logoImage}
+                  className="shrink-0 !w-[40px] !h-[40px] !rounded-sm object-cover"
+                />
               </div>
-              {/* <ImgLoading src={record.logoImage} className="shrink-0 w-[40px] h-[40px] !rounded-[6px] mr-[8px]" /> */}
               <div className="flex flex-col text-ellipsis truncate items-left justify-center">
                 <div
                   className={clsx(
@@ -150,23 +146,12 @@ export default function getColumns(
           key: 'tokenName',
           render: (text, record) => (
             <div className="flex items-center">
-              {/* <Image
-                sizes="(max-width: 768px) 70px, (max-width: 1200px) 70px"
-                width={70}
-                height={70}
-                src={record.logoImage}
-                alt=""></Image> */}
               <div className="mr-[24px]">
-                <CustomImg width={70} height={70} src={record.logoImage} className="shrink-0 !rounded-[8px]" alt="" />
+                <ImageEnhance
+                  src={record.logoImage}
+                  className="shrink-0 !w-[70px] !h-[70px] !rounded-md object-cover "
+                />
               </div>
-              {/* <ImgLoading
-                nextImageProps={{
-                  width: 70,
-                  height: 70,
-                }}
-                src={`${record.logoImage}`}
-                className="shrink-0 w-[70px] h-[70px] !rounded-[8px] mr-[24px]"
-              /> */}
               <span className={clsx(styles['table-text'], 'font-semibold')}>{text}</span>
             </div>
           ),
