@@ -45,7 +45,7 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
       const batchTraitsParams = needShowRankingNftArr.map((nftInfo) => {
         const traitInfos = nftInfo.traitPairsDictionary;
 
-        const params = getParamsByTraitPairsDictionary(traitInfos as unknown as ITraitInfo[]);
+        const params = getParamsByTraitPairsDictionary(traitInfos);
 
         return params;
       });

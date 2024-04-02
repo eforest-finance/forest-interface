@@ -54,10 +54,6 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
         <>
           {convertType !== 'image' && <div className={styles['mark']}>{dataSource?.fileExtension?.toUpperCase()}</div>}
           <div className="relative border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
-            {/* <ImgLoading
-              nextImageProps={{ width: 200, height: 200, className: '!object-contain' }}
-              src={`${dataSource?.previewImage || metaLogoImage?.value || COLLECTION_DEFAULT_IMG}`}
-            /> */}
             <ImageEnhance
               className=" !rounded-t-lg w-full aspect-square"
               width={'100%'}

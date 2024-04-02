@@ -88,7 +88,7 @@ function SaleListingModalConstructor(nftInfo: INftInfo) {
           className={`font-medium text-[var(--color-secondary)] ${
             isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
           }`}>
-          {(text && `in ${text} days`) || '-'}
+          {text || '-'}
         </span>
       ),
     },

@@ -171,9 +171,7 @@ export interface INftInfo {
     mintLimit?: number;
   };
   generation: number;
-  traitPairsDictionary: Array<{
-    [key: string]: string;
-  }>;
+  traitPairsDictionary: Array<Pick<ITraitInfo, 'key' | 'value'>>;
   _rankStrForShow?: string;
 }
 
