@@ -87,7 +87,11 @@ export function TraitsInfoCard() {
             return (
               <Link key={traitInfo.key} href={`/explore-items/${detailInfo.nftInfo?.nftCollection?.id}?${str}`}>
                 <div className="flex flex-col items-center rounded-md py-[9px] px-[6px] bg-fillHoverBg cursor-pointer">
-                  <div className=" text-textPrimary text-xs font-medium">{traitInfo.key}</div>
+                  <Tooltip title={traitInfo.key}>
+                    <div className="w-full text-center text-textPrimary text-xs font-medium overflow-hidden  text-ellipsis whitespace-nowrap cursor-pointer">
+                      {traitInfo.key}
+                    </div>
+                  </Tooltip>
                   <Tooltip title={traitInfo.value}>
                     <div className="w-full text-center text-textPrimary text-sm font-semibold mt-[6px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">
                       {traitInfo.value}
