@@ -105,7 +105,7 @@ export const useGetTraitRankingInfo = () => {
 
   useEffect(() => {
     const traitInfos = nftTraitInfos?.traitInfos;
-    if (!traitInfos?.length) {
+    if (!traitInfos?.length || !wallet?.address) {
       return;
     }
 

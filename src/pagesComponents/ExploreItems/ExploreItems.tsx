@@ -92,7 +92,7 @@ export default function ExploreItems({
 
   const fetchRankingDataOfNft = useCallback(
     async (nftItemArr: INftInfo[]) => {
-      // if (!wallet.address) return nftItemArr;
+      if (!wallet.address) return nftItemArr;
       const needShowRankingNftArr = nftItemArr.filter(
         (itm) => itm.generation === 9 && itm.traitPairsDictionary?.length >= 11,
       );

@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import ImgLoading from 'components/ImgLoading';
+import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
 import Logo from 'components/Logo';
 import { useSelector } from 'store/store';
 import { useMemo } from 'react';
@@ -53,11 +53,17 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
       cover={
         <>
           {convertType !== 'image' && <div className={styles['mark']}>{dataSource?.fileExtension?.toUpperCase()}</div>}
-          <div className="border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
-            <ImgLoading
-              nextImageProps={{ width: 200, height: 200, className: '!object-contain' }}
-              src={`${dataSource?.previewImage || metaLogoImage?.value || COLLECTION_DEFAULT_IMG}`}
+          <div className="relative border-x-0 border-y-0 border-b-[1px] border-solid border-[var(--line-dividers)]">
+            <ImageEnhance
+              className=" !rounded-t-lg w-full aspect-square"
+              width={'100%'}
+              src={dataSource?.previewImage || metaLogoImage?.value || ''}
             />
+            {!dataSource?._rankStrForShow ? null : (
+              <div className="absolute bottom-0 left-0 w-full py-1 text-center text-xxs text-white font-medium bg-fillMask1">
+                Rank: {dataSource?._rankStrForShow}
+              </div>
+            )}
           </div>
         </>
       }

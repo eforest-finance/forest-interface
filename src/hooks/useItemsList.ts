@@ -1,15 +1,19 @@
 import { useSelector, dispatch } from 'store/store';
 import { setItemsList, addItemsList } from 'store/reducer/layoutInfo';
 import { useCallback, useEffect, useState } from 'react';
-import { getListByKey } from 'utils';
+import { addPrefixSuffix, getListByKey } from 'utils';
 import { RangeType } from 'components/ItemsLayout/types';
 import { usePathname } from 'next/navigation';
 import { useDebounce, useHash, useLocalStorage } from 'react-use';
 import { defaultFilter } from 'components/ItemsLayout/assets';
 
 import equal from 'fast-deep-equal';
-import { fetchNftInfos } from '../api/fetch';
+import { fetchNftInfos, fetchNftRankingInfoApi } from '../api/fetch';
 import storages from 'storages';
+import { thousandsNumber } from 'utils/unitConverter';
+import { INftInfo, ITraitInfo } from 'types/nftTypes';
+import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
+import { INftRankingInfo } from 'api/types';
 
 const isEmptyObject = (obj: any) => {
   if (!obj) return true;
@@ -30,6 +34,48 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
   const pathName = usePathname();
   // const [hash] = useHash();
   const hash = window.location.hash;
+
+  const fetchRankingDataOfNft = useCallback(
+    async (nftItemArr: INftInfo[]) => {
+      if (!walletInfo.address) return nftItemArr;
+      const needShowRankingNftArr = nftItemArr.filter(
+        (itm) => itm.generation === 9 && itm.traitPairsDictionary?.length >= 11,
+      );
+      if (!needShowRankingNftArr.length) return nftItemArr;
+      const batchTraitsParams = needShowRankingNftArr.map((nftInfo) => {
+        const traitInfos = nftInfo.traitPairsDictionary;
+
+        const params = getParamsByTraitPairsDictionary(traitInfos);
+
+        return params;
+      });
+
+      let resData: INftRankingInfo[] = [];
+      try {
+        resData = await fetchNftRankingInfoApi({
+          address: addPrefixSuffix(walletInfo.address),
+          catsTraits: batchTraitsParams as string[][][][],
+        });
+      } catch (error) {}
+
+      if (!resData?.length) {
+        return nftItemArr;
+      }
+      needShowRankingNftArr.forEach((item, index) => {
+        const data = resData?.[index]?.rank;
+        if (data.rank) {
+          let str = `${thousandsNumber(data.rank)}`;
+          if (data.total) {
+            str += ` / ${thousandsNumber(data.total)}`;
+          }
+          item._rankStrForShow = str;
+        }
+      });
+
+      return nftItemArr;
+    },
+    [walletInfo.address],
+  );
 
   const getItemsList = useCallback(async () => {
     // if (loading) return;
@@ -116,20 +162,31 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
     const result = await fetchNftInfos({
       ...param,
     });
+    const targetItems = await fetchRankingDataOfNft(result.items);
     setLoading(false);
     if (!result || typeof result?.totalCount !== 'number') return;
     const action = page === 0 ? setItemsList : addItemsList;
     dispatch(
       action({
-        items: result.items,
+        items: targetItems,
         totalCount: result.totalCount,
-        end: result.items?.length < pageSize ? true : false,
+        end: targetItems?.length < pageSize ? true : false,
         page,
         tabType: hash ?? undefined,
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nftCollectionIdOrAddress, page, pageSize, hash, walletInfo?.address, pathName, filterSelect, params]);
+  }, [
+    nftCollectionIdOrAddress,
+    page,
+    pageSize,
+    hash,
+    walletInfo?.address,
+    pathName,
+    filterSelect,
+    params,
+    fetchRankingDataOfNft,
+  ]);
 
   useDebounce(
     () => {

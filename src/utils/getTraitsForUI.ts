@@ -72,7 +72,7 @@ function getRarityEnhance(key: string, value: string, sourceData: INftRankingInf
   return sourceData?.rankTwoToNine?.traitsProbability?.[value];
 }
 
-function getParamsByTraitPairsDictionary(traitInfos: ITraitInfo[]) {
+function getParamsByTraitPairsDictionary(traitInfos: Array<Pick<ITraitInfo, 'key' | 'value'>>) {
   const map: {
     [key: string]: string;
   } = {

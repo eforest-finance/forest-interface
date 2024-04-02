@@ -5,6 +5,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import storages from 'storages';
 import { AUTHORISATION_FAILED } from 'constants/errorMessage';
 import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
+import { IGNORE_ERROR_URLS } from './constant';
 
 interface ResponseType<T> {
   code: string;
@@ -97,7 +98,11 @@ class Request {
           logout && logout({ noModal: true });
         }
 
-        message.error(errMessage);
+        const requestUrl = error?.response?.config?.url;
+        if (!requestUrl || !IGNORE_ERROR_URLS.includes(requestUrl)) {
+          message.error(errMessage);
+        }
+
         return Promise.reject(errMessage);
       },
     );
