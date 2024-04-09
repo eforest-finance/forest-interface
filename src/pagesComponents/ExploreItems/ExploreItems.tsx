@@ -215,7 +215,7 @@ export default function ExploreItems({
       return {
         key: itemTraitInfo.key,
         label: (
-          <div className="flex justify-between mr-12">
+          <div className="flex justify-between mr-12 text-textPrimary">
             <span>{itemTraitInfo.key}</span>
             <span>{itemTraitInfo.valueCount}</span>
           </div>

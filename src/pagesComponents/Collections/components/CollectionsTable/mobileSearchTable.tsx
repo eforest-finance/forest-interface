@@ -159,6 +159,7 @@ export default function ModalSearchTable(modalProps: ISearchModalProps) {
               rowKey="id"
               columns={columns}
               clearFilter={clearFilter}
+              scroll={{ x: 1280 }}
               onRow={(record) => {
                 return {
                   onClick: () => {

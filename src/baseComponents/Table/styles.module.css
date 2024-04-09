@@ -60,4 +60,7 @@
   :global(.ant-table-cell-fix-right) {
     @apply bg-fillPageBg;
   }
+  :global(.ant-table-container > .ant-table-sticky-scroll > .ant-table-sticky-scroll-bar) {
+    @apply !h-0;
+  }
 }

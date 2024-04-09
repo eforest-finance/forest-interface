@@ -21,6 +21,7 @@ export interface SearchCollections {
 
 export interface requestSearchCollectionsParams {
   TokenName: string;
+  DateRangeType?: number;
   Sort?: Sort | null;
   SortType?: SortTypeEnum | null;
   SkipCount: number;

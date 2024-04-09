@@ -13,7 +13,7 @@
 }
 
 .sort-header {
-  @apply flex items-center cursor-pointer;
+  @apply inline-flex items-center cursor-pointer;
   .sort-header-title {
     @apply mr-[4px];
   }
@@ -29,6 +29,19 @@
   svg {
     * {
       @apply !stroke-[var(--table-sort-hover)];
+    }
+  }
+}
+
+.mobile-table {
+  :global {
+    .ant-table {
+      .ant-table-thead > tr > .ant-table-cell {
+        @apply !px-1 !py-1;
+      }
+      .ant-table-row .ant-table-cell {
+        @apply !px-1;
+      }
     }
   }
 }
