@@ -1,0 +1,8 @@
+.custom-popover {
+  :global(.ant-popover-arrow-content) {
+    --antd-arrow-background-color: var(--fill-card-bg);
+  }
+  :global(.ant-popover-inner) {
+    @apply !bg-fillCardBg;
+  }
+}

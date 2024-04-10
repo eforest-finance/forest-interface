@@ -24,6 +24,18 @@ export type SourceItemType = {
   extra?: string | number;
 };
 
+export const AcitvityItemArray = [
+  'Issue',
+  'Burn',
+  'Transfer',
+  'Sale',
+  'ListWithFixedPrice',
+  'DeList',
+  'MakeOffer',
+  'CancelOffer',
+  'PlaceBid',
+];
+
 export enum FilterKeyEnum {
   Status = 'Status',
   Chain = 'Chain',
@@ -31,6 +43,7 @@ export enum FilterKeyEnum {
   Price = 'Price',
   Generation = 'Generation',
   Traits = 'Traits',
+  ActivityType = 'ActivityType',
 }
 
 export type CheckboxItemType = {
@@ -137,6 +150,38 @@ export const getFilterList = (type: string, ChainId: string): Array<CheckboxItem
   return filterList;
 };
 
+export const getFilterListForActivity = (type: string, ChainId: string): Array<CheckboxItemType | RangeItemType> => {
+  const filterList = [
+    {
+      key: FilterKeyEnum.Chain,
+      title: FilterKeyEnum.Chain,
+      type: FilterType.Checkbox,
+      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+    },
+    {
+      key: FilterKeyEnum.Symbol,
+      title: FilterKeyEnum.Symbol,
+      showClearAll: true,
+      type: FilterType.Checkbox,
+      data: [
+        { value: SymbolTypeEnum.FT, label: 'FT' },
+        { value: SymbolTypeEnum.NFT, label: 'NFT' },
+      ],
+    },
+    {
+      key: FilterKeyEnum.Traits,
+      title: FilterKeyEnum.Traits,
+      showClearAll: true,
+      type: FilterType.SearchCheckbox,
+      data: [],
+    },
+  ];
+  if (type === 'nft') {
+    filterList.splice(1, 1);
+  }
+  return filterList;
+};
+
 export interface IFilterSelect {
   [FilterKeyEnum.Status]: {
     type: FilterType.Checkbox;
@@ -162,11 +207,15 @@ export interface IFilterSelect {
     type: FilterType.Checkbox;
     data: SourceItemType[];
   };
+  [FilterKeyEnum.ActivityType]: {
+    type: FilterType.Checkbox;
+    data: SourceItemType[];
+  };
   [key: string]: any;
 }
 
-export const getDefaultFilter = (ChainId: string): IFilterSelect => {
-  return {
+export const getDefaultFilter = (ChainId: string, isActivity?: boolean): IFilterSelect => {
+  const res = {
     [FilterKeyEnum.Status]: {
       type: FilterType.Checkbox,
       data: [],
@@ -197,6 +246,20 @@ export const getDefaultFilter = (ChainId: string): IFilterSelect => {
       data: [],
     },
   };
+
+  if (isActivity) {
+    Object.assign(res, {
+      [FilterKeyEnum.ActivityType]: {
+        type: FilterType.Checkbox,
+        data: [
+          { label: 'Sale', value: 3 },
+          { label: 'ListWithFixedPrice', value: 4 },
+        ],
+      },
+    });
+  }
+
+  return res;
 };
 
 // export const defaultFilter: IFilterSelect = {
@@ -266,7 +329,7 @@ const bigStr = (str: string) => {
   return str === '' ? undefined : new BigNumber(str).toNumber();
 };
 
-export const getFilter = (filterSelect: IFilterSelect) => {
+export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => {
   const status = filterSelect.Status.data.map((item) => item.value);
   const generation = filterSelect.Generation.data.map((item) => item.value);
   const traits = getTraitsInfo();
@@ -288,6 +351,14 @@ export const getFilter = (filterSelect: IFilterSelect) => {
     Object.assign(params, {
       traits,
     });
+  }
+
+  if (isActivity) {
+    ['PriceLow', 'PriceHigh', 'HasListingFlag', 'HasAuctionFlag', 'HasOfferFlag'].forEach((key) => delete params[key]);
+
+    const activityType = filterSelect.ActivityType?.data?.map?.((item) => item.value) || [];
+
+    params.Type = activityType;
   }
 
   return params;

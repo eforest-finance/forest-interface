@@ -22,21 +22,20 @@
       @apply !text-[var(--primary-color)];
     }
   }
-  .size_container {
-    @apply flex ml-[32px] rounded-[12px] border-[1px] items-center h-[48px] border-solid border-[var(--size-border)];
-    .large {
-      @apply flex items-center h-full p-[8px] rounded-l-[12px] cursor-pointer;
+}
+
+.size_container {
+  @apply flex ml-4 items-center h-12 overflow-hidden rounded-lg border border-solid border-lineBorder;
+
+  .btn-icon {
+    @apply flex items-center h-full p-2 cursor-pointer;
+  }
+  svg {
+    * {
+      @apply stroke-[var(--size-svg)];
     }
-    svg {
-      * {
-        @apply stroke-[var(--size-svg)];
-      }
-    }
-    .small {
-      @apply flex items-center h-full p-[8px] rounded-r-[12px] cursor-pointer;
-    }
-    .active {
-      @apply bg-[var(--size-active-bg)];
-    }
+  }
+  .active {
+    @apply bg-fillHoverBg;
   }
 }

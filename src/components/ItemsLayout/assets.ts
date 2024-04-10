@@ -1,4 +1,4 @@
-import { FilterItemList, FilterType, SingleItemType } from 'components/ItemsLayout/types';
+import { FilterItemList, FilterType, SingleItemType, MultipleItemType } from 'components/ItemsLayout/types';
 export const ADAPT_MAP = {
   5: 1920,
   4: 1600,
@@ -36,6 +36,23 @@ export const dropDownCollectionsMenu: SingleItemType = {
     // { value: 'USDT-ListingPrice ASC', label: 'USDT Price：Low to High' },
     // { value: 'USDT-ListingPrice DESC', label: 'USDT Price：High to Low' },
     { value: 'Recently Listed', label: 'Recently Listed' },
+  ],
+};
+
+export const dropDownActivitiesMenu: MultipleItemType = {
+  key: 'acitvityType',
+  title: 'acitvityType',
+  type: FilterType.Multiple,
+  data: [
+    { label: 'Issue', value: 0 },
+    { label: 'Burn', value: 1 },
+    { label: 'Transfer', value: 2 },
+    { label: 'Sale', value: 3 },
+    { label: 'ListWithFixedPrice', value: 4 },
+    { label: 'Delist', value: 5 },
+    { label: 'Make Offer', value: 6 },
+    { label: 'Cancel Offer', value: 7 },
+    { label: 'PlaceBid', value: 8 },
   ],
 };
 

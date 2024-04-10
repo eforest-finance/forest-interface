@@ -60,6 +60,9 @@ import {
   ICollecionGenerationInfoRes,
   INftRankingInfo,
   INftRankingInfoParams,
+  INftTraitsInfoRes,
+  ICollectionActivitiesParams,
+  ICollectionActivitiesRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -95,7 +98,7 @@ export const fetchNftInfo = async (params: { id: string; address: string }): Pro
 };
 
 export const fetchNftTraitsInfo = async (params: { id: string }) => {
-  return request.get<IDropQuotaResponse>('app/trait/nft-traits-info', { params });
+  return request.get<INftTraitsInfoRes>('app/trait/nft-traits-info', { params });
 };
 
 export const fetchGetTokenData = async (params: { symbol: string }): Promise<ITokenData> => {
@@ -288,4 +291,8 @@ export const fetchCollectionGenerationInfos = async (nftCollectionId: string) =>
 
 export const fetchNftRankingInfoApi = async (params: INftRankingInfoParams) => {
   return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params, rankApiConfig);
+};
+
+export const fetchCollectionActivities = async (params?: ICollectionActivitiesParams) => {
+  return request.post<ICollectionActivitiesParams, ICollectionActivitiesRes>('app/nft/collection-activities', params);
 };

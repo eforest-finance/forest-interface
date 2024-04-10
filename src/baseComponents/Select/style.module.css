@@ -85,4 +85,24 @@
       @apply !text-textDisable !bg-fillPageBg;
     }
   }
+
+  &:global(.ant-select-multiple .ant-select-selector) {
+    @apply w-full;
+  }
+
+  &:global(.ant-select-multiple .ant-select-selection-search) {
+    @apply w-full;
+  }
+
+  &:global(.ant-select-multiple .ant-select-selection-item) {
+    @apply bg-[var(--fill-click-bg)] bg-[var(--line-border)];
+  }
+
+  &:global(.ant-select-selection-item) {
+    svg {
+      path {
+        @apply !fill-[var(--text-primary)];
+      }
+    }
+  }
 }
