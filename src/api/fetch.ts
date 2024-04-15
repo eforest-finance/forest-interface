@@ -2,6 +2,16 @@ import { INftInfo, OfferType } from 'types/nftTypes';
 import request, { cmsRequest, tokenRequest } from './request';
 // import qs from 'query-string';
 const qs = require('qs');
+
+const rankApiConfig =
+  process.env.NEXT_PUBLIC_APP_ENV === 'test'
+    ? {
+        baseURL: '/schrodingerai/api',
+      }
+    : {
+        baseURL: '/api',
+      };
+
 import {
   INftOffersParams,
   ITokens,
@@ -277,5 +287,5 @@ export const fetchCollectionGenerationInfos = async (nftCollectionId: string) =>
 };
 
 export const fetchNftRankingInfoApi = async (params: INftRankingInfoParams) => {
-  return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params);
+  return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params, rankApiConfig);
 };
