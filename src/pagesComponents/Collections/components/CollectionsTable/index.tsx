@@ -92,7 +92,7 @@ export default function CollectionTable() {
 
   const TokenNameChange = (e: any) => {
     setTokenName(e.target.value);
-    run({ value: e.target.value });
+    run({ value: e.target.value, DateRangeType: dateRangeType });
   };
 
   const sortChange = (sort: ISortProps) => {
@@ -139,7 +139,10 @@ export default function CollectionTable() {
   };
   const clearFilter = () => {
     setTokenName('');
-    run('');
+    run({
+      value: '',
+      DateRangeType: dateRangeType,
+    });
   };
 
   return (
