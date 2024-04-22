@@ -264,8 +264,13 @@ export default function Activity() {
       children: (
         <div className="border-0 border-t !border-solid border-lineBorder">
           <div id="filter" className="px-[24px] pt-[16px]">
-            <Dropdown trigger={['click']} overlayClassName={styles['detail-activity-dropdown']} menu={dropdownMenu}>
-              <div className={`filter flex justify-between`} onClick={() => setVisible((v) => !v)}>
+            <Dropdown
+              trigger={['click']}
+              overlayClassName={styles['detail-activity-dropdown']}
+              menu={dropdownMenu}
+              open={visible}
+              onOpenChange={setVisible}>
+              <div className={`filter flex justify-between`}>
                 <p className="text-textPrimary">Filter</p>
                 <DownOutlined />
               </div>

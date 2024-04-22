@@ -8,11 +8,11 @@ import { Ref, forwardRef } from 'react';
 function CollectionSearch(params: InputProps & React.RefAttributes<InputRef>, ref: Ref<InputRef> | undefined) {
   return (
     <Input
+      placeholder="Search a collection name"
       {...params}
       ref={ref}
       prefix={<ClockCircleOutlined />}
       allowClear={{ clearIcon: <Clear /> }}
-      placeholder="Search a collection name"
     />
   );
 }

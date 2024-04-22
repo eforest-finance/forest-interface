@@ -138,6 +138,7 @@ export interface INftInfo {
   whitelistPriceToken: SaleTokens | null;
   minter: ICreator | null;
   owner: ICreator | null;
+  realOwner?: ICreator | null;
   decimals: string | number;
   nftCollection: {
     chainId: Chain;

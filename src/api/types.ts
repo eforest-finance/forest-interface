@@ -1,6 +1,6 @@
 import { AxiosRequestHeaders, AxiosResponse, Method } from 'axios';
 import { IManagerItem } from 'store/reducer/saleInfo/type';
-import { IListingType } from 'types/nftTypes';
+import { IListingType, ITraitInfo } from 'types/nftTypes';
 
 export type requestConfig = {
   method?: Method;
@@ -145,10 +145,13 @@ export interface IActivitiesItem {
   to?: ITo | null;
   amount: number;
   price: number;
-  priceToken: IPriceToken;
+  priceToken: IPriceToken | null;
   id: string;
   transactionHash: string;
   timestamp: number;
+  nftCollectionName: string;
+  nftName: string;
+  previewImage: string;
 }
 
 export interface IActivities {
@@ -687,4 +690,28 @@ export interface INftRankingInfo {
   rankGenOne: IRankData;
   rankTwoToNine: IRankData;
   rank: IRankData;
+}
+
+export interface INftTraitsInfoRes {
+  generation: number;
+  id: string;
+  traitInfos: ITraitInfo[];
+}
+
+export interface ICollectionActivitiesParams {
+  ChainList: Chain[];
+  CollectionType: string;
+  CollectionId: string;
+  Type: number[];
+  SkipCount: number;
+  MaxResultCount: number;
+  traits: Array<{
+    key: string;
+    values: string[];
+  }>;
+}
+
+export interface ICollectionActivitiesRes {
+  totalCount: number;
+  items: IActivitiesItem[];
 }

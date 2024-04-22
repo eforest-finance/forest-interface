@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './ExploreItems.module.css';
-import { useDebounceFn } from 'ahooks';
-import CollectionSearch, { BoxSizeEnum } from './components/CollectionItemsSearch';
+import { useDebounceFn, useSize } from 'ahooks';
+import ActivityItemsSearch from './components/ActivityItemsSearch';
 import {
   FilterKeyEnum,
   ICompProps,
@@ -10,18 +10,18 @@ import {
   getDefaultFilter,
   getComponentByType,
   getFilter,
-  getFilterList,
   getTagList,
+  FilterType,
+  getFilterListForActivity,
 } from './type';
 import { Layout } from 'antd';
 import clsx from 'clsx';
 import { CollapseForPC, CollapseForPhone } from './components/FilterContainer';
-import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
-import ScrollContent from './components/ScrollContent';
-import { fetchCollectionGenerationInfos, fetchCompositeNftInfos, fetchNftRankingInfoApi } from 'api/fetch';
+import ScrollContent from './components/ActivityScrollContent';
+import { fetchCollectionActivities } from 'api/fetch';
 import { getPageNumber } from 'utils/calculate';
-import { CompositeNftInfosParams, ICollectionTraitInfo, INftRankingInfo } from 'api/types';
-import { INftInfo, ITraitInfo } from 'types/nftTypes';
+import { IActivitiesItem, ICollectionActivitiesParams, ICollectionTraitInfo } from 'api/types';
+
 import useResponsive from 'hooks/useResponsive';
 import FilterTags from './components/FilterTags';
 import Loading from 'components/SyncChainModal/loading';
@@ -31,26 +31,14 @@ import { useRequest } from 'ahooks';
 import { fetchCollectionAllTraitsInfos } from 'api/fetch';
 import { useSearchParams } from 'next/navigation';
 import { getFilterFromSearchParams } from './util';
-import { useWebLogin } from 'aelf-web-login';
-import { addPrefixSuffix } from 'utils';
-import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 import { thousandsNumber } from 'utils/unitConverter';
+import { dropDownActivitiesMenu } from 'components/ItemsLayout/assets';
 
-export default function ExploreItems({
-  nftCollectionId,
-  elfRate,
-  totalChange,
-}: {
-  nftCollectionId: string;
-  totalChange: (value: number) => void;
-  elfRate: number;
-}) {
+export default function ActivityItems({ nftCollectionId }: { nftCollectionId: string }) {
   const params = useSearchParams();
   const filterParamStr = params.get('filterParams');
   const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr);
-  const { wallet } = useWebLogin();
 
-  const [size, setSize] = useState<BoxSizeEnum>(BoxSizeEnum.small);
   // 1024 below is the mobile display
   const { isLG } = useResponsive();
   const [collapsed, setCollapsed] = useState(!isLG);
@@ -58,84 +46,41 @@ export default function ExploreItems({
   const [SearchParam, setSearchParam] = useState<string>('');
   const nftType = nftCollectionId.endsWith('-SEED-0') ? 'seed' : 'nft';
   const { aelfInfo } = useGetState();
-  const filterList = getFilterList(nftType, aelfInfo.curChain);
-  const [sort, setSort] = useState<string>(dropDownCollectionsMenu.data[0].value as string);
-  const defaultFilter = getDefaultFilter(aelfInfo.curChain);
+  const filterList = getFilterListForActivity(nftType, aelfInfo.curChain);
+  const [activityType, setActivityType] = useState<number[]>([3, 4]);
+  const defaultFilter = getDefaultFilter(aelfInfo.curChain, true);
 
   const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
     Object.assign({}, defaultFilter, paramsFromUrlForFilter),
   );
   const [current, SetCurrent] = useState<number>(1);
-  const [dataSource, setDataSource] = useState<INftInfo[]>([]);
+  const [dataSource, setDataSource] = useState<IActivitiesItem[]>([]);
   const isLoadMore = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [moreLoading, setMoreLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const pageSize = 32;
   const requestParams = useMemo(() => {
-    const filter = getFilter(filterSelect);
+    const filter = getFilter(filterSelect, true);
     return {
       ...filter,
-      Sorting: sort,
-      SearchParam,
+      // Type: activityType,
       CollectionType: nftType,
       CollectionId: nftCollectionId,
       SkipCount: getPageNumber(current, pageSize),
       MaxResultCount: pageSize,
     };
-  }, [current, filterSelect, SearchParam, nftCollectionId, sort, nftType]);
+  }, [current, filterSelect, nftCollectionId, activityType, nftType]);
+
+  const tagRef = useRef(null);
+  const tagCompSize = useSize(tagRef);
 
   const { data: traitsInfo } = useRequest(() => fetchCollectionAllTraitsInfos(nftCollectionId), {
     refreshDeps: [nftCollectionId],
   });
-  const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
-    refreshDeps: [nftCollectionId],
-  });
-
-  const fetchRankingDataOfNft = useCallback(
-    async (nftItemArr: INftInfo[]) => {
-      if (!wallet.address) return nftItemArr;
-      const needShowRankingNftArr = nftItemArr.filter(
-        (itm) => itm.generation === 9 && itm.traitPairsDictionary?.length >= 11,
-      );
-      if (!needShowRankingNftArr.length) return nftItemArr;
-      const batchTraitsParams = needShowRankingNftArr.map((nftInfo) => {
-        const traitInfos = nftInfo.traitPairsDictionary;
-
-        const params = getParamsByTraitPairsDictionary(traitInfos as unknown as ITraitInfo[]);
-
-        return params;
-      });
-
-      let resData: INftRankingInfo[] = [];
-      try {
-        resData = await fetchNftRankingInfoApi({
-          address: addPrefixSuffix(wallet.address),
-          catsTraits: batchTraitsParams as string[][][][],
-        });
-      } catch (error) {}
-
-      if (!resData?.length) {
-        return nftItemArr;
-      }
-      needShowRankingNftArr.forEach((item, index) => {
-        const data = resData?.[index]?.rank;
-        if (data.rank) {
-          let str = `${thousandsNumber(data.rank)}`;
-          if (data.total) {
-            str += ` / ${thousandsNumber(data.total)}`;
-          }
-          item._rankStrForShow = str;
-        }
-      });
-
-      return nftItemArr;
-    },
-    [wallet.address],
-  );
 
   const fetchData = useCallback(
-    async (params: Partial<CompositeNftInfosParams>, loadMore?: boolean, isTotal?: boolean) => {
+    async (params: ICollectionActivitiesParams, loadMore?: boolean) => {
       if (loadMore) {
         setMoreLoading(true);
       } else {
@@ -143,10 +88,9 @@ export default function ExploreItems({
         setLoading(true);
       }
       try {
-        const res = await fetchCompositeNftInfos(params);
-        const items = await fetchRankingDataOfNft(res.items);
+        const res = await fetchCollectionActivities(params);
+        const items = res.items;
         setTotal(res.totalCount);
-        if (isTotal) totalChange && totalChange(res.totalCount);
         if (isLoadMore.current) {
           setDataSource([...dataSource, ...items]);
           setLoadingMore(true);
@@ -161,24 +105,12 @@ export default function ExploreItems({
         setMoreLoading(false);
       }
     },
-    [dataSource, totalChange, fetchRankingDataOfNft],
+    [dataSource],
   );
 
   useEffect(() => {
-    fetchData(requestParams, false, true);
-  }, [nftCollectionId, wallet?.address]);
-
-  useEffect(() => {
-    if (!wallet.address) return;
-    SetCurrent(1);
-    fetchData(
-      Object.assign({}, requestParams, {
-        SkipCount: 0,
-      }),
-      false,
-      true,
-    );
-  }, [wallet?.address]);
+    fetchData(requestParams, false);
+  }, [nftCollectionId]);
 
   const resetScrollTop = () => {
     const scrollEle = document.querySelector('#explore__container');
@@ -188,13 +120,13 @@ export default function ExploreItems({
   const filterChange = useCallback(
     (val: ItemsSelectSourceType) => {
       setFilterSelect({ ...filterSelect, ...val });
-      const filter = getFilter({ ...filterSelect, ...val });
-      console.log('filterChange', filterSelect, filter);
+      const filter = getFilter({ ...filterSelect, ...val }, true);
+      console.log('filterChange', filterSelect, filter, val);
       resetScrollTop();
       SetCurrent(1);
       const params = {
         ...filter,
-        Sorting: sort,
+        // Type: activityType,
         SearchParam,
         CollectionType: nftType,
         CollectionId: nftCollectionId,
@@ -253,24 +185,11 @@ export default function ExploreItems({
       resTargetList.splice(index, 1);
     }
 
-    if (!generationInfos?.items?.length) {
-      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Generation);
-      resTargetList.splice(index, 1);
-    }
-
     return resTargetList?.map((item) => {
       const defaultValue = filterSelect[item.key]?.data;
 
       if (item.key === FilterKeyEnum.Traits) {
         return getTraitSelectorData(traitsInfo?.items || [], filterChange, filterSelect);
-      }
-
-      if (item.key === FilterKeyEnum.Generation) {
-        item.data = (generationInfos?.items || []).map((itm) => ({
-          value: `${itm.generation}`,
-          label: `${itm.generation}`,
-          extra: `${itm.generationItemsCount}`,
-        }));
       }
 
       const Comp: React.FC<ICompProps> = getComponentByType(item.type);
@@ -294,71 +213,105 @@ export default function ExploreItems({
         ],
       };
     });
-  }, [filterChange, filterList, filterSelect, traitsInfo, generationInfos]);
+  }, [filterChange, filterList, filterSelect, traitsInfo]);
 
-  const sizeChange = (value: BoxSizeEnum) => {
-    setSize(value);
-  };
-
-  const { run } = useDebounceFn(
-    (value) => {
-      SetCurrent(1);
-      fetchData({ ...requestParams, SearchParam: value, SkipCount: getPageNumber(1, pageSize) });
-    },
-    {
-      wait: 500,
-    },
-  );
   const clearAll = useCallback(() => {
     resetScrollTop();
     SetCurrent(1);
     setSearchParam('');
-    setFilterSelect({ ...defaultFilter });
-    const filter = getFilter({ ...defaultFilter });
+    const filterSelectData: IFilterSelect = {
+      ...defaultFilter,
+      [FilterKeyEnum.ActivityType]: {
+        type: FilterType.Checkbox,
+        data: [],
+      },
+    };
+    setFilterSelect(filterSelectData);
+    const filter = getFilter(filterSelectData, true);
     const params = {
       ...filter,
-      Sorting: sort,
-      SearchParam: '',
+      // Type: activityType,
       CollectionType: nftType,
       CollectionId: nftCollectionId,
       MaxResultCount: pageSize,
     };
     fetchData({ ...params, SkipCount: getPageNumber(1, pageSize) });
     if (isLG) setCollapsed(false);
-  }, [setFilterSelect, isLG, defaultFilter, fetchData, pageSize, sort, nftType, nftCollectionId]);
+  }, [setFilterSelect, isLG, defaultFilter, fetchData, pageSize, activityType, nftType, nftCollectionId]);
 
   const symbolChange = (e: any) => {
     setSearchParam(e.target.value);
-    run(e.target.value);
+    addTraitsSelectorBySearchParams(e.target.value);
+  };
+
+  const addActivityTypeTag = (activityType: (string | number)[]) => {
+    const selArr = dropDownActivitiesMenu.data.filter((item) => {
+      return activityType.includes(item.value);
+    });
+    const filterData = {
+      [FilterKeyEnum.ActivityType]: {
+        type: FilterType.Checkbox,
+        data: selArr,
+      },
+    };
+    filterChange(filterData);
+  };
+
+  const addTraitsSelectorBySearchParams = (searchVal: string) => {
+    searchVal = searchVal.trim();
+    let parentKey = '';
+    let data = null;
+    for (let traitItem of traitsInfo?.items || []) {
+      const traitsValue = traitItem.values.find((traitItemVal) => String(traitItemVal.value).trim() === searchVal);
+      if (traitsValue) {
+        parentKey = traitItem.key;
+        data = {
+          label: `${traitsValue.value}`,
+          value: traitsValue.value,
+        };
+        break;
+      }
+    }
+
+    if (!data) return;
+
+    filterChange({
+      [`${FilterKeyEnum.Traits}-${parentKey}`]: {
+        type: FilterType.Checkbox,
+        data: [data],
+      },
+    });
   };
 
   const clearSearchChange = () => {
     setSearchParam('');
     SetCurrent(1);
-    fetchData({ ...requestParams, SearchParam: '', SkipCount: getPageNumber(1, pageSize) });
+    fetchData({ ...requestParams, SkipCount: getPageNumber(1, pageSize) });
   };
 
   const collapsedChange = () => {
     setCollapsed(!collapsed);
   };
 
-  const sortChange = (sort: string) => {
-    isLoadMore.current = false;
-    SetCurrent(1);
-    setSort(sort);
-    fetchData({
-      ...requestParams,
-      Sorting: sort,
-      SkipCount: getPageNumber(1, pageSize),
-    });
+  const activityTypeChange = (activityType: (number | string)[]) => {
+    console.log('activityTypeChange', activityType);
+    addActivityTypeTag(activityType);
+    // isLoadMore.current = false;
+    // SetCurrent(1);
+    // setActivityType(activityType);
+    // fetchData({
+    //   ...requestParams,
+    //   // Type: activityType,
+    //   SkipCount: getPageNumber(1, pageSize),
+    // });
   };
 
   const hasMore = useMemo(() => {
     return total > dataSource.length;
   }, [total, dataSource]);
   const tagList = useMemo(() => {
-    return getTagList(filterSelect, SearchParam);
-  }, [filterSelect, SearchParam]);
+    return getTagList(filterSelect, '');
+  }, [filterSelect]);
 
   const loadMoreData = useCallback(() => {
     setLoadingMore(true);
@@ -376,21 +329,24 @@ export default function ExploreItems({
 
   return (
     <div className={styles.explore__item__container}>
-      <CollectionSearch
-        size={size}
+      <ActivityItemsSearch
         collapsed={collapsed}
         collapsedChange={collapsedChange}
         searchParams={{
-          placeholder: 'Search for names or token symbols',
+          placeholder: 'Search by traits',
           value: SearchParam,
           onChange: symbolChange,
           onPressEnter: symbolChange,
         }}
-        sizeChange={sizeChange}
+        nftType={nftType}
         selectProps={{
-          value: sort,
-          defaultValue: dropDownCollectionsMenu.data[0].value,
-          onChange: sortChange,
+          value: filterSelect.ActivityType?.data?.map?.((item) => item.value) || [],
+          mode: 'multiple',
+          defaultValue: [3, 4],
+          allowClear: true,
+          maxTagCount: 1,
+          onChange: activityTypeChange,
+          maxTagTextLength: 6,
         }}
       />
       <div>
@@ -420,20 +376,22 @@ export default function ExploreItems({
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden">
+              <div ref={tagRef} className=" sticky flex items-center top-36 z-[3] bg-fillPageBg overflow-hidden ">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}
-                  SearchParam={SearchParam}
+                  SearchParam={''}
                   filterSelect={filterSelect}
                   clearAll={clearAll}
                   onchange={filterChange}
                   clearSearchChange={clearSearchChange}
                 />
+
+                <div className=" text-base font-medium text-textPrimary flex-1 text-right min-w-[160px]">
+                  {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
+                </div>
               </div>
               <ScrollContent
-                elfRate={elfRate}
-                sizes={size}
                 collapsed={collapsed}
                 ListProps={{
                   dataSource: dataSource,
@@ -446,6 +404,7 @@ export default function ExploreItems({
                   hasSearch: !!tagList.length,
                   loadMore: loadMoreData,
                   clearFilter: clearAll,
+                  stickeyOffsetHeight: isLG ? (tagCompSize?.height || 0) + 138 : (tagCompSize?.height || 0) + 138,
                 }}
               />
             </Loading>

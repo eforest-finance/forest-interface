@@ -10,12 +10,15 @@ import Link from 'next/link';
 import Button from 'baseComponents/Button';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
+import ActivityItems from './ActivityItems';
+import useTokenData from 'hooks/useTokenData';
 
 export default function ExploreItemsIndex() {
   const { address: nftCollectionId } = useParams();
   const { isMinter, collectionsInfo } = useIsMinter(nftCollectionId as string);
   const { isSmallScreen } = useSelector(selectInfo);
   const [total, setTotal] = useState<number>(0);
+  const elfRate = useTokenData();
   const tabItems = useMemo(() => {
     return [
       {
@@ -25,15 +28,25 @@ export default function ExploreItemsIndex() {
             <span className={styles.tab__item__total}>({total})</span>
           </div>
         ),
-        key: `${nftCollectionId}`,
+        key: 'items',
         children: (
           <ExploreItems
+            elfRate={elfRate}
             nftCollectionId={nftCollectionId as string}
             totalChange={(value: number) => {
               setTotal(value);
             }}
           />
         ),
+      },
+      {
+        label: (
+          <div className={styles.tab__item}>
+            <span className={styles.tab__item__label}>Activity</span>
+          </div>
+        ),
+        key: 'activity',
+        children: <ActivityItems nftCollectionId={nftCollectionId as string} />,
       },
     ];
   }, [collectionsInfo, total, nftCollectionId]);
@@ -57,12 +70,8 @@ export default function ExploreItemsIndex() {
             </Button>
           </div>
         )}
-        <CollectionsTabs items={tabItems} />
+        <CollectionsTabs items={tabItems} destroyInactiveTabPane={true} defaultActiveKey="items" />
       </div>
     </div>
-
-    // {
-    //   /* <ItemsLayout showAdd={isMinter && isSmallScreen} tabNav={tabName} /> */
-    // }
   );
 }
