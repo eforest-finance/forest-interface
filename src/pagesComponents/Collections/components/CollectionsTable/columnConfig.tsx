@@ -1,21 +1,35 @@
 import { ColumnsType } from 'antd/lib/table';
+import { Typography } from 'antd';
 import { Item } from 'pagesComponents/Collections/Hooks/useSearchCollections';
 import styles from './styles.module.css';
 import clsx from 'clsx';
-import { unitConverter } from 'utils/unitConverter';
 import SortDefault from 'assets/images/explore/sort-arrow-default.svg';
 import SortDown from 'assets/images/explore/arrow-down.svg';
 import SortUp from 'assets/images/explore/arrow-up.svg';
 import { debounce } from 'lodash-es';
 import { ImageEnhance } from 'components/ImgLoading';
-import { formatNumber, formatTokenPrice } from 'utils/format';
+import { formatNumberEnhance, formatTokenPrice } from 'utils/format';
+import Tooltip from 'baseComponents/Tooltip';
+import { thousandsNumber } from 'utils/unitConverter';
+import BigNumber from 'bignumber.js';
+
+const { Text } = Typography;
 export enum SortTypeEnum {
   asc,
   desc,
   default,
 }
 
-export type Sort = 'floorPrice' | 'itemTotal' | 'ownerTotal' | '';
+export type Sort =
+  | 'floorPrice'
+  | 'itemTotal'
+  | 'ownerTotal'
+  | 'volumeTotal'
+  | 'volumeTotalChange'
+  | 'floorChange'
+  | 'salesTotal'
+  | 'supplyTotal'
+  | '';
 
 export interface ISortProps {
   sort: Sort;
@@ -45,191 +59,185 @@ export default function getColumns(
       });
     }
   }, 500);
-  return isMobile
-    ? [
-        {
-          title: '#',
-          dataIndex: 'index',
-          width: '32px',
-          key: 'index',
-          render: (text) => (
-            <div className="flex items-center">
-              <span className={clsx(styles['table-text'], 'font-semibold !text-[var(--table-header-text)]')}>
-                {text}
-              </span>
+
+  const renderTitle = (title: string, sortKeyWord: Sort) => (
+    <div
+      className={clsx(styles['sort-header'])}
+      onClick={() => {
+        sortClick(sortKeyWord);
+      }}>
+      <span className={styles['sort-header-title']}>{title}</span>
+      {(sort.sort !== sortKeyWord || (sort.sort === sortKeyWord && sort.sortType === SortTypeEnum.default)) && (
+        <SortDefault />
+      )}
+      {sort.sort === sortKeyWord && sort.sortType === SortTypeEnum.desc && <SortDown />}
+      {sort.sort === sortKeyWord && sort.sortType === SortTypeEnum.asc && <SortUp />}
+    </div>
+  );
+  const renderNumberOfChange = (text: string | number) => {
+    const num = Number(text);
+    if (isNaN(num)) return '-';
+
+    const percentStr = BigNumber(num).abs().times(100).toFixed(2, BigNumber.ROUND_DOWN);
+    const percent = Number(percentStr);
+
+    if (percent === 0) {
+      return <span className=" text-textSecondary">0.00%</span>;
+    }
+
+    const textClassName = num < 0 ? 'text-functionalDanger' : 'text-functionalSuccess';
+
+    let showStr = '';
+
+    if (percent > 10000) {
+      showStr = '>10000%';
+    } else {
+      showStr = `${num < 0 ? '-' : '+'}${percentStr}%`;
+    }
+
+    return <span className={textClassName}>{showStr}</span>;
+  };
+
+  return [
+    {
+      title: '#',
+      dataIndex: 'index',
+      fixed: 'left',
+      width: isMobile ? 28 : 54,
+      ellipsis: true,
+      key: 'index',
+      render: (text) => (
+        <div className="flex items-center">
+          <span className={clsx(styles['table-text'], 'font-semibold !text-[var(--table-header-text)]')}>{text}</span>
+        </div>
+      ),
+    },
+    {
+      title: (
+        <div className={clsx(styles['sort-header'])}>
+          <span className={styles['sort-header-title']}>Collection</span>
+        </div>
+      ),
+      dataIndex: 'tokenName',
+      width: isMobile ? 96 : 234,
+      fixed: 'left',
+      key: 'tokenName',
+      render: (text, record) => {
+        return (
+          <div className="flex items-center">
+            <div className={clsx(isMobile ? 'mr-2' : 'mr-4')}>
+              <ImageEnhance
+                src={record.logoImage}
+                className={clsx(
+                  'shrink-0 object-cover ',
+                  isMobile ? '!w-8 !h-8 !rounded-sm' : '!w-[52px] !h-[52px] !rounded-md ',
+                )}
+              />
             </div>
-          ),
-        },
-        {
-          title: 'Collection',
-          dataIndex: 'tokenName',
-          ellipsis: true,
-          key: 'tokenName',
-          render: (text, record) => (
-            <div className="flex items-center">
-              <div className="mr-2">
-                <ImageEnhance
-                  src={record.logoImage}
-                  className="shrink-0 !w-[40px] !h-[40px] !rounded-sm object-cover"
-                />
-              </div>
-              <div className="flex flex-col text-ellipsis truncate items-left justify-center">
-                <div
-                  className={clsx(
-                    styles['table-text'],
-                    'font-semibold w-full text-ellipsis truncate !text-[14px] !leading-[22px]',
-                  )}>
-                  {text}
-                </div>
-                <div
-                  className={clsx(
-                    styles['table-text'],
-                    'font-semibold !text-[12px] !leading-[20px] !text-[var(--table-header-text)]',
-                  )}>
-                  <span className="mr-[8px]">Items</span>
-                  <span>{unitConverter(record.itemTotal, record.itemTotal >= 1000 ? 1 : 4)}</span>
-                </div>
-              </div>
-            </div>
-          ),
-        },
-        {
-          title: (
-            <div
-              className={clsx(styles['sort-header'], 'justify-end')}
-              onClick={() => {
-                sortClick('floorPrice');
+            <Text
+              className=" !text-textPrimary"
+              style={{ width: isMobile ? 52 : 142 }}
+              ellipsis={{
+                tooltip: text,
               }}>
-              <span className={styles['sort-header-title']}>Floor Price</span>
-              {(sort.sort !== 'floorPrice' ||
-                (sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.default)) && <SortDefault />}
-              {sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.desc && <SortDown />}
-              {sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.asc && <SortUp />}
-            </div>
-          ),
-          dataIndex: 'floorPrice',
-          key: 'floorPrice',
-          render: (text, record) => (
-            <div className="text-right">
-              <span className={clsx(styles['table-text'], 'font-medium')}>
-                {(text || text === 0) && text >= 0
-                  ? formatTokenPrice(text) + ' ' + (record.floorPriceSymbol || 'ELF')
-                  : '-'}
-              </span>
-            </div>
-          ),
-        },
-      ]
-    : [
-        {
-          title: '#',
-          dataIndex: 'index',
-          className: 'w-[80px]',
-          fixed: true,
-          key: 'index',
-          render: (text) => (
-            <div className="flex items-center">
-              <span className={clsx(styles['table-text'], 'font-semibold !text-[var(--table-header-text)]')}>
-                {text}
-              </span>
-            </div>
-          ),
-        },
-        {
-          title: (
-            <div className={clsx(styles['sort-header'])}>
-              <span className={styles['sort-header-title']}>Collection</span>
-            </div>
-          ),
-          dataIndex: 'tokenName',
-          className: 'w-[624px]',
-          key: 'tokenName',
-          render: (text, record) => (
-            <div className="flex items-center">
-              <div className="mr-[24px]">
-                <ImageEnhance
-                  src={record.logoImage}
-                  className="shrink-0 !w-[70px] !h-[70px] !rounded-md object-cover "
-                />
-              </div>
-              <span className={clsx(styles['table-text'], 'font-semibold')}>{text}</span>
-            </div>
-          ),
-        },
-        {
-          title: (
-            <div
-              className={clsx(styles['sort-header'])}
-              onClick={() => {
-                sortClick('floorPrice');
-              }}>
-              <span className={styles['sort-header-title']}>Floor Price</span>
-              {(sort.sort !== 'floorPrice' ||
-                (sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.default)) && <SortDefault />}
-              {sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.desc && <SortDown />}
-              {sort.sort === 'floorPrice' && sort.sortType === SortTypeEnum.asc && <SortUp />}
-            </div>
-          ),
-          dataIndex: 'floorPrice',
-          className: 'w-[264px]',
-          key: 'floorPrice',
-          render: (text, record) => (
-            <div className="flex items-center">
-              <span className={clsx(styles['table-text'], 'font-medium')}>
-                {(text || text === 0) && text >= 0
-                  ? formatTokenPrice(text) + ' ' + (record.floorPriceSymbol || 'ELF')
-                  : '-'}
-              </span>
-            </div>
-          ),
-        },
-        {
-          title: (
-            <div
-              className={clsx(styles['sort-header'])}
-              onClick={() => {
-                sortClick('itemTotal');
-              }}>
-              <span className={styles['sort-header-title']}>Items</span>
-              {(sort.sort !== 'itemTotal' || (sort.sort === 'itemTotal' && sort.sortType === SortTypeEnum.default)) && (
-                <SortDefault />
-              )}
-              {sort.sort === 'itemTotal' && sort.sortType === SortTypeEnum.desc && <SortDown />}
-              {sort.sort === 'itemTotal' && sort.sortType === SortTypeEnum.asc && <SortUp />}
-            </div>
-          ),
-          dataIndex: 'itemTotal',
-          className: 'w-[184px]',
-          key: 'itemTotal',
-          render: (text) => (
-            <div className="flex items-center">
-              <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumber(text)}</span>
-            </div>
-          ),
-        },
-        {
-          title: (
-            <div
-              className={clsx(styles['sort-header'], 'justify-end')}
-              onClick={() => {
-                sortClick('ownerTotal');
-              }}>
-              <span className={styles['sort-header-title']}>Owners</span>
-              {(sort.sort !== 'ownerTotal' ||
-                (sort.sort === 'ownerTotal' && sort.sortType === SortTypeEnum.default)) && <SortDefault />}
-              {sort.sort === 'ownerTotal' && sort.sortType === SortTypeEnum.desc && <SortDown />}
-              {sort.sort === 'ownerTotal' && sort.sortType === SortTypeEnum.asc && <SortUp />}
-            </div>
-          ),
-          dataIndex: 'ownerTotal',
-          className: 'w-[128px]',
-          align: 'right',
-          key: 'ownerTotal',
-          render: (text) => (
-            <div className="text-right">
-              <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumber(text)}</span>
-            </div>
-          ),
-        },
-      ];
+              {text}
+            </Text>
+          </div>
+        );
+      },
+    },
+    {
+      title: renderTitle('Volume', 'volumeTotal'),
+      dataIndex: 'volumeTotal',
+      key: 'volumeTotal',
+      width: 144,
+      render: (text) => {
+        return (
+          <Tooltip title={thousandsNumber(text)}>
+            <span>{formatNumberEnhance(text)} ELF</span>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      title: renderTitle('Volume Change', 'volumeTotalChange'),
+      dataIndex: 'volumeTotalChange',
+      key: 'volumeTotalChange',
+      width: 154,
+      render: renderNumberOfChange,
+    },
+    {
+      title: renderTitle('Floor Price', 'floorPrice'),
+      dataIndex: 'floorPrice',
+      width: 134,
+      key: 'floorPrice',
+      render: (text, record) => (
+        <div className="flex items-center">
+          <span className={clsx(styles['table-text'], 'font-medium')}>
+            {(text || text === 0) && text >= 0
+              ? formatTokenPrice(text) + ' ' + (record.floorPriceSymbol || 'ELF')
+              : '-'}
+          </span>
+        </div>
+      ),
+    },
+    {
+      title: renderTitle('Floor Change', 'floorChange'),
+      dataIndex: 'floorChange',
+      key: 'floorChange',
+      width: 144,
+      render: renderNumberOfChange,
+    },
+    {
+      title: renderTitle('Sales', 'salesTotal'),
+      dataIndex: 'salesTotal',
+      key: 'salesTotal',
+      width: 98,
+      render: (text) => (
+        <div className="flex items-center">
+          <Tooltip title={thousandsNumber(text)}>
+            <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
+          </Tooltip>
+        </div>
+      ),
+    },
+    {
+      title: renderTitle('Items', 'itemTotal'),
+      dataIndex: 'itemTotal',
+      width: 93,
+      key: 'itemTotal',
+      render: (text) => (
+        <div className="flex items-center">
+          <Tooltip title={thousandsNumber(text)}>
+            <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
+          </Tooltip>
+        </div>
+      ),
+    },
+    {
+      title: renderTitle('Owners', 'ownerTotal'),
+      dataIndex: 'ownerTotal',
+      width: 93,
+      key: 'ownerTotal',
+      render: (text) => (
+        <Tooltip title={thousandsNumber(text)}>
+          <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
+        </Tooltip>
+      ),
+    },
+    {
+      title: renderTitle('Total Supply', 'supplyTotal'),
+      dataIndex: 'supplyTotal',
+      key: 'supplyTotal',
+      align: 'right',
+      width: 132,
+      render: (text) => (
+        <div className="text-right">
+          <Tooltip title={thousandsNumber(text)}>
+            <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
 }

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { number } from 'echarts';
 
 export function formatTime({
   minDigits = 2,
@@ -104,4 +103,19 @@ export function formatShowEmptyValue(value: number | string | undefined, str = '
   if (value === '0' || value === 0) return value;
   if (Number(value) === -1 || !value) return str;
   return value;
+}
+
+export function formatNumberEnhance(number: number | string | BigNumber) {
+  const numberBig = BigNumber.isBigNumber(number) ? number : new BigNumber(number);
+  if (numberBig.isNaN()) return `${number || '-'}`;
+
+  if (!numberBig.isEqualTo(0) && numberBig.lt(0.0001)) {
+    return '< 0.0001';
+  }
+
+  if (numberBig.lte(1000)) {
+    return Number(numberBig.toFixed(4, BigNumber.ROUND_DOWN));
+  }
+
+  return formatNumber(number);
 }

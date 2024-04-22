@@ -37,8 +37,13 @@
     @apply border-error;
   }
 
-  &:global(.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector),
-  :global(.ant-select-status-error.ant-select:not(.ant-select-disabled, .ant-select-customize-input).ant-select-focused .ant-select-selector)  {
+  &:global(
+      .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector
+    ),
+  :global(
+      .ant-select-status-error.ant-select:not(.ant-select-disabled, .ant-select-customize-input).ant-select-focused
+        .ant-select-selector
+    ) {
     @apply bg-transparent h-full border-none !shadow-none;
 
     border-radius: inherit;
@@ -49,7 +54,9 @@
 
     border-radius: inherit;
   }
-  &:global(.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input) {
+  &:global(
+      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input
+    ) {
     @apply h-full;
   }
   &:global(.ant-select-single .ant-select-selector .ant-select-selection-placeholder) {
@@ -61,12 +68,18 @@
       @apply mr-[8px] w-[24px] h-[24px];
     }
   }
-  &:global(.ant-select-arrow) {
+  :global(.ant-select-arrow) {
     @apply text-textSecondary right-[18px];
+
+    svg {
+      path {
+        @apply stroke-textPrimary;
+      }
+    }
   }
 
   &:global(.ant-select-disabled) {
-    @apply hover:border-lineBorder hover:shadow-none focus:border-lineBorder focus:shadow-none; 
+    @apply hover:border-lineBorder hover:shadow-none focus:border-lineBorder focus:shadow-none;
 
     :global(.ant-select-selector) {
       @apply !text-textDisable !bg-fillPageBg;

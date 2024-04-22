@@ -6,6 +6,8 @@ import {
   requestSearchCollectionsParams,
 } from 'pagesComponents/Collections/Hooks/useSearchCollections';
 import { useEffectOnce } from 'react-use';
+import useGetState from 'store/state/getState';
+
 import getColumns, { ISortProps, SortTypeEnum } from './columnConfig';
 import { getPageNumber } from 'utils/calculate';
 import useResponsive from 'hooks/useResponsive';
@@ -16,30 +18,37 @@ import { InputRef } from 'antd';
 import { useRouter } from 'next/navigation';
 import Table from 'baseComponents/Table';
 import TableEmpty from 'components/TableEmpty';
+import { Select, Option } from 'baseComponents/Select';
+import clsx from 'clsx';
 interface TableDataItem extends Item {
   index: number;
 }
 export default function CollectionTable() {
+  const { infoState } = useGetState();
+  const { isSmallScreen } = infoState;
+
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [TokenName, setTokenName] = useState<string>('');
+  const [dateRangeType, setDateRangeType] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
 
   const [dataSource, setDataSource] = useState<TableDataItem[]>();
   const [sort, setSort] = useState<ISortProps>({
-    sort: 'ownerTotal',
+    sort: 'volumeTotal',
     sortType: SortTypeEnum.desc,
   });
 
   const params = useMemo(() => {
     return {
       SkipCount: getPageNumber(current, pageSize),
+      DateRangeType: dateRangeType,
       MaxResultCount: pageSize,
       TokenName: TokenName,
       Sort: sort.sortType === SortTypeEnum.default ? null : sort.sort,
       SortType: sort.sortType === SortTypeEnum.default ? null : sort.sortType,
     };
-  }, [current, pageSize, TokenName, sort]);
+  }, [current, pageSize, TokenName, sort, dateRangeType]);
   const { loading, getList } = useSearchCollections();
   const navigate = useRouter();
   const getData = async (params: requestSearchCollectionsParams) => {
@@ -59,12 +68,13 @@ export default function CollectionTable() {
     getData({ ...params });
   });
   const { run } = useDebounceFn(
-    (value) => {
+    ({ value, DateRangeType = 0 }) => {
       setCurrent(1);
       getData({
         ...params,
         SkipCount: getPageNumber(1, pageSize),
         TokenName: value,
+        DateRangeType,
       });
     },
     {
@@ -72,9 +82,17 @@ export default function CollectionTable() {
     },
   );
 
+  const dateTypeChange = (value: any) => {
+    setDateRangeType(value);
+    run({
+      value: TokenName,
+      DateRangeType: value,
+    });
+  };
+
   const TokenNameChange = (e: any) => {
     setTokenName(e.target.value);
-    run(e.target.value);
+    run({ value: e.target.value, DateRangeType: dateRangeType });
   };
 
   const sortChange = (sort: ISortProps) => {
@@ -121,14 +139,31 @@ export default function CollectionTable() {
   };
   const clearFilter = () => {
     setTokenName('');
-    run('');
+    run({
+      value: '',
+      DateRangeType: dateRangeType,
+    });
   };
 
   return (
     <div className={styles['collections-table']}>
       <div className={styles.header}>
         <div className={styles.title}>Collections</div>
-        <div className="search w-full mdl:w-auto">
+        <div className="search w-full flex mdl:w-auto">
+          <Select
+            value={dateRangeType}
+            onChange={dateTypeChange}
+            className={clsx(isMobile ? 'w-[86px]' : 'w-[146px]', 'mr-6')}
+            options={[
+              {
+                value: 0,
+                label: '24H',
+              },
+              {
+                value: 1,
+                label: '7D',
+              },
+            ]}></Select>
           <CollectionSearch
             ref={searchRef}
             value={TokenName}
@@ -180,6 +215,11 @@ export default function CollectionTable() {
               navigate.push(`/explore-items/${record.id}`);
             },
           };
+        }}
+        scroll={{ x: 1280 }}
+        className={isMobile ? styles['mobile-table'] : ''}
+        sticky={{
+          offsetHeader: isSmallScreen ? 62 : 80,
         }}
       />
       <ModalSearchTable open={open} cancel={cancel} />
