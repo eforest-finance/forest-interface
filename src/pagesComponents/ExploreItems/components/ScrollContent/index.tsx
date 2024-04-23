@@ -1,9 +1,8 @@
-import { Card, List, ListProps } from 'antd';
-import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
+import { Card, List, ListProps, Table } from 'antd';
+import { ImageEnhance } from 'components/ImgLoading';
 import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
 import styles from './style.module.css';
-import { COLLECTION_DEFAULT_IMG } from 'constants/FileConfig';
 import useColumns from 'hooks/useColumns';
 import { BoxSizeEnum } from '../CollectionItemsSearch';
 import LoadingMore from 'components/Loading';
@@ -12,6 +11,7 @@ import TableEmpty, { emptyEnum } from 'components/TableEmpty';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { formatTokenPrice } from 'utils/format';
+import { NFTListTable } from '../NftListTable';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -83,6 +83,7 @@ interface IContentProps {
     clearFilter?: () => void;
   };
   ListProps: ListProps<INftInfo>;
+  elfRate: number;
 }
 
 function ScrollContent(props: IContentProps) {
@@ -107,6 +108,18 @@ function ScrollContent(props: IContentProps) {
       document.querySelector('#explore__container')?.removeEventListener('scroll', handleScroll);
     };
   }, [handleScroll]);
+
+  if (props.sizes === BoxSizeEnum.details) {
+    return (
+      <>
+        <NFTListTable elfRate={props.elfRate} dataSource={ListProps.dataSource || []}></NFTListTable>
+        {loading ? <LoadingMore className="absolute z-100 bottom-[20px]" /> : null}
+        {!hasMore && loadingMore && ListProps?.dataSource?.length ? (
+          <div className="text-center w-full text-textDisable font-medium text-base py-[20px]">No more data</div>
+        ) : null}
+      </>
+    );
+  }
 
   return (
     <div className={clsx('item-card-wrapper', props.className)}>

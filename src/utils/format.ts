@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js';
+import { MINUTES_PER_HOUR, MONTH_DAYS, SECOND_PER_MINUTES, TIME_FORMAT_24_HOUR, YEAR_MONTHS } from 'constants/time';
+import moment from 'moment';
 
 export function formatTime({
   minDigits = 2,
@@ -119,3 +121,13 @@ export function formatNumberEnhance(number: number | string | BigNumber) {
 
   return formatNumber(number);
 }
+
+export const getDateString = (timestamp: number) => {
+  const duration = moment.duration(moment().valueOf() - timestamp);
+  if (duration.asSeconds() < SECOND_PER_MINUTES) return 'a few seconds ago';
+  if (duration.asMinutes() < MINUTES_PER_HOUR) return `${duration.asMinutes().toFixed(0)} minutes ago`;
+  if (duration.asHours() < TIME_FORMAT_24_HOUR) return `${duration.asHours().toFixed(0)} hours ago`;
+  if (duration.asDays() < MONTH_DAYS) return `${duration.asDays().toFixed(0)} days ago`;
+  if (duration.asMonths() < YEAR_MONTHS) return `${duration.asMonths().toFixed(0)} months ago`;
+  return `${duration.asYears().toFixed(0)} years ago`;
+};
