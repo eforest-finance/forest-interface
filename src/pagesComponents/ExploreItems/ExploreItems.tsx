@@ -387,6 +387,7 @@ export default function ExploreItems({
           onPressEnter: symbolChange,
         }}
         sizeChange={sizeChange}
+        selectTagCount={tagList.length}
         selectProps={{
           value: sort,
           defaultValue: dropDownCollectionsMenu.data[0].value,
@@ -420,7 +421,7 @@ export default function ExploreItems({
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden">
+              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden h-0 lgTW:h-auto">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}

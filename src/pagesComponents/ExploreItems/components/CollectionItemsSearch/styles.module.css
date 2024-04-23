@@ -2,7 +2,7 @@
 .collection__search {
   @apply flex items-center mb-0 mdl:mb-4 pb-4 pt-8 sticky top-12 z-50 bg-fillPageBg;
   .collapsed__button {
-    @apply flex cursor-pointer mr-[32px] rounded-[12px] items-center p-[12px] !bg-[var(--collapsed-bg)];
+    @apply relative flex cursor-pointer mr-[32px] rounded-[12px] items-center p-[12px] !bg-[var(--collapsed-bg)];
     .collapsed__text {
       @apply ml-[8px] text-[16px] font-semibold leading-[24px] !text-[var(--collapsed-text)];
     }
