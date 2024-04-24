@@ -1,4 +1,4 @@
-import { Card, List, ListProps, Table } from 'antd';
+import { Card, List, ListProps } from 'antd';
 import { ImageEnhance } from 'components/ImgLoading';
 import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
@@ -12,6 +12,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { formatTokenPrice } from 'utils/format';
 import { NFTListTable } from '../NftListTable';
+import useResponsive from 'hooks/useResponsive';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -87,8 +88,9 @@ interface IContentProps {
 }
 
 function ScrollContent(props: IContentProps) {
+  const { isLG } = useResponsive();
   const { ListProps, InfiniteScrollProps } = props;
-  const { loading, hasMore, loadingMore, loadMore, hasSearch, clearFilter } = InfiniteScrollProps;
+  const { loading, hasMore, loadingMore, loadMore, hasSearch, clearFilter, total } = InfiniteScrollProps;
   const { run } = useDebounceFn(loadMore, {
     wait: 100,
   });

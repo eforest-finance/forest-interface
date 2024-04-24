@@ -23,19 +23,29 @@ interface ICollectionItemsSearch {
   sizeChange: (value: BoxSizeEnum) => void;
   collapsedChange: () => void;
   selectProps: SelectProps;
+  selectTagCount?: number;
+  extraInfo?: string;
 }
 
 export default function CollectionItemsSearch(params: ICollectionItemsSearch) {
   const { isLG } = useResponsive();
-  const { size, collapsed, searchParams, selectProps, sizeChange, collapsedChange } = params;
+  const { size, collapsed, searchParams, selectProps, sizeChange, collapsedChange, selectTagCount, extraInfo } = params;
   return (
     <>
       <div className={styles.collection__search}>
-        <div className={clsx('flex', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
+        <div className={clsx('flex justify-between items-center', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
           <div className={clsx(styles.collapsed__button)} onClick={collapsedChange}>
             <CollapsedIcon className={styles.collapsed__icon} />
-            <span className={styles.collapsed__text}>Filters</span>
+            <span className={clsx(styles.collapsed__text, isLG && 'w-0 !ml-0 overflow-hidden')}>Filters</span>
+            {isLG && selectTagCount ? (
+              <span className=" absolute left-8 -top-2 px-1.5 bg-textPrimary text-textWhite text-xs font-medium rounded-3xl">
+                {selectTagCount}
+              </span>
+            ) : null}
           </div>
+          {extraInfo && collapsed && !isLG ? (
+            <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
+          ) : null}
         </div>
         <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
           <CollectionSearch {...searchParams} />
@@ -73,7 +83,7 @@ export default function CollectionItemsSearch(params: ICollectionItemsSearch) {
         )}
       </div>
       {isLG && (
-        <div className="flex my-4">
+        <div className="flex mb-4">
           <BaseSelect className="!flex-1" dataSource={dropDownCollectionsMenu} {...selectProps} />
 
           <div className={styles['size_container']}>

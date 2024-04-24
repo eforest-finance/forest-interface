@@ -199,7 +199,6 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
     itm && columns.splice(1, 0, itm);
   }
 
-  console.log('stickeyOffsetHeight', stickeyOffsetHeight);
   return (
     <Table
       size="middle"

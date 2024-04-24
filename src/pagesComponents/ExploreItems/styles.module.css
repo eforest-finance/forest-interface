@@ -6,9 +6,10 @@
 
   height: calc(var(--vh, 1vh) * 100 - 80px);
   @apply sm:px-[40px] px-[16px];
+
   .tab__item {
     .tab__item__label {
-      @apply text-[16px] mr-[8px] leading-[24px] font-semibold text-[var(--tabs-label-text)];
+      @apply text-base mr-2 font-semibold text-textSecondary;
     }
     .tab__item__total {
       @apply text-[14px] font-medium leading-[22px] text-[var(--tabs-label-total)];
