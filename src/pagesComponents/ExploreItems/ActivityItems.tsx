@@ -340,6 +340,7 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
           value: activityType,
           onChange: activityTypeChange,
         }}
+        extraInfo={`${thousandsNumber(total)} ${total < 2 ? 'result' : 'results'}`}
       />
       <div>
         <Layout className="!bg-[var(--bg-page)]">
@@ -380,11 +381,12 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
                   onchange={filterChange}
                   clearSearchChange={clearSearchChange}
                 />
-
-                <div className=" text-base font-medium text-textPrimary flex-1 text-right min-w-[160px]">
+              </div>
+              {isLG ? (
+                <div className=" text-base font-medium text-textPrimary pt-2">
                   {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
                 </div>
-              </div>
+              ) : null}
               <ScrollContent
                 collapsed={collapsed}
                 ListProps={{

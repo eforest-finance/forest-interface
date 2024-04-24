@@ -23,6 +23,7 @@ interface IAcitvityItemsSearch {
   selectProps: SelectProps;
   nftType: string;
   selectTagCount?: number;
+  extraInfo?: string;
 }
 
 function SelectTag({ text }: { text: string }) {
@@ -35,7 +36,7 @@ function SelectTag({ text }: { text: string }) {
 
 export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
   const { isLG } = useResponsive();
-  const { collapsed, searchParams, selectProps, collapsedChange, nftType, selectTagCount } = params;
+  const { collapsed, searchParams, selectProps, collapsedChange, nftType, selectTagCount, extraInfo } = params;
   const [visible, setVisible] = useState<boolean>(false);
 
   const menuForShow =
@@ -96,7 +97,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
   return (
     <>
       <div className={styles.collection__search}>
-        <div className={clsx('flex', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
+        <div className={clsx('flex justify-between items-center', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
           <div className={clsx(styles.collapsed__button)} onClick={collapsedChange}>
             <CollapsedIcon className={styles.collapsed__icon} />
             <span className={clsx(styles.collapsed__text, isLG && 'w-0 !ml-0 overflow-hidden')}>Filters</span>
@@ -107,6 +108,9 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
               </span>
             ) : null}
           </div>
+          {extraInfo && collapsed && !isLG ? (
+            <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
+          ) : null}
         </div>
         <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
           <CollectionSearch {...searchParams} />

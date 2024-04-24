@@ -139,7 +139,7 @@ export default function useBatchBuyNow(chainId?: Chain) {
       const approveTokenResult = await checkELFApprove({
         chainId: chainId,
         price: parameter.price,
-        quantity: timesDecimals(parameter.quantity, parameter.nftDecimals || '0').toNumber(),
+        quantity: timesDecimals(parameter.quantity, '0').toNumber(),
         spender:
           chainId === SupportedELFChainId.MAIN_NET ? getForestContractAddress().main : getForestContractAddress().side,
         address: walletInfo.address || '',

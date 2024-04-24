@@ -42,7 +42,7 @@ export default function ExploreItems({
   totalChange,
 }: {
   nftCollectionId: string;
-  totalChange: (value: number) => void;
+  totalChange?: (value: number) => void;
   elfRate: number;
 }) {
   const params = useSearchParams();
@@ -393,6 +393,7 @@ export default function ExploreItems({
           defaultValue: dropDownCollectionsMenu.data[0].value,
           onChange: sortChange,
         }}
+        extraInfo={`${thousandsNumber(total)} ${total < 2 ? 'result' : 'results'}`}
       />
       <div>
         <Layout className="!bg-[var(--bg-page)]">

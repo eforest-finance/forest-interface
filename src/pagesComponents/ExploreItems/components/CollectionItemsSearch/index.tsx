@@ -24,15 +24,16 @@ interface ICollectionItemsSearch {
   collapsedChange: () => void;
   selectProps: SelectProps;
   selectTagCount?: number;
+  extraInfo?: string;
 }
 
 export default function CollectionItemsSearch(params: ICollectionItemsSearch) {
   const { isLG } = useResponsive();
-  const { size, collapsed, searchParams, selectProps, sizeChange, collapsedChange, selectTagCount } = params;
+  const { size, collapsed, searchParams, selectProps, sizeChange, collapsedChange, selectTagCount, extraInfo } = params;
   return (
     <>
       <div className={styles.collection__search}>
-        <div className={clsx('flex', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
+        <div className={clsx('flex justify-between items-center', collapsed && !isLG ? 'w-[360px] mr-[32px]' : 0)}>
           <div className={clsx(styles.collapsed__button)} onClick={collapsedChange}>
             <CollapsedIcon className={styles.collapsed__icon} />
             <span className={clsx(styles.collapsed__text, isLG && 'w-0 !ml-0 overflow-hidden')}>Filters</span>
@@ -42,6 +43,9 @@ export default function CollectionItemsSearch(params: ICollectionItemsSearch) {
               </span>
             ) : null}
           </div>
+          {extraInfo && collapsed && !isLG ? (
+            <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
+          ) : null}
         </div>
         <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
           <CollectionSearch {...searchParams} />

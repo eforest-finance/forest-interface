@@ -4,6 +4,7 @@ import LoadingMore from 'components/Loading';
 import { useDebounceFn } from 'ahooks';
 import { ActivityListTable } from '../ActivityListTable';
 import { IActivitiesItem } from 'api/types';
+import useResponsive from 'hooks/useResponsive';
 
 interface IContentProps {
   collapsed: boolean;
@@ -23,6 +24,7 @@ interface IContentProps {
 
 function ScrollContent(props: IContentProps) {
   const { ListProps, InfiniteScrollProps } = props;
+  const { isLG } = useResponsive();
   const { loading, hasMore, loadingMore, loadMore, hasSearch, clearFilter, stickeyOffsetHeight } = InfiniteScrollProps;
   const { run } = useDebounceFn(loadMore, {
     wait: 100,

@@ -1,7 +1,7 @@
 'use client';
 import useIsMinter from 'hooks/useIsMinter';
 import { useMemo, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import CollectionsTabs from './components/CollectionsTabs';
 import styles from './styles.module.css';
 import ExploreItems from './ExploreItems';
@@ -14,30 +14,23 @@ import ActivityItems from './ActivityItems';
 import useTokenData from 'hooks/useTokenData';
 
 export default function ExploreItemsIndex() {
-  const { address: nftCollectionId } = useParams();
+  const {
+    address: [nftCollectionId, activeTab],
+  } = useParams();
   const { isMinter, collectionsInfo } = useIsMinter(nftCollectionId as string);
   const { isSmallScreen } = useSelector(selectInfo);
-  const [total, setTotal] = useState<number>(0);
   const elfRate = useTokenData();
+  const nav = useRouter();
   const tabItems = useMemo(() => {
     return [
       {
         label: (
           <div className={styles.tab__item}>
             <span className={styles.tab__item__label}>Items</span>
-            <span className={styles.tab__item__total}>({total})</span>
           </div>
         ),
         key: 'items',
-        children: (
-          <ExploreItems
-            elfRate={elfRate}
-            nftCollectionId={nftCollectionId as string}
-            totalChange={(value: number) => {
-              setTotal(value);
-            }}
-          />
-        ),
+        children: <ExploreItems elfRate={elfRate} nftCollectionId={nftCollectionId as string} />,
       },
       {
         label: (
@@ -49,7 +42,7 @@ export default function ExploreItemsIndex() {
         children: <ActivityItems nftCollectionId={nftCollectionId as string} />,
       },
     ];
-  }, [collectionsInfo, total, nftCollectionId]);
+  }, [nftCollectionId]);
 
   return (
     <div className={styles.explore__banner}>
@@ -70,7 +63,14 @@ export default function ExploreItemsIndex() {
             </Button>
           </div>
         )}
-        <CollectionsTabs items={tabItems} destroyInactiveTabPane={true} defaultActiveKey="items" />
+        <CollectionsTabs
+          items={tabItems}
+          destroyInactiveTabPane={true}
+          defaultActiveKey={activeTab || 'items'}
+          onChange={(key) => {
+            nav.replace(`/explore-items/${nftCollectionId}/${key}`);
+          }}
+        />
       </div>
     </div>
   );

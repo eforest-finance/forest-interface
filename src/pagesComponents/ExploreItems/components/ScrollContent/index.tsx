@@ -12,6 +12,8 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { formatTokenPrice } from 'utils/format';
 import { NFTListTable } from '../NftListTable';
+import { thousandsNumber } from 'utils/unitConverter';
+import useResponsive from 'hooks/useResponsive';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -87,8 +89,9 @@ interface IContentProps {
 }
 
 function ScrollContent(props: IContentProps) {
+  const { isLG } = useResponsive();
   const { ListProps, InfiniteScrollProps } = props;
-  const { loading, hasMore, loadingMore, loadMore, hasSearch, clearFilter } = InfiniteScrollProps;
+  const { loading, hasMore, loadingMore, loadMore, hasSearch, clearFilter, total } = InfiniteScrollProps;
   const { run } = useDebounceFn(loadMore, {
     wait: 100,
   });
@@ -112,6 +115,11 @@ function ScrollContent(props: IContentProps) {
   if (props.sizes === BoxSizeEnum.details) {
     return (
       <>
+        {isLG ? (
+          <div className=" text-base font-medium text-textPrimary pt-2">
+            {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
+          </div>
+        ) : null}
         <NFTListTable elfRate={props.elfRate} dataSource={ListProps.dataSource || []}></NFTListTable>
         {loading ? <LoadingMore className="absolute z-100 bottom-[20px]" /> : null}
         {!hasMore && loadingMore && ListProps?.dataSource?.length ? (
