@@ -383,7 +383,7 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
                 />
               </div>
               {isLG ? (
-                <div className=" text-base font-medium text-textPrimary pt-2">
+                <div className=" text-base font-medium text-textPrimary pb-2">
                   {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
                 </div>
               ) : null}

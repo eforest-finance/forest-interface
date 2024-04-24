@@ -1,4 +1,4 @@
-import { Card, List, ListProps, Table } from 'antd';
+import { Card, List, ListProps } from 'antd';
 import { ImageEnhance } from 'components/ImgLoading';
 import { useCallback, useEffect, useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
@@ -12,7 +12,6 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { formatTokenPrice } from 'utils/format';
 import { NFTListTable } from '../NftListTable';
-import { thousandsNumber } from 'utils/unitConverter';
 import useResponsive from 'hooks/useResponsive';
 
 interface ItemsCardProps {
@@ -115,11 +114,6 @@ function ScrollContent(props: IContentProps) {
   if (props.sizes === BoxSizeEnum.details) {
     return (
       <>
-        {isLG ? (
-          <div className=" text-base font-medium text-textPrimary pt-2">
-            {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
-          </div>
-        ) : null}
         <NFTListTable elfRate={props.elfRate} dataSource={ListProps.dataSource || []}></NFTListTable>
         {loading ? <LoadingMore className="absolute z-100 bottom-[20px]" /> : null}
         {!hasMore && loadingMore && ListProps?.dataSource?.length ? (

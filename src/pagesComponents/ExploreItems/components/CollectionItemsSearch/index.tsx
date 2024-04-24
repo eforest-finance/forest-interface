@@ -83,7 +83,7 @@ export default function CollectionItemsSearch(params: ICollectionItemsSearch) {
         )}
       </div>
       {isLG && (
-        <div className="flex my-4">
+        <div className="flex mb-4">
           <BaseSelect className="!flex-1" dataSource={dropDownCollectionsMenu} {...selectProps} />
 
           <div className={styles['size_container']}>

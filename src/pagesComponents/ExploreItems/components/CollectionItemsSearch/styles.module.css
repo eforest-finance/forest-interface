@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity  */
 .collection__search {
-  @apply flex items-center mb-0 mdl:mb-4 pb-4 pt-8 sticky top-12 z-50 bg-fillPageBg;
+  @apply flex items-center mb-0 mdl:mb-4 pb-4 pt-6 mdl:pt-8 sticky top-12 z-50 bg-fillPageBg;
   .collapsed__button {
     @apply relative flex cursor-pointer mr-[32px] rounded-[12px] items-center p-[12px] !bg-[var(--collapsed-bg)];
     .collapsed__text {

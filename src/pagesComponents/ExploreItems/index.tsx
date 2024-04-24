@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 import ActivityItems from './ActivityItems';
 import useTokenData from 'hooks/useTokenData';
+import clsx from 'clsx';
 
 export default function ExploreItemsIndex() {
   const {
@@ -26,7 +27,9 @@ export default function ExploreItemsIndex() {
       {
         label: (
           <div className={styles.tab__item}>
-            <span className={styles.tab__item__label}>Items</span>
+            <span className={clsx(styles.tab__item__label, activeTab !== 'activity' && '!text-textPrimary')}>
+              Items
+            </span>
           </div>
         ),
         key: 'items',
@@ -35,7 +38,9 @@ export default function ExploreItemsIndex() {
       {
         label: (
           <div className={styles.tab__item}>
-            <span className={styles.tab__item__label}>Activity</span>
+            <span className={clsx(styles.tab__item__label, activeTab === 'activity' && '!text-textPrimary')}>
+              Activity
+            </span>
           </div>
         ),
         key: 'activity',

@@ -433,6 +433,11 @@ export default function ExploreItems({
                   clearSearchChange={clearSearchChange}
                 />
               </div>
+              {isLG ? (
+                <div className=" text-base font-medium text-textPrimary pb-2">
+                  {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
+                </div>
+              ) : null}
               <ScrollContent
                 elfRate={elfRate}
                 sizes={size}
