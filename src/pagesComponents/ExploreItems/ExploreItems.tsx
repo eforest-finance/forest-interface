@@ -42,7 +42,7 @@ export default function ExploreItems({
   totalChange,
 }: {
   nftCollectionId: string;
-  totalChange: (value: number) => void;
+  totalChange?: (value: number) => void;
   elfRate: number;
 }) {
   const params = useSearchParams();
@@ -387,11 +387,13 @@ export default function ExploreItems({
           onPressEnter: symbolChange,
         }}
         sizeChange={sizeChange}
+        selectTagCount={tagList.length}
         selectProps={{
           value: sort,
           defaultValue: dropDownCollectionsMenu.data[0].value,
           onChange: sortChange,
         }}
+        extraInfo={`${thousandsNumber(total)} ${total < 2 ? 'result' : 'results'}`}
       />
       <div>
         <Layout className="!bg-[var(--bg-page)]">
@@ -420,7 +422,7 @@ export default function ExploreItems({
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden">
+              <div className=" sticky top-36 z-[1] bg-fillPageBg overflow-hidden h-0 lgTW:h-auto">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}
@@ -431,6 +433,11 @@ export default function ExploreItems({
                   clearSearchChange={clearSearchChange}
                 />
               </div>
+              {isLG ? (
+                <div className=" text-base font-medium text-textPrimary pb-2">
+                  {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
+                </div>
+              ) : null}
               <ScrollContent
                 elfRate={elfRate}
                 sizes={size}

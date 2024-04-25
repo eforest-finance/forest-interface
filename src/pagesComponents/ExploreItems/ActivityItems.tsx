@@ -47,8 +47,8 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
   const nftType = nftCollectionId.endsWith('-SEED-0') ? 'seed' : 'nft';
   const { aelfInfo } = useGetState();
   const filterList = getFilterListForActivity(nftType, aelfInfo.curChain);
-  const [activityType, setActivityType] = useState<number[]>([3, 4]);
-  const defaultFilter = getDefaultFilter(aelfInfo.curChain, true);
+  const [activityType, setActivityType] = useState<(number | string)[]>([3, 6]);
+  const defaultFilter = getDefaultFilter(aelfInfo.curChain);
 
   const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
     Object.assign({}, defaultFilter, paramsFromUrlForFilter),
@@ -61,10 +61,10 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const pageSize = 32;
   const requestParams = useMemo(() => {
-    const filter = getFilter(filterSelect, true);
+    const filter = getFilter(filterSelect);
     return {
       ...filter,
-      // Type: activityType,
+      Type: activityType,
       CollectionType: nftType,
       CollectionId: nftCollectionId,
       SkipCount: getPageNumber(current, pageSize),
@@ -120,13 +120,13 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
   const filterChange = useCallback(
     (val: ItemsSelectSourceType) => {
       setFilterSelect({ ...filterSelect, ...val });
-      const filter = getFilter({ ...filterSelect, ...val }, true);
+      const filter = getFilter({ ...filterSelect, ...val });
       console.log('filterChange', filterSelect, filter, val);
       resetScrollTop();
       SetCurrent(1);
       const params = {
         ...filter,
-        // Type: activityType,
+        Type: activityType,
         SearchParam,
         CollectionType: nftType,
         CollectionId: nftCollectionId,
@@ -221,16 +221,12 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
     setSearchParam('');
     const filterSelectData: IFilterSelect = {
       ...defaultFilter,
-      [FilterKeyEnum.ActivityType]: {
-        type: FilterType.Checkbox,
-        data: [],
-      },
     };
     setFilterSelect(filterSelectData);
-    const filter = getFilter(filterSelectData, true);
+    const filter = getFilter(filterSelectData);
     const params = {
       ...filter,
-      // Type: activityType,
+      Type: activityType,
       CollectionType: nftType,
       CollectionId: nftCollectionId,
       MaxResultCount: pageSize,
@@ -295,15 +291,15 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
 
   const activityTypeChange = (activityType: (number | string)[]) => {
     console.log('activityTypeChange', activityType);
-    addActivityTypeTag(activityType);
-    // isLoadMore.current = false;
-    // SetCurrent(1);
-    // setActivityType(activityType);
-    // fetchData({
-    //   ...requestParams,
-    //   // Type: activityType,
-    //   SkipCount: getPageNumber(1, pageSize),
-    // });
+    // addActivityTypeTag(activityType);
+    isLoadMore.current = false;
+    SetCurrent(1);
+    setActivityType(activityType);
+    fetchData({
+      ...requestParams,
+      Type: activityType,
+      SkipCount: getPageNumber(1, pageSize),
+    });
   };
 
   const hasMore = useMemo(() => {
@@ -339,15 +335,12 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
           onPressEnter: symbolChange,
         }}
         nftType={nftType}
+        selectTagCount={tagList.length}
         selectProps={{
-          value: filterSelect.ActivityType?.data?.map?.((item) => item.value) || [],
-          mode: 'multiple',
-          defaultValue: [3, 4],
-          allowClear: true,
-          maxTagCount: 1,
+          value: activityType,
           onChange: activityTypeChange,
-          maxTagTextLength: 6,
         }}
+        extraInfo={`${thousandsNumber(total)} ${total < 2 ? 'result' : 'results'}`}
       />
       <div>
         <Layout className="!bg-[var(--bg-page)]">
@@ -376,7 +369,9 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
 
           <Layout className="!bg-[var(--bg-page)] relative">
             <Loading spinning={loading} text="loading...">
-              <div ref={tagRef} className=" sticky flex items-center top-36 z-[3] bg-fillPageBg overflow-hidden ">
+              <div
+                ref={tagRef}
+                className=" sticky flex items-center top-36 z-[3] bg-fillPageBg overflow-hidden h-0 lgTW:h-auto ">
                 <FilterTags
                   isMobile={isLG}
                   tagList={tagList}
@@ -386,11 +381,12 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
                   onchange={filterChange}
                   clearSearchChange={clearSearchChange}
                 />
-
-                <div className=" text-base font-medium text-textPrimary flex-1 text-right min-w-[160px]">
+              </div>
+              {isLG ? (
+                <div className=" text-base font-medium text-textPrimary pb-2">
                   {thousandsNumber(total)} {total < 2 ? 'result' : 'results'}
                 </div>
-              </div>
+              ) : null}
               <ScrollContent
                 collapsed={collapsed}
                 ListProps={{
@@ -404,7 +400,7 @@ export default function ActivityItems({ nftCollectionId }: { nftCollectionId: st
                   hasSearch: !!tagList.length,
                   loadMore: loadMoreData,
                   clearFilter: clearAll,
-                  stickeyOffsetHeight: isLG ? (tagCompSize?.height || 0) + 138 : (tagCompSize?.height || 0) + 138,
+                  stickeyOffsetHeight: isLG ? (tagCompSize?.height || 0) + 128 : (tagCompSize?.height || 0) + 138,
                 }}
               />
             </Loading>

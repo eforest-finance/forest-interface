@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/nextjs';
-const { NEXT_PUBLIC_APP_ENV } = process.env;
 
 export const init = () =>
   Sentry.init({
@@ -14,7 +13,12 @@ export const init = () =>
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
     beforeSend(event) {
-      if (NEXT_PUBLIC_APP_ENV !== 'production') {
+      console.log(
+        'before send Event',
+        process.env.NEXT_PUBLIC_APP_ENV,
+        process.env.NEXT_PUBLIC_APP_ENV !== 'production',
+      );
+      if (process.env.NEXT_PUBLIC_APP_ENV !== 'production') {
         return null;
       }
       return event;

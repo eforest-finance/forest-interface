@@ -297,13 +297,15 @@ export const checkELFApprove = async (options: {
       const totalAmount = new BigNumber(res?.totalAmount ?? 0);
       const allowanceBN = new BigNumber(res?.allowance ?? 0);
 
-      if (allowanceBN.lt(BigNumber.sum(bigA.multipliedBy(quantity), totalAmount))) {
-        const amount = isNightEl() ? CONTRACT_AMOUNT : Number(BigNumber.sum(totalAmount, bigA.multipliedBy(quantity)));
+      if (allowanceBN.lt(BigNumber.sum(bigA.multipliedBy(quantity).multipliedBy(10 ** 8), totalAmount))) {
+        const amount = isNightEl()
+          ? CONTRACT_AMOUNT
+          : Number(BigNumber.sum(totalAmount, bigA.multipliedBy(quantity).multipliedBy(10 ** 8)));
         return await approve(spender, 'ELF', `${amount}`, chainId);
       }
       return true;
     } else {
-      const amount = isNightEl() ? CONTRACT_AMOUNT : Number(Number(bigA.multipliedBy(quantity)));
+      const amount = isNightEl() ? CONTRACT_AMOUNT : Number(Number(bigA.multipliedBy(quantity).multipliedBy(10 ** 8)));
       return await approve(spender, 'ELF', `${amount}`, chainId);
     }
   } catch (error) {
