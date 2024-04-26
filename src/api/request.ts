@@ -93,13 +93,13 @@ class Request {
             break;
         }
 
-        if (config.baseURL?.includes('connect')) {
-          const logout = (window as any).logout;
-          logout && logout({ noModal: true });
-        }
+        // if (config.baseURL?.includes('connect')) {
+        //   const logout = (window as any).logout;
+        //   logout && logout({ noModal: true });
+        // }
 
         const requestUrl = error?.response?.config?.url;
-        if (!requestUrl || !IGNORE_ERROR_URLS.includes(requestUrl)) {
+        if (!requestUrl || !IGNORE_ERROR_URLS.includes(requestUrl) || !config.baseURL?.includes('connect')) {
           message.error(errMessage);
         }
 
