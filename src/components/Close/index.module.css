@@ -1,6 +1,6 @@
 .close {
-  @apply w-[24px] h-[24px] ml-[16px] cursor-pointer;
+  @apply w-6 h-6 ml-4 cursor-pointer;
   path {
-    @apply !fill-[var(--text-primary)];
+    @apply !fill-textPrimary !stroke-textPrimary;
   }
 }

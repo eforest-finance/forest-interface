@@ -30,6 +30,7 @@ import BuyNowModal from '../BuyNowModal';
 import useIntervalRequestForListings from 'pagesComponents/Detail/hooks/useIntervalRequestForListings';
 import { useMount } from 'react-use';
 import { MAX_RESULT_COUNT_10 } from 'constants/common';
+import Copy from 'components/Copy';
 
 function Listings(option: { rate: number }) {
   const { chainId, id } = useParams() as {
@@ -159,14 +160,17 @@ function Listings(option: { rate: number }) {
         dataIndex: 'fromName',
         width: isSmallScreen ? 240 : 260,
         render: (text: string, record: FormatListingType) => (
-          <TableCell
-            content={
-              record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)
-            }
-            isLink={true}
-            onClick={() => nav.push(`/account/${record.ownerAddress}`)}
-            tooltip={addPrefixSuffix(record.ownerAddress)}
-          />
+          <div className="flex items-center">
+            <TableCell
+              content={
+                record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)
+              }
+              isLink={true}
+              onClick={() => nav.push(`/account/${record.ownerAddress}`)}
+              tooltip={addPrefixSuffix(record.ownerAddress)}
+            />
+            <Copy className="copy-svg ml-2 cursor-pointer" toCopy={addPrefixSuffix(record.ownerAddress)} />
+          </div>
         ),
       },
       {

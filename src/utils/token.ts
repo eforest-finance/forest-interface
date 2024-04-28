@@ -7,6 +7,7 @@ import WalletAndTokenInfo from './walletAndTokenInfo';
 import { getOriginalAddress } from 'utils';
 import { fetchToken } from 'api/fetch';
 import { ITokenParams } from 'api/types';
+import { sleep } from '@portkey/utils';
 const AElf = require('aelf-sdk');
 
 export const isCurrentPageNeedToken = (): boolean => {
@@ -105,7 +106,7 @@ export const createToken = async (
   }
 
   try {
-    const res = await fetchToken({
+    const res = await loopFetchToken({
       grant_type: 'signature',
       scope: 'NFTMarketServer',
       client_id: 'NFTMarketServer_App',
@@ -122,6 +123,22 @@ export const createToken = async (
     return tokenRes;
   } catch (error) {
     console.error('fetchToken err:', error);
+    const logout = (window as any).logout;
+    logout && logout({ noModal: true });
   }
   return undefined;
 };
+
+async function loopFetchToken(params: ITokenParams, loopsNum: number = 10) {
+  try {
+    const res = await fetchToken(params);
+    return res;
+  } catch (error) {
+    if (loopsNum < 1) {
+      throw error;
+    } else {
+      await sleep(1000);
+      return loopFetchToken(params, --loopsNum);
+    }
+  }
+}
