@@ -197,6 +197,9 @@ export const fetchSaveCollectionInfos = async (data: ISaveCollectionInfosParams)
 export const fetchIsMinter = async (params: { nftCollectionId: string }): Promise<INftCollectionInfo> => {
   return request.get<INftCollectionInfo>(`app/nft/nft-collection/${params.nftCollectionId}`, {});
 };
+export const fetchNFTCollectionInfo = async (params: { nftCollectionId: string }): Promise<INftCollectionInfo> => {
+  return request.get<INftCollectionInfo>(`app/nft/nft-collection/${params.nftCollectionId}`, {});
+};
 
 export const fetchFooterNavItems = async (): Promise<ICommunityItems[]> => {
   return cmsRequest.get<ICommunityItems[]>('items/community', { baseURL: '/cms' });
@@ -279,7 +282,7 @@ export const fetchCollectionAllTraitsInfos = async (nftCollectionId: string) => 
   >('app/trait/nft-collection-traits-info', {
     id: nftCollectionId,
     skipCount: 0,
-    maxResultCount: 32,
+    maxResultCount: 128,
   });
 };
 
@@ -293,6 +296,9 @@ export const fetchNftRankingInfoApi = async (params: INftRankingInfoParams) => {
   return request.post<INftRankingInfoParams, INftRankingInfo[]>('probability/catsRank', params, rankApiConfig);
 };
 
-export const fetchCollectionActivities = async (params?: ICollectionActivitiesParams) => {
-  return request.post<ICollectionActivitiesParams, ICollectionActivitiesRes>('app/nft/collection-activities', params);
+export const fetchCollectionActivities = async (params?: Partial<ICollectionActivitiesParams>) => {
+  return request.post<Partial<ICollectionActivitiesParams>, ICollectionActivitiesRes>(
+    'app/nft/collection-activities',
+    params,
+  );
 };

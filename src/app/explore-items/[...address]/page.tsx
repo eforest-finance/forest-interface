@@ -2,4 +2,4 @@
 
 import dynamic from 'next/dynamic';
 
-export default dynamic(() => import('pagesComponents/ExploreItems'), { ssr: false });
+export default dynamic(() => import('pagesComponents/ExploreItem'), { ssr: false });

@@ -1,5 +1,5 @@
 import styles from './index.module.css';
-import CloseIcon from 'assets/images/close.svg';
+import CloseIcon from 'assets/images/icon/clear.svg';
 
 type SizeType = 'small' | 'xs' | 'xl';
 

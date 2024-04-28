@@ -104,10 +104,10 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
         (isTrueOrZero(dataSource?.whitelistPrice) && !!whitelistSrc)) && (
         <div className={styles['items-price']}>
           <div className={`${styles['items-last-price']} flex items-center`}>
-            <span className={styles['text']}>{dataSource?.whitelistPrice ? 'Whitelist price' : 'Last'}</span>
-            <div className={`${styles['price']} flex items-center`}>
+            <span className={styles['text']}>{dataSource?.whitelistPrice ? 'Whitelist price' : 'Last Sale'}</span>
+            <div className={`flex items-center`}>
               <Logo className="flex w-[12px] h-[12px]" src={dataSource?.whitelistPrice ? whitelistSrc : lastSrc} />
-              <span className={`${styles['price-value']} text-[var(--color-secondary)]`}>
+              <span className="text-xs text-textSecondary ml-1">
                 {formatTokenPrice((dataSource?.whitelistPrice || dataSource?.latestDealPrice) ?? 0)}
               </span>
             </div>

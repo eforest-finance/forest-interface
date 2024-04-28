@@ -17,12 +17,6 @@ import '../styles/theme.css';
 export const metadata = {
   title: 'Forest',
   description: 'Forest',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: 'no',
-  },
 };
 
 export const viewport = {

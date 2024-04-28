@@ -80,7 +80,7 @@
   @apply text-right min-w-[50px];
 }
 .items-card-wrapper .items-last-price {
-  @apply justify-end mt-[6px];
+  @apply justify-between mt-[6px];
 }
 .items-card-wrapper .items-last-price > .text {
   @apply text-sm text-[#bdc1c1];
