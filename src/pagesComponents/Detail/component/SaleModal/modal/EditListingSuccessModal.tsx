@@ -3,7 +3,7 @@ import Modal from 'baseComponents/Modal';
 import { INftInfo } from 'types/nftTypes';
 import Button from 'baseComponents/Button';
 import useGetState from 'store/state/getState';
-import ImgLoading from 'baseComponents/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 import Jump from 'assets/images/detail/jump.svg';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
@@ -68,23 +68,15 @@ function EditListingSuccessModalConstructor({
       <div className="flex flex-col h-full">
         <div className="flex flex-col items-center justify-between">
           {nftInfo?.previewImage && (
-            <ImgLoading
+            <ImageEnhance
               src={nftInfo?.previewImage}
-              nextImageProps={{
-                width: 128,
-                height: 128,
-              }}
               className="w-[128px] h-[128px] rounded-md mb-4 object-contain border border-solid border-lineBorder"
             />
           )}
           <div className="flex items-center justify-center mb-1">
             {nftInfo?.nftCollection?.logoImage && (
-              <ImgLoading
+              <ImageEnhance
                 src={nftInfo?.nftCollection?.logoImage}
-                nextImageProps={{
-                  width: 24,
-                  height: 24,
-                }}
                 className="!rounded-[4px] w-6 h-6 mr-1 object-contain border border-solid border-lineBorder"
               />
             )}

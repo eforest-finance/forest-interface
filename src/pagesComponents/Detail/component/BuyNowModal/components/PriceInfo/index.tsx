@@ -1,4 +1,4 @@
-import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 import { useMemo } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
@@ -37,10 +37,9 @@ export default function PriceInfo(props: {
   return (
     <div className="flex justify-between">
       <div className="flex flex-col mdTW:flex-row">
-        <ImgLoading
+        <ImageEnhance
           className="!rounded-[8px] mr-[16px] w-[84px] h-[84px] border border-solid border-lineBorder"
           src={nftInfo?.previewImage || ''}
-          nextImageProps={{ width: 84, height: 84 }}
         />
         <div>
           <p className="text-[16px] mt-[8px] mdTW:mt-0 leading-[24px] font-medium text-[var(--text-secondary)]">

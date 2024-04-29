@@ -1,4 +1,4 @@
-import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 import { StaticImageData } from 'next/image';
 import React from 'react';
 import styles from './style.module.css';
@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 
 export interface INftInfoListCard {
-  image?: string | StaticImageData;
+  image?: string | StaticImageData | undefined;
   collectionName?: string;
   nftName?: string;
   item?: string;
@@ -28,15 +28,7 @@ const NftInfoListCard = (props: INftInfoListCard) => {
         <div className="flex items-center mr-[16px] overflow-hidden flex-1">
           {props.image && (
             <div className="w-[84px] h-[84px] mr-[16px] flex justify-center items-center overflow-hidden rounded-md border border-solid border-lineBorder">
-              <ImgLoading
-                src={props.image}
-                nextImageProps={{
-                  width: 84,
-                  height: 84,
-                }}
-                imageSizeType={imageSizeType}
-                className="!rounded-none !w-[84px] !h-[84px]"
-              />
+              <ImageEnhance src={props.image} className="!rounded-none !w-[84px] !h-[84px]" />
             </div>
           )}
 

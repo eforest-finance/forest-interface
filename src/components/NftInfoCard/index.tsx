@@ -1,16 +1,17 @@
-import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
+
 import { StaticImageData } from 'next/image';
 import React from 'react';
 
 export interface INftInfoCard {
-  logoImage?: string | StaticImageData;
+  logoImage?: string | StaticImageData | undefined;
   subTitle?: string;
   title?: string;
   extra?: string;
 }
 
 interface IProps {
-  previewImage?: string | StaticImageData;
+  previewImage?: string | StaticImageData | undefined;
   info?: INftInfoCard;
 }
 
@@ -19,12 +20,8 @@ const NftInfoCard = (props: IProps) => {
   return (
     <div className="flex flex-col items-center justify-between">
       {previewImage && (
-        <ImgLoading
+        <ImageEnhance
           src={previewImage}
-          nextImageProps={{
-            width: 128,
-            height: 128,
-          }}
           className="w-[128px] h-[128px] border border-solid border-lineBorder"
           imageSizeType="contain"
         />
@@ -33,14 +30,9 @@ const NftInfoCard = (props: IProps) => {
         <>
           <div className="flex items-center justify-center mb-1 mt-[16px]">
             {info?.logoImage && (
-              <ImgLoading
+              <ImageEnhance
                 src={info?.logoImage}
-                nextImageProps={{
-                  width: 24,
-                  height: 24,
-                }}
                 className="w-[24px] h-[24px] border border-solid border-lineBorder !rounded-[4px] mr-[4px]"
-                imageSizeType="cover"
               />
             )}
             {info.subTitle && <span className="text-textSecondary text-base">{info.subTitle}</span>}
