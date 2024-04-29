@@ -1,5 +1,7 @@
 import FileView from 'components/FileView/FileView';
-import ImgLoading from 'baseComponents/ImgLoading';
+// import ImgLoading, { ImageEnhance } from 'baseComponents/ImgLoading';
+import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
+
 import { useMemo, useState } from 'react';
 import Preview from 'assets/images/icons/preview.svg';
 
@@ -24,10 +26,10 @@ export default function Picture() {
       <div
         className={`${styles['detail-cover']} ${isSmallScreen && styles['mobile-detail-cover']}`}
         onClick={() => isSmallScreen && setVisible(true)}>
-        <ImgLoading
-          notReady={!nftInfo}
-          defaultHeight="400px"
-          className="picture flex items-center justify-center"
+        <ImageEnhance
+          width={'100%'}
+          height={'100%'}
+          className=" w-full h-full aspect-square rounded-lg"
           src={nftInfo?.previewImage || ''}
         />
         {nftInfo?.file &&

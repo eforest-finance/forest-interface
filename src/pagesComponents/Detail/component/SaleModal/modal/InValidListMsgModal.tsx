@@ -5,10 +5,10 @@ import { BatchDeListType, IListedNFTInfo } from 'contract/type';
 import { INftInfo } from 'types/nftTypes';
 import Button from 'baseComponents/Button';
 import useGetState from 'store/state/getState';
-import ImgLoading from 'baseComponents/ImgLoading';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { useSelector } from 'store/store';
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
+import { ImageEnhance } from 'components/ImgLoading';
 
 function InValidListMsgModalConstructor({
   nftInfo,
@@ -56,12 +56,8 @@ function InValidListMsgModalConstructor({
       <div className="flex items-center justify-between">
         <div className="flex-1 flex items-center">
           {nftInfo?.previewImage && (
-            <ImgLoading
+            <ImageEnhance
               src={nftInfo?.previewImage}
-              nextImageProps={{
-                width: 64,
-                height: 64,
-              }}
               className="rounded-md mr-[16px] mdTW:mr-[26px] object-contain border border-solid border-lineBorder"
             />
           )}

@@ -5,7 +5,7 @@ import { BatchDeListType, IListedNFTInfo } from 'contract/type';
 import { INftInfo } from 'types/nftTypes';
 import Button from 'baseComponents/Button';
 import useGetState from 'store/state/getState';
-import ImgLoading from 'baseComponents/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 
 function InValidListMsgModal({
   nftInfo,
@@ -57,12 +57,8 @@ function InValidListMsgModal({
       <div className="flex items-center justify-between">
         <div className="flex-1 flex items-center">
           {nftInfo?.previewImage && (
-            <ImgLoading
+            <ImageEnhance
               src={nftInfo?.previewImage}
-              nextImageProps={{
-                width: 64,
-                height: 64,
-              }}
               className="rounded-md mr-[16px] mdTW:mr-[26px] !w-16 !h-16 object-contain border border-solid border-lineBorder"
             />
           )}

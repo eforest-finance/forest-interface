@@ -5,6 +5,7 @@ import { ipfsURLToS3AndIpfsURL } from 'utils/reg';
 import { Skeleton } from 'antd';
 import clsx from 'clsx';
 import styles from './ImgLoading.module.css';
+import { StaticImageData } from 'next/image';
 
 export function ImageEnhance({
   src = '',
@@ -12,7 +13,7 @@ export function ImageEnhance({
   onError,
   ...props
 }: {
-  src?: string;
+  src?: string | StaticImageData | undefined;
 } & ImageProps) {
   const [srcIndex, setSrcIndex] = useState<number>(0);
   const { aelfInfo } = useGetState();

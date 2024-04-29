@@ -1,5 +1,5 @@
 import { INftSaleInfoItem } from 'api/types';
-import Image from 'next/image';
+import { ImageEnhance } from 'components/ImgLoading';
 import { formatUSDPrice, formatTokenPrice } from 'utils/format';
 import useGetState from 'store/state/getState';
 
@@ -64,12 +64,11 @@ export function NFTSaleInfoCard({
     return (
       <div className="flex flex-col">
         <div className="flex rounded-md bg-fillHoverBg w-full aspect-square overflow-hidden justify-center items-center">
-          <Image
-            width={400}
-            height={400}
+          <ImageEnhance
             src={nftSaleInfo?.logoImage || ''}
-            className="object-contain rounded-md bg-fillHoverBg w-full h-full"
-            alt="nft logo"></Image>
+            className="object-contain rounded-md bg-fillHoverBg w-full h-full "
+            alt="nft logo"
+          />
         </div>
         <div className="flex justify-between mt-2">
           <InfoItem top={nftSaleInfo?.collectionName} middle={nftSaleInfo?.tokenName} bottom={listItem} />
@@ -83,12 +82,11 @@ export function NFTSaleInfoCard({
     return (
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <Image
-            width={84}
-            height={84}
+          <ImageEnhance
             src={nftSaleInfo?.logoImage || ''}
-            className="object-contain rounded-md bg-fillHoverBg"
-            alt="nft logo"></Image>
+            className="object-contain rounded-md bg-fillHoverBg w-[84px] h-[84px]"
+            alt="nft logo"
+          />
           <InfoItem top={topItemStr} middle={middle} bottom={bottom} textAlgnClassName="text-right" />
         </div>
         <BaseInfoItemMobile top={nftSaleInfo?.collectionName} middle={nftSaleInfo?.tokenName} bottom={listItem} />
@@ -98,12 +96,10 @@ export function NFTSaleInfoCard({
   return (
     <div className="flex">
       <div className="flex flex-1">
-        <Image
-          width={84}
-          height={84}
+        <ImageEnhance
           src={nftSaleInfo?.logoImage || ''}
-          className="object-contain rounded-md bg-fillHoverBg"
-          alt="nft logo"></Image>
+          className="object-contain rounded-md bg-fillHoverBg w-[84px] h-[84px]"
+        />
         <InfoItem top={nftSaleInfo?.collectionName} middle={nftSaleInfo?.tokenName} bottom={listItem} />
       </div>
       <InfoItem top={topItemStr} middle={middle} bottom={bottom} textAlgnClassName="text-right" />
@@ -124,12 +120,10 @@ export function NFTSaleInfoCardForDelListing({
     return (
       <div className="flex flex-col">
         <div className="flex items-center justify-center rounded-md bg-fillHoverBg w-full aspect-square">
-          <Image
-            width={400}
-            height={400}
+          <ImageEnhance
             src={nftSaleInfo?.logoImage || ''}
             className="object-contain rounded-md bg-fillHoverBg w-full"
-            alt="nft logo"></Image>
+          />
         </div>
         <div className="flex justify-between mt-2">
           <InfoItem top={nftSaleInfo?.collectionName} middle={nftSaleInfo?.tokenName} bottom={listItem} />
@@ -142,12 +136,11 @@ export function NFTSaleInfoCardForDelListing({
   return (
     <div className="flex">
       <div className="flex flex-1">
-        <Image
-          width={84}
-          height={84}
+        <ImageEnhance
           src={nftSaleInfo?.logoImage || ''}
-          className="object-contain rounded-md bg-fillHoverBg"
-          alt="nft logo"></Image>
+          className="object-contain rounded-md bg-fillHoverBg w-[84px] h-[84px]"
+          alt="nft logo"
+        />
         <InfoItem top={nftSaleInfo?.collectionName} middle={nftSaleInfo?.tokenName} bottom={listItem} />
       </div>
       <InfoItem top=" " middle={' '} bottom={bottom} textAlgnClassName="text-right" />

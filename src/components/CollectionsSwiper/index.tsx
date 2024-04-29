@@ -1,6 +1,6 @@
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 import useResponsive from 'hooks/useResponsive';
 import LeftArrow from 'assets/images/swiper/arrow-left-swiper.svg';
 import RrightArrow from 'assets/images/swiper/arrow-right-swiper.svg';
@@ -80,7 +80,6 @@ export default function CollectionsSwiper({ swiperData }: ISwiperProps) {
               key={item.id}>
               <div className="relative">
                 <Link href={`/explore-items/${item.id}`}>
-                  {/* <ImgLoading className="rounded-[12px]" src={item.imgUrl} /> */}
                   <ImageEnhance
                     width={'100%'}
                     height={'100%'}
