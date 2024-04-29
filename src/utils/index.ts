@@ -80,7 +80,7 @@ export const getOmittedStr = (
   },
 ) => {
   const defaults: Record<OmittedType, { prevLen: number; endLen: number; limitLen: number }> = {
-    [OmittedType.ADDRESS]: { prevLen: 10, endLen: 9, limitLen: 19 },
+    [OmittedType.ADDRESS]: { prevLen: 8, endLen: 9, limitLen: 17 },
     [OmittedType.NAME]: { prevLen: 6, endLen: 4, limitLen: 10 },
     [OmittedType.CUSTOM]: { prevLen: 6, endLen: 4, limitLen: 10 },
   };

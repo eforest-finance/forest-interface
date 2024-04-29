@@ -10,6 +10,7 @@ import UpIcon from 'assets/images/explore/show-up.svg';
 import useJumpExplorer from 'hooks/useJumpExplorer';
 import { ImageEnhance } from 'components/ImgLoading';
 import clsx from 'clsx';
+import Copy from 'components/Copy';
 
 function SeedImg({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo }) {
   const { isLG } = useResponsive();
@@ -30,7 +31,7 @@ function SeedName({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
       <div className="text-[24px] mb-[2px] mdl:mb-0 mdl:text-[40px] break-words leading-[32px] mdl:leading-[48px] font-semibold text-[var(--text-item)]">
         {collectionsInfo?.tokenName}
       </div>
-      <div>
+      <div className="flex items-center">
         <span className="text-[14px] leading-[22px] text-[var(--address-text)]">Created by</span>
         <span
           className="text-[14px] cursor-pointer ml-[8px] leading-[22px] font-semibold text-[var(--brand-base)]"
@@ -42,13 +43,17 @@ function SeedName({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
           }}>
           {addPrefixSuffix(
             getOmittedStr(collectionsInfo?.creatorAddress || '', OmittedType.CUSTOM, {
-              prevLen: 5,
-              endLen: 3,
-              limitLen: 10,
+              prevLen: 4,
+              endLen: 4,
+              limitLen: 17,
             }),
             collectionsInfo?.chainId,
           )}
         </span>
+        <Copy
+          className="copy-svg pl-[4px]"
+          toCopy={addPrefixSuffix(collectionsInfo?.creatorAddress || '', collectionsInfo?.chainId)}
+        />
       </div>
     </div>
   );

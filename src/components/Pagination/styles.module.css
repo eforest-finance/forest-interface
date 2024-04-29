@@ -109,7 +109,7 @@
 }
 
 .paginationMobile {
-  @apply flex items-start flex-col md:flex-row !important;
+  @apply flex items-start flex-col md:flex-row  py-[16px] px-0;
   .pagination__right {
     @apply mt-[8px];
   }
