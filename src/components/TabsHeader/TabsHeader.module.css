@@ -6,7 +6,7 @@
 }
 
 .tabs-header :global(.ant-tabs-tab) {
-  @apply px-0 pt-[28px] pb-[24px];
+  /* @apply px-0 pt-[28px] pb-[24px]; */
 }
 .tabs-header > :global(.ant-tabs-nav::before) {
   @apply border-b-[var(--line-box)];
@@ -43,7 +43,7 @@
 }
 
 .tabs-header.mobile-tabs-header :global(.ant-tabs-tab) {
-  @apply pt-[30px] pb-[16px] px-0 opacity-60;
+  @apply opacity-60;
 }
 
 .tabs-header.mobile-tabs-header .tabs-title :global(.ant-space-item) svg {

@@ -1,5 +1,5 @@
 .profile-banner-wrapper {
-  @apply relative h-[397px] bg-[var(--bg-dark)] bg-center bg-no-repeat bg-cover text-center mb-[-79px];
+  @apply relative bg-[var(--bg-dark)] bg-center bg-no-repeat bg-cover text-center;
 }
 
 .profile-banner-wrapper .profile-banner-mask {
@@ -47,9 +47,13 @@
   @apply w-[96px] h-[96px];
 }
 
-:global(.forest-marketplace-mobile) .profile-banner-wrapper {
-  @apply h-[349px] mb-[-67px];
+.profile-banner-wrapper {
+  @apply mdl:pb-[64px] pb-[32px];
 }
+
+/* :global(.forest-marketplace-mobile) .profile-banner-wrapper {
+  @apply pb-[32px];
+} */
 
 :global(.forest-marketplace-mobile) .profile-banner-wrapper .profile-banner-mask {
   @apply pt-[40px] w-full h-full;
@@ -62,5 +66,5 @@
 }
 
 :global(.forest-marketplace-mobile) .profile-banner-wrapper .user-address {
-  @apply text-[16px] leading-normal;
+  @apply text-[16px] leading-normal mt-[8px];
 }

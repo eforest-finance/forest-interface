@@ -51,51 +51,6 @@ export default function ProfileBanner({
         />
         <div className={styles['user-name']}>{name || 'Unnamed'}</div>
         <div className={styles['user-address']}>{getOmittedStr(address, OmittedType.ADDRESS)}</div>
-        <div className={styles['links']}>
-          {!!email && (
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-                setCopied(email || '');
-                message.success('Copied');
-              }}>
-              <Email />
-            </span>
-          )}
-          {!!twitter &&
-            (isSmallScreen ? (
-              <a
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCopied(twitter.includes('http') ? twitter : `https://${twitter}`);
-                  message.success('Copied');
-                }}>
-                <Twitter />
-              </a>
-            ) : (
-              <a href={twitter.includes('http') ? twitter : `https://${twitter}`} target="_blank" rel="noreferrer">
-                <Twitter />
-              </a>
-            ))}
-          {!!instagram &&
-            (isSmallScreen ? (
-              <a
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCopied(instagram.includes('http') ? instagram : `https://${instagram}`);
-                  message.success('Copied');
-                }}>
-                <Instagram />
-              </a>
-            ) : (
-              <a
-                href={instagram.includes('http') ? instagram : `https://${instagram}`}
-                target="_blank"
-                rel="noreferrer">
-                <Instagram />
-              </a>
-            ))}
-        </div>
       </div>
     </div>
   );

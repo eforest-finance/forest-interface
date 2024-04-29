@@ -56,14 +56,15 @@
 }
 
 .close__button {
-  * {
-    @apply stroke-[var(--text-item)] fill-[var(--text-item)];
+  @apply w-[24px] h-[24px] ml-[16px] cursor-pointer;
+  path {
+    @apply !fill-[var(--text-primary)];
   }
 }
-
+/* 
 .elf-dropdown-phone-dark {
   :global(.ant-drawer-header) {
     box-shadow: 0 4px 8px 0 var(--box-shadow-header);
     border: none;
   }
-}
+} */
