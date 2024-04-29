@@ -2,7 +2,7 @@ import { Divider, Drawer, Menu, MenuProps } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { useMemo } from 'react';
-import CloseBtn from 'assets/images/explore/close.svg';
+import Close from 'components/Close';
 import ExpandIcon from 'assets/images/explore/item-arrow-up.svg';
 import BaseButton from 'baseComponents/Button';
 
@@ -64,7 +64,7 @@ const CollapseForPhone = ({
       title={
         <div className="flex items-center justify-between pr-[20px]">
           <span className="text-[24px] leading-[32px] font-medium text-[var(--text-item)]">{titleTxt}</span>
-          <CloseBtn className={styles.close__button} onClick={onCloseHandler} />
+          <Close onClose={onCloseHandler} />
         </div>
       }
       closeIcon={null}

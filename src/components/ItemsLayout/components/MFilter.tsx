@@ -30,7 +30,7 @@ export default function FilterBtn({
         placement={'right'}
         closable={false}
         maskClosable
-        maskStyle={{ background: 'none' }}
+        // maskStyle={{ background: 'none' }}
         mask={false}
         open={isCollapsed}>
         <ItemsSider />
