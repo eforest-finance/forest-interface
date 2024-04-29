@@ -1,10 +1,10 @@
-import ImgLoading from 'baseComponents/ImgLoading/ImgLoading';
 import { StaticImageData } from 'next/image';
 import React, { useMemo } from 'react';
 import useGetState from 'store/state/getState';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { handlePlurality } from 'utils/handlePlurality';
+import { ImageEnhance } from 'components/ImgLoading';
 
 export interface INftInfoList {
   image?: string | StaticImageData | null;
@@ -37,15 +37,7 @@ const NftInfoList = (props: INftInfoList) => {
       <div className="flex items-center mr-[16px] overflow-hidden flex-1">
         {props?.image && (
           <div className="overflow-hidden w-[48px] h-[48px] mdTW:w-[84px] mdTW:h-[84px] flex justify-center items-center mr-[16px] rounded-md border border-solid border-lineBorder">
-            <ImgLoading
-              src={props.image}
-              nextImageProps={{
-                width: isSmallScreen ? 48 : 84,
-                height: isSmallScreen ? 48 : 84,
-              }}
-              imageSizeType="contain"
-              className="!rounded-none"
-            />
+            <ImageEnhance src={props.image} imageSizeType="contain" className="!rounded-none" />
           </div>
         )}
 

@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import Button from 'baseComponents/Button';
 import useDropDetailGetState from 'store/state/dropDetailGetState';
-import ImgLoading from 'baseComponents/ImgLoading';
 import { useRouter } from 'next/navigation';
+import { ImageEnhance } from 'components/ImgLoading';
 
 export enum ActivityStatus {
   ended = 'Ended',
@@ -23,12 +23,8 @@ function CollectionInformation(props: IProps) {
     <div className={clsx(className)}>
       <h1 className="text-xl mdTW:text-2xl text-textPrimary font-semibold">About the NFT Collection</h1>
       <div className="flex items-center mt-[16px] mdTW:mt-[24px]">
-        <ImgLoading
+        <ImageEnhance
           src={dropDetailInfo?.collectionLogo || ''}
-          nextImageProps={{
-            width: 84,
-            height: 84,
-          }}
           imageSizeType="cover"
           className="!w-[84px] !h-[84px] rounded-lg"
         />

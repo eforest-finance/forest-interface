@@ -5,7 +5,8 @@ import { ChangeEvent, ReactNode, memo, useEffect, useMemo, useState } from 'reac
 
 import useDetailGetState from 'store/state/detailGetState';
 import useGetState from 'store/state/getState';
-import Image, { StaticImageData } from 'next/image';
+// import Image, { StaticImageData } from 'next/image';
+import { ImageEnhance } from 'components/ImgLoading';
 import { addPrefixSuffix, getExploreLink } from 'utils';
 import { decodeTransferAddress as aelfDecodeAddress } from 'utils/aelfUtils';
 import Modal from 'baseComponents/Modal';
@@ -294,12 +295,9 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
       }>
       <div className="content mdTW:pt-0  pt-[24px]">
         <div className="flex flex-col mdTW:items-center items-start">
-          <Image
-            className="rounded-lg object-contain w-full mdTW:w-[128px] mdTW:h-[128px] border-[1px] border-[var(--line-border)] border-none mdTW:border-solid"
+          <ImageEnhance
+            className="rounded-lg object-contain !w-[343px] mdTW:!w-[128px] mdTW:h-[128px] border-[1px] border-[var(--line-border)] border-none mdTW:border-solid"
             src={curImage}
-            width={isSmallScreen ? 343 : 128}
-            height={isSmallScreen ? 343 : 128}
-            alt="nft"
             onError={(e) => {
               setCurImage(nftPreview);
               (e.target as HTMLElement).className = 'broken';
@@ -307,13 +305,15 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
           />
           <div className="mt-[8px] mdTW:mt-[16px] text-[16px] leading-[24px] font-medium text-textSecondary flex items-center justify-center">
             {nftInfo?.nftCollection?.logoImage && !isSmallScreen && (
-              <Image
-                className="rounded-[4px] mr-[4px] object-cover"
-                width={24}
-                height={24}
-                src={nftInfo?.nftCollection?.logoImage}
-                alt="collection"
-              />
+              <span className="mr-[4px]">
+                <ImageEnhance
+                  className="rounded-[4px] object-cover"
+                  width={24}
+                  height={24}
+                  src={nftInfo?.nftCollection?.logoImage}
+                  alt="collection"
+                />
+              </span>
             )}
             <span>{nftInfo?.nftCollection?.tokenName}</span>
           </div>
