@@ -30,4 +30,4 @@ export const DANGEROUS_CHARACTERS_REG = /^(?!.*[<>\\"'%&+\\\\\\']).*$/;
 export const externalLinkReg = /((https?|ftp):\/\/)([a-z0-9-]+\.)+[a-z]{2,}(:\d{1,5})?(\/[^\s]*)?/;
 
 export const hideHeaderPage = ['asset'];
-export const hideFooterPage = ['asset', 'explore-items', 'account', 'collections', 'my-collections'];
+export const hideFooterPage = ['asset', 'explore-items', 'account', 'collections', 'my-collections', 'explore-item'];

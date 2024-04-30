@@ -1,5 +1,4 @@
 import { Carousel, Col, Row } from 'antd';
-import { ItemsCard } from 'pagesComponents/ExploreItems/components/ScrollContent';
 import { useRecommendList } from 'pagesComponents/Detail/hooks/useRecommendList';
 import useWindowWidth from 'hooks/useWindowWidth';
 import { MouseEvent, useCallback, useMemo } from 'react';
@@ -13,6 +12,7 @@ import useDetailGetState from 'store/state/detailGetState';
 import { RECOMMEND_LIST_WIDTH_COLUMN } from 'constants/common';
 import CollapseForPC from 'components/Collapse';
 import Button from 'baseComponents/Button';
+import { ItemsCard } from 'pagesComponents/ExploreItem/components/NFTList';
 
 export default function RecommendList() {
   const windowWidth = useWindowWidth();
