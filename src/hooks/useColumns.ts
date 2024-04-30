@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useResponsive from './useResponsive';
-import { BoxSizeEnum } from 'pagesComponents/ExploreItems/components/CollectionItemsSearch';
+import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
 export default function useColumns(collapsed: boolean, size: BoxSizeEnum) {
   const { isMin, isMD, isLG, is2XL, is3XL, is4XL, is5XL, is6XL } = useResponsive();
@@ -25,7 +25,7 @@ export default function useColumns(collapsed: boolean, size: BoxSizeEnum) {
     } else {
       result = 8;
     }
-    if (!isLG && collapsed) {
+    if (!isLG && !collapsed) {
       result -= 1;
     }
     if (!isLG && size === BoxSizeEnum.large) {

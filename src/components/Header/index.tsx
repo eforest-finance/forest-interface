@@ -21,6 +21,7 @@ import MyCollection from 'assets/images/myCollection.svg';
 import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
 import DropIcon from 'assets/images/events/drops.svg';
+import Close from 'components/Close';
 
 import './style.css';
 import styles from './style.module.css';
@@ -117,6 +118,7 @@ function Header() {
                 <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>
               }
               placement="right"
+              closeIcon={<Close />}
               onClose={onClose}
               open={visible}>
               <div>

@@ -30,6 +30,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import useCancelOffer from 'pagesComponents/Detail/hooks/useCancelOffer';
 import BigNumber from 'bignumber.js';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import Copy from 'components/Copy';
 
 export const COLUMN_TITLE = {
   1155: {
@@ -280,14 +281,17 @@ export default function Offers(options: { rate: number }) {
         width: isSmallScreen ? 240 : 260,
         render: (from: From | null) => {
           return (
-            <TableCell
-              content={
-                walletInfo.address === from?.address ? 'you' : getOmittedStr(from?.name || '', OmittedType.ADDRESS)
-              }
-              isLink={true}
-              onClick={() => from?.address && nav.push(`/account/${from.address}`)}
-              tooltip={from?.address && addPrefixSuffix(from.address)}
-            />
+            <div className="flex items-center">
+              <TableCell
+                content={
+                  walletInfo.address === from?.address ? 'you' : getOmittedStr(from?.name || '', OmittedType.ADDRESS)
+                }
+                isLink={true}
+                onClick={() => from?.address && nav.push(`/account/${from.address}`)}
+                tooltip={from?.address && addPrefixSuffix(from.address)}
+              />
+              <Copy className="copy-svg ml-2 cursor-pointer" toCopy={addPrefixSuffix(from?.address || '')} />
+            </div>
           );
         },
       },

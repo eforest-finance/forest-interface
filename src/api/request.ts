@@ -94,8 +94,7 @@ class Request {
         }
 
         if (config.baseURL?.includes('connect')) {
-          const logout = (window as any).logout;
-          logout && logout({ noModal: true });
+          return Promise.reject(errMessage);
         }
 
         const requestUrl = error?.response?.config?.url;

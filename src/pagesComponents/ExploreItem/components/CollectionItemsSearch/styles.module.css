@@ -1,0 +1,41 @@
+/* stylelint-disable no-descending-specificity  */
+.collection__search {
+  @apply flex items-center mb-0 mdl:mb-4 pb-4 pt-6 mdl:pt-8 sticky top-[110px] mdb:top-32 z-50 bg-fillPageBg;
+  .collapsed__button {
+    @apply relative flex cursor-pointer mr-[32px] rounded-[12px] items-center p-[12px] !bg-[var(--collapsed-bg)];
+    .collapsed__text {
+      @apply ml-[8px] text-[16px] font-semibold leading-[24px] !text-[var(--collapsed-text)];
+    }
+    svg {
+      * {
+        @apply stroke-[var(--collapsed-text)];
+      }
+    }
+  }
+  .collapsed__button:hover {
+    svg {
+      * {
+        @apply stroke-[var(--primary-color)];
+      }
+    }
+    .collapsed__text {
+      @apply !text-[var(--primary-color)];
+    }
+  }
+}
+
+.size_container {
+  @apply flex ml-4 items-center h-12 overflow-hidden rounded-lg border border-solid border-lineBorder;
+
+  .btn-icon {
+    @apply flex items-center h-full p-2 cursor-pointer;
+  }
+  svg {
+    * {
+      @apply stroke-[var(--size-svg)];
+    }
+  }
+  .active {
+    @apply bg-fillHoverBg;
+  }
+}
