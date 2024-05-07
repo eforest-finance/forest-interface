@@ -33,26 +33,47 @@ export interface Item {
   proxyIssuerAddress?: string;
   proxyOwnerAddress?: string;
   metadata?: Array<{ key: string; value: string }>;
+  isMainChainCreateNFT?: boolean;
 }
 
 export interface Collections {
   items: Item[];
 }
 
-export const useCollections = (requestType?: 'creator' | 'address') => {
+export const useCollections = (requestType?: 'creator' | 'address', allChain?: boolean) => {
   const { walletInfo: walletInfoStore } = useGetState();
 
-  const { aelfChainAddress: account } = (walletInfoStore || {}) as WalletInfoType;
+  const { aelfChainAddress: account, address } = (walletInfoStore || {}) as WalletInfoType;
   const getList = useCallback(
     async (type: string, page: number, maxResultCount: number, callback: any) => {
       console.log('execute getList');
       if (!type) return;
       if (!account && requestType) return;
-      const result = await fetchCollections(
-        requestType
-          ? { skipCount: page * maxResultCount, maxResultCount, [requestType]: account }
-          : { skipCount: page * maxResultCount, maxResultCount },
-      );
+
+      let params: {
+        skipCount?: number;
+        maxResultCount?: number;
+        addressList?: string[];
+        address?: string;
+        creator?: string;
+      } = {
+        skipCount: page * maxResultCount,
+        maxResultCount,
+      };
+
+      if (requestType === 'creator') {
+        params.creator = account;
+      }
+
+      if (requestType === 'address') {
+        if (allChain) {
+          params.addressList = [account || '', address];
+        } else {
+          params.address = account;
+        }
+      }
+
+      const result = await fetchCollections(params);
       if (!result) store.dispatch(openModal());
       callback?.(result?.items);
     },

@@ -128,8 +128,16 @@ export const saveUserSettings = async (data: IUserSettingParams): Promise<boolea
 export const fetchCollections = async (params: {
   skipCount?: number;
   maxResultCount?: number;
+  addressList?: Array<string>;
 }): Promise<Collections> => {
-  return request.get<Collections>('/app/nft/nft-collections', { params });
+  return request.get<Collections>('/app/nft/nft-collections', {
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify(params, {
+        arrayFormat: 'repeat',
+      });
+    },
+  });
 };
 
 export const fetchSearchCollections = async (params: requestSearchCollectionsParams): Promise<SearchCollections> => {

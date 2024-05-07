@@ -21,16 +21,17 @@ enum SymbolTypeEnum {
   NFT,
 }
 
+enum BoxSizeEnum {
+  large = 'large',
+  small = 'small',
+  details = 'details',
+}
+
 enum CollectionsStatus {
   'Buy Now' = 1,
   'My Items' = 2,
   'On Auction' = 3,
   'Has Offers' = 4,
-}
-enum BoxSizeEnum {
-  large,
-  small,
-  details,
 }
 
 const AcitvityItemArray = [

@@ -11,6 +11,7 @@ export interface ICreateParams {
   memo?: string;
   to?: string;
   lockWhiteList?: string[];
+  isCreateNftIssueChain?: boolean;
   externalInfo: {
     value: {
       __nft_description: string;
@@ -35,6 +36,7 @@ export interface ICreateCollectionParams extends Omit<ICreateParams, 'externalIn
       __nft_file_url: string;
       __nft_metadata?: string;
       __nft_image_url?: string;
+      __nft_create_chain_id?: string | number;
     };
   };
 }

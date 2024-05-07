@@ -23,6 +23,7 @@ export interface IStepData {
   subTitle: string;
   progressTips: string;
   retry?: boolean;
+  hiddenShow?: boolean;
 }
 export interface IProgressStepsProps {
   stepsData: IStepData[];
@@ -209,10 +210,11 @@ const ProgressSteps = ({
   return (
     <div className={styles['elf-steps-wrapper']}>
       {stepsData.map((stepItem, index) => {
+        const stepForShow = index + 1 - stepsData.slice(0, index).filter((itm) => !!itm.hiddenShow).length;
         return (
-          <div className={styles['elf-step-wrapper']} key={index}>
+          <div className={clsx(styles['elf-step-wrapper'], stepItem.hiddenShow && '!hidden')} key={index}>
             <ChainStepItem
-              step={index + 1}
+              step={stepForShow}
               status={stepItem.status}
               title={stepItem.title}
               subTitle={stepItem.subTitle}
