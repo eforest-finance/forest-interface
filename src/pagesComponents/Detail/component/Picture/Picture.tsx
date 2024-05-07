@@ -1,5 +1,4 @@
 import FileView from 'components/FileView/FileView';
-// import ImgLoading, { ImageEnhance } from 'baseComponents/ImgLoading';
 import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
 
 import { useMemo, useState } from 'react';

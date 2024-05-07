@@ -10,12 +10,8 @@ import useResponsive from 'hooks/useResponsive';
 import { SelectProps } from 'baseComponents/Select';
 import { InputProps } from 'baseComponents/Input/Input';
 import { FilterButton } from '../Filters/FilterButton';
+import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
-export enum BoxSizeEnum {
-  large,
-  small,
-  details,
-}
 interface ICollectionItemsSearch {
   size: BoxSizeEnum;
   collapsed: boolean;

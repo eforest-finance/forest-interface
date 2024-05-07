@@ -1,6 +1,5 @@
 import { Card, List } from 'antd';
 import { INftInfo } from 'types/nftTypes';
-import { BoxSizeEnum } from '../CollectionItemsSearch';
 import useColumns from 'hooks/useColumns';
 import { NFTListTable } from '../NftListTable';
 import TableEmpty, { emptyEnum } from 'components/TableEmpty';
@@ -10,6 +9,7 @@ import styles from './style.module.css';
 import { ImageEnhance } from 'components/ImgLoading';
 import { formatTokenPrice } from 'utils/format';
 import clsx from 'clsx';
+import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
 interface INFTListProps {
   collapsed: boolean;
@@ -92,6 +92,8 @@ export function NFTList({
   if (sizes === BoxSizeEnum.details) {
     return <NFTListTable ELFToDollarRate={ELFToDollarRate} dataSource={dataSource || []} loading={loading} />;
   }
+
+  console.log('sizes---', sizes);
 
   return (
     <List

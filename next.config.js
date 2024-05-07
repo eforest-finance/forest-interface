@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const withPlugins = require('next-compose-plugins');
 const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
 
 const { ANALYZE, NEXT_PUBLIC_APP_ENV } = process.env;
 const pluginConfig = require('./build.config/plugin');
@@ -31,6 +32,7 @@ const nextConfig = {
     config.optimization.minimizer.push(new TerserPlugin());
 
     config.ignoreWarnings = [{ module: /node_modules/ }];
+    config.resolve.alias['antd5'] = path.resolve(__dirname, 'node_modules/@aelf-design/common/node_modules/antd');
     return config;
   },
 
