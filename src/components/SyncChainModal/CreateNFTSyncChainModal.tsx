@@ -25,6 +25,7 @@ interface ISyncChainModalProps {
     createParams?: ICreateItemsParams;
     issuerParams?: IIssuerParams;
     proxyIssuerAddress?: string;
+    nftCreateChainId?: string | number;
   };
   collectionName?: string;
   tokenName?: string;
@@ -71,6 +72,11 @@ const CreateNFTSyncChainModal = (props: ISyncChainModalProps) => {
       </div>
     );
   };
+
+  const titles = ['zero', 'one', 'two', 'three'];
+  const steps = percentAndStatusForShow.filter((itm) => !itm.hiddenShow).length;
+
+  const progressStepTitle = `Creating an Item takes ${titles[steps]} steps`;
 
   return (
     <>
@@ -122,9 +128,7 @@ const CreateNFTSyncChainModal = (props: ISyncChainModalProps) => {
               )}
             </div>
           </div>
-          <div className="text-[var(--color-primary)] text-[20px] font-semibold my-[24Px]">
-            Creating an Item takes three steps
-          </div>
+          <div className="text-[var(--color-primary)] text-[20px] font-semibold my-[24Px]">{progressStepTitle}</div>
           <ProgressSteps
             stepsData={percentAndStatusForShow}
             showProgress={!confirmBtnShowStatus}

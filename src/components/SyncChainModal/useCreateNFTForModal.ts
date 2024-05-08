@@ -15,6 +15,7 @@ export function useCreateLogicForCreateModal(createParamsData: {
   createParams?: ICreateItemsParams;
   issuerParams?: IIssuerParams;
   proxyIssuerAddress?: string;
+  skipChainSync?: boolean;
 }) {
   const { create, issueRetry, currentStep } = useCreateByStep();
   const [firstStepPercent, setFirstStepPercent] = useState(0);
@@ -27,7 +28,9 @@ export function useCreateLogicForCreateModal(createParamsData: {
       percent: 0,
       status: '',
       title: MESSAGE['createNFT.approveStep.title'],
-      subTitle: MESSAGE['createNFT.approveStep.subTitle'],
+      subTitle: !!createParamsData.skipChainSync
+        ? MESSAGE['createNFTSideChain.approveStep.subTitle']
+        : MESSAGE['createNFT.approveStep.subTitle'],
       progressTips: MESSAGE['createNFT.approveStep.progressTips'],
     },
     {
@@ -36,6 +39,7 @@ export function useCreateLogicForCreateModal(createParamsData: {
       title: MESSAGE['createNFT.syncStep.title'],
       subTitle: MESSAGE['createNFT.syncStep.subTitle'],
       progressTips: MESSAGE['createNFT.syncStep.progressTips'],
+      hiddenShow: !!createParamsData.skipChainSync,
     },
     {
       percent: 0,
@@ -64,6 +68,7 @@ export function useCreateLogicForCreateModal(createParamsData: {
       CreateByEnum.Items,
       createParamsData.issuerParams,
       createParamsData.proxyIssuerAddress,
+      !!createParamsData.skipChainSync,
     );
   };
 

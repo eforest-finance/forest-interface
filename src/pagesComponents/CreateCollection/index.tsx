@@ -354,6 +354,7 @@ export default function CreateCollection() {
     amount: 1,
     seedSymbol: '',
     owner: '',
+    isCreateNftIssueChain: true,
     externalInfo: {
       value: {
         __nft_description: '',
@@ -372,9 +373,7 @@ export default function CreateCollection() {
         const mainAddress = await getAccountInfoSync();
         if (!mainAddress) return;
 
-        console.log('protocolInfo', protocolInfo);
-
-        const owner = walletInfo.aelfChainAddress || mainAddress || ''; // main
+        const owner = walletInfo.address || ''; //side chain address
         const issuer = walletInfo.address; // side
 
         const params: ICreateCollectionParams = {
@@ -389,6 +388,7 @@ export default function CreateCollection() {
           amount: 1,
           seedSymbol: symbolOption.current?.seedSymbol || '',
           owner,
+          isCreateNftIssueChain: true,
           externalInfo: {
             value: {
               __nft_file_hash: logo.hash,

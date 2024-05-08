@@ -65,10 +65,13 @@ const getProtoObject = () => {
   return AElf.pbjs.Root.fromJSON(tokenContractJson);
 };
 
-const createContractByNft = async (params: ICreateItemsParams) => {
+const createContractByNft = async (params: ICreateItemsParams, createOnSideChain?: boolean) => {
   const info = store.getState().aelfInfo.aelfInfo;
   try {
-    const hash = await GetProxyAccountByProxyAccountAddress(params.owner, SupportedELFChainId.MAIN_NET);
+    const hash = await GetProxyAccountByProxyAccountAddress(
+      params.owner,
+      !createOnSideChain ? SupportedELFChainId.MAIN_NET : info.curChain,
+    );
     const CreateInputMessage = getProtoObject().lookupType('CreateInput');
 
     const args = await encodedParams(CreateInputMessage.resolveAll(), params);
@@ -76,11 +79,11 @@ const createContractByNft = async (params: ICreateItemsParams) => {
     const result = await ForwardCall(
       {
         proxyAccountHash: hash?.proxyAccountHash,
-        contractAddress: info?.mainChainAddress,
+        contractAddress: createOnSideChain ? info.sideChainAddress : info?.mainChainAddress,
         methodName: 'Create',
         args: Buffer.from(args).toString('base64'),
       },
-      SupportedELFChainId.MAIN_NET,
+      !createOnSideChain ? SupportedELFChainId.MAIN_NET : info.curChain,
     );
 
     console.log('createContractByNft finish', result);
@@ -182,7 +185,11 @@ export default function useCreateByStep() {
     status: StepStatus.unStart,
   });
 
-  const createContractStep = async (params: ICreateCollectionParams | ICreateItemsParams, createBy: CreateByEnum) => {
+  const createContractStep = async (
+    params: ICreateCollectionParams | ICreateItemsParams,
+    createBy: CreateByEnum,
+    createOnSideChain: boolean, // only for nft
+  ) => {
     const issueChainId = params.issueChainId as keyof typeof CHAIN_ID_VALUE;
 
     let result;
@@ -225,7 +232,7 @@ export default function useCreateByStep() {
         },
       } as ICreateItemsParams;
 
-      result = await createContractByNft(contractParams);
+      result = await createContractByNft(contractParams, createOnSideChain);
     }
 
     return result;
@@ -363,13 +370,14 @@ export default function useCreateByStep() {
     createBy: CreateByEnum,
     issuerParams?: IIssuerParams,
     proxyIssuerAddress?: string,
+    skipChainSync?: boolean,
   ) => {
     try {
       setCurrentStep({
         step: CreateCollectionOrNFTStep.requestContractAuth,
         status: StepStatus.pending,
       });
-      const result = await createContractStep(params, createBy);
+      const result = await createContractStep(params, createBy, skipChainSync);
 
       setCurrentStep({
         step: CreateCollectionOrNFTStep.requestContractAuth,
@@ -382,13 +390,17 @@ export default function useCreateByStep() {
         status: StepStatus.pending,
       });
 
-      await saveInfosOffChainStep(params, createBy, result.TransactionId);
-      await notifyCrossChainAndGetSyncResultStep({
-        issueChainId: params.issueChainId as keyof typeof CHAIN_ID_VALUE,
-        symbol: params.symbol,
-        TransactionId: result!.TransactionId,
-      });
-      await sleep(10000);
+      if (!skipChainSync) {
+        await saveInfosOffChainStep(params, createBy, result.TransactionId);
+        await notifyCrossChainAndGetSyncResultStep({
+          issueChainId: params.issueChainId as keyof typeof CHAIN_ID_VALUE,
+          symbol: params.symbol,
+          TransactionId: result!.TransactionId,
+        });
+        await sleep(10000);
+      } else {
+        await sleep(100);
+      }
 
       setCurrentStep({
         step: CreateCollectionOrNFTStep.crossChainSync,
@@ -402,7 +414,7 @@ export default function useCreateByStep() {
             message: 'issue params or proxyIssuerAddress is empty',
           };
         }
-        await sleep(1100);
+        await sleep(100);
         setCurrentStep({
           step: CreateCollectionOrNFTStep.issue,
           status: StepStatus.pending,
