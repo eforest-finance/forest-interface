@@ -12,6 +12,8 @@ export const MESSAGE = {
   'createNFT.approveStep.title': 'Create the NFT item',
   'createNFT.approveStep.subTitle':
     'The NFT will be created on the MainChain, which requires your signature as an approval.\n Note: This process will take 1 to 2 minutes and cost some transaction fees. Please make sure you have 0.01 ELF in your MainChain account beforehand.',
+  'createNFTSideChain.approveStep.subTitle':
+    'The NFT will be created on the SideChain, which requires your signature as an approval.\n Note: This process will take 1 to 2 minutes and cost some transaction fees. Please make sure you have 0.01 ELF in your SideChain account beforehand.',
   'createNFT.approveStep.progressTips': 'About 1-2 minutes',
 
   'createNFT.syncStep.title': 'Synchronise NFT info',

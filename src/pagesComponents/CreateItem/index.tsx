@@ -91,7 +91,7 @@ export default function CreateItem() {
   const [fileViewVisible, setFileViewVisible] = useState(false);
   const nav = useRouter();
 
-  const getList = useCollections('address');
+  const getList = useCollections('address', true);
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
 
@@ -447,14 +447,16 @@ export default function CreateItem() {
     createParams?: ICreateItemsParams;
     issuerParams?: IIssuerParams;
     proxyIssuerAddress?: string;
+    skipChainSync?: boolean;
   }>({});
+
+  const canSkipChainSync = () => {
+    return !protocolItem.isMainChainCreateNFT;
+  };
 
   const handleCreate = async () => {
     login({
       callBack: async () => {
-        const mainAddress = await getAccountInfoSync();
-        if (!mainAddress) return;
-
         const symbol = getSymbolByTokenId(itemInfo!.tokenId!);
         const { exist } = await fetchSymbolHasExisted({ symbol });
         if (exist) {
@@ -502,6 +504,7 @@ export default function CreateItem() {
             to: to!,
           },
           proxyIssuerAddress,
+          skipChainSync: canSkipChainSync(),
         });
         setModalState((preState) => {
           return {

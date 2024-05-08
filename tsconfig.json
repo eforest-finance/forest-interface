@@ -22,6 +22,9 @@
     "noImplicitReturns": true,
     "allowUnreachableCode": false,
     "experimentalDecorators": true,
+    "paths": {
+      "antd5/*": ["../node_modules/@aelf-design/common/node_modules/antd"]
+    },
     "plugins": [
       {
         "name": "next"

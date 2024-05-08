@@ -24,7 +24,7 @@ export default function MyCollections() {
   const [noMoreStatus, setNoMoreStatus] = useState(false);
   const [, forceUpdate] = useState({});
 
-  const getList = useCollections('address');
+  const getList = useCollections('address', true);
 
   const handlePageChange = () => {
     if (loading.current) return;
