@@ -262,7 +262,7 @@ export default (props: UploadBatchProps) => {
           </div>
         )}
 
-        <div className={`${style['upload-wrapper']}`}>
+        <div className={`${style['upload-drag-wrapper']}`}>
           <Dragger {...uploadProps} className={`rounded-[15.6px] ${listData.length ? 'hidden' : 'inline'}`}>
             <UploadButton />
           </Dragger>

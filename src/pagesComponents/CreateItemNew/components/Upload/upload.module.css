@@ -1,5 +1,9 @@
 .upload-wrapper {
   @apply w-[343px] h-[343px] mdl:w-[480px] mdl:h-[480px];
+}
+
+.upload-drag-wrapper {
+  @apply w-[343px] h-[343px] mdl:w-[480px] mdl:h-[480px];
   :global {
     .ant-upload-drag {
       @apply rounded-[15.6px] rounded-b-none;

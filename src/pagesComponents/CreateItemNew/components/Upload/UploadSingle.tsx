@@ -193,14 +193,14 @@ export default (props: IUploadProps) => {
   return (
     <div>
       {isDragger ? (
-        <div className={`${style['upload-wrapper']}`}>
+        <div className={`${style['upload-wrapper']} ${previewImage ? 'mdl:!h-auto' : ''}`}>
           {s3File.url && (
             <div className="p-[30px] border-[1px] border-dashed	border-[var(--line-border)] rounded-t-[12px] relative ">
               <Image
                 className="object-contain"
                 wrapperClassName={`${
                   fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
-                } w-[283px] h-[248px] mdl:w-[420px] mdl:-[248px] overflow-hidden flex justify-center`}
+                } w-[283px] h-[248px] mdl:w-[420px] mdl:h-[248px] overflow-hidden flex justify-center`}
                 preview={
                   fileType === 'image'
                     ? {
@@ -234,8 +234,8 @@ export default (props: IUploadProps) => {
             </div>
           )}
 
-          <div className={`${style['upload-wrapper']}`}>
-            <Dragger {...uploadProps} className={`rounded-[15.6px] ${previewImage ? 'hidden' : 'inline'}`}>
+          <div className={`${style['upload-drag-wrapper']} ${previewImage ? 'hidden' : 'inline'}`}>
+            <Dragger {...uploadProps} className={`rounded-[15.6px]`}>
               <UploadButton />
             </Dragger>
           </div>
