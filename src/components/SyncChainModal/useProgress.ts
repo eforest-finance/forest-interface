@@ -3,7 +3,7 @@ import { useRafInterval, useUnmount } from 'ahooks';
 
 const PROGRESS_TIME = 75 * 1000;
 
-export function useProgress() {
+export function useProgress(progressTime = PROGRESS_TIME) {
   const [percent, setPercent] = useState(0);
 
   const [accumulativeTime, setAccumulativeTime] = useState(0);
@@ -25,7 +25,7 @@ export function useProgress() {
 
   useEffect(() => {
     // perhaps 15 Multiple
-    const progress = ((1 - Math.exp(-accumulativeTime / PROGRESS_TIME)) * 100).toFixed(4).slice(0, 5);
+    const progress = ((1 - Math.exp(-accumulativeTime / progressTime)) * 100).toFixed(4).slice(0, 5);
     setPercent(Number(progress));
 
     if (progress === '99.99') {
@@ -58,7 +58,7 @@ export function useProgress() {
 
   const finish = () => {
     setProgressing(false);
-    setStepTimeForFinish((15 * PROGRESS_TIME - accumulativeTime) / 30);
+    setStepTimeForFinish((15 * progressTime - accumulativeTime) / 30);
     setProgressingForFinish(true);
   };
 

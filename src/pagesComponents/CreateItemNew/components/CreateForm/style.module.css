@@ -1,0 +1,25 @@
+.custom-form {
+  @apply mt-8 mdl:mt-10;
+  :global {
+    .ant-form-item-label > label {
+      @apply !h-auto !text-textPrimary font-medium text-lg w-full;
+    }
+
+    .ant-collapse-header {
+      @apply !px-0 flex flex-row-reverse w-fit !items-center;
+      .ant-collapse-header-text {
+        @apply !text-textPrimary font-medium text-lg mr-2;
+      }
+    }
+    .ant-collapse-content-box {
+      @apply !px-0;
+    }
+  }
+  .arrow-icon-custom {
+    svg {
+      path {
+        @apply stroke-textPrimary;
+      }
+    }
+  }
+}
