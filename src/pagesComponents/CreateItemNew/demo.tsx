@@ -1,7 +1,7 @@
-import Upload from './Upload';
-import CollectionTag from './CollectionTag';
+import Upload from './components/Upload/Upload';
+import CollectionTag from './components/CollectionTag';
 
-import UploadMeta, { ItemFromCsv } from './UploadMeta';
+import UploadMeta, { ItemFromCsv } from './components/Upload/UploadMeta';
 import { useState } from 'react';
 import { store } from 'store/store';
 
