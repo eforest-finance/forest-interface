@@ -13,6 +13,7 @@ import Reload from 'assets/images/v2/refresh.svg';
 import Delete from 'assets/images/v2/delete.svg';
 import PlayIcon from 'assets/images/v2/play.svg';
 import FileView from 'components/FileView/FileView';
+import { ISingleFile } from 'store/reducer/create/item';
 
 enum acceptFileType {
   picture = 'jpeg,.jpg,.png,.gif',
@@ -25,7 +26,7 @@ export type FileUploadType = 'image' | 'video' | 'audio';
 interface IUploadProps extends UploadProps {
   isDragger?: boolean;
   previewSrc?: string;
-  onChange?: (file: any) => void;
+  onUploadChange?: (file: ISingleFile) => void;
 }
 
 type ImageInfoType = {
@@ -38,7 +39,7 @@ type ImageInfoType = {
 export const ImagePlaceHolder = <Skeleton.Image active={true} className={'!w-full !h-full'}></Skeleton.Image>;
 
 export default (props: IUploadProps) => {
-  const { isDragger = true, onChange, previewSrc } = props;
+  const { isDragger = true, onUploadChange, previewSrc } = props;
   const uploader = useRef<any>(null);
 
   const [s3File, setS3File] = useState<ImageInfoType>({
@@ -104,6 +105,8 @@ export default (props: IUploadProps) => {
             setPoster('');
           }
 
+          // fileType, url, hash
+
           setS3File({
             url,
             file,
@@ -112,9 +115,12 @@ export default (props: IUploadProps) => {
           });
 
           setPreviewImage(url);
-
-          onChange && onChange(url);
-
+          onUploadChange &&
+            onUploadChange({
+              fileType: type,
+              url,
+              hash,
+            });
           console.log(url);
           setTimeout(messageApi.destroy, 0);
 
@@ -188,7 +194,6 @@ export default (props: IUploadProps) => {
   };
 
   const previewImageSrc = fileType === 'image' ? s3File.url : poster;
-  console.log(previewImageSrc);
 
   return (
     <div>

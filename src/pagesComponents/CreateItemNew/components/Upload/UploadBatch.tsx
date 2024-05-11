@@ -2,6 +2,7 @@ import { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, message, Image, Skeleton, Flex, Button } from 'antd5/';
 import type { UploadProps } from 'antd5/';
 import AWSManagerInstance from 'utils/S3';
+import { cloneDeep } from 'lodash-es';
 import { csvToArray, getBase64, getTheFirstFrame } from 'utils/fileToObject';
 import { FileUploadType, ImagePlaceHolder } from './UploadSingle';
 import UploadArea from './UploadArea';
@@ -15,6 +16,7 @@ import style from './upload.module.css';
 import FileView from 'components/FileView/FileView';
 import { ItemFromCsv } from './UploadMeta';
 import { store } from 'store/store';
+import { ISingleFile } from 'store/reducer/create/item';
 
 const { Dragger } = Upload;
 
@@ -30,19 +32,19 @@ interface Item {
   src: string;
   url: string;
   tokenId: string;
-  type: FileUploadType;
+  fileType: FileUploadType;
   hash: string;
 }
 
 interface UploadBatchProps {
   metaList?: Array<ItemFromCsv>;
+  onUploadChange?: (fileArray: ISingleFile[]) => void;
 }
 
 const MAX_UPLOAD = 30;
 
 export default (props: UploadBatchProps) => {
-  const { metaList } = props;
-  console.log('---batch---', metaList);
+  const { metaList, onUploadChange } = props;
   const {
     collection: { name },
   } = store.getState().createItem;
@@ -106,7 +108,7 @@ export default (props: UploadBatchProps) => {
       src: base64,
       url: '',
       tokenId: '',
-      type,
+      fileType: type,
       hash: '',
     } as Item;
 
@@ -145,8 +147,11 @@ export default (props: UploadBatchProps) => {
     try {
       const { url, hash } = await AWSManagerInstance.uploadFile(file);
       task.current--;
-      setListData((preList) => {
-        const shouldUpdateItem = preList.find((item) => {
+
+      setListData((preState) => {
+        const newList = cloneDeep(preState);
+
+        let shouldUpdateItem = newList.find((item) => {
           return item.file.name === file.name;
         });
 
@@ -154,8 +159,9 @@ export default (props: UploadBatchProps) => {
           shouldUpdateItem.url = url;
           shouldUpdateItem.hash = hash;
         }
+        onUploadChange && onUploadChange(newList);
 
-        return [...preList];
+        return newList;
       });
 
       if (!!!task.current) {
@@ -216,6 +222,8 @@ export default (props: UploadBatchProps) => {
     setPreviewItem(undefined);
   };
 
+  console.log('------>', listData, store.getState().createItem);
+
   return (
     <div>
       <div className={`${style['upload-wrapper-batch']}`}>
@@ -230,10 +238,10 @@ export default (props: UploadBatchProps) => {
                     <Image
                       className="object-contain"
                       wrapperClassName={`${
-                        item.type !== 'image' && 'bg-[var(--bg-page-gray)]'
+                        item.fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
                       }  overflow-hidden flex justify-center w-[144px] h-[144px]`}
                       preview={
-                        item.type === 'image'
+                        item.fileType === 'image'
                           ? {
                               visible: previewOpen,
                               onVisibleChange: (visible) => setPreviewOpen(visible),
@@ -244,7 +252,7 @@ export default (props: UploadBatchProps) => {
                       src={item.poster}
                     />
 
-                    {item.type !== 'image' && (
+                    {item.fileType !== 'image' && (
                       <span
                         className="bg-transparent	cursor-pointer absolute top-0 w-[144px] h-[144px]  overflow-hidden flex justify-center items-center"
                         onClick={handlePlay(item)}>
@@ -269,8 +277,8 @@ export default (props: UploadBatchProps) => {
         </div>
 
         {contextHolder}
-        {previewItem && previewItem.type !== 'image' && (
-          <FileView visible={fileViewVisible} type={previewItem.type} src={previewItem.src} onClose={handleClose} />
+        {previewItem && previewItem.fileType !== 'image' && (
+          <FileView visible={fileViewVisible} type={previewItem.fileType} src={previewItem.src} onClose={handleClose} />
         )}
       </div>
       {!!listData.length && (
