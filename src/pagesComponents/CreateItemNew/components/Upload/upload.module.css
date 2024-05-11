@@ -1,0 +1,24 @@
+/* stylelint-disable no-descending-specificity */
+.img-uploader-wrapper {
+  @apply flex flex-row items-center w-[480px] h-[480px];
+  :global(.ant-upload-picture-card-wrapper) {
+    @apply w-full h-full;
+
+    :global(.ant-upload.ant-upload-select-picture-card) {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      svg {
+        @apply fill-textPrimary;
+      }
+    }
+  }
+}
+
+.elf-upload__hasimg {
+  @apply flex;
+  :global(.ant-upload.ant-upload-select-picture-card) {
+    @apply border-solid border-lineBorder;
+  }
+}

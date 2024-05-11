@@ -9,6 +9,10 @@
               "requestType": "CreateInput",
               "responseType": "google.protobuf.Empty"
             },
+            "BatchCreateNFT": {
+              "requestType": "BatchCreateInput",
+              "responseType": "google.protobuf.Empty"
+            },
             "Issue": {
               "requestType": "IssueInput",
               "responseType": "google.protobuf.Empty"
@@ -280,6 +284,20 @@
             "value": { "keyType": "string", "type": "string", "id": 1 }
           }
         },
+        "NFTInfo": {
+          "fields": {
+            "symbol": { "type": "string", "id": 1 },
+            "tokenName": { "type": "string", "id": 2 },
+            "supply": { "type": "int64", "id": 3 },
+            "totalSupply": { "type": "int64", "id": 4 },
+            "decimals": { "type": "int32", "id": 5 },
+            "issuer": { "type": "aelf.Address", "id": 6 },
+            "isBurnable": { "type": "bool", "id": 7 },
+            "issueChainId": { "type": "int32", "id": 8 },
+            "issued": { "type": "int64", "id": 9 },
+            "externalInfo": { "type": "ExternalInfo", "id": 10 }
+          }
+        },
         "CreateInput": {
           "fields": {
             "symbol": { "type": "string", "id": 1 },
@@ -296,6 +314,16 @@
             "issueChainId": { "type": "int32", "id": 8 },
             "externalInfo": { "type": "ExternalInfo", "id": 9 },
             "owner": { "type": "aelf.Address", "id": 10 }
+          }
+        },
+        "BatchCreateInput": {
+          "fields": {
+            "proxyAccountHash": { "type": "aelf.Hash", "id": 1 },
+            "nftInfos": {
+              "rule": "repeated",
+              "type": "NFTInfo",
+              "id": 2
+            }
           }
         },
         "SetPrimaryTokenSymbolInput": {

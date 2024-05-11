@@ -1,6 +1,7 @@
 import { webLoginInstance } from './webLogin';
 import {
   ContractMethodType,
+  IBatchCreateNFTParams,
   IContractError,
   IContractOptions,
   IForwardCallParams,
@@ -101,6 +102,17 @@ export const GetProxyAccountByProxyAccountAddress = async (
 export const ForwardCall = async (params: IForwardCallParams, chain?: Chain): Promise<ISendResult> => {
   try {
     const res: ISendResult = await proxyContractRequest('ForwardCall', params, {
+      chain,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const BatchCreateNFT = async (params: IBatchCreateNFTParams, chain?: Chain): Promise<ISendResult> => {
+  try {
+    const res: ISendResult = await proxyContractRequest('BatchCreateNFT', params, {
       chain,
     });
     return Promise.resolve(res);

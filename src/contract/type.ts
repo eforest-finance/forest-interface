@@ -428,3 +428,9 @@ export interface IClaimDropResult {
   TransactionId: string;
   address: string;
 }
+
+export interface IBatchCreateNFTParams {
+  ownerProxyAccountHash: string;
+  issuerProxyAccountHash: string;
+  nftInfos: any[];
+}
