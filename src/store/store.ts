@@ -18,6 +18,7 @@ import SaleInfoReducer, { saleInfoSlice } from 'store/reducer/saleInfo/saleInfo'
 import SyncChainModalReducer, { syncChainModalSlice } from 'store/reducer/syncChainModal';
 import sellModalsInfosSliceReducer, { sellModalsInfosSlice } from 'store/reducer/saleInfo/sellModalsInfo';
 import dropDetailInfoReducer, { dropDetailInfoSlice } from 'store/reducer/dropDetail/dropDetailInfo';
+import CreateItemReducer, { createItemSlice } from './reducer/create/item';
 
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux';
 
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   [syncChainModalSlice.name]: SyncChainModalReducer,
   [sellModalsInfosSlice.name]: sellModalsInfosSliceReducer,
   [dropDetailInfoSlice.name]: dropDetailInfoReducer,
+  [createItemSlice.name]: CreateItemReducer,
 });
 
 const makeStore = () => {
