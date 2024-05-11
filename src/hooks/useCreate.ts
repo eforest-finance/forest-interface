@@ -4,18 +4,25 @@ import AElf from 'utils/aelf';
 import { Approve, GetAllowance } from 'contract/multiToken';
 import { CreateToken } from 'contract/tokenAdapter';
 import { IContractError, ICreateCollectionParams, ICreateItemsParams, IIssuerParams } from 'contract/type';
-import { fetchSyncCollection, fetchSyncResult, fetchSaveNftItemInfos, fetchSaveCollectionInfos } from 'api/fetch';
+import {
+  fetchSyncCollection,
+  fetchSyncResult,
+  fetchSaveNftItemInfos,
+  fetchSaveCollectionInfos,
+  batchSaveNftItemsInfos,
+} from 'api/fetch';
 import { ISaveCollectionInfosParams, ISaveNftInfosParams, ISyncChainParams } from 'api/types';
 import { SupportedELFChainId } from 'constants/chain';
 import { CHAIN_ID_VALUE } from 'constants/index';
 import { store } from 'store/store';
-import { ForwardCall, GetProxyAccountByProxyAccountAddress } from 'contract/proxy';
+import { BatchCreateNFT, ForwardCall, GetProxyAccountByProxyAccountAddress } from 'contract/proxy';
 import tokenContractJson from 'proto/token_contract.json';
 import { encodedParams } from 'utils/aelfUtils';
 import { message } from 'antd';
 import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import { sleep } from 'utils';
+import { getContractMethods } from '@portkey/contracts';
 
 const intervalTime = 20 * 1000;
 const errorRetryCount = 5;
@@ -377,7 +384,7 @@ export default function useCreateByStep() {
         step: CreateCollectionOrNFTStep.requestContractAuth,
         status: StepStatus.pending,
       });
-      const result = await createContractStep(params, createBy, skipChainSync);
+      const result = await createContractStep(params, createBy, !!skipChainSync);
 
       setCurrentStep({
         step: CreateCollectionOrNFTStep.requestContractAuth,
@@ -389,17 +396,15 @@ export default function useCreateByStep() {
         step: CreateCollectionOrNFTStep.crossChainSync,
         status: StepStatus.pending,
       });
+      await saveInfosOffChainStep(params, createBy, result.TransactionId);
 
       if (!skipChainSync) {
-        await saveInfosOffChainStep(params, createBy, result.TransactionId);
         await notifyCrossChainAndGetSyncResultStep({
           issueChainId: params.issueChainId as keyof typeof CHAIN_ID_VALUE,
           symbol: params.symbol,
           TransactionId: result!.TransactionId,
         });
         await sleep(10000);
-      } else {
-        await sleep(100);
       }
 
       setCurrentStep({
@@ -488,7 +493,90 @@ export default function useCreateByStep() {
     }
   };
 
-  return { create, issue, currentStep, issueRetry };
+  const batchSaveInfosOffChainStep = async (paramsArr: ICreateItemsParams[], TransactionId: string) => {
+    const batchSaveNftItemInfoParams = paramsArr.map((params) => {
+      const issueChainId = params.issueChainId as keyof typeof CHAIN_ID_VALUE;
+      const createContractParams = params as ICreateItemsParams;
+      const description = createContractParams.externalInfo.value.__nft_description;
+      const externalLink = createContractParams.externalInfo.value.__nft_external_link;
+      const fileLink = createContractParams.externalInfo.value.__nft_file_url;
+      const fileKey = createContractParams.externalInfo.value.__nft_fileType === 'image' ? 'previewImage' : 'file';
+      const saveNftItemInfosParams: ISaveNftInfosParams = {
+        chainId: issueChainId,
+        symbol: createContractParams.symbol,
+        transactionId: TransactionId || '',
+        description,
+        externalLink,
+        previewImage: createContractParams.externalInfo.value.__nft_preview_image,
+        [fileKey]: fileLink,
+      };
+
+      return saveNftItemInfosParams;
+    });
+
+    try {
+      console.log('batchSaveNftItemInfosParams', batchSaveNftItemInfoParams);
+      await batchSaveNftItemsInfos({
+        nFTList: batchSaveNftItemInfoParams,
+      });
+    } catch (error) {
+      console.log(error);
+      throw {
+        step: FailStepOfNFTEnum.saveInfosOffChain,
+        message: 'save infos offChain fail',
+      };
+    }
+  };
+
+  const batchCreateNFT = async (paramsArr: any[], proxyOwnerAddress: any, proxyIssuerAddress: any) => {
+    const info = store.getState().aelfInfo.aelfInfo;
+
+    console.log('batchCreateNFT owner', proxyOwnerAddress);
+
+    const proxyOwnerHash = await GetProxyAccountByProxyAccountAddress(proxyOwnerAddress, info.curChain);
+    const proxyIssuerHash = await GetProxyAccountByProxyAccountAddress(proxyIssuerAddress, info.curChain);
+
+    const batchCreateNFTContractParams = {
+      ownerProxyAccountHash: proxyOwnerHash?.proxyAccountHash,
+      issuerProxyAccountHash: proxyIssuerHash?.proxyAccountHash,
+      nftInfos: paramsArr.map((params) => {
+        const externalInfo = params.externalInfo.value as ICreateItemsParams['externalInfo']['value'];
+        const issueChainId = params.issueChainId as keyof typeof CHAIN_ID_VALUE;
+
+        const contractParams = {
+          ...params,
+          issueChainId: CHAIN_ID_VALUE[issueChainId],
+          externalInfo: {
+            value: Object.assign(
+              {
+                __nft_file_hash: externalInfo?.__nft_file_hash,
+                __nft_metadata: externalInfo?.__nft_metadata,
+                __nft_fileType: externalInfo?.__nft_fileType,
+                __nft_image_url: externalInfo?.__nft_preview_image || externalInfo?.__nft_file_url || '',
+              },
+              externalInfo?.__nft_fileType === 'audio' || externalInfo?.__nft_fileType === 'video'
+                ? {
+                    __nft_file_url: externalInfo?.__nft_file_url || '',
+                  }
+                : null,
+            ),
+          },
+        };
+        return contractParams;
+      }),
+    };
+
+    console.log('batchCreateNFTContractParams', batchCreateNFTContractParams);
+    const result = await BatchCreateNFT(batchCreateNFTContractParams, info.curChain);
+
+    console.log('batchCreateContractByNft finish', result);
+
+    await batchSaveInfosOffChainStep(paramsArr, result.TransactionId);
+
+    return result;
+  };
+
+  return { create, issue, currentStep, issueRetry, batchCreateNFT };
 }
 
 export { useCreateByStep };

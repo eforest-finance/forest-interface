@@ -1,0 +1,51 @@
+.upload-wrapper {
+  @apply w-[343px] h-[343px] mdl:w-[480px] mdl:h-[480px];
+}
+
+.upload-drag-wrapper {
+  @apply w-[343px]  mdl:w-[480px] mdl:h-[480px];
+  :global {
+    .ant-upload-drag {
+      @apply rounded-[15.6px] rounded-b-none bg-[var(--fill-hover-bg)] border-[var(--line-border)];
+    }
+  }
+}
+
+.upload-single-no-bottom {
+  :global {
+    .ant-upload-drag {
+      @apply !rounded-b-[15.6px];
+    }
+  }
+}
+
+.upload-wrapper-batch {
+  @apply w-[343px] mdl:w-[480px] mdl:h-[480px];
+  :global {
+    .ant-upload-drag {
+      @apply rounded-[15.6px];
+    }
+  }
+
+  .list-wrapper {
+    &::-webkit-scrollbar {
+      @apply hidden;
+    }
+  }
+}
+
+.upload-continue-wrapper {
+  @apply w-[343px] mdl:w-[480px] mdl:h-[192px] border-[1px]  border-solid border-[var(--line-border)] p-[24px] rounded-[15.6px];
+  :global {
+    .ant-upload-drag {
+      @apply bg-transparent border-0;
+    }
+    .ant-upload-btn {
+      @apply !p-0;
+    }
+  }
+
+  svg path {
+    @apply fill-[var(--text-primary)];
+  }
+}
