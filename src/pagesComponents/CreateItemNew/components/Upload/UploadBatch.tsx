@@ -34,6 +34,7 @@ interface Item {
   tokenId: string;
   fileType: FileUploadType;
   hash: string;
+  attributes?: Array<any>;
 }
 
 interface UploadBatchProps {
@@ -47,7 +48,10 @@ export default (props: UploadBatchProps) => {
   const { metaList, onUploadChange } = props;
   const {
     collection: { name },
+    batchFiles,
   } = store.getState().createItem;
+
+  console.log('---batchFiles---', batchFiles);
 
   const uploader = useRef<any>(null);
   const task = useRef<number>(0);
@@ -81,15 +85,28 @@ export default (props: UploadBatchProps) => {
         const meta = metaList?.find((metaItem) => metaItem['File Name'] === listItem.file.name);
 
         if (meta) {
+          const attributes = Object.keys(meta).reduce((ac: any, k) => {
+            if (k.includes('Attributes')) {
+              ac.push({
+                [k]: meta[k],
+              });
+            }
+
+            return ac;
+          }, []);
+
           return {
             ...listItem,
             tokenId: meta['Token ID'],
+            meta,
+            attributes,
           };
         } else {
           return listItem;
         }
       });
 
+      onUploadChange && onUploadChange(newList);
       return newList;
     });
   };
@@ -214,7 +231,6 @@ export default (props: UploadBatchProps) => {
   };
 
   const handlePlay = (previewItem: Item) => () => {
-    debugger;
     setPreviewItem(previewItem);
     setFileViewVisible(true);
   };
