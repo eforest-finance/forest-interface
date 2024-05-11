@@ -214,6 +214,7 @@ export default (props: UploadBatchProps) => {
   };
 
   const handlePlay = (previewItem: Item) => () => {
+    debugger;
     setPreviewItem(previewItem);
     setFileViewVisible(true);
   };
@@ -235,22 +236,24 @@ export default (props: UploadBatchProps) => {
                   <div
                     key={`nft-${i}`}
                     className="w-[144px] h-[180px] border-[1px] border-solid border-[var(--line-border)]  rounded-[8px] overflow-hidden relative">
-                    <Image
-                      className="object-contain"
-                      wrapperClassName={`${
-                        item.fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
-                      }  overflow-hidden flex justify-center w-[144px] h-[144px]`}
-                      preview={
-                        item.fileType === 'image'
-                          ? {
-                              visible: previewOpen,
-                              onVisibleChange: (visible) => setPreviewOpen(visible),
-                            }
-                          : false
-                      }
-                      placeholder={ImagePlaceHolder}
-                      src={item.poster}
-                    />
+                    <Image.PreviewGroup preview>
+                      <Image
+                        className="object-contain"
+                        wrapperClassName={`${
+                          item.fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
+                        }  overflow-hidden flex justify-center w-[144px] h-[144px]`}
+                        preview={
+                          item.fileType === 'image'
+                            ? {
+                                visible: previewOpen,
+                                onVisibleChange: (visible) => setPreviewOpen(visible),
+                              }
+                            : false
+                        }
+                        placeholder={ImagePlaceHolder}
+                        src={item.poster}
+                      />
+                    </Image.PreviewGroup>
 
                     {item.fileType !== 'image' && (
                       <span
