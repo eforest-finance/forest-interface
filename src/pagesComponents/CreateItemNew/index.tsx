@@ -98,7 +98,7 @@ export default function CreateNFTItemPage() {
   return (
     <section className="max-w-[1360px] !mx-auto !px-4 mb-20">
       <h1
-        className={`flex gap-4 font-semibold text-2xl mdl:text-5xl pt-10 mdTW:pt-20 pb-6 mdTW:pb-10 text-textPrimary !mb-0`}>
+        className={`flex gap-4 font-semibold text-2xl mdl:text-5xl pt-10 mdTW:pt-12 pb-6 mdTW:pb-10 text-textPrimary !mb-0`}>
         <span
           className="flex items-center justify-center w-8 h-8 mdl:w-12 mdl:h-12 rounded-full bg-fillHoverBg cursor-pointer"
           onClick={onBackHandler}>

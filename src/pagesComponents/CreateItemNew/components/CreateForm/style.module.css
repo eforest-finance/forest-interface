@@ -6,7 +6,7 @@
     }
 
     .ant-collapse-header {
-      @apply !px-0 flex flex-row-reverse w-fit items-center;
+      @apply !px-0 flex flex-row-reverse w-fit !items-center;
       .ant-collapse-header-text {
         @apply !text-textPrimary font-medium text-lg mr-2;
       }

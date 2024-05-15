@@ -101,7 +101,10 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, onCancel, defaultMet
                       <Input placeholder={`Parameters ${index + 1}`} />
                     </Form.Item>
                   </div>
-                  <MinusCircleOutlined className="ml-4 w-6 h-6 text-2xl mt-3" onClick={() => remove(name)} />
+                  <MinusCircleOutlined
+                    className="ml-4 w-6 h-6 text-xl mt-3 text-textSecondary"
+                    onClick={() => remove(name)}
+                  />
                 </div>
               ))}
               <Form.Item>
