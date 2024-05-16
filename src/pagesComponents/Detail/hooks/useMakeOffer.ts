@@ -18,13 +18,14 @@ export default function useMakeOffer(chainId?: Chain) {
     quantity: number;
     quantityForApprove: number;
     price: IPrice;
+    priceForApprove: IPrice;
     expireTime?: number;
   }) => {
     if (isLogin) {
       try {
         const approveTokenResult = await checkELFApprove({
           chainId: chainId,
-          price: parameter.price,
+          price: parameter.priceForApprove,
           quantity: parameter.quantityForApprove,
           spender:
             chainId === SupportedELFChainId.MAIN_NET

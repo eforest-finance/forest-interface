@@ -82,7 +82,14 @@
     @apply hover:border-lineBorder hover:shadow-none focus:border-lineBorder focus:shadow-none;
 
     :global(.ant-select-selector) {
-      @apply !text-textDisable !bg-fillPageBg;
+      @apply !text-textDisable !bg-fillHoverBg;
+
+      :global(.ant-select-selection-item) {
+        @apply opacity-20;
+      }
+    }
+    :global(.ant-select-arrow) {
+      @apply opacity-20;
     }
   }
 

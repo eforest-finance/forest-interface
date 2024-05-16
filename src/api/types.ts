@@ -396,6 +396,11 @@ export interface IOwnedSymbolsParams extends IListParams {
   seedOwnedSymbol?: string;
 }
 
+export interface IOwnedAllSymbolsParams extends IListParams {
+  addressList: string[];
+  seedOwnedSymbol?: string;
+}
+
 export interface IOwnedSymbol {
   id: string;
   symbol: string;
@@ -406,6 +411,7 @@ export interface IOwnedSymbol {
   seedExpTimeSecond: number;
   seedSymbol: string;
   seedExpTime: string;
+  chainId?: Chain;
 }
 
 export interface IOwnedSymbolsResponse {

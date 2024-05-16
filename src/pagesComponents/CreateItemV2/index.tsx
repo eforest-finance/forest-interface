@@ -85,7 +85,7 @@ export default function CreateNFTItemPage() {
             id={tokenId}
           />
         )}
-        <div className=" leading-[24px] w-[343px]  mdl:w-[480px] text-[16px] font-medium text-[var(--text-secondary)] mt-[16px]">
+        <div className=" leading-[24px] w-[343px]  mdl:w-[480px] text-[16px] text-[var(--text-secondary)] mt-[16px]">
           File types support: JPG,PNG,GIF. Max size: 100MB
         </div>
       </div>

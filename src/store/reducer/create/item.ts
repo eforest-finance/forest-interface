@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { FileUploadType } from 'pagesComponents/CreateItemNew/components/Upload/UploadSingle';
+import { FileUploadType } from 'pagesComponents/CreateItemV2/components/Upload/UploadSingle';
 
 export interface ISingleFile {
   fileType?: FileUploadType;
