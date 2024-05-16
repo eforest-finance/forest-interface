@@ -26,7 +26,7 @@ export function TraitsInfoCard() {
   useEffect(() => {
     if (!nftTraitInfos?.traitInfos?.length) return;
     try {
-      let map: {
+      const map: {
         [key: string]: string;
       } = {
         'Weapon(Left Hand)': 'Weapon',

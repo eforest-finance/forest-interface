@@ -16,7 +16,7 @@ export default function Socket() {
         setSocket(signalR);
         // setError(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setSocket(signalR);
         // setError(e);
       });
