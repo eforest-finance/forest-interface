@@ -82,7 +82,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
     }),
   };
 
-  const renderSelectTags = (maxTagCount: number = 2) => {
+  const renderSelectTags = (maxTagCount = 2) => {
     const size = selectProps.value?.length || 0;
     if (!size) {
       return <span className="text-textPrimary font-medium text-base">Filter</span>;

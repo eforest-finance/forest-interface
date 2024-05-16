@@ -26,7 +26,9 @@ export const fetchRankingDataOfNft = async (nftItemArr: INftInfo[], userWalletAd
       address: addPrefixSuffix(userWalletAddress),
       catsTraits: batchTraitsParams as string[][][][],
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 
   if (!resData?.length) {
     return nftItemArr;
@@ -50,7 +52,9 @@ const fetchNFTItemsData = async (params: Partial<CompositeNftInfosParams>, userW
   try {
     const items = await fetchRankingDataOfNft(res.items, userWalletAddress);
     res.items = items;
-  } catch {}
+  } catch (error) {
+    console.error(error);
+  }
 
   return res;
 };

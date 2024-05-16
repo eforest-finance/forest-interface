@@ -1,4 +1,4 @@
-import { INftRankingInfo, IRankData } from 'api/types';
+import { INftRankingInfo } from 'api/types';
 import { traitsData } from './tratisData';
 import BigNumber from 'bignumber.js';
 import { ITraitInfo } from 'types/nftTypes';

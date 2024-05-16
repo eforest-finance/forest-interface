@@ -5,7 +5,6 @@ import { ConfigProvider, message } from 'antd';
 
 import enUS from 'antd/lib/locale/en_US';
 
-import { prefixCls } from 'constants/theme';
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
 import { store } from 'store/store';
