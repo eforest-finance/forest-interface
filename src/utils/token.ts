@@ -129,7 +129,7 @@ export const createToken = async (
   return undefined;
 };
 
-async function loopFetchToken(params: ITokenParams, loopsNum: number = 10) {
+async function loopFetchToken(params: ITokenParams, loopsNum = 10) {
   try {
     const res = await fetchToken(params);
     return res;

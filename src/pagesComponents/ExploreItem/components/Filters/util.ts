@@ -107,7 +107,7 @@ export function getFilterFromSearchParams(filterParamStr: string | null) {
   } = {};
 
   filterParamsObj?.[FilterKeyEnum.Traits]?.forEach?.((item) => {
-    let tmpObj = {
+    const tmpObj = {
       type: FilterType.Checkbox,
       data: (item.values || []).map((itm) => ({
         label: itm,
@@ -191,7 +191,7 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
   return params;
 
   function getTraitsInfo() {
-    let targetKeys = Object.keys(filterSelect).filter((key) => key.includes(FilterKeyEnum.Traits));
+    const targetKeys = Object.keys(filterSelect).filter((key) => key.includes(FilterKeyEnum.Traits));
     if (!targetKeys.length) return null;
     const res: Array<{
       key: string;

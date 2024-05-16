@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  useCreateByStep,
-  CreateCollectionOrNFTStep,
-  StepStatus,
-  CreateByEnum,
-  FailStepOfCollectionEnum,
-} from 'hooks/useCreate';
+import { useCreateByStep, CreateCollectionOrNFTStep, StepStatus, CreateByEnum } from 'hooks/useCreate';
 import { useProgress } from './useProgress';
 import { ICreateItemsParams, IIssuerParams } from 'contract/type';
 import { MESSAGE } from 'assets/resString';
@@ -28,7 +22,7 @@ export function useCreateLogicForCreateModal(createParamsData: {
       percent: 0,
       status: '',
       title: MESSAGE['createNFT.approveStep.title'],
-      subTitle: !!createParamsData.skipChainSync
+      subTitle: createParamsData.skipChainSync
         ? MESSAGE['createNFTSideChain.approveStep.subTitle']
         : MESSAGE['createNFT.approveStep.subTitle'],
       progressTips: MESSAGE['createNFT.approveStep.progressTips'],

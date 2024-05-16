@@ -39,7 +39,7 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
     searchVal = searchVal.trim();
     let parentKey = '';
     let data = null;
-    for (let traitItem of traitsInfo?.items || []) {
+    for (const traitItem of traitsInfo?.items || []) {
       const traitsValue = traitItem.values.find((traitItemVal) => String(traitItemVal.value).trim() === searchVal);
       if (traitsValue) {
         parentKey = traitItem.key;

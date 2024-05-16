@@ -1,7 +1,5 @@
 'use client';
-import { scheme } from '@portkey/utils';
 import dynamic from 'next/dynamic';
-import isMobile from 'utils/isMobile';
 import { store } from 'store/store';
 
 const APP_NAME = 'forest';
@@ -76,31 +74,6 @@ const WebLoginProviderDynamic = dynamic(
   },
   { ssr: false },
 );
-
-const jumpAppInH5 = (maxWaitingTime: number) => {
-  const initialTime = +new Date();
-  let waitTime = 0;
-  window.location.href = scheme.formatScheme({
-    action: 'linkDapp',
-    domain: window.location.host,
-    custom: {
-      url: window.location.href,
-    },
-  });
-
-  const checkOpen = window.setInterval(() => {
-    waitTime = +new Date() - initialTime;
-    if (waitTime > maxWaitingTime) {
-      window.clearInterval(checkOpen);
-      window.open('https://portkey.finance', '_blank');
-    } else {
-      const hide = document.hidden || document?.webkitHidden;
-      if (hide) {
-        window.clearInterval(checkOpen);
-      }
-    }
-  }, 100);
-};
 
 export default ({ children }: { children: React.ReactNode }) => {
   const info = store.getState().aelfInfo.aelfInfo;

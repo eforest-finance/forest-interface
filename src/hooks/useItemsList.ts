@@ -4,14 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { addPrefixSuffix, getListByKey } from 'utils';
 import { RangeType } from 'components/ItemsLayout/types';
 import { usePathname } from 'next/navigation';
-import { useDebounce, useHash, useLocalStorage } from 'react-use';
+import { useDebounce, useLocalStorage } from 'react-use';
 import { defaultFilter } from 'components/ItemsLayout/assets';
 
 import equal from 'fast-deep-equal';
 import { fetchNftInfos, fetchNftRankingInfoApi } from '../api/fetch';
 import storages from 'storages';
 import { thousandsNumber } from 'utils/unitConverter';
-import { INftInfo, ITraitInfo } from 'types/nftTypes';
+import { INftInfo } from 'types/nftTypes';
 import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 import { INftRankingInfo } from 'api/types';
 
@@ -56,7 +56,9 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
           address: addPrefixSuffix(walletInfo.address),
           catsTraits: batchTraitsParams as string[][][][],
         });
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
 
       if (!resData?.length) {
         return nftItemArr;

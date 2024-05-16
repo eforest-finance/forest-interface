@@ -8,7 +8,9 @@ const fetchNFTItemsData = async (params: Partial<INftInfoParams>, loginAddress?:
   try {
     const items = await fetchRankingDataOfNft(res.items, loginAddress);
     res.items = items;
-  } catch {}
+  } catch (e) {
+    console.error(e);
+  }
 
   return res;
 };
