@@ -198,6 +198,10 @@ export const fetchSaveNftItemInfos = async (data: ISaveNftInfosParams): Promise<
   return request.post<ISaveNftInfosParams, null>('app/nft/nft-infos', data);
 };
 
+export const batchSaveNftItemsInfos = async (data: { nFTList: ISaveNftInfosParams[] }): Promise<null> => {
+  return request.post<{ nFTList: ISaveNftInfosParams[] }, null>('app/nft/batch-nft-infos', data);
+};
+
 export const fetchSaveCollectionInfos = async (data: ISaveCollectionInfosParams): Promise<null> => {
   return request.post<ISaveCollectionInfosParams, null>('app/nft/nft-collections', data);
 };

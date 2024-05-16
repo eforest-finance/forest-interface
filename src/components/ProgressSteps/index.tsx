@@ -229,7 +229,7 @@ const ProgressSteps = ({
               <ProgressStep
                 percent={stepItem.percent}
                 status={stepItem.status as unknown as ProgressProps['status']}
-                title={`Step ${index + 1}`}
+                title={`Step ${stepForShow}`}
                 subTitle={stepItem.progressTips}
                 retry={stepItem.retry}
                 retryFailedStep={() => {
