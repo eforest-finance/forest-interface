@@ -11,6 +11,7 @@ export interface ICreateParams {
   memo?: string;
   to?: string;
   lockWhiteList?: string[];
+  amount?: string | number;
   isCreateNftIssueChain?: boolean;
   externalInfo: {
     value: {
@@ -427,4 +428,10 @@ export interface IClaimDropResult {
   };
   TransactionId: string;
   address: string;
+}
+
+export interface IBatchCreateNFTParams {
+  ownerProxyAccountHash: string;
+  issuerProxyAccountHash: string;
+  nftInfos: any[];
 }

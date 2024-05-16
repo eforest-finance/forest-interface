@@ -50,7 +50,7 @@ export const useCollections = (requestType?: 'creator' | 'address', allChain?: b
       if (!type) return;
       if (!account && requestType) return;
 
-      let params: {
+      const params: {
         skipCount?: number;
         maxResultCount?: number;
         addressList?: string[];

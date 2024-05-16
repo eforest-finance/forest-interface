@@ -33,7 +33,7 @@ function Modal(props: ModalProps) {
       title={
         <div>
           <div className="pr-8 break-words">{title}</div>
-          {subTitle && <div className="text-min mt-2 text-dark-caption">{subTitle}</div>}
+          {subTitle && <div className=" text-base font-medium mt-8 text-textSecondary">{subTitle}</div>}
         </div>
       }>
       {children}

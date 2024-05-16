@@ -82,7 +82,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
     }),
   };
 
-  const renderSelectTags = (maxTagCount: number = 2) => {
+  const renderSelectTags = (maxTagCount = 2) => {
     const size = selectProps.value?.length || 0;
     if (!size) {
       return <span className="text-textPrimary font-medium text-base">Filter</span>;
@@ -99,7 +99,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
 
   return (
     <>
-      <div className={styles.collection__search}>
+      <div className={styles.collection__search} id="collection-search">
         <div
           className={clsx(
             'flex justify-between items-center',
@@ -119,6 +119,9 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
             trigger={['click']}
             open={visible}
             onOpenChange={(open) => setVisible(open)}
+            getPopupContainer={(node) => {
+              return node.parentElement!;
+            }}
             overlayClassName={styles['detail-activity-dropdown']}
             menu={dropdownMenu as unknown as MenuProps}>
             <div className={styles['filter']}>
@@ -129,11 +132,14 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
         )}
       </div>
       {isLG && (
-        <div className="mt-0 !w-full mb-[16px] relative">
+        <div className="mt-0 !w-full mb-[16px] relative" id="activity-filter-root">
           <Dropdown
             trigger={['click']}
             open={visible}
-            getPopupContainer={(v) => v}
+            autoAdjustOverflow
+            getPopupContainer={(node) => {
+              return node.parentElement!;
+            }}
             onOpenChange={(open) => setVisible(open)}
             overlayClassName={styles['detail-activity-dropdown']}
             menu={dropdownMenu as unknown as MenuProps}>

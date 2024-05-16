@@ -44,16 +44,14 @@ export function NFTTraitInfoCard({ nftInfo }: { nftInfo: INftInfo }) {
       <div className="flex flex-col mr-6">
         <ImageEnhance src={previewImage || ''} className="!w-[148px] !h-[148px] object-cover !rounded-md" />
         <Text
-          className="mt-4 !text-textPrimary font-semibold text-base"
-          style={{ width: 148 }}
+          className="mt-4 !text-textPrimary font-semibold text-base !w-[148px]"
           ellipsis={{
             tooltip: tokenName,
           }}>
           {tokenName}
         </Text>
         <Text
-          className="mt-2 font-medium !text-textSecondary"
-          style={{ width: 148 }}
+          className="mt-2 font-medium !text-textSecondary !w-[148px]"
           ellipsis={{
             tooltip: nftSymbol,
           }}>
@@ -81,16 +79,14 @@ export function NFTTraitInfoCard({ nftInfo }: { nftInfo: INftInfo }) {
               return (
                 <div className="flex flex-col">
                   <Text
-                    className="text-sm !text-textPrimary"
-                    style={{ width: 109 }}
+                    className="text-sm !text-textPrimary !w-[109px]"
                     ellipsis={{
                       tooltip: record.key,
                     }}>
                     {record.key}
                   </Text>
                   <Text
-                    className=" font-semibold text-sm !text-textPrimary"
-                    style={{ width: 109 }}
+                    className=" font-semibold text-sm !text-textPrimary !w-[109px]"
                     ellipsis={{
                       tooltip: record.value,
                     }}>

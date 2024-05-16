@@ -183,6 +183,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
           <a
             className=" inline-flex items-center cursor-pointer !text-textPrimary"
             target="_blank"
+            rel="noreferrer"
             href={getExploreLink(record.transactionHash, 'transaction', sideChain)}>
             <Tooltip title={moment(number).format('YYYY/MM/DD HH:mm:ss')}>
               <span>{getDateString(number)}</span>
