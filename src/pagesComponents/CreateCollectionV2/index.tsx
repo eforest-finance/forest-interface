@@ -3,7 +3,7 @@ import { useCreateCollectionPageService } from './hooks/useCreateCollectionPageS
 import BackIcon from 'assets/images/icons/back.svg';
 import { CreateForm } from './components/CreateForm';
 import SyncChainModal from 'components/SyncChainModal';
-import styles from '../CreateItemNew/components/Upload/upload.module.css';
+import styles from '../CreateItemV2/components/Upload/upload.module.css';
 
 export default function CreateCollectionPage() {
   const { isSmallScreen, onBackHandler, onCreateHandler, modalState, setModalState, createParamsData, setUploadFile } =
