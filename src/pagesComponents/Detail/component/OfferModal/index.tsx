@@ -164,6 +164,10 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
             symbol: token,
             amount: Number(timesDecimals(price, 8)),
           },
+          priceForApprove: {
+            symbol: 'ELF',
+            amount: Number(timesDecimals(price, '0')),
+          },
           expireTime: Number(durationTime),
         });
         setLoading(false);

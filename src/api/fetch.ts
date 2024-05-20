@@ -63,6 +63,7 @@ import {
   INftTraitsInfoRes,
   ICollectionActivitiesParams,
   ICollectionActivitiesRes,
+  IOwnedAllSymbolsParams,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -233,6 +234,15 @@ export const fetchToken = async (data: ITokenParams) => {
 
 export const fetchSymbolList = async (params: IOwnedSymbolsParams): Promise<IOwnedSymbolsResponse> => {
   return request.get<IOwnedSymbolsResponse>('app/nft/seed-owned-symbols', { params });
+};
+
+export const fetchAllChainSymbolList = async (params: IOwnedAllSymbolsParams): Promise<IOwnedSymbolsResponse> => {
+  return request.get<IOwnedSymbolsResponse>('app/nft/all-seed-owned-symbols', {
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' });
+    },
+  });
 };
 
 export const fetchSymbolHasExisted = async (params: { symbol: string }): Promise<{ exist: boolean }> => {

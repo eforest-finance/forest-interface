@@ -232,13 +232,30 @@ function Header() {
               </Link>
               <DropMenu
                 getPopupContainer={(v) => v}
-                className={`${styles['nav-text']} ${pathname === '/create' && styles['text-select']}`}
+                className={`${styles['nav-text']} ${
+                  (pathname === '/create-item' || pathname === '/create-collection') && styles['text-select']
+                }`}
                 overlay={
                   <Menu
                     items={[
-                      { label: <AuthNavLink to={'/create-item'}>Create an Item</AuthNavLink>, key: 'item' },
                       {
-                        label: <AuthNavLink to={'/create-collection'}>Create a Collection</AuthNavLink>,
+                        label: (
+                          <AuthNavLink
+                            to={'/create-item'}
+                            className={pathname === '/create-item' ? '!text-brandNormal' : ''}>
+                            Create an Item
+                          </AuthNavLink>
+                        ),
+                        key: 'item',
+                      },
+                      {
+                        label: (
+                          <AuthNavLink
+                            to={'/create-collection'}
+                            className={pathname === '/create-collection' ? '!text-brandNormal' : ''}>
+                            Create a Collection
+                          </AuthNavLink>
+                        ),
                         key: 'Collection',
                       },
                     ]}

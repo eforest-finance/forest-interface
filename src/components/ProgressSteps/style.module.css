@@ -21,7 +21,6 @@
     }
   }
 
-
   .chain-step {
     @apply relative flex flex-row items-start justify-start mdb:items-start  mdb:pl-[22.5px] mdb:pr-[22.5px];
 
@@ -38,12 +37,10 @@
     .content {
       @apply flex flex-col max-w-[430Px];
       .title {
-        @apply flex font-semibold;
-
-        font-size: 20px;
+        @apply flex font-semibold text-xl;
       }
       .sub-title {
-        @apply flex text-[16px] text-[var(--color-placeholder)] whitespace-pre-line font-normal mt-[10Px];
+        @apply flex text-base text-textSecondary whitespace-pre-line font-normal mt-[10px];
       }
     }
 
@@ -91,9 +88,7 @@
       color: var(--error);
     }
     .progress-step-sub-title {
-      @apply flex h-[32px] text-[var(--color-placeholder)] font-semibold;
-
-      font-size: 14px;
+      @apply flex text-textSecondary font-normal text-sm;
     }
   }
 

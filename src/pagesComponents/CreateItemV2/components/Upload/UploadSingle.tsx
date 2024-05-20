@@ -27,6 +27,7 @@ interface IUploadProps extends UploadProps {
   isDragger?: boolean;
   previewSrc?: string;
   wrapperClassName?: string;
+  dragWrapperClassName?: string;
   onUploadChange?: (file: ISingleFile) => void;
 }
 
@@ -40,7 +41,7 @@ type ImageInfoType = {
 export const ImagePlaceHolder = <Skeleton.Image active={true} className={'!w-full !h-full'}></Skeleton.Image>;
 
 export default (props: IUploadProps) => {
-  const { isDragger = true, onUploadChange, previewSrc, wrapperClassName } = props;
+  const { isDragger = true, onUploadChange, previewSrc, wrapperClassName, dragWrapperClassName } = props;
   const uploader = useRef<any>(null);
 
   const [s3File, setS3File] = useState<ImageInfoType>({
@@ -157,9 +158,6 @@ export default (props: IUploadProps) => {
     },
     beforeUpload(file: any) {
       handleFileUpload(file);
-
-      const traitsArray = csvToArray(file);
-      console.log('--traitsArray--', traitsArray);
     },
   };
 
@@ -198,14 +196,14 @@ export default (props: IUploadProps) => {
   return (
     <div>
       {isDragger ? (
-        <div className={` ${style['upload-wrapper']} ${previewImage ? 'mdl:!h-auto' : ''}`}>
+        <div className={` ${style['upload-wrapper']} ${wrapperClassName} ${previewImage ? 'mdl:!h-auto' : ''}`}>
           {s3File.url && (
-            <div className="p-[30px] border-[1px] border-dashed	border-[var(--line-border)] rounded-t-[12px] relative ">
+            <div className={`${style['upload-preview-wrapper']}`}>
               <Image
                 className="object-contain"
                 wrapperClassName={`${
                   fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
-                } w-[283px] h-[248px] mdl:w-[420px] mdl:h-[248px] overflow-hidden flex justify-center`}
+                } w-[283px] h-[248px] mdl:w-[420px] mdl:h-[420px] overflow-hidden flex justify-center border-[1px] border-solid	border-[var(--line-border)]`}
                 preview={
                   fileType === 'image'
                     ? {
@@ -239,7 +237,8 @@ export default (props: IUploadProps) => {
             </div>
           )}
 
-          <div className={`${style['upload-drag-wrapper']} ${wrapperClassName} ${previewImage ? 'hidden' : 'inline'}`}>
+          <div
+            className={`${style['upload-drag-wrapper']} ${dragWrapperClassName} ${previewImage ? 'hidden' : 'inline'}`}>
             <Dragger {...uploadProps} className={`rounded-[15.6px]`}>
               <UploadButton />
             </Dragger>
