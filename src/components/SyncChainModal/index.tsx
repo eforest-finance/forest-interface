@@ -83,31 +83,22 @@ const SyncChainModal = (props: ISyncChainModalProps) => {
                   className="w-[64px] object-cover"></Image>
               ) : null}
             </div>
-            <div className="flex flex-1 flex-wrap items-center ml-[16Px]">
-              <span className="font-semibold text-[20px] leading-[28Px] pr-[8px] break-all">{tokenName}</span>
+            <div className="flex flex-1 flex-wrap items-center ml-4 font-semibold text-textPrimary">
+              <span className=" pr-2 break-all">{tokenName}</span>
               {!creating ? (
                 <div className="flex items-center">
-                  <span className="break-all">
-                    <span className="font-medium text-[16px] pr-[8px] text-[var(--text-secondary1)]">
-                      will be created using the
-                    </span>{' '}
-                    <span className="font-semibold text-[20Px] leading-[28Px]">{seed}</span>
+                  <span className="break-all font-semibold text-xl text-textPrimary">
+                    will be created using the {seed}
                   </span>
                 </div>
               ) : !creatingFailed ? (
-                <span className="font-medium text-[16px] text-[var(--text-secondary1)]">
-                  is being created now. Please don't close this window.
-                </span>
+                <span>is being created now. Please don't close this window.</span>
               ) : (
-                <span className="font-medium text-[16px] text-[var(--text-secondary1)]">
-                  creation failed. Please try again later.
-                </span>
+                <span>creation failed. Please try again later.</span>
               )}
             </div>
           </div>
-          <div className="text-[var(--color-primary)] text-[20px] font-semibold my-[24Px]">
-            Collection creation takes two steps
-          </div>
+          <div className="text-textPrimary text-xl font-semibold my-6">Collection creation takes two steps</div>
           <ProgressSteps stepsData={percentAndStatusForShow} showProgress={!confirmBtnShowStatus} />
         </SpinLoading>
         {confirmBtnShowStatus ? (

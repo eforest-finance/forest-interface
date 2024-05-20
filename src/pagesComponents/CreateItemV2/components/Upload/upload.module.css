@@ -1,5 +1,9 @@
 .upload-wrapper {
   @apply w-[343px] h-[343px] mdl:w-[480px] mdl:h-[480px];
+
+  .upload-preview-wrapper {
+    @apply p-[30px] border-[1px] border-dashed	border-[var(--line-border)] rounded-b-none relative;
+  }
 }
 
 .upload-drag-wrapper {
@@ -12,10 +16,16 @@
 }
 
 .upload-single-no-bottom {
-  :global {
-    .ant-upload-drag {
-      @apply !rounded-b-[15.6px];
+  .upload-drag-wrapper {
+    :global {
+      .ant-upload-drag {
+        @apply !rounded-b-[15.6px];
+      }
     }
+  }
+
+  .upload-preview-wrapper {
+    @apply !rounded-[12px];
   }
 }
 

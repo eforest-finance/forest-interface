@@ -1,0 +1,7 @@
+.upload-single-no-bottom {
+  :global {
+    .ant-upload-drag {
+      @apply !rounded-b-[15.6px];
+    }
+  }
+}
