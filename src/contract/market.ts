@@ -4,7 +4,6 @@ import {
   IBatchBuyNowParams,
   IBatchDeListParams,
   ICancelOfferParams,
-  IClaimDropParams,
   IContractError,
   IContractOptions,
   IDealParams,
@@ -80,7 +79,7 @@ const marketContractRequest = async <T, R>(
       const { transactionId, TransactionId } = result.result || result;
       const resTransactionId = TransactionId || transactionId;
       await sleep(1000);
-      const transaction = await getTxResult(resTransactionId!, curChain);
+      const transaction = await getTxResult(resTransactionId as string, curChain);
 
       console.log('=====marketContractRequest transaction: ', method, transaction);
 

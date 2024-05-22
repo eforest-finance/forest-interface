@@ -26,7 +26,7 @@ function InValidListMsgModalConstructor({
   useNiceModalCommonService(modal);
   const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
   const { showRetryBtn } = useSelector((store) => store.sellModalsInfos.invalidListingModal);
 
   const tryAgain = () => {

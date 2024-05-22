@@ -6,7 +6,6 @@ import useGetState from 'store/state/getState';
 import { ImageEnhance } from 'components/ImgLoading';
 import Jump from 'assets/images/detail/jump.svg';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { isMobile } from 'react-device-detect';
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
 
 function ListingSuccessModalConstructor({
@@ -20,9 +19,9 @@ function ListingSuccessModalConstructor({
 }) {
   const modal = useModal();
   useNiceModalCommonService(modal);
-  const { infoState, walletInfo } = useGetState();
+  const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
 
   const aProps = { target: '_blank', rel: 'noreferrer' };
 

@@ -44,8 +44,8 @@ export const approveELF = async (spender: string, symbol: string, amount: string
 
     const { TransactionId } = approveResult.result || approveResult;
 
-    if (chainId) {
-      await MessageTxToExplore(TransactionId!, chainId);
+    if (chainId && TransactionId) {
+      await MessageTxToExplore(TransactionId, chainId);
     }
 
     return true;
@@ -78,7 +78,7 @@ export const approveNFT: ApproveFunc = async ({ nftInfo, spender, chainId }) => 
     }
 
     const { TransactionId } = approveResult.result || approveResult;
-    await MessageTxToExplore(TransactionId!, chainId);
+    await MessageTxToExplore(TransactionId as string, chainId);
     return true;
   } catch (error) {
     const resError = error as unknown as IContractError;
@@ -109,8 +109,8 @@ export const approve = async (spender: string, symbol: string, amount: string, c
 
     const { TransactionId } = approveResult.result || approveResult;
 
-    if (chainId) {
-      await MessageTxToExplore(TransactionId!, chainId);
+    if (chainId && TransactionId) {
+      await MessageTxToExplore(TransactionId, chainId);
     }
 
     return true;
@@ -219,7 +219,7 @@ export const checkTokenApproveCurrying = () => {
     decimals?: number;
     approveSymbol?: string;
   }) => {
-    const { chainId, symbol, address, spender, amount, decimals, approveSymbol } = options;
+    const { chainId, address, spender, amount, decimals, approveSymbol } = options;
     try {
       const allowance = await GetAllowance(
         {

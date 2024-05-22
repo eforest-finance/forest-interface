@@ -14,7 +14,7 @@ export function EventList() {
   const [data, setData] = useState<IActionDetail[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(8);
+  const [pageSize] = useState<number>(8);
   const [hasMore, setHasMore] = useState(true);
   const listWrapperRef = useRef(null);
   const loadingMoreRef = useRef(null);

@@ -1,12 +1,4 @@
-import {
-  useComponentFlex,
-  useGetAccount,
-  useWebLogin,
-  useWebLoginEvent,
-  WalletType,
-  WebLoginEvents,
-  WebLoginState,
-} from 'aelf-web-login';
+import { useComponentFlex, useGetAccount, useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
 import { store, dispatch, useSelector } from 'store/store';
 import storages from 'storages';
 import { message } from 'antd';

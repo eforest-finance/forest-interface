@@ -3,7 +3,7 @@ import { Upload, message, Image, Skeleton } from 'antd5/';
 import type { UploadProps } from 'antd5/';
 import AWSManagerInstance from 'utils/S3';
 
-import { csvToArray, getBase64, getTheFirstFrame } from 'utils/fileToObject';
+import { getBase64, getTheFirstFrame } from 'utils/fileToObject';
 const { Dragger } = Upload;
 
 import style from './upload.module.css';
@@ -40,7 +40,7 @@ type ImageInfoType = {
 
 export const ImagePlaceHolder = <Skeleton.Image active={true} className={'!w-full !h-full'}></Skeleton.Image>;
 
-export default (props: IUploadProps) => {
+const UploadSingle = (props: IUploadProps) => {
   const { isDragger = true, onUploadChange, previewSrc, wrapperClassName, dragWrapperClassName } = props;
   const uploader = useRef<any>(null);
 
@@ -62,7 +62,7 @@ export default (props: IUploadProps) => {
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [fileType, setFileType] = useState<FileUploadType | undefined>();
-  const [accept, setAccept] = useState<acceptFileType>(acceptFileType.picture);
+  const [accept] = useState<acceptFileType>(acceptFileType.picture);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -200,6 +200,7 @@ export default (props: IUploadProps) => {
           {s3File.url && (
             <div className={`${style['upload-preview-wrapper']}`}>
               <Image
+                alt=""
                 className="object-contain"
                 wrapperClassName={`${
                   fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
@@ -254,3 +255,5 @@ export default (props: IUploadProps) => {
     </div>
   );
 };
+
+export default UploadSingle;

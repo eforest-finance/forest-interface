@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import styles from './style.module.css';
 import { BigNumber } from 'bignumber.js';
-import { divDecimals } from 'utils/calculate';
 import { useRouter, useParams } from 'next/navigation';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
@@ -19,7 +18,6 @@ import { useModal } from '@ebay/nice-modal-react';
 import { getListingsInfo } from './utils/getListingsInfo';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { COLUMN_TITLE } from '../Offers';
-import { DEFAULT_CELL_WIDTH } from 'constants/index';
 import getTextWidth from 'utils/getTextWidth';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
 import TableCell from '../TableCell';
@@ -78,19 +76,16 @@ function Listings(option: { rate: number }) {
     });
   };
 
-  const buyDisabled = useCallback(
-    (record: FormatListingType) => {
-      if (isLogin) {
-        const nftBalanceBig = new BigNumber(nftNumber.nftBalance);
-        const nftQuantityBig = new BigNumber(nftNumber.nftQuantity);
+  const buyDisabled = useCallback(() => {
+    if (isLogin) {
+      const nftBalanceBig = new BigNumber(nftNumber.nftBalance);
+      const nftQuantityBig = new BigNumber(nftNumber.nftQuantity);
 
-        return nftBalanceBig.comparedTo(nftQuantityBig) === 0;
-      } else {
-        return false;
-      }
-    },
-    [isLogin, nftNumber.nftBalance, nftNumber.nftQuantity],
-  );
+      return nftBalanceBig.comparedTo(nftQuantityBig) === 0;
+    } else {
+      return false;
+    }
+  }, [isLogin, nftNumber.nftBalance, nftNumber.nftQuantity]);
 
   useEffect(() => {
     const getMaxColumWidth = () => {
@@ -183,7 +178,7 @@ function Listings(option: { rate: number }) {
               className="!w-[64px]"
               type="primary"
               size="mini"
-              disabled={buyDisabled(record)}
+              disabled={buyDisabled()}
               onClick={() => {
                 if (isLogin) {
                   onClickBuy(record);

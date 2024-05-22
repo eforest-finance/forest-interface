@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import { useRouter } from 'next/navigation';
 import { useMount } from 'react-use';
 import { fetchSpecialSeeds } from 'api/fetch';
 import { ISeedItemData } from 'api/types';
@@ -18,11 +17,10 @@ export enum SEED_STATUS {
 }
 
 const useRecommendSeedLogic = () => {
-  // const router = useRouter();
   const [originData, setOriginData] = useState<ISeedItemData[]>([]);
   const [seedList, setSeedList] = useState<ISeedItemData[]>([]);
   const jumpTSM = useJumpTSM();
-  const { isMD, isXL, isPcMin } = useResponsive();
+  const { isMD, isXL } = useResponsive();
 
   const { data, run } = useRequest(fetchSpecialSeeds, {
     pollingInterval: 4000,
@@ -63,12 +61,6 @@ const useRecommendSeedLogic = () => {
       setSeedList(originData);
     }
   }, [originData, isMD, isXL]);
-
-  // useEffect(() => {
-  //   seedList.forEach((item) => {
-  //     router.prefetch(`/tsm/${TOKEN_TYPES[item.tokenType]}/${String(item.symbol).toUpperCase()}`);
-  //   });
-  // }, [seedList]);
 
   const goTsm = () => {
     jumpTSM('/');

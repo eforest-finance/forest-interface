@@ -7,7 +7,7 @@ interface IProps {
   id?: string;
 }
 
-export default (props: IProps) => {
+const CollectionTag = (props: IProps) => {
   const { collectionName, id, src, nftName } = props;
   const placeholder = <Skeleton.Image active={true} className={'!w-full !h-full'}></Skeleton.Image>;
 
@@ -22,6 +22,7 @@ export default (props: IProps) => {
           preview={false}
           placeholder={placeholder}
           src={src}
+          alt=""
         />
         <span className="ml-[8px] text-[16px] font-medium text-[var(--text-secondary)]">{collectionName}</span>
       </div>
@@ -32,3 +33,5 @@ export default (props: IProps) => {
     </div>
   );
 };
+
+export default CollectionTag;

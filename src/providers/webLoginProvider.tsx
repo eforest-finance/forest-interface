@@ -75,7 +75,7 @@ const WebLoginProviderDynamic = dynamic(
   { ssr: false },
 );
 
-export default ({ children }: { children: React.ReactNode }) => {
+const defaultWebLoginProvider = ({ children }: { children: React.ReactNode }) => {
   const info = store.getState().aelfInfo.aelfInfo;
 
   return (
@@ -106,3 +106,5 @@ export default ({ children }: { children: React.ReactNode }) => {
     </PortkeyProviderDynamic>
   );
 };
+
+export default defaultWebLoginProvider;

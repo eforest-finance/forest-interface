@@ -1,4 +1,4 @@
-import Input, { InputNumber } from 'baseComponents/Input';
+import Input from 'baseComponents/Input';
 import { Select, Option } from 'baseComponents/Select';
 import { Tooltip } from 'antd';
 
@@ -107,7 +107,7 @@ const ShortCutList = ({ floorPrice, lastSalePrice, bestOfferPrice, onChangePrice
           <Comp
             key={item.title}
             title={item.title}
-            price={formatTokenPrice(item.price!)}
+            price={formatTokenPrice(item.price || '')}
             onClick={() => {
               onChangePrice && onChangePrice(item.price);
             }}

@@ -1,12 +1,11 @@
 import { ImageEnhance } from 'components/ImgLoading';
-import { StaticImageData } from 'next/image';
 import React from 'react';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 
 export interface INftInfoListCard {
-  image?: string | StaticImageData | undefined;
+  image?: string | undefined;
   collectionName?: string;
   nftName?: string;
   item?: string;
@@ -17,7 +16,7 @@ export interface INftInfoListCard {
 }
 
 const NftInfoListCard = (props: INftInfoListCard) => {
-  const { collectionName, nftName, item, priceTitle, price, usdPrice, imageSizeType = 'contain' } = props;
+  const { collectionName, nftName, item, priceTitle, price, usdPrice } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;

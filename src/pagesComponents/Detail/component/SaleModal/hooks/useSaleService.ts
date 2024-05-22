@@ -40,7 +40,6 @@ import { store, useSelector } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { selectInfo } from 'store/reducer/info';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
-import useDetailGetState from 'store/state/detailGetState';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -77,8 +76,6 @@ export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPre
 
 export function useGetListItemsForSale(nftInfo: INftInfo) {
   const { walletInfo } = useGetState();
-  const { detailInfo } = useDetailGetState();
-  const decimals = detailInfo?.nftInfo?.decimals || 0;
 
   const [listedNFTInfoList, setListedNFTInfoList] = useState<IListedNFTInfo[]>([]);
   const [maxQuantity, setMaxQuantity] = useState<number>(0);
@@ -97,7 +94,7 @@ export function useGetListItemsForSale(nftInfo: INftInfo) {
       setListedNFTInfoList(res.listedNFTInfoList);
       setListItems(res.listItems);
     }
-  }, [nftInfo, walletInfo.address, decimals]);
+  }, [nftInfo, walletInfo.address]);
 
   useEffect(() => {
     getMaxNftQuantity();
@@ -160,7 +157,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
           ? getForestContractAddress().main
           : getForestContractAddress().side;
       const approveRes = await checkNFTApprove({
-        symbol: nftInfo!.nftSymbol,
+        symbol: nftInfo.nftSymbol,
         address: walletInfo?.address,
         spender,
         amount: timesDecimals(amount, nftInfo?.decimals || '0').toNumber(),
@@ -195,9 +192,9 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         return Promise.reject(result || DEFAULT_ERROR);
       }
 
-      const { TransactionId } = result.result || result;
+      const { TransactionId = '' } = result.result || result;
       messageHTML(TransactionId || '', 'success', nftInfo.chainId);
-      const explorerUrl = getExploreLink(TransactionId!, 'transaction', nftInfo.chainId);
+      const explorerUrl = getExploreLink(TransactionId, 'transaction', nftInfo.chainId);
       promptModal.hide();
       if (mode === 'edit') {
         editListingSuccessModal.show({
@@ -276,10 +273,10 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
         image: nftSaleInfo?.logoImage,
         collectionName: nftSaleInfo?.collectionName,
         nftName: nftInfo?.tokenName,
-        priceTitle: isERC721(nftInfo!) ? 'Listing Price' : 'Listing Price Per Item',
+        priceTitle: nftInfo && isERC721(nftInfo) ? 'Listing Price' : 'Listing Price Per Item',
         price: `${listingPrice.price ? formatTokenPrice(listingPrice.price) : '--'} ELF`,
         usdPrice: listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --',
-        item: isERC721(nftInfo!) ? undefined : handlePlurality(itemsForSell, 'item'),
+        item: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(itemsForSell, 'item'),
       },
       title: ListingMessage.title,
       content: {

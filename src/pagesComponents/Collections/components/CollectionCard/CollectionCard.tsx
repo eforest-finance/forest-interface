@@ -19,7 +19,6 @@ export type CollectionType = {
 };
 
 const TitlePanel = ({ tokenName, hasBadge, creator }: { tokenName: string; hasBadge?: boolean; creator: Creator }) => {
-  const router = useRouter();
   return (
     <div>
       <p className={styles['protocol-title']}>

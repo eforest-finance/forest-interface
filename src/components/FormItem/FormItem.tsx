@@ -40,6 +40,6 @@ export default function FormItem(options: {
         {error && <div className="mt-[8px] text-functionalDanger ">{error?.msg}</div>}
       </div>
     ),
-    [children, description, require, suffix, title],
+    [children, description, require, suffix, title, isSmallScreen, error],
   );
 }

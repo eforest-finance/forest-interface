@@ -31,7 +31,7 @@ export default function CreateNFTItemPage() {
     batchCreateLoading,
   } = useCreateItemPageService();
 
-  const { collection, tokenId, nftName, singleFile, batchFiles } = useSelector((store) => store.createItem);
+  const { collection, tokenId, nftName, singleFile } = useSelector((store) => store.createItem);
   const [type, setType] = useState<SegmentedValue>('single');
 
   const renderSyncChainModal = () => {

@@ -18,7 +18,7 @@ import { InputRef } from 'antd';
 import { useRouter } from 'next/navigation';
 import Table from 'baseComponents/Table';
 import TableEmpty from 'components/TableEmpty';
-import { Select, Option } from 'baseComponents/Select';
+import { Select } from 'baseComponents/Select';
 import clsx from 'clsx';
 interface TableDataItem extends Item {
   index: number;

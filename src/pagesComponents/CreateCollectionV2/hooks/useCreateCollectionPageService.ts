@@ -96,7 +96,7 @@ function adaptorCreateParam(formValues: any, walletInfo: any, file: any) {
   const owner = walletInfo.address || ''; //side chain address
   const issuer = walletInfo.address; // side
   const params: ICreateCollectionParams = {
-    symbol: formValues!.symbol.value || '',
+    symbol: formValues.symbol?.value || '',
     seedSymbol: formValues.symbol?.key || '',
     tokenName: formValues.tokenName || '',
     decimals: 0,

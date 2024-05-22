@@ -21,7 +21,6 @@ import {
   INftPricesParams,
   IPricesList,
   IListingsParams,
-  IActivitiesParams,
   IActivities,
   IWhitelistPriceTokensResponse,
   INftInfoParams,

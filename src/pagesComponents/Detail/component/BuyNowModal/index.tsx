@@ -30,7 +30,6 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
-import { usePathname } from 'next/navigation';
 import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
@@ -41,7 +40,6 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   const resultModal = useModal(ResultModal);
   const title = 'Buy Now';
   const submitBtnText = 'Buy Now';
-  const pathname = usePathname();
   const { infoState, walletInfo, aelfInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { nftInfo } = detailInfo;
@@ -50,7 +48,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   const [page, setPage] = useState<number>(1);
   const [listings, setListings] = useState<FormatListingType[]>([]);
   const [maxQuantity, setMaxQuantity] = useState<number>(0);
-  const [totalCount, setTotalCount] = useState<number>(0);
+  const [, setTotalCount] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [buyListings, setBuyListings] = useState<IFixPriceList[]>([]);
   const batchBuyNow = useBatchBuyNow(nftInfo?.chainId);
@@ -129,7 +127,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
       }
 
       const batchBuyNowRes = await batchBuyNow({
-        symbol: nftInfo!.nftSymbol,
+        symbol: nftInfo?.nftSymbol || '',
         fixPriceList: buyListingData.map((list) => {
           return {
             ...list,
@@ -166,14 +164,13 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               logoImage: nftInfo?.nftCollection?.logoImage || '',
               subTitle: nftInfo?.nftCollection?.tokenName,
               title: nftInfo?.tokenName,
-              extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+              extra: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
             },
             jumpInfo: {
               url: explorerUrl,
             },
           });
         } else {
-          const length = batchBuyNowRes.failPriceList?.value.length || 1;
           const list = batchBuyNowRes.failPriceList?.value.map((item) => {
             const price = divDecimals(item.price.amount, 8);
             const convertPrice = new BigNumber(price).multipliedBy(elfRate);
@@ -205,7 +202,7 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
               logoImage: nftInfo?.nftCollection?.logoImage || '',
               subTitle: nftInfo?.nftCollection?.tokenName,
               title: nftInfo?.tokenName,
-              extra: isERC721(nftInfo!) ? undefined : handlePlurality(Number(quantity) - errorCount, 'item'),
+              extra: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(Number(quantity) - errorCount, 'item'),
             },
             jumpInfo: {
               url: explorerUrl,
@@ -244,10 +241,10 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
           image: nftInfo?.previewImage || '',
           collectionName: nftInfo?.nftCollection?.tokenName,
           nftName: nftInfo?.tokenName,
-          priceTitle: isERC721(nftInfo!) ? 'Listing Price' : 'Total Price',
+          priceTitle: nftInfo && isERC721(nftInfo) ? 'Listing Price' : 'Total Price',
           price: `${formatTokenPrice(totalPrice)} ELF`,
           usdPrice: formatUSDPrice(convertTotalPrice),
-          item: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+          item: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
         },
         title: BuyMessage.title,
         content: {

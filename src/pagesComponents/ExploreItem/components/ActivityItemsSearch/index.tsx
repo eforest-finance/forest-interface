@@ -1,6 +1,5 @@
 import CollectionSearch from 'pagesComponents/Collections/components/CollectionSearch';
 import styles from './styles.module.css';
-import CollapsedIcon from 'assets/images/explore/collapsed.svg';
 import clsx from 'clsx';
 import { dropDownActivitiesMenu } from 'components/ItemsLayout/assets';
 import useResponsive from 'hooks/useResponsive';
@@ -120,7 +119,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
             open={visible}
             onOpenChange={(open) => setVisible(open)}
             getPopupContainer={(node) => {
-              return node.parentElement!;
+              return node.parentElement || document.body;
             }}
             overlayClassName={styles['detail-activity-dropdown']}
             menu={dropdownMenu as unknown as MenuProps}>
@@ -138,7 +137,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
             open={visible}
             autoAdjustOverflow
             getPopupContainer={(node) => {
-              return node.parentElement!;
+              return node.parentElement || document.body;
             }}
             onOpenChange={(open) => setVisible(open)}
             overlayClassName={styles['detail-activity-dropdown']}
