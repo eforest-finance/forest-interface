@@ -1,0 +1,3 @@
+.carousel-item {
+  @apply w-full h-full relative !flex justify-center items-end mdl:justify-normal  mdl:items-center;
+}

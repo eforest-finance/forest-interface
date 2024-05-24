@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import AboveTheFold from './component/AboveTheFold';
-import ActionWrapper from './component/ActionWrapper';
-import { RecommendSeeds } from './component/RecommendSeeds';
+import ActionWrapper from '../Home/components/ActionWrapper';
+import { RecommendSeeds } from '../Home/components/RecommendSeeds';
 import { selectInfo, setShowDisconnectTip } from 'store/reducer/info';
 import { useEffect } from 'react';
 import { message } from 'antd';

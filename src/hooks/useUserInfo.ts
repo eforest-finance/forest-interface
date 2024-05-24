@@ -6,7 +6,6 @@ import { fetchUserInfo } from 'api/fetch';
 
 export default function useUserInfo() {
   const {
-    userInfo,
     walletInfo: { address: account },
   } = useSelector((store) => store.userInfo);
 
@@ -36,7 +35,7 @@ export default function useUserInfo() {
       store.dispatch(setUserInfo(result));
       return null;
     },
-    [account, userInfo],
+    [account],
   );
 
   return getUserInfo;

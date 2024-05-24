@@ -40,6 +40,7 @@ export default function getColumns(
   isMobile: boolean,
   sort: ISortProps,
   sortChange: (params: ISortProps) => void,
+  columnKeys?: string[],
 ): ColumnsType<Item> {
   const sortClick = debounce((sortItem: Sort) => {
     if (sort.sort === sortItem) {
@@ -98,7 +99,7 @@ export default function getColumns(
     return <span className={textClassName}>{showStr}</span>;
   };
 
-  return [
+  const columns = [
     {
       title: '#',
       dataIndex: 'index',
@@ -106,7 +107,7 @@ export default function getColumns(
       width: isMobile ? 28 : 54,
       ellipsis: true,
       key: 'index',
-      render: (text) => (
+      render: (text: string) => (
         <div className="flex items-center">
           <span className={clsx(styles['table-text'], 'font-semibold !text-[var(--table-header-text)]')}>{text}</span>
         </div>
@@ -122,7 +123,7 @@ export default function getColumns(
       width: isMobile ? 96 : 234,
       fixed: 'left',
       key: 'tokenName',
-      render: (text, record) => {
+      render: (text: string, record: Item) => {
         return (
           <div className="flex items-center">
             <div className={clsx(isMobile ? 'mr-2' : 'mr-4')}>
@@ -151,7 +152,7 @@ export default function getColumns(
       dataIndex: 'volumeTotal',
       key: 'volumeTotal',
       width: 144,
-      render: (text) => {
+      render: (text: string) => {
         return (
           <Tooltip title={thousandsNumber(text)}>
             <span>{formatNumberEnhance(text)} ELF</span>
@@ -171,7 +172,7 @@ export default function getColumns(
       dataIndex: 'floorPrice',
       width: 134,
       key: 'floorPrice',
-      render: (text, record) => (
+      render: (text: number, record: Item) => (
         <div className="flex items-center">
           <span className={clsx(styles['table-text'], 'font-medium')}>
             {(text || text === 0) && text >= 0
@@ -193,7 +194,7 @@ export default function getColumns(
       dataIndex: 'salesTotal',
       key: 'salesTotal',
       width: 98,
-      render: (text) => (
+      render: (text: number) => (
         <div className="flex items-center">
           <Tooltip title={thousandsNumber(text)}>
             <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
@@ -206,7 +207,7 @@ export default function getColumns(
       dataIndex: 'itemTotal',
       width: 93,
       key: 'itemTotal',
-      render: (text) => (
+      render: (text: number) => (
         <div className="flex items-center">
           <Tooltip title={thousandsNumber(text)}>
             <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
@@ -219,7 +220,7 @@ export default function getColumns(
       dataIndex: 'ownerTotal',
       width: 93,
       key: 'ownerTotal',
-      render: (text) => (
+      render: (text: number) => (
         <Tooltip title={thousandsNumber(text)}>
           <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
         </Tooltip>
@@ -231,7 +232,7 @@ export default function getColumns(
       key: 'supplyTotal',
       align: 'right',
       width: 132,
-      render: (text) => (
+      render: (text: number) => (
         <div className="text-right">
           <Tooltip title={thousandsNumber(text)}>
             <span className={clsx(styles['table-text'], 'font-medium')}>{formatNumberEnhance(text)}</span>
@@ -240,4 +241,11 @@ export default function getColumns(
       ),
     },
   ];
+
+  if (columnKeys?.length) {
+    return columns.filter((column) => {
+      return columnKeys.includes(column.dataIndex);
+    }) as any as ColumnsType<Item>;
+  }
+  return columns as any as ColumnsType<Item>;
 }

@@ -44,9 +44,9 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   const resultModal = useModal(ResultModal);
   const { login, isLogin } = useCheckLoginAndToken();
 
-  const { infoState, walletInfo, aelfInfo } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
-  const [token, setToken] = useState<string>('ELF');
+  const [token] = useState<string>('ELF');
   const [quantity, setQuantity] = useState<number | string>('');
   const [price, setPrice] = useState<number | string>('');
   const [loading, setLoading] = useState(false);
@@ -205,7 +205,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
   };
 
   const onMakeOffer = async () => {
-    if (isLogin) {
+    if (isLogin && nftInfo) {
       try {
         if (!durationTime || !checkDate(durationTime)) {
           setLoading(false);
@@ -217,10 +217,10 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
             image: nftInfo?.previewImage || '',
             collectionName: nftInfo?.nftCollection?.tokenName,
             nftName: nftInfo?.tokenName,
-            priceTitle: isERC721(nftInfo!) ? 'Offer Amount' : 'Total Amount',
+            priceTitle: isERC721(nftInfo) ? 'Offer Amount' : 'Total Amount',
             price: `${formatTokenPrice(totalPrice)} ${token || 'ELF'}`,
             usdPrice: formatUSDPrice(convertPrice),
-            item: isERC721(nftInfo!) ? undefined : handlePlurality(Number(quantity), 'item'),
+            item: isERC721(nftInfo) ? undefined : handlePlurality(Number(quantity), 'item'),
           },
           title: OfferMessage.title,
           content: {

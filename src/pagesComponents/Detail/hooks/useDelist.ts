@@ -38,7 +38,7 @@ export default function useDelist(chainId?: Chain) {
           return 'error';
         } else {
           const { TransactionId } = result.result || result;
-          messageHTML(TransactionId!, 'success', chainId);
+          TransactionId && messageHTML(TransactionId, 'success', chainId);
         }
         return result;
       } catch (error) {

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { ReactNode, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.css';
 import {
   useSearchCollections,
@@ -18,17 +18,36 @@ import { InputRef } from 'antd';
 import { useRouter } from 'next/navigation';
 import Table from 'baseComponents/Table';
 import TableEmpty from 'components/TableEmpty';
-import { Select, Option } from 'baseComponents/Select';
+import { Select } from 'baseComponents/Select';
 import clsx from 'clsx';
+
+export interface ICollectionProps {
+  title?: ReactNode;
+  showSearchBar?: boolean;
+  showPagination?: boolean;
+  columnKeys?: string[];
+  className?: string;
+  pageSize?: number;
+}
+
 interface TableDataItem extends Item {
   index: number;
 }
-export default function CollectionTable() {
+
+export default function CollectionTable(props: ICollectionProps) {
+  const {
+    title,
+    showSearchBar = true,
+    columnKeys,
+    className,
+    showPagination = true,
+    pageSize: defaultPageSize = 10,
+  } = props;
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
 
   const [current, setCurrent] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [TokenName, setTokenName] = useState<string>('');
   const [dateRangeType, setDateRangeType] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
@@ -124,7 +143,7 @@ export default function CollectionTable() {
       MaxResultCount: size,
     });
   };
-  const columns = getColumns(isMobile, sort, sortChange);
+  const columns = getColumns(isMobile, sort, sortChange, columnKeys);
 
   const [open, setOpen] = useState<boolean>(false);
   const searchRef = useRef<InputRef>(null);
@@ -146,61 +165,74 @@ export default function CollectionTable() {
   };
 
   return (
-    <div className={styles['collections-table']}>
+    <div className={`${styles['collections-table']} ${className}`}>
       <div className={styles.header}>
-        <div className={styles.title}>Collections</div>
-        <div className="search w-full flex mdl:w-auto">
-          <Select
-            value={dateRangeType}
-            onChange={dateTypeChange}
-            className={clsx(isMobile ? 'w-[86px]' : 'w-[146px]', 'mr-6')}
-            options={[
-              {
-                value: 0,
-                label: '24H',
-              },
-              {
-                value: 1,
-                label: '7D',
-              },
-            ]}></Select>
-          <CollectionSearch
-            ref={searchRef}
-            value={TokenName}
-            onChange={TokenNameChange}
-            onPressEnter={TokenNameChange}
-            onFocus={searchFocus}
-            className="mdl:!w-[632px] w-full flex-1"
-          />
-        </div>
+        {title ? (
+          <>{title}</>
+        ) : (
+          <>
+            <div className={styles.title}>{title ? title : 'Collections'}</div>
+
+            {showSearchBar && (
+              <div className="search w-full flex mdl:w-auto">
+                <Select
+                  value={dateRangeType}
+                  onChange={dateTypeChange}
+                  className={clsx(isMobile ? 'w-[86px]' : 'w-[146px]', 'mr-6')}
+                  options={[
+                    {
+                      value: 0,
+                      label: '24H',
+                    },
+                    {
+                      value: 1,
+                      label: '7D',
+                    },
+                  ]}></Select>
+                <CollectionSearch
+                  ref={searchRef}
+                  value={TokenName}
+                  onChange={TokenNameChange}
+                  onPressEnter={TokenNameChange}
+                  onFocus={searchFocus}
+                  className="mdl:!w-[632px] w-full flex-1"
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
       <Table
-        pagination={{
-          current,
-          pageSize,
-          total,
-          pageChange,
-          pageSizeChange,
-          hideOnSinglePage: true,
-          options: [
-            {
-              label: 10,
-              value: 10,
-            },
-            {
-              label: 20,
-              value: 20,
-            },
-            {
-              label: 50,
-              value: 50,
-            },
-            {
-              label: 100,
-              value: 100,
-            },
-          ],
-        }}
+        pagination={
+          showPagination
+            ? {
+                current,
+                pageSize,
+                total,
+                pageChange,
+                pageSizeChange,
+                hideOnSinglePage: true,
+                options: [
+                  {
+                    label: 10,
+                    value: 10,
+                  },
+                  {
+                    label: 20,
+                    value: 20,
+                  },
+                  {
+                    label: 50,
+                    value: 50,
+                  },
+                  {
+                    label: 100,
+                    value: 100,
+                  },
+                ],
+              }
+            : false
+        }
         searchText={TokenName}
         dataSource={dataSource}
         rowKey="id"
@@ -216,7 +248,7 @@ export default function CollectionTable() {
             },
           };
         }}
-        scroll={{ x: 1280 }}
+        scroll={{ x: columns.reduce((pre, cur) => pre + Number(cur.width || 50), 0) }}
         className={isMobile ? styles['mobile-table'] : ''}
         sticky={{
           offsetHeader: isSmallScreen ? 62 : 80,

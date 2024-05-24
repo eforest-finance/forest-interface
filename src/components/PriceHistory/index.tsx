@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CanvasRenderer } from 'echarts/renderers';
 import {
   TitleComponent,
@@ -40,7 +40,7 @@ interface IHistoryChart {
   priceList: [number, number][];
 }
 
-const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistoryChart) => {
+const HistoryChart = memo(({ theme, nftInfo, priceList }: IHistoryChart) => {
   const chart = useRef<HTMLDivElement>(null);
   const [myChart, setMyChart] = useState<echarts.ECharts>();
   const [isLoading, setIsLoading] = useState(false);
@@ -99,7 +99,7 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistor
         },
       ],
     }),
-    [isSmallScreen, pricesList, theme],
+    [pricesList, theme],
   );
 
   const getNftPrices = async () => {
@@ -147,7 +147,7 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistor
       myChart.setOption(echartsOption);
       myChart.resize();
     }
-  }, [echartsOption, pricesList]);
+  }, [echartsOption, pricesList, myChart]);
 
   useEffect(() => {
     if (!myChart) {
@@ -170,7 +170,7 @@ const HistoryChart = memo(({ isSmallScreen, theme, nftInfo, priceList }: IHistor
     return () => {
       resizeObserver.disconnect();
     };
-  }, [myChart]);
+  }, [myChart, echartsOption]);
 
   const onTimeChange = (time: string) => {
     setFirstTime((time !== '0' && new Date().getTime() - Number(time) * MILLISECONDS_PER_DAY) || 0);
@@ -204,7 +204,7 @@ export default function PriceHistory() {
   const { nftInfo } = detailInfo;
   const [pricesList, setPricesList] = useState<[number, number][]>([]);
 
-  const getNftPrices = async () => {
+  const getNftPrices = useCallback(async () => {
     try {
       if (!nftInfo?.id) {
         return;
@@ -229,13 +229,11 @@ export default function PriceHistory() {
     } catch (error) {
       /* empty */
     }
-  };
+  }, [nftInfo?.id]);
 
   useEffect(() => {
-    if (nftInfo?.id) {
-      getNftPrices();
-    }
-  }, [nftInfo?.id]);
+    getNftPrices();
+  }, [getNftPrices]);
 
   const items = [
     {

@@ -4,7 +4,7 @@ import useGetState from 'store/state/getState';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { ICreateItemsParams, IIssuerParams } from 'contract/type';
 import { message } from 'antd';
-import { store, useSelector } from 'store/store';
+import { useSelector } from 'store/store';
 import { BatchCreateNFTModal } from 'components/SyncChainModal/BatchCreateNFTModal';
 import { useModal } from '@ebay/nice-modal-react';
 
@@ -28,7 +28,7 @@ export const getSymbolByTokenId = (tokenId: number, collectinInfo: any) => {
 };
 
 export function useCreateSingeItemService({ collections }: { collections: any[] }) {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [, setLoading] = useState<boolean>(false);
   const { walletInfo } = useGetState();
   const { singleFile } = useSelector((store) => store.createItem);
 
@@ -62,7 +62,7 @@ export function useCreateSingeItemService({ collections }: { collections: any[] 
 
         const collectionInfo = collections.find((itm) => itm.id === formValues.collectionId);
 
-        const symbol = getSymbolByTokenId(formValues!.tokenId, collectionInfo);
+        const symbol = getSymbolByTokenId(formValues.tokenId, collectionInfo);
         const { exist } = await fetchSymbolHasExisted({ symbol });
         if (exist) {
           message.error('This token ID has been taken');
@@ -94,7 +94,7 @@ export function useCreateSingeItemService({ collections }: { collections: any[] 
               __nft_description: formValues.descrtion || '',
               __nft_file_url: singleFile.url,
               __nft_file_hash: singleFile.hash || '',
-              __nft_external_link: formValues.externalLink!,
+              __nft_external_link: formValues.externalLink,
               __nft_fileType: singleFile.fileType || '',
               __nft_metadata: JSON.stringify(formValues.metaData || []),
               __nft_preview_image: '',
@@ -123,9 +123,9 @@ export function useCreateSingeItemService({ collections }: { collections: any[] 
           createParams: params,
           issuerParams: {
             symbol,
-            amount: formValues!.quantity,
+            amount: formValues.quantity,
             memo: '3',
-            to: to!,
+            to: to,
           },
           proxyIssuerAddress,
           skipChainSync: !collectionInfo.isMainChainCreateNFT,

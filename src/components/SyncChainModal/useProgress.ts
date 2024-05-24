@@ -36,7 +36,7 @@ export function useProgress(progressTime = PROGRESS_TIME) {
       setProgressingForFinish(false);
       return;
     }
-  }, [accumulativeTime]);
+  }, [accumulativeTime, progressTime]);
 
   useUnmount(() => {
     clearFinishProgressing();

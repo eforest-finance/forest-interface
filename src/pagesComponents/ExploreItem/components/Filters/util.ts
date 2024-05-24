@@ -199,7 +199,7 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
     }> = [];
 
     targetKeys.forEach((key) => {
-      const [_, subKey] = key.split('-');
+      const [, subKey] = key.split('-');
       if (!subKey || !filterSelect?.[key]?.data?.length) return;
       res.push({
         key: subKey,

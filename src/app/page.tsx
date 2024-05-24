@@ -2,4 +2,4 @@
 
 import dynamic from 'next/dynamic';
 
-export default dynamic(() => import('pagesComponents/Landing'), { ssr: false });
+export default dynamic(() => import('pagesComponents/Home'), { ssr: false });

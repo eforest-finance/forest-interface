@@ -6,9 +6,6 @@ import { useEffect, useState } from 'react';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
 import { FormatOffersType, FormatListingType } from 'store/types/reducer';
-import { dispatch } from 'store/store';
-import { setOffers } from 'store/reducer/detail/detailInfo';
-import { cloneDeep } from 'lodash-es';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import BigNumber from 'bignumber.js';
@@ -25,11 +22,10 @@ function CancelModal(options: {
   const modal = useModal();
   const pathname = usePathname();
 
-  const { infoState, walletInfo } = useGetState();
+  const { infoState } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isSmallScreen } = infoState;
-  const { nftInfo, offers } = detailInfo;
-  const account = walletInfo.address;
+  const { nftInfo } = detailInfo;
   const cancelOffer = useCancelOffer(nftInfo?.chainId);
   const delist = useDelist(nftInfo?.chainId);
   const { onClose, type, data } = options;
@@ -38,25 +34,6 @@ function CancelModal(options: {
   const handleConfirm = async () => {
     setLoading(true);
     if (type === 'offer') {
-      let curKey = '';
-      const index =
-        offers?.items
-          ?.filter((item) => item?.from?.address === account)
-          ?.findIndex((item) => {
-            const { from, quantity, price, expireTime, key } = item;
-            curKey = key;
-            return (
-              from?.address === account &&
-              quantity === data?.quantity &&
-              price === data?.price &&
-              expireTime === (data as FormatOffersType)?.expireTime
-            );
-          }) ?? 0;
-      const curIndex =
-        offers?.items?.findIndex((item) => {
-          return curKey === item.key;
-        }) ?? 0;
-
       const result = await cancelOffer({
         symbol: nftInfo?.nftSymbol || '',
         tokenId: nftInfo?.nftTokenId || 0,

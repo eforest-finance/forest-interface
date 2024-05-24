@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import RangeInput from './RangeInput';
 import ELFICon from 'assets/images/explore/aelf.svg';
 import BigNumber from 'bignumber.js';
-const ZERO = new BigNumber(0);
 import styles from './RangeSelect.module.css';
 import clsx from 'clsx';
 import Button from 'baseComponents/Button';
@@ -12,7 +11,7 @@ function RangeSelect({ dataSource, maxCount, AMOUNT_LENGTH, decimals, defaultVal
   const customDecimals = decimals === 0 || decimals ? decimals : 4;
   const [range, setRange] = useState<RangeType>({ ...defaultValue?.[0] } as RangeType);
   const [applyDis, setApplyDis] = useState<boolean>(true);
-  const [clearDis, setClearDis] = useState<boolean>(true);
+  const [, setClearDis] = useState<boolean>(true);
   const [isApply, setIsApply] = useState<boolean>(false);
   const [minStatus, setMinStatus] = useState<'warning' | 'error' | ''>('');
   const [maxStatus, setMaxStatus] = useState<'warning' | 'error' | ''>('');
