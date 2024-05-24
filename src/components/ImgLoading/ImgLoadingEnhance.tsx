@@ -1,25 +1,17 @@
-import { ImgHTMLAttributes, ReactEventHandler, useCallback, useMemo, useState } from 'react';
+import { ReactEventHandler, useCallback, useMemo, useState } from 'react';
 import { Image, ImageProps } from 'antd';
 import useGetState from 'store/state/getState';
 import { ipfsURLToS3AndIpfsURL } from 'utils/reg';
 import { Skeleton } from 'antd';
 import clsx from 'clsx';
 import styles from './ImgLoading.module.css';
-import { StaticImageData } from 'next/image';
 
-export function ImageEnhance({
-  src = '',
-  alt,
-  onError,
-  ...props
-}: {
-  src?: string | StaticImageData | undefined;
-} & ImageProps) {
+export function ImageEnhance({ src = '', alt, onError, ...props }: ImageProps) {
   const [srcIndex, setSrcIndex] = useState<number>(0);
   const { aelfInfo } = useGetState();
   const srcs = useMemo(
     () => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL),
-    [src, aelfInfo.ipfsToS3ImageURL],
+    [src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL],
   );
   const imageUrl = useMemo(() => srcs[srcIndex], [srcIndex, srcs]);
   const nextSrc: ReactEventHandler<HTMLImageElement> = useCallback(

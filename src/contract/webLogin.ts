@@ -75,27 +75,41 @@ export default class WebLoginInstance {
   }
 
   contractSendMethod<T, R>(chain: Chain, params: CallContractParams<T>): Promise<R> {
+    let contractMethod = null;
     switch (chain) {
       case SupportedELFChainId.MAIN_NET:
-        return this.aelfSendMethod!(params);
+        contractMethod = this.aelfSendMethod;
+        break;
       case SupportedELFChainId.TDVV_NET:
-        return this.tdvvSendMethod!(params);
+        contractMethod = this.tdvvSendMethod;
+        break;
       case SupportedELFChainId.TDVW_NET:
-        return this.tdvwSendMethod!(params);
+        contractMethod = this.tdvwSendMethod;
+        break;
     }
-    throw new Error('Error: Invalid chain ID');
+    if (!contractMethod) {
+      throw new Error('Error: Invalid chain ID');
+    }
+    return contractMethod(params);
   }
 
   contractViewMethod<T, R>(chain: Chain, params: CallContractParams<T>): Promise<R> {
+    let contractMethod = null;
     switch (chain) {
       case SupportedELFChainId.MAIN_NET:
-        return this.aelfViewMethod!(params);
+        contractMethod = this.aelfViewMethod;
+        break;
       case SupportedELFChainId.TDVV_NET:
-        return this.tdvvViewMethod!(params);
+        contractMethod = this.tdvvViewMethod;
+        break;
       case SupportedELFChainId.TDVW_NET:
-        return this.tdvwViewMethod!(params);
+        contractMethod = this.tdvwViewMethod;
+        break;
     }
-    throw new Error('Error: Invalid chain ID');
+    if (!contractMethod) {
+      throw new Error('Error: Invalid chain ID');
+    }
+    return contractMethod(params);
   }
 
   callContract<T>(params: CallContractParams<T>) {

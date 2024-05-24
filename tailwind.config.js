@@ -116,6 +116,7 @@ module.exports = {
       lg: '1036px',
       xlb: '1280px',
       xl: '1360px',
+      mc: '1440px',
       '2xl': '1920px',
       smTW: '640px',
       mdTW: '768px',

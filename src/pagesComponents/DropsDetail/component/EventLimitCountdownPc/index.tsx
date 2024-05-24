@@ -1,7 +1,6 @@
 import { DropState } from 'api/types';
 import clsx from 'clsx';
 import { CountDown } from 'components/CountDown';
-import moment from 'moment';
 import React, { useMemo, useState } from 'react';
 import { setDropQuota } from 'store/reducer/dropDetail/dropDetailInfo';
 import useDropDetailGetState from 'store/state/dropDetailGetState';

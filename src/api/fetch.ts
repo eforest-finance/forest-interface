@@ -21,7 +21,6 @@ import {
   INftPricesParams,
   IPricesList,
   IListingsParams,
-  IActivitiesParams,
   IActivities,
   IWhitelistPriceTokensResponse,
   INftInfoParams,
@@ -64,6 +63,8 @@ import {
   ICollectionActivitiesParams,
   ICollectionActivitiesRes,
   IOwnedAllSymbolsParams,
+  IBannerResponse,
+  IHotNFTsRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -222,6 +223,10 @@ export const fetchConfigItems = async (): Promise<IConfigResponse> => {
   return cmsRequest.get<IConfigResponse>('items/config', { baseURL: '/cms' });
 };
 
+export const fetchBanner = async (): Promise<IBannerResponse> => {
+  return cmsRequest.get<IBannerResponse>('items/banner', { baseURL: '/cms' });
+};
+
 export const fetchToken = async (data: ITokenParams) => {
   return tokenRequest.post<
     ITokenParams,
@@ -323,4 +328,8 @@ export const fetchCollectionActivities = async (params?: Partial<ICollectionActi
     'app/nft/collection-activities',
     params,
   );
+};
+
+export const fetchHotNFTs = async (): Promise<IHotNFTsRes> => {
+  return request.get<IHotNFTsRes>('app/nft/hot-nft-infos');
 };

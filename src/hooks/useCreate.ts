@@ -22,10 +22,8 @@ import { message } from 'antd';
 import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import { sleep } from 'utils';
-import { getContractMethods } from '@portkey/contracts';
 
 const intervalTime = 20 * 1000;
-const errorRetryCount = 5;
 
 export enum CreateByEnum {
   Collection = 'collection',
@@ -402,7 +400,7 @@ export default function useCreateByStep() {
         await notifyCrossChainAndGetSyncResultStep({
           issueChainId: params.issueChainId as keyof typeof CHAIN_ID_VALUE,
           symbol: params.symbol,
-          TransactionId: result!.TransactionId,
+          TransactionId: result.TransactionId,
         });
         await sleep(10000);
       }

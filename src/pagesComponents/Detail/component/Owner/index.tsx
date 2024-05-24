@@ -2,7 +2,7 @@ import { useParams, useRouter } from 'next/navigation';
 import useDetailGetState from 'store/state/detailGetState';
 import { OmittedType, addPrefixSuffix, getOmittedStr } from 'utils';
 import useJumpExplorer from 'hooks/useJumpExplorer';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import Tooltip from 'baseComponents/Tooltip';
 import styles from './style.module.css';
 import OwnersList from '../OwnersList';
@@ -41,11 +41,11 @@ const Owner = ({ className, isERC721 }: { className?: string; isERC721?: boolean
       nftInfo && nftInfo?.owner ? (
         <div className={styles.owner}>
           <span className={styles.title}>Owned by &nbsp;</span>
-          <Tooltip title={addPrefixSuffix(nftInfo!.owner!.address)}>
+          <Tooltip title={addPrefixSuffix(nftInfo?.owner?.address)}>
             <span className={styles.value} onClick={toPageAccount}>
               {nftInfo.owner.address === walletInfo.address
                 ? 'you'
-                : getOmittedStr(nftInfo!.owner!.name || '', OmittedType.ADDRESS) || ''}
+                : getOmittedStr(nftInfo?.owner?.name || '', OmittedType.ADDRESS) || ''}
             </span>
           </Tooltip>
         </div>
@@ -58,7 +58,7 @@ const Owner = ({ className, isERC721 }: { className?: string; isERC721?: boolean
       nftInfo && nftInfo?.owner ? (
         <div className={styles.owner}>
           <Tooltip
-            title={nftInfo!.ownerCount}
+            title={nftInfo?.ownerCount}
             trigger={'hover'}
             zIndex={999}
             overlayInnerStyle={{ textAlign: 'center' }}>

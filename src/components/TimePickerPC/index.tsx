@@ -11,7 +11,7 @@ export default function TimePickerPC(options: {
   className?: string;
   defaultTime: moment.Moment;
 }) {
-  const { onSelect, value, popupClassName, defaultTime, className } = options;
+  const { onSelect, value, popupClassName, defaultTime } = options;
   return (
     <DatePicker
       picker="time"

@@ -3,7 +3,6 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { memo, useEffect, useState } from 'react';
 import Button from 'baseComponents/Button';
 import { Checkbox } from 'antd';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Loading from 'components/Loading';
 import useGetState from 'store/state/getState';
@@ -11,7 +10,6 @@ import clsx from 'clsx';
 
 function LoginModal({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   const modal = useModal();
-  const pathname = usePathname();
 
   const [loading, setLoading] = useState<boolean>(false);
 

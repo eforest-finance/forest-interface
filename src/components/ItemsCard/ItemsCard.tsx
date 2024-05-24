@@ -1,17 +1,15 @@
 import { Card } from 'antd';
-import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 import Logo from 'components/Logo';
 import { useSelector } from 'store/store';
 import { useMemo } from 'react';
 import { INftInfo } from 'types/nftTypes';
-import { unitConverter } from 'utils/unitConverter';
 import styles from './ItemsCard.module.css';
 import StarD from 'assets/images/night/star.svg';
 import StarL from 'assets/images/light/star.svg';
 import { useTheme } from 'hooks/useTheme';
 import ELFPng from 'assets/images/ELF.png';
 import { SYMBOL_TYPE } from 'constants/Symbol';
-import { COLLECTION_DEFAULT_IMG } from 'constants/FileConfig';
 import Button from 'baseComponents/Button';
 import { formatTokenPrice } from 'utils/format';
 
@@ -28,9 +26,6 @@ const isTrueOrZero = (n?: number) => {
 };
 
 export default function ItemsCard({ dataSource, extraActions, hiddenActions, onClick }: ItemsCardProps) {
-  const {
-    walletInfo: { address },
-  } = useSelector((store) => store.userInfo);
   const [theme] = useTheme();
   const {
     info: { isSmallScreen },

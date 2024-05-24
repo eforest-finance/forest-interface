@@ -112,7 +112,7 @@ export const createToken = async (
       client_id: 'NFTMarketServer_App',
       timestamp,
       version: version === 'v1' ? 'v1' : 'v2',
-      signature: sign!.signature,
+      signature: sign?.signature,
       ...extraParam,
     } as ITokenParams);
     const tokenRes = {

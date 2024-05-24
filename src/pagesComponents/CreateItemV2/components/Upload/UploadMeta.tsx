@@ -19,7 +19,7 @@ interface UploadMetaProps {
 const UploadMeta: React.FC<UploadMetaProps> = (props: UploadMetaProps) => {
   const { onChange } = props;
   const [fileName, setFileName] = useState('');
-  const [_, setMetaList] = useState<Array<ItemFromCsv>>([]);
+  const [, setMetaList] = useState<Array<ItemFromCsv>>([]);
   const { batchFiles } = store.getState().createItem;
   const { csvTemplate } = useSelector((store) => store.aelfInfo.aelfInfo);
 

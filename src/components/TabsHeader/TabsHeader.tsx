@@ -1,4 +1,4 @@
-import { Space, TabPaneProps, Tabs, TabsProps } from 'antd';
+import { Image, Space, TabPaneProps, Tabs, TabsProps } from 'antd';
 import { useSelector } from 'store/store';
 import styles from './TabsHeader.module.css';
 export interface TabNavType extends TabPaneProps {
@@ -54,7 +54,7 @@ export default function TabsHeader({ tabNav, activeKey, onChange, ...props }: Ta
         .map((item) => {
           let icon = item.icon;
           if (typeof item.icon === 'string') {
-            icon = <img src={item.icon} />;
+            icon = <Image src={item.icon} alt="" preview={false} />;
           }
           return <Tabs.TabPane {...item} tab={<TabWrapper icon={icon} item={item} />} key={item.key} />;
         })}

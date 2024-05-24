@@ -38,7 +38,7 @@ function ImgLoading({
   const [loadableStatus, setLoadableStatus] = useState<boolean>(isUrl(src));
   const imgSrcs = useMemo(
     () => ipfsURLToS3AndIpfsURL(src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL),
-    [src],
+    [src, aelfInfo.ipfsToS3ImageURL, aelfInfo.ipfsToSchrodingerURL],
   );
   const [srcIndex, setSrcIndex] = useState<number>(0);
 

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import style from './index.module.css';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useMount } from 'react-use';
 
 interface IconProps {
   fill?: string;
@@ -12,9 +13,9 @@ interface IconProps {
   node?: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
-const Icon = ({ name, src, className, defaultColor, fill, hoverColor, node, ...rest }: IconProps) => {
+const Icon = ({ src, className, defaultColor, fill, hoverColor, node, ...rest }: IconProps) => {
   const rootRef = useRef<any>(null);
-  useEffect(() => {
+  useMount(() => {
     if (rootRef.current) {
       const rootNode = rootRef.current;
       const path = rootRef.current.querySelector('path');
@@ -34,7 +35,7 @@ const Icon = ({ name, src, className, defaultColor, fill, hoverColor, node, ...r
         });
       }
     }
-  }, [rootRef.current]);
+  });
 
   const SVG = node;
 

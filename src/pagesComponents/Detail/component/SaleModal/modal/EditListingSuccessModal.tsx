@@ -22,9 +22,9 @@ function EditListingSuccessModalConstructor({
 }) {
   const modal = useModal();
   useNiceModalCommonService(modal);
-  const { infoState, walletInfo } = useGetState();
+  const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
 
   const aProps = { target: '_blank', rel: 'noreferrer' };
 

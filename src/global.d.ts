@@ -12,7 +12,7 @@ interface Window {
   NightElf?: {};
 }
 
-interface HTMLAttributes<T> {
+interface HTMLAttributes {
   scrollTop?: number;
 }
 

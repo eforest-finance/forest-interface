@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './RangeSelect.module.css';
 import clsx from 'clsx';
 import Input from 'baseComponents/Input';
@@ -48,15 +48,15 @@ export default function RangeInput(props: RangeInputProps) {
     }
     return value;
   };
-  const minHandler = useCallback((v: ChangeEvent) => {
+  const minHandler = (v: ChangeEvent) => {
     const val = formatNumber(v);
     setMin(val);
-  }, []);
+  };
 
-  const maxHandler = useCallback((v: ChangeEvent) => {
+  const maxHandler = (v: ChangeEvent) => {
     const val = formatNumber(v);
     setMax(val);
-  }, []);
+  };
   useEffect(() => {
     onValueChange?.(min, max);
   }, [min, max, onValueChange]);

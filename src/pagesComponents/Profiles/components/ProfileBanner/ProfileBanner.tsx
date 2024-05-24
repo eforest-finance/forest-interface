@@ -1,10 +1,6 @@
-import { Avatar, message } from 'antd';
+import { Avatar } from 'antd';
 import styles from './ProfileBanner.module.css';
 
-import Email from 'assets/images/icons/email.svg';
-import Instagram from 'assets/images/icons/instagram.svg';
-import Twitter from 'assets/images/icons/twitter.svg';
-import { useCopyToClipboard } from 'react-use';
 import { useSelector } from 'store/store';
 import Copy from 'components/Copy';
 
@@ -18,9 +14,6 @@ export default function ProfileBanner({
   profileImage,
   name,
   address,
-  email,
-  twitter,
-  instagram,
 }: {
   bannerImage: string;
   profileImage: string;
@@ -30,7 +23,6 @@ export default function ProfileBanner({
   twitter: string | null;
   instagram: string | null;
 }) {
-  const [, setCopied] = useCopyToClipboard();
   const {
     info: { isSmallScreen },
   } = useSelector((store) => store);

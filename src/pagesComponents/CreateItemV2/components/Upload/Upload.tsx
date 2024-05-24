@@ -16,7 +16,7 @@ interface IUploadProps extends UploadProps {
   onChange?: (file: any) => void;
 }
 
-export default (props: IUploadProps) => {
+const Upload = (props: IUploadProps) => {
   const { collection } = store.getState().createItem;
   const { isBatch = true, metaList } = props;
   const handleSingleUploadChange = (uploadFile: ISingleFile) => {
@@ -39,3 +39,5 @@ export default (props: IUploadProps) => {
     </div>
   );
 };
+
+export default Upload;

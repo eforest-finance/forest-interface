@@ -136,5 +136,7 @@ const tokenRequest = new Request({
   },
 });
 
-export default new Request({});
+const commonApiRequest = new Request({});
+
+export default commonApiRequest;
 export { cmsRequest, tokenRequest };

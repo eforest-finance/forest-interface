@@ -21,6 +21,7 @@ export default function useDeal(chainId?: Chain) {
   const resultModal = useModal(ResultModal);
 
   const showErrorModal = ({ quantity }: { quantity: number }) => {
+    if (!nftInfo) return;
     resultModal.show({
       previewImage: nftInfo?.previewImage || '',
       title: DealMessage.errorMessage.title,
@@ -29,7 +30,7 @@ export default function useDeal(chainId?: Chain) {
         logoImage: nftInfo?.nftCollection?.logoImage || '',
         subTitle: nftInfo?.nftCollection?.tokenName,
         title: nftInfo?.tokenName,
-        extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        extra: isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
       },
       error: {
         title: DealMessage.errorMessage.tips,
@@ -68,7 +69,7 @@ export default function useDeal(chainId?: Chain) {
       );
       message.destroy();
       const { TransactionId } = result.result || result;
-      messageHTML(TransactionId!, 'success', chainId);
+      TransactionId && messageHTML(TransactionId, 'success', chainId);
       return {
         TransactionId,
       };

@@ -5,7 +5,7 @@ import styles from './style.module.css';
 import Button from 'baseComponents/Button';
 import UploadMeta from '../Upload/UploadMeta';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
-import { store, useSelector } from 'store/store';
+import { useSelector } from 'store/store';
 
 interface IBatchCreateFormProps {
   optionsForCollection: any[];
@@ -31,9 +31,9 @@ export function BatchCreateForm({
       return;
     }
 
-    for (let i = 0; i < batchFiles!.length; i++) {
-      const nftItem = batchFiles![i];
-      if (nftItem.error) {
+    for (let i = 0; i < (batchFiles?.length || 0); i++) {
+      const nftItem = batchFiles?.[i];
+      if (nftItem?.error) {
         message.error('wrong data');
         return;
       }

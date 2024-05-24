@@ -1,4 +1,4 @@
-import { List, Spin } from 'antd';
+import { Spin } from 'antd';
 import { INftInfo } from 'types/nftTypes';
 import useColumns from 'hooks/useColumns';
 import ItemsCard from 'components/ItemsCard';

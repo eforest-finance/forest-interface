@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-inline-styles/no-inline-styles */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useGetState from 'store/state/getState';
 import { ImageEnhance } from 'components/ImgLoading';
 import { Progress } from 'antd';
 
 import styles from './style.module.css';
-import { ICreateItemsParams, IIssuerParams } from 'contract/type';
+import { ICreateItemsParams } from 'contract/type';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
 import { useBatchCreateNFTLogic } from './useBatchCreateNFTLogic';

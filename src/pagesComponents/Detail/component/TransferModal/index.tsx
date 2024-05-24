@@ -5,13 +5,11 @@ import { ChangeEvent, ReactNode, memo, useEffect, useMemo, useState } from 'reac
 
 import useDetailGetState from 'store/state/detailGetState';
 import useGetState from 'store/state/getState';
-// import Image, { StaticImageData } from 'next/image';
 import { ImageEnhance } from 'components/ImgLoading';
 import { addPrefixSuffix, getExploreLink } from 'utils';
 import { decodeTransferAddress as aelfDecodeAddress } from 'utils/aelfUtils';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
-import { matchErrorMsg } from 'contract/formatErrorMsg';
 import { debounce } from 'lodash-es';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { usePathname } from 'next/navigation';
@@ -26,7 +24,6 @@ import { isERC721 } from 'utils/isTokenIdReuse';
 import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice } from 'utils/format';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
-import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import { WalletType, useWebLogin } from 'aelf-web-login';
 import styles from './style.module.css';
 import { timesDecimals } from 'utils/calculate';
@@ -37,7 +34,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const promptModal = useModal(PromptModal);
   const pathname = usePathname();
 
-  const { walletInfo, aelfInfo } = useGetState();
+  const { walletInfo } = useGetState();
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
@@ -54,8 +51,6 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   const isPortkeyConnected = walletType === WalletType.portkey;
 
   const [curImage, setCurImage] = useState<string | StaticImageData>(nftInfo?.previewImage || nftPreview);
-
-  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
 
   useEffect(() => {
     if (nftInfo?.previewImage) {
@@ -151,7 +146,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
         image: nftInfo?.previewImage || '',
         collectionName: nftInfo?.nftCollection?.tokenName,
         nftName: nftInfo?.tokenName,
-        item: isERC721(nftInfo!) ? undefined : handlePlurality(Number(inputQuantity) || 1, 'item'),
+        item: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(Number(inputQuantity) || 1, 'item'),
       },
       title: TransferMessage.title,
       content: {

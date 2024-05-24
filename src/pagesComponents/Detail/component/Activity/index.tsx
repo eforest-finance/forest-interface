@@ -1,4 +1,4 @@
-import { Checkbox, MenuProps, message, Space } from 'antd';
+import { Checkbox, MenuProps, Space } from 'antd';
 import ELF from 'assets/images/ELF.png';
 import Logo from 'components/Logo';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,7 +10,6 @@ import CloseOutlined from 'assets/images/explore/tag-close.svg';
 
 import styles from './style.module.css';
 import moment from 'moment';
-import { useCopyToClipboard } from 'react-use';
 import { useRouter } from 'next/navigation';
 import useGetState from 'store/state/getState';
 import useDetailGetState from 'store/state/detailGetState';
@@ -25,7 +24,6 @@ import Dropdown from 'baseComponents/Dropdown';
 import { formatTokenPrice } from 'utils/format';
 
 export default function Activity() {
-  const [, setCopied] = useCopyToClipboard();
   const { infoState } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isMobile, isSmallScreen } = infoState;
@@ -89,11 +87,6 @@ export default function Activity() {
 
   const getLogoUrl = (symbol: string) => {
     return symbol && symbol.toUpperCase() === 'ELF' ? ELF : '';
-  };
-
-  const onJump = (record: IActivitiesItem) => {
-    setCopied(getExploreLink(record.transactionHash, 'transaction', nftInfo?.chainId) || '');
-    message.success('Copied');
   };
 
   const columns = useMemo(
@@ -232,7 +225,7 @@ export default function Activity() {
         .filter((key) => filterObj[key])
         .map((key) => filterList.findIndex((item) => item === key));
       const params = qs.stringify({
-        nftInfoId: nftInfo!.id,
+        nftInfoId: nftInfo?.id,
         types,
         skipCount: page * MAX_RESULT_COUNT_10,
         maxResultCount: MAX_RESULT_COUNT_10,

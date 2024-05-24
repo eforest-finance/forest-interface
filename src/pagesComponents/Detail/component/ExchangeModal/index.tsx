@@ -47,9 +47,8 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
   const resultModal = useModal(ResultModal);
   const pathname = usePathname();
 
-  const { infoState, walletInfo } = useGetState();
+  const { walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
-  const { isSmallScreen } = infoState;
   const { nftInfo, nftNumber } = detailInfo;
   const { onClose, art, nftBalance } = options;
   const [loading, setLoading] = useState<boolean>(false);
@@ -67,18 +66,16 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
   const [quantity, setQuantity] = useState<number>(1);
 
   const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
-  const price = new BigNumber(art?.price || 0);
-  const convertPrice = new BigNumber(art?.convertPrice || 0);
 
   const onVisibleChange = () => {
     setQuantity(1);
   };
 
   const totalPrice = useMemo(() => {
-    const priceBig = new BigNumber(price);
+    const priceBig = new BigNumber(art?.price || 0);
     const quantityBig = new BigNumber(quantity || 0);
     return priceBig.multipliedBy(quantityBig);
-  }, [price, quantity]);
+  }, [art?.price, quantity]);
 
   const totalUSDPrice = useMemo(() => {
     const totalPriceBig = new BigNumber(totalPrice);
@@ -143,7 +140,7 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
           logoImage: nftInfo?.nftCollection?.logoImage || '',
           subTitle: nftInfo?.nftCollection?.tokenName,
           title: nftInfo?.tokenName,
-          extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+          extra: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
         },
         jumpInfo: {
           url: explorerUrl,
@@ -162,10 +159,10 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
         image: nftInfo?.previewImage || '',
         collectionName: nftInfo?.nftCollection?.tokenName,
         nftName: nftInfo?.tokenName,
-        priceTitle: isERC721(nftInfo!) ? 'Offer Amount' : 'Total Offer Amount',
+        priceTitle: nftInfo && isERC721(nftInfo) ? 'Offer Amount' : 'Total Offer Amount',
         price: `${formatTokenPrice(totalPrice)} ${art.token.symbol || 'ELF'}`,
         usdPrice: formatUSDPrice(totalUSDPrice),
-        item: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        item: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
       },
       title: DealMessage.title,
       content: {

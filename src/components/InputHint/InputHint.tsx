@@ -1,5 +1,5 @@
 import { InputProps } from 'antd-mobile/es/components/input';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDebounce } from 'react-use';
 import { SyncOutlined } from '@ant-design/icons';
 

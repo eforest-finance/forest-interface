@@ -371,6 +371,22 @@ export interface IConfigItems {
   ipfsToSchrodingerURL?: string;
 }
 
+export interface IBanner {
+  h5: IBannerItem;
+  pc: IBannerItem;
+}
+
+export interface IBannerItem {
+  image: string;
+  link: string;
+  title: string;
+  description: string;
+}
+
+export interface IBannerResponse {
+  itemList: Array<IBanner>;
+}
+
 export interface IUserSettingParams {
   name?: string;
   email?: string;
@@ -720,4 +736,24 @@ export interface ICollectionActivitiesParams {
 export interface ICollectionActivitiesRes {
   totalCount: number;
   items: IActivitiesItem[];
+}
+
+export interface IHotNFT {
+  collectionName: string;
+  collectionSymbol: string;
+  collectionImage: string;
+  collectionId: string;
+  nftName: string;
+  nftSymbol: string;
+  previewImage: string;
+  nftId: string;
+  latestDealPrice: number;
+  offerPrice: number;
+  link?: string;
+  chainId: string;
+  id: string;
+}
+
+export interface IHotNFTsRes {
+  items: IHotNFT[];
 }
