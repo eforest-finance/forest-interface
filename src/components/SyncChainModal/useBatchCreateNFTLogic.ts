@@ -29,7 +29,7 @@ export function useBatchCreateNFTLogic(
   const [modalCloseIconShowStatus, setModalCloseIconShowStatus] = useState<boolean>(true);
   const [confirmBtnShowStatus, setConfirmBtnShowStatus] = useState<boolean>(true);
   const [creating, setCreating] = useState<boolean>(false);
-  const [creatingFailed, setCreatingFailed] = useState<boolean>(false);
+  const [creatingFailed] = useState<boolean>(false);
   const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
 
   const { createParamsArr = [], proxyOwnerAddress, proxyIssuerAddress, collectionInfo } = createParamsData;
@@ -48,7 +48,7 @@ export function useBatchCreateNFTLogic(
       finish();
       setModalCloseIconShowStatus(true);
 
-      const explorerUrl = getExploreLink(result.TransactionId!, 'transaction', curChain as Chain);
+      const explorerUrl = getExploreLink(result.TransactionId as string, 'transaction', curChain as Chain);
 
       modal.hide();
 

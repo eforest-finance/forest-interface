@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import styles from './index.module.css';
 import useCountdown from 'hooks/useCountDown';
 import { timeFillDigits } from 'utils/format';

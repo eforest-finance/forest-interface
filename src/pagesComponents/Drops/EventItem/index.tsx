@@ -1,25 +1,15 @@
 import moment from 'moment';
 import useResponsive from 'hooks/useResponsive';
-import clsx from 'clsx';
 import { IActionDetail } from 'api/types';
 import { formatTokenPrice } from 'utils/format';
 import SkeletonImage from 'baseComponents/SkeletonImage';
 import BigNumber from 'bignumber.js';
 
-const COLLECTION_DEFAULT_IMG = 'https://forest-test.oss-cn-hongkong.aliyuncs.com/host/protocol-featured.jpg';
-
 interface IEventItemProps extends IActionDetail {
   imageUrl?: string;
 }
 
-export function EventItem({
-  imageUrl = COLLECTION_DEFAULT_IMG,
-  expireTime,
-  startTime,
-  mintPrice,
-  logoUrl,
-  dropName,
-}: IEventItemProps) {
+export function EventItem({ expireTime, startTime, mintPrice, logoUrl, dropName }: IEventItemProps) {
   const { isXS } = useResponsive();
 
   const renderTime = () => {

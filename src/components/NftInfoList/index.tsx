@@ -1,13 +1,11 @@
-import { StaticImageData } from 'next/image';
 import React, { useMemo } from 'react';
-import useGetState from 'store/state/getState';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { handlePlurality } from 'utils/handlePlurality';
 import { ImageEnhance } from 'components/ImgLoading';
 
 export interface INftInfoList {
-  image?: string | StaticImageData | null;
+  image?: string | null;
   collectionName?: string;
   nftName?: string;
   item?: string | number;
@@ -19,9 +17,6 @@ export interface INftInfoList {
 
 const NftInfoList = (props: INftInfoList) => {
   const { collectionName, nftName, item, priceTitle, price, usdPrice, onClick } = props;
-
-  const { infoState } = useGetState();
-  const { isSmallScreen } = infoState;
 
   const itemText = useMemo(() => {
     if (typeof item === 'number') {
@@ -37,7 +32,7 @@ const NftInfoList = (props: INftInfoList) => {
       <div className="flex items-center mr-[16px] overflow-hidden flex-1">
         {props?.image && (
           <div className="overflow-hidden w-[48px] h-[48px] mdTW:w-[84px] mdTW:h-[84px] flex justify-center items-center mr-[16px] rounded-md border border-solid border-lineBorder">
-            <ImageEnhance src={props.image} imageSizeType="contain" className="!rounded-none" />
+            <ImageEnhance src={props.image} className="!rounded-none" />
           </div>
         )}
 

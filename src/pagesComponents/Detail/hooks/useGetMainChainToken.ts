@@ -4,7 +4,6 @@ import useGetState from 'store/state/getState';
 
 export function useGetMainChainBalance({ tokenName }: { tokenName: string }) {
   const [balance, setBalance] = useState(0);
-  const [totalQuantity, setTotalQuantity] = useState(0);
 
   const { walletInfo } = useGetState();
 

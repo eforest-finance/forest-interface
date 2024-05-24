@@ -4,7 +4,6 @@ import styles from './style.module.css';
 import useDetailGetState from 'store/state/detailGetState';
 import React from 'react';
 import useGetState from 'store/state/getState';
-import { divDecimals } from 'utils/calculate';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import Button from 'baseComponents/Button';
 import { useModal } from '@ebay/nice-modal-react';

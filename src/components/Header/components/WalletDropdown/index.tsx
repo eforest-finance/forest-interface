@@ -171,7 +171,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
     if (account) {
       getUser();
     }
-  }, [account]);
+  }, [account, getUser]);
 
   return (
     <div>

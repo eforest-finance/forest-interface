@@ -169,7 +169,7 @@ export interface IContractError extends Error {
   from?: string;
   sid?: string;
   result?: {
-    TransactionId?: string;
+    TransactionId: string;
     transactionId?: string;
   };
   TransactionId?: string;
@@ -180,7 +180,7 @@ export interface IContractError extends Error {
 export interface IApproveParams {
   spender: string;
   symbol: string;
-  amount: number;
+  amount: number | string;
 }
 
 export interface ITagInfo {

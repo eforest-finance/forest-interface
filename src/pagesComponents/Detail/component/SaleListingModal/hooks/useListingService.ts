@@ -1,7 +1,7 @@
 import { useMount } from 'react-use';
 import { INftInfo } from 'types/nftTypes';
 import useGetState from 'store/state/getState';
-import batchDeList from 'pagesComponents/SetSale/utils/batchDeList';
+import batchDeList from 'pagesComponents/Detail/component/SaleModal/utils/batchDeList';
 import { BatchDeListType, IContractError, IPrice, ITimestamp } from 'contract/type';
 import { FormatListingType } from 'store/types/reducer';
 import { useState } from 'react';
@@ -121,7 +121,7 @@ export function useListingService(
 
       message.destroy();
       const { TransactionId } = result.result || result;
-      messageHTML(TransactionId!, 'success', chainId);
+      messageHTML(TransactionId as string, 'success', chainId);
       return result;
     } catch (error) {
       const resError = error as IContractError;

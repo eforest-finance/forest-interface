@@ -19,7 +19,6 @@ import { getOffersInfo } from './utils/getOffersInfo';
 import useIntervalRequestForOffers from 'pagesComponents/Detail/hooks/useIntervalRequestForOffers';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import getTextWidth from 'utils/getTextWidth';
-import { DEFAULT_CELL_WIDTH } from 'constants/index';
 import TableCell from '../TableCell';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
 import isTokenIdReuse from 'utils/isTokenIdReuse';
@@ -29,7 +28,6 @@ import { CancelOfferMessage } from 'constants/promptMessage';
 import { handlePlurality } from 'utils/handlePlurality';
 import useCancelOffer from 'pagesComponents/Detail/hooks/useCancelOffer';
 import BigNumber from 'bignumber.js';
-import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import Copy from 'components/Copy';
 
 export const COLUMN_TITLE = {
@@ -48,7 +46,7 @@ export default function Offers(options: { rate: number }) {
   const promptModal = useModal(PromptModal);
   const columWidth = useRef<Map<string, number>>();
 
-  const { infoState, walletInfo, aelfInfo } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const { detailInfo } = useDetailGetState();
   const { nftInfo, offers, nftNumber } = detailInfo;
@@ -61,8 +59,6 @@ export default function Offers(options: { rate: number }) {
   };
 
   useIntervalRequestForOffers(id, chainId);
-
-  const { getAccountInfoSync } = useWalletSyncCompleted(aelfInfo.curChain);
 
   const nav = useRouter();
 
@@ -148,7 +144,7 @@ export default function Offers(options: { rate: number }) {
         id: nftInfo?.nftTokenId,
         name: nftInfo?.tokenName || '',
         token: { symbol: record?.token.symbol },
-        symbol: nftInfo!.nftSymbol,
+        symbol: nftInfo?.nftSymbol,
         collection: nftInfo.nftCollection?.tokenName,
         nftDecimals: Number(nftInfo?.decimals || 0),
         decimals: record?.decimals,

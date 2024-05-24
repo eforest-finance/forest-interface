@@ -1,4 +1,4 @@
-import React, { useMemo, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import { Button as AntdButton, ButtonProps as AntdButtonProps } from 'antd';
 import styles from './index.module.css';
 import { SizeType as AntdSizeType } from 'antd/lib/config-provider/SizeContext';
@@ -22,7 +22,7 @@ function Button(props: ButtonProps) {
     mini: styles['forest-btn-mini'],
   };
 
-  const isExtSize = useMemo(() => size && extSizeType.includes(size), [size]);
+  const isExtSize = size && extSizeType.includes(size);
 
   const { run: buttonClickHandler } = useThrottleFn(
     (e: MouseEvent<HTMLElement>) => {

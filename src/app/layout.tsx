@@ -1,7 +1,5 @@
 import '../styles/base.css';
 
-import Script from 'next/script';
-
 import 'antd/dist/antd.css';
 
 import '@portkey/did-ui-react/dist/assets/index.css';

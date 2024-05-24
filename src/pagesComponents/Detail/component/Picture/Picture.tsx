@@ -1,5 +1,5 @@
 import FileView from 'components/FileView/FileView';
-import ImgLoading, { ImageEnhance } from 'components/ImgLoading';
+import { ImageEnhance } from 'components/ImgLoading';
 
 import { useMemo, useState } from 'react';
 import Preview from 'assets/images/icons/preview.svg';

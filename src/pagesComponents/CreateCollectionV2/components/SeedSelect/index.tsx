@@ -20,12 +20,6 @@ interface ISeedSelectProps extends SelectProps {
   searching?: boolean;
 }
 
-interface ValueType {
-  key?: string;
-  label: React.ReactNode;
-  value: string | number;
-}
-
 function EmptySeed({ searchKeyword }: { searchKeyword?: string }) {
   if (!searchKeyword) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No owned SEEDs were found." />;

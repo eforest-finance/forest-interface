@@ -79,7 +79,7 @@ const whiteListContractRequest = async <T, R>(
       const { transactionId, TransactionId } = result.result || result;
       const resTransactionId = TransactionId || transactionId;
       await sleep(1000);
-      const transaction = await getTxResult(resTransactionId!, curChain);
+      const transaction = await getTxResult(resTransactionId || '', curChain);
       console.log('=====whiteListContractRequest transaction: ', method, transaction);
 
       return Promise.resolve({ TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult });

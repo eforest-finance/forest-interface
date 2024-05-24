@@ -60,7 +60,7 @@ export default function useMakeOffer(chainId?: Chain) {
           message.destroy();
           if (result) {
             const { TransactionId } = result.result || result;
-            messageHTML(TransactionId!, 'success', chainId);
+            messageHTML(TransactionId as string, 'success', chainId);
             return {
               ...result,
               TransactionId,

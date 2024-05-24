@@ -6,8 +6,6 @@ import { useTimeoutFn } from 'react-use';
 
 const PORTKEY_LOGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';
 
-const APP_NAME = 'forest';
-
 export default function MyAsset() {
   const router = useRouter();
   const { loginState, walletType } = useWebLogin();

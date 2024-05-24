@@ -70,7 +70,7 @@ const proxyContractRequest = async <T, R>(
       const { transactionId, TransactionId } = result.result || result;
       const resTransactionId = TransactionId || transactionId;
       await sleep(1000);
-      const transaction = await getTxResult(resTransactionId!, curChain);
+      const transaction = await getTxResult(resTransactionId as string, curChain);
       return Promise.resolve({ TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult });
     }
   } catch (error) {

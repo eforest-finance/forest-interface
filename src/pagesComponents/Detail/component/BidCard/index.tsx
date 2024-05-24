@@ -1,10 +1,10 @@
 import useGetState from 'store/state/getState';
 import styles from './style.module.css';
-import React, { useEffect } from 'react';
+import React from 'react';
 import CollapseForPC from 'components/Collapse';
 import { IBidInfo, IAuctionInfoResponse } from 'api/types';
 import Question from 'assets/images/question.svg';
-import { formatAmount, fix4NotInt } from 'utils/formatElf';
+import { formatAmount } from 'utils/formatElf';
 import { OmittedType, getOmittedStr, getOriginalAddress } from 'utils';
 import Link from 'next/link';
 import Table from 'baseComponents/Table';

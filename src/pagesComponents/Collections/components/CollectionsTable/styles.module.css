@@ -6,6 +6,12 @@
   .title {
     @apply text-[var(--color-primary)] text-[40px] font-semibold leading-[48px] mdl:mb-0 mb-[16px];
   }
+
+  :global {
+    .ant-table-row {
+      @apply mdl:!h-[96px] !h-[68px]  cursor-pointer;
+    }
+  }
 }
 
 .table-text {

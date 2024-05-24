@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useUpdateEffect } from 'react-use';
 
 export interface ISetSellItemNumberProps {
   onChange?: (value: number | string) => void;
@@ -26,11 +25,6 @@ export function useSellItemNumber({ onChange, maxNumber }: ISetSellItemNumberPro
     console.log('inputChange status', value);
     setStatus(status);
   };
-
-  // useUpdateEffect(() => {
-  //   const status = !Number(value) ? 'error' : Number(value) > Number(maxNumber) ? 'error' : '';
-  //   setStatus(status);
-  // }, [value, maxNumber]);
 
   return {
     maxNumber,

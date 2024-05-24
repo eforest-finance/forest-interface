@@ -1,5 +1,5 @@
 'use client';
-import { Col, Form, message, Row, Tooltip, Upload } from 'antd';
+import { Col, Form, message, Row, Tooltip, Upload, Image } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Photo from 'assets/images/photo.svg';
 import WarningMark from 'assets/images/waring.svg';
@@ -30,7 +30,7 @@ export default function Settings() {
   const { address } = walletInfo;
   const [avatar, setAvatar] = useState<string | undefined>(userInfo.profileImage);
   const [banner, setBanner] = useState<string | undefined>(userInfo.bannerImage);
-  const [uploading, setUploading] = useState(false);
+  const [uploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const unMounted = useRef<boolean>(false);
 
@@ -230,8 +230,9 @@ export default function Settings() {
                   beforeUpload={(e) => beforeUpload(e, 'avatar')}>
                   <div className={styles['avatar']}>
                     {avatar || userInfo?.profileImage ? (
-                      <img
-                        className={'border border-solid border-[var(--line-box)] w-full'}
+                      <Image
+                        preview={false}
+                        rootClassName="border border-solid border-lineBorder w-full h-full rounded-full"
                         src={`${avatar || userInfo?.profileImage}`}
                         alt="avatar"
                       />
@@ -264,7 +265,14 @@ export default function Settings() {
                   showUploadList={false}
                   beforeUpload={(e) => beforeUpload(e, 'banner')}>
                   <div className={styles['banner']}>
-                    {!!(banner || userInfo?.bannerImage) && <img src={`${banner || userInfo?.bannerImage}`} />}
+                    {!!(banner || userInfo?.bannerImage) && (
+                      <Image
+                        preview={false}
+                        rootClassName="w-full h-full"
+                        alt=""
+                        src={`${banner || userInfo?.bannerImage}`}
+                      />
+                    )}
                   </div>
                 </Upload>
               </Col>

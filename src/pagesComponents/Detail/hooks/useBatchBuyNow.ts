@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { checkELFApprove, messageHTML } from 'utils/aelfUtils';
+import { checkELFApprove } from 'utils/aelfUtils';
 import { BatchBuyNow } from 'contract/market';
 import useGetState from 'store/state/getState';
 import {
@@ -42,7 +42,7 @@ export default function useBatchBuyNow(chainId?: Chain) {
         logoImage: nftInfo?.nftCollection?.logoImage || '',
         subTitle: nftInfo?.nftCollection?.tokenName,
         title: nftInfo?.tokenName,
-        extra: isERC721(nftInfo!) ? undefined : handlePlurality(quantity, 'item'),
+        extra: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
       },
       error: {
         title: BuyMessage.errorMessage.tips,

@@ -20,7 +20,7 @@ import CrossChainTransferModal, { CrossChainTransferType } from 'components/Cros
 import PromptModal from 'components/PromptModal';
 import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import { MintNftMessage } from 'constants/promptMessage';
-import { getExploreLink, sleep } from 'utils';
+import { getExploreLink } from 'utils';
 import ResultModal from 'components/ResultModal';
 import { updateDropQuota } from 'pagesComponents/DropsDetail/utils/getDropQuota';
 import { DropState } from 'api/types';

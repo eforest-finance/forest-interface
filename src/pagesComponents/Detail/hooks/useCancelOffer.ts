@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { messageHTML } from 'utils/aelfUtils';
 import { CancelOffer } from 'contract/market';
 import useGetState from 'store/state/getState';
-import { ICancelOfferItemParams, IContractError, IMakeOfferParams } from 'contract/type';
+import { ICancelOfferItemParams, IContractError } from 'contract/type';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { UserDeniedMessage } from 'contract/formatErrorMsg';
@@ -26,7 +26,7 @@ export default function useCancelOffer(chainId?: Chain) {
         });
         message.destroy();
         const { TransactionId } = result.result || result;
-        messageHTML(TransactionId!, 'success', chainId);
+        TransactionId && messageHTML(TransactionId, 'success', chainId);
         return result;
       } catch (error) {
         const resError = error as IContractError;

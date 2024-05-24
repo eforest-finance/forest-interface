@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
-import { Upload, message, Image, Flex, Button } from 'antd5/';
+import { Upload, message, Image, Flex } from 'antd5/';
 import AWSManagerInstance from 'utils/S3';
 import { cloneDeep } from 'lodash-es';
 import { getBase64, getTheFirstFrame } from 'utils/fileToObject';
@@ -44,14 +44,14 @@ interface UploadBatchProps {
 
 const MAX_UPLOAD = 30;
 
-export default (props: UploadBatchProps) => {
+const UploadBatch = (props: UploadBatchProps) => {
   const { metaList, onUploadChange } = props;
 
   const uploader = useRef<any>(null);
   const task = useRef<number>(0);
 
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [accept, setAccept] = useState<acceptFileType>(acceptFileType.all);
+  const [accept] = useState<acceptFileType>(acceptFileType.all);
   const [messageApi, contextHolder] = message.useMessage();
   const [listData, setListData] = useState<Array<Item>>([]);
   const [fileViewVisible, setFileViewVisible] = useState<boolean>(false);
@@ -132,7 +132,7 @@ export default (props: UploadBatchProps) => {
     });
   };
 
-  const handleFileUpload = useCallback(async (file: File, fileList: Array<File>) => {
+  const handleFileUpload = useCallback(async (file: File) => {
     if (file.size > 100 * 1024 * 1024) {
       message.error(`File upload failed. Please choose a file within the size limit.`);
       return false;
@@ -218,7 +218,7 @@ export default (props: UploadBatchProps) => {
         setReloadFlag(false);
       }
       task.current = fileList.length;
-      handleFileUpload(file, fileList);
+      handleFileUpload(file);
     },
   };
 
@@ -263,6 +263,7 @@ export default (props: UploadBatchProps) => {
                     className="w-[98px] h-[154px] mdl:w-[144px] mdl:h-[180px] border-[1px] border-solid border-[var(--line-border)]  rounded-[8px] overflow-hidden relative">
                     <Image.PreviewGroup preview>
                       <Image
+                        alt=""
                         className="object-contain"
                         wrapperClassName={`${
                           item.fileType !== 'image' && 'bg-[var(--bg-page-gray)]'
@@ -331,3 +332,5 @@ export default (props: UploadBatchProps) => {
     </div>
   );
 };
+
+export default UploadBatch;

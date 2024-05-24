@@ -30,7 +30,7 @@ export default function useTransfer(chainId?: Chain) {
         return Promise.reject(transferResult.errorMessage?.message || DEFAULT_ERROR);
       } else {
         const { TransactionId } = transferResult.result || transferResult;
-        messageHTML(TransactionId!, 'success', chainId);
+        TransactionId && messageHTML(TransactionId, 'success', chainId);
         getNFTNumber({
           owner: walletInfo.address,
           nftSymbol: parameter.symbol,

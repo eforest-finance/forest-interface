@@ -41,10 +41,9 @@ export function useCreateItemPageService() {
     collections: collectionList?.items || [],
   });
 
-  const { batchModalState, setBatchModalState, batchCreateParamsData, onBatchCreateHandler, batchCreateLoading } =
-    useBatchCreateItemService({
-      collections: collectionList?.items || [],
-    });
+  const { onBatchCreateHandler, batchCreateLoading } = useBatchCreateItemService({
+    collections: collectionList?.items || [],
+  });
 
   const onBackHandler = () => {
     router.back();

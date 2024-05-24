@@ -88,9 +88,14 @@ function ListingCardTitle(props: IProps) {
       <div className="flex-1 flex flex-col justify-center">
         {isShowTimeCard ? (
           <>
-            <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime!)}`}</span>
+            <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime as string)}`}</span>
             {isCountdown && (
-              <Countdown endTime={endTime!} className="mt-[16px]" status={countdownStatus} onChange={ontimeupdate} />
+              <Countdown
+                endTime={String(endTime)}
+                className="mt-[16px]"
+                status={countdownStatus}
+                onChange={ontimeupdate}
+              />
             )}
           </>
         ) : null}

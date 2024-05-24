@@ -13,7 +13,6 @@ import { store, dispatch } from 'store/store';
 import { selectInfo, setHasToken, setIsMobile, setIsSmallScreen, setShowDisconnectTip } from 'store/reducer/info';
 import WebLoginInstance from 'contract/webLogin';
 import { SupportedELFChainId } from 'constants/chain';
-import { useGetToken } from 'hooks/useContractConnect';
 import useUserInfo from 'hooks/useUserInfo';
 import AWS from 'aws-sdk';
 import { useEffectOnce, useLocalStorage } from 'react-use';
@@ -25,7 +24,7 @@ import 'utils/analytics';
 import AWSManagerInstance from 'utils/S3';
 import { formatErrorMsg } from 'contract/formatErrorMsg';
 import { IContractError } from 'contract/type';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
@@ -47,7 +46,6 @@ const Layout = dynamic(async () => {
     const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
     const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
     const webLoginContext = useWebLogin();
-    const { version } = webLoginContext;
 
     const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } = useCallContract({
       chainId: SupportedELFChainId.MAIN_NET,
@@ -65,10 +63,7 @@ const Layout = dynamic(async () => {
     (window as any).logout = webLoginContext.logout;
     WebLoginInstance.get().setWebLoginContext(webLoginContext);
 
-    const getToken = useGetToken();
     const getUserInfo = useUserInfo();
-
-    const nav = useRouter();
 
     const pathName = usePathname();
 
@@ -199,8 +194,8 @@ const Layout = dynamic(async () => {
           className={clsx(`forest-marketplace`, isSmallScreen && `forest-marketplace-mobile`, '!bg-fillPageBg')}>
           <Header />
           <AntdLayout.Content
-            className={`marketplace-content, ${
-              isSmallScreen ? 'marketplace-content-mobile' : 'marketplace-content-pc'
+            className={`marketplace-content !min-h-[100vh]  ${
+              isSmallScreen ? 'marketplace-content-mobile' : 'marketplace-content-pc '
             }`}
             id={`marketplace-content`}>
             <Suspense fallback={<PageLoading />}>{children}</Suspense>
