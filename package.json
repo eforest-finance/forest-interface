@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "next lint",
     "dev:analyze": "PORT=4000 ANALYZE=true next dev",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "resolutions": {
     "@portkey/did-ui-react": "2.2.0",
