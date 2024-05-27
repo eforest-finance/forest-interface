@@ -33,7 +33,6 @@ import {
   setNftTraitInfos,
   setOffers,
 } from 'store/reducer/detail/detailInfo';
-import { RankingInfoCard } from 'pagesComponents/Detail/component/DetailCard/RankingInfoCard';
 
 function DetailPc() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
@@ -61,7 +60,6 @@ function DetailPc() {
             <DescriptionCard />
             <TraitsInfoCard />
             <GenerationInfoCard />
-            <RankingInfoCard />
             <DetailCardNew />
             <CreateTokenInfoCard />
             <InscriptionInfoCard />

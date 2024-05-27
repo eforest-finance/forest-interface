@@ -53,11 +53,11 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
                 width={'100%'}
                 src={dataSource?.previewImage || ''}
               />
-              {!dataSource?._rankStrForShow ? null : (
+              {/* {!dataSource?._rankStrForShow ? null : (
                 <div className="absolute bottom-0 left-0 w-full py-1 text-center text-xxs text-white font-medium bg-fillMask1">
                   Rank: {dataSource?._rankStrForShow}
                 </div>
-              )}
+              )} */}
             </div>
           </>
         }>
