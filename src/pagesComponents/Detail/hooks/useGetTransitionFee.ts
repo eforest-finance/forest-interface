@@ -7,6 +7,7 @@ export interface ITransitionFee {
   transactionFeeOfUsd?: number;
   forestServiceRate?: number;
   creatorLoyaltyRate?: number;
+  aiImageFee?: number;
 }
 
 export default function useGetTransitionFee() {

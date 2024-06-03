@@ -4,7 +4,7 @@ interface IProps {
   src?: string;
   nftName?: string;
   collectionName?: string;
-  id?: string;
+  id?: string | number;
 }
 
 const CollectionTag = (props: IProps) => {

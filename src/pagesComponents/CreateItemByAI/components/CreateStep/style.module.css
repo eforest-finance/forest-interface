@@ -1,0 +1,38 @@
+.create-step {
+  @apply border border-solid border-lineBorder rounded-lg !p-6;
+
+  :global {
+    .ant-steps-item-icon {
+      @apply !w-12 !h-12 !inline-flex items-center justify-center;
+      .ant-steps-icon {
+        @apply !text-xl !text-textWhite !font-semibold;
+      }
+    }
+    .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
+      @apply !text-textDisable;
+    }
+    .ant-steps-item-finish .ant-steps-item-icon {
+      @apply !bg-brandNormal;
+    }
+    .ant-steps-item-tail {
+      margin-inline-start: 64px !important;
+      padding-left: 48px !important;
+      padding-right: 64px !important;
+
+      @apply !top-6;
+    }
+    .ant-steps-item-container .ant-steps-item-content .ant-steps-item-title {
+      @apply text-textSecondary font-medium text-base;
+    }
+    .ant-steps-item-active .ant-steps-item-container .ant-steps-item-icon {
+      @apply !bg-brandNormal;
+    }
+    .ant-steps-item-wait .ant-steps-item-container .ant-steps-item-icon {
+      @apply !bg-transparent border-2 border-solid border-lineBorder;
+    }
+
+    .ant-steps-item-finish .ant-steps-item-container .ant-steps-item-content .ant-steps-item-title {
+      @apply text-brandNormal font-medium text-base;
+    }
+  }
+}

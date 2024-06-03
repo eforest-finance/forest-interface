@@ -1,4 +1,4 @@
-import { SignatureData, SignatureParams, WalletType } from 'aelf-web-login';
+import { SignatureData, SignatureParams, WalletType, DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
 
 export interface RoutesProps {
   path: string;
@@ -23,3 +23,12 @@ export interface ICreateTokenParams {
   onError?: <T>(error: T) => void;
   signInfo?: SignatureData;
 }
+
+export type WalletInfoType = {
+  address: string;
+  publicKey?: string;
+  token?: string;
+  aelfChainAddress?: string;
+  discoverInfo?: DiscoverInfo;
+  portkeyInfo?: PortkeyInfo;
+};

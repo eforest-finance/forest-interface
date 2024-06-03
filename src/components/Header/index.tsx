@@ -140,6 +140,12 @@ function Header() {
                       <span>Create a Collection</span>
                     </AuthNavLink>
                   </p>
+                  <p className="menu-item">
+                    <AuthNavLink to="/create-nft-ai" className="create-icon">
+                      <Create />
+                      <span>AI NFT Generator</span>
+                    </AuthNavLink>
+                  </p>
 
                   {aelfInfo.showDropEntrance ? (
                     <p className="menu-item">
@@ -233,7 +239,7 @@ function Header() {
               <DropMenu
                 getPopupContainer={(v) => v}
                 className={`${styles['nav-text']} ${
-                  (pathname === '/create-item' || pathname === '/create-collection') && styles['text-select']
+                  ['/create-item', '/create-collection', '/create-nft-ai'].includes(pathname) && styles['text-select']
                 }`}
                 overlay={
                   <Menu
@@ -254,6 +260,16 @@ function Header() {
                             to={'/create-collection'}
                             className={pathname === '/create-collection' ? '!text-brandNormal' : ''}>
                             Create a Collection
+                          </AuthNavLink>
+                        ),
+                        key: 'Collection',
+                      },
+                      {
+                        label: (
+                          <AuthNavLink
+                            to={'/create-nft-ai'}
+                            className={pathname === '/create-nft-ai' ? '!text-brandNormal' : ''}>
+                            AI NFT Generator
                           </AuthNavLink>
                         ),
                         key: 'Collection',

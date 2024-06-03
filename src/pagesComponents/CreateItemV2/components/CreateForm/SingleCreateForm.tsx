@@ -23,6 +23,9 @@ const NUMBER_MAX = '9007199254740991';
 interface ISingleCreateFormProps {
   optionsForCollection: any[];
   onCreateHandler: (values: any) => void;
+  disabledMainChainCollectionSelect?: boolean;
+  defaultFormValues?: any;
+  onValuesChange?: (changedValues: any, values: any) => void;
 }
 
 function FormItemLabel({ title, description }: { title: string; description?: string }) {
@@ -34,7 +37,13 @@ function FormItemLabel({ title, description }: { title: string; description?: st
   );
 }
 
-export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISingleCreateFormProps) {
+export function SingleCreateForm({
+  optionsForCollection,
+  onCreateHandler,
+  disabledMainChainCollectionSelect,
+  defaultFormValues,
+  onValuesChange,
+}: ISingleCreateFormProps) {
   const [open, setOpen] = useState(false);
 
   const [singleCreateFormInstance] = Form.useForm();
@@ -91,6 +100,14 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
           basicForm.setFieldsValue({
             metaData: resMetaData,
           });
+
+          onValuesChange?.(
+            {
+              metaData: resMetaData,
+            },
+            basicForm.getFieldsValue(true),
+          );
+
           setOpen(false);
         }
       }}>
@@ -101,13 +118,15 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
         name="basicForm"
         className={styles['custom-form']}
         requiredMark={false}
-        onValuesChange={(changedValues) => {
+        initialValues={defaultFormValues}
+        onValuesChange={(changedValues, values) => {
           if (changedValues.tokenId) {
             store.dispatch(setTokenId(changedValues.tokenId));
           }
           if (changedValues.tokenName) {
             store.dispatch(setNFTName(changedValues.tokenName));
           }
+          onValuesChange?.(changedValues, values);
         }}
         onFinish={(values) => {
           onCreateHandler?.(values);
@@ -121,7 +140,7 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
               message: 'Please Choose a colleciton',
             },
           ]}>
-          <CollectionSelect options={optionsForCollection} />
+          <CollectionSelect options={optionsForCollection} disabledOnMainChain={disabledMainChainCollectionSelect} />
         </Form.Item>
 
         <Form.Item
@@ -137,7 +156,7 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
               message: 'Invalid name. Please enter only letters and numbers.',
             },
           ]}>
-          <Input placeholder="Item name" maxLength={30} />
+          <Input placeholder="Item name" maxLength={30} autoComplete="off" />
         </Form.Item>
 
         <Form.Item
@@ -164,7 +183,7 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
               },
             }),
           ]}>
-          <Input placeholder="Quantity" maxLength={30} />
+          <Input placeholder="Quantity" maxLength={30} autoComplete="off" />
         </Form.Item>
 
         <Form.Item
@@ -194,7 +213,7 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
               },
             }),
           ]}>
-          <Input placeholder="Token ID" max={999999} min={1} />
+          <Input placeholder="Token ID" max={999999} min={1} autoComplete="off" />
         </Form.Item>
 
         <Divider />
@@ -221,7 +240,7 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
                   message: 'Invalid external link.',
                 },
               ]}>
-              <Input allowClear placeholder="http://yoursite.io/item/123" maxLength={100} />
+              <Input allowClear placeholder="http://yoursite.io/item/123" maxLength={100} autoComplete="off" />
             </Form.Item>
 
             <Form.Item
@@ -280,6 +299,12 @@ export function SingleCreateForm({ optionsForCollection, onCreateHandler }: ISin
                             singleCreateFormInstance.setFieldsValue({
                               metaData,
                             });
+                            onValuesChange?.(
+                              {
+                                metaData,
+                              },
+                              singleCreateFormInstance.getFieldsValue(true),
+                            );
                           }}
                         />
                       </li>

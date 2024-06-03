@@ -19,6 +19,7 @@ import SyncChainModalReducer, { syncChainModalSlice } from 'store/reducer/syncCh
 import sellModalsInfosSliceReducer, { sellModalsInfosSlice } from 'store/reducer/saleInfo/sellModalsInfo';
 import dropDetailInfoReducer, { dropDetailInfoSlice } from 'store/reducer/dropDetail/dropDetailInfo';
 import CreateItemReducer, { createItemSlice } from './reducer/create/item';
+import CreateItemAIReducer, { createItemAISlice } from './reducer/create/itemsByAI';
 
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux';
 
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   [sellModalsInfosSlice.name]: sellModalsInfosSliceReducer,
   [dropDetailInfoSlice.name]: dropDetailInfoReducer,
   [createItemSlice.name]: CreateItemReducer,
+  [createItemAISlice.name]: CreateItemAIReducer,
 });
 
 const makeStore = () => {
