@@ -65,6 +65,8 @@ import {
   IOwnedAllSymbolsParams,
   IBannerResponse,
   IHotNFTsRes,
+  IGenerateParams,
+  IGenerateRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -332,4 +334,26 @@ export const fetchCollectionActivities = async (params?: Partial<ICollectionActi
 
 export const fetchHotNFTs = async (): Promise<IHotNFTsRes> => {
   return request.get<IHotNFTsRes>('app/nft/hot-nft-infos');
+};
+
+export const fetchGenerate = async (params: IGenerateParams): Promise<IGenerateRes> => {
+  return request.post<IGenerateParams, IGenerateRes>('app/nft/create-ai-arts', params);
+};
+
+export const fetchAiImages = async (params: { status: number; address: string }): Promise<IGenerateRes> => {
+  return request.get<IGenerateRes>('app/nft/ai-arts', {
+    params,
+  });
+};
+
+export const updateAiImagesStatus = async (params: { status?: number; imageList: Array<string> }): Promise<null> => {
+  return request.post<{ imageList: Array<string> }, null>('app/nft/ai-arts', params);
+};
+
+export const fetchRandomAIPrompt = async (): Promise<{
+  data: string;
+}> => {
+  return request.get<{
+    data: string;
+  }>('app/nft/ai-prompts');
 };

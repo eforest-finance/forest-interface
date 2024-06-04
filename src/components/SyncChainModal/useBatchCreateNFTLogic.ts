@@ -8,6 +8,7 @@ import { getExploreLink } from 'utils';
 import { useSelector } from 'store/store';
 import { message } from 'antd';
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
+import { updateAiImagesStatus } from 'api/fetch';
 
 export function useBatchCreateNFTLogic(
   createParamsData: {
@@ -15,6 +16,7 @@ export function useBatchCreateNFTLogic(
     collectionInfo?: any;
     proxyIssuerAddress?: string;
     proxyOwnerAddress?: string;
+    imageHashListForUpdate?: Array<string>;
   },
   logoImage?: string,
 ) {
@@ -32,7 +34,13 @@ export function useBatchCreateNFTLogic(
   const [creatingFailed] = useState<boolean>(false);
   const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
 
-  const { createParamsArr = [], proxyOwnerAddress, proxyIssuerAddress, collectionInfo } = createParamsData;
+  const {
+    createParamsArr = [],
+    proxyOwnerAddress,
+    proxyIssuerAddress,
+    collectionInfo,
+    imageHashListForUpdate,
+  } = createParamsData;
   const batchCreateNFTSuccessModal = useModal(BatchCreateNFTSuccessModal);
 
   const onConfirmCreate = async () => {
@@ -45,6 +53,13 @@ export function useBatchCreateNFTLogic(
     start();
     try {
       const result = await batchCreateNFT(createParamsArr, proxyOwnerAddress, proxyIssuerAddress);
+
+      if (imageHashListForUpdate?.length) {
+        await updateAiImagesStatus({
+          imageList: imageHashListForUpdate,
+        });
+      }
+
       finish();
       setModalCloseIconShowStatus(true);
 

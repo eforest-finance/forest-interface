@@ -757,3 +757,29 @@ export interface IHotNFT {
 export interface IHotNFTsRes {
   items: IHotNFT[];
 }
+
+export interface ICreateArt {
+  promt: string;
+  negativePrompt: string;
+  model: string;
+  quality?: string;
+  style?: string;
+  size: string;
+  number: string;
+  paintingStyle: string;
+}
+
+export interface IGenerateParams {
+  rawTransaction: string;
+  chainId: string;
+}
+
+export interface IAIImage {
+  url: string;
+  hash: string;
+}
+
+export interface IGenerateRes {
+  totalCount: number;
+  items: IAIImage[];
+}
