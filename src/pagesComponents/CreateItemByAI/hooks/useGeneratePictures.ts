@@ -101,7 +101,7 @@ export default function useGeneratePictures() {
 
       const { items = [] } = await fetchGenerate({
         rawTransaction,
-        chainId: 'tDVW',
+        chainId,
       });
       return items;
     } catch (error) {
