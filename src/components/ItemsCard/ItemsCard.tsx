@@ -12,6 +12,7 @@ import ELFPng from 'assets/images/ELF.png';
 import { SYMBOL_TYPE } from 'constants/Symbol';
 import Button from 'baseComponents/Button';
 import { formatTokenPrice } from 'utils/format';
+import HonourLabel from 'baseComponents/HonourLabel';
 
 interface ItemsCardProps {
   dataSource?: INftInfo;
@@ -54,11 +55,11 @@ export default function ItemsCard({ dataSource, extraActions, hiddenActions, onC
               width={'100%'}
               src={dataSource?.previewImage || metaLogoImage?.value || ''}
             />
-            {/* {!dataSource?._rankStrForShow ? null : (
-              <div className="absolute bottom-0 left-0 w-full py-1 text-center text-xxs text-white font-medium bg-fillMask1">
-                Rank: {dataSource?._rankStrForShow}
+            {dataSource?.describe ? (
+              <div className="absolute top-3 right-3">
+                <HonourLabel text={dataSource?.describe} />
               </div>
-            )} */}
+            ) : null}
           </div>
         </>
       }

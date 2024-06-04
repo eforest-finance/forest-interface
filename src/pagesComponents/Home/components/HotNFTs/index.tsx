@@ -10,6 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { formatTokenPrice } from 'utils/format';
 import { IHotNFT } from 'api/types';
+import HonourLabel from 'baseComponents/HonourLabel';
 
 interface IHotNFTsProps {
   hotNFTs: IHotNFT[];
@@ -106,9 +107,20 @@ export default function HotNFTs({ hotNFTs }: IHotNFTsProps) {
                           className=" w-full aspect-square overflow-hidden relative group-hover:scale-110 transition-all"
                           src={item.previewImage}
                         />
+                        {item.describe && (
+                          <div className="absolute top-[12px] right-[12px] ">
+                            <HonourLabel text={item.describe} theme="white" />
+                          </div>
+                        )}
+
                         <div className="text-white w-full bg-fillMask1 h-[32px] absolute z-1 bottom-0 left-0 flex justify-center items-center">
                           {item.collectionName}
                         </div>
+                        {item?.describe ? (
+                          <div className="absolute top-3 right-3">
+                            <HonourLabel text={item?.describe} />
+                          </div>
+                        ) : null}
                       </div>
 
                       <div className="p-[16px]">

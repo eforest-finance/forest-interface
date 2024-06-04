@@ -6,6 +6,7 @@ import { useRequest } from 'ahooks';
 import { fetchNftTraitsInfo } from 'api/fetch';
 import { formatTokenPrice } from 'utils/format';
 import { getEmptyText } from 'baseComponents/Table';
+import HonourLabel from 'baseComponents/HonourLabel';
 
 const { Text } = Typography;
 
@@ -31,7 +32,7 @@ const renderItemPercent = ({ itemsCount, allItemsCount }: ITraitInfo) => {
 };
 
 export function NFTTraitInfoCard({ nftInfo }: { nftInfo: INftInfo }) {
-  const { previewImage, tokenName, nftSymbol } = nftInfo;
+  const { previewImage, tokenName, nftSymbol, describe } = nftInfo;
 
   const { data, loading } = useRequest(() => fetchNftTraitsInfo({ id: nftInfo.id }), {
     refreshDeps: [nftInfo.id],
@@ -41,22 +42,23 @@ export function NFTTraitInfoCard({ nftInfo }: { nftInfo: INftInfo }) {
 
   return (
     <div className="flex" onClick={(e) => e.stopPropagation()}>
-      <div className="flex flex-col mr-6">
+      <div className="flex flex-col mr-6 gap-y-2">
         <ImageEnhance src={previewImage || ''} className="!w-[148px] !h-[148px] object-cover !rounded-md" />
         <Text
-          className="mt-4 !text-textPrimary font-semibold text-base !w-[148px]"
+          className="mt-2 !text-textPrimary font-semibold text-base !w-[148px]"
           ellipsis={{
             tooltip: tokenName,
           }}>
           {tokenName}
         </Text>
         <Text
-          className="mt-2 font-medium !text-textSecondary !w-[148px]"
+          className="font-medium !text-textSecondary !w-[148px]"
           ellipsis={{
             tooltip: nftSymbol,
           }}>
           {nftSymbol}
         </Text>
+        {describe ? <HonourLabel text={describe} theme="white" /> : null}
       </div>
       <Table
         className="w-[500px]"

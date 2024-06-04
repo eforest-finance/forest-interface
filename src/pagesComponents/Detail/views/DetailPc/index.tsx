@@ -7,6 +7,7 @@ import { InscriptionInfoCard } from 'pagesComponents/Detail/component/DetailCard
 import { CreateTokenInfoCard } from 'pagesComponents/Detail/component/DetailCard/CreateTokenInfoCard';
 import { TraitsInfoCard } from 'pagesComponents/Detail/component/DetailCard/TraitsCard';
 import { GenerationInfoCard } from 'pagesComponents/Detail/component/DetailCard/GenerationInfoCard';
+import { RarityInfoCard } from 'pagesComponents/Detail/component/DetailCard/RarityInfoCard';
 import Listings from 'pagesComponents/Detail/component/Listings';
 import PriceHistory from 'components/PriceHistory';
 import RecommendList from 'components/RecommendList';
@@ -60,6 +61,7 @@ function DetailPc() {
             <DescriptionCard />
             <TraitsInfoCard />
             <GenerationInfoCard />
+            <RarityInfoCard />
             <DetailCardNew />
             <CreateTokenInfoCard />
             <InscriptionInfoCard />
