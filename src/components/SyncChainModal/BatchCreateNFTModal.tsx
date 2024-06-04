@@ -24,6 +24,7 @@ interface IBatchCreateModalProps {
     collectionInfo?: any;
     proxyIssuerAddress?: string;
     proxyOwnerAddress?: string;
+    imageHashListForUpdate?: Array<string>;
   };
   collectionName?: string;
   tokenName?: string;
