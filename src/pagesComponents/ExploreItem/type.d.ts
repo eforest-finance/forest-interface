@@ -64,6 +64,7 @@ interface ICompProps {
   onChange: (val: ItemsSelectSourceType) => void;
   clearAll?: () => void;
   disableClearAll?: boolean;
+  showSelectAll?: boolean;
 
   maxCount?: number;
   decimals?: number;

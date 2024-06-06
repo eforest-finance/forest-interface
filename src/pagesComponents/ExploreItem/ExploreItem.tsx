@@ -37,7 +37,7 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
   const { isLG } = useResponsive();
   const [collapsed, setCollapsed] = useState<boolean>(isLG);
 
-  const { filterList, filterSelect, traitsInfo, generationInfos, onFilterChange, clearAll } =
+  const { filterList, filterSelect, traitsInfo, generationInfos, rarityInfos, onFilterChange, clearAll } =
     useFilterForItemService(nftCollectionId);
 
   const [SearchParam, setSearchParam] = useState<string>('');
@@ -119,6 +119,7 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
           filterSelect={filterSelect}
           traitsInfo={traitsInfo?.items}
           generationInfos={generationInfos?.items}
+          rarityInfos={rarityInfos?.items}
           open={!collapsed}
           onClose={() => {
             setCollapsed(true);

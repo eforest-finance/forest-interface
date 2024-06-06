@@ -10,12 +10,13 @@ import moment from 'moment';
 import Copy from 'components/Copy';
 import { IActivitiesItem, IFrom, ITo } from 'api/types';
 import { useWebLogin } from 'aelf-web-login';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import ShareLink from 'assets/images/explore/sharelink.svg';
 import useGetState from 'store/state/getState';
 
 import { OmittedType, addPrefixSuffix, getExploreLink, getOmittedStr, getOriginalAddress } from 'utils';
 import { AcitvityItemArray } from 'pagesComponents/ExploreItem/constant';
+import HonourLabel from 'baseComponents/HonourLabel';
 const { Text } = Typography;
 
 interface IActivityListTableProps {
@@ -31,6 +32,11 @@ const renderPrice = (text?: string | number, tokenSymbol?: string) => {
 };
 
 export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: IActivityListTableProps) {
+  const { address } = useParams();
+  const nftCollectionId = address[0];
+
+  const isSchrondinger = nftCollectionId.endsWith('-SGRTEST-0') || nftCollectionId.endsWith('-SGR-0');
+
   const { isLG: isSmallScreen } = useResponsive();
   const { wallet } = useWebLogin();
   const {
@@ -139,6 +145,16 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       },
     },
     {
+      title: 'Rarity',
+      dataIndex: 'describe',
+      key: 'describe',
+      width: 136,
+      render: (text) => {
+        if (!text) return '--';
+        return <HonourLabel text={text} theme="white" />;
+      },
+    },
+    {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
@@ -194,6 +210,10 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       },
     },
   ];
+
+  if (!isSchrondinger) {
+    columns.splice(2, 1);
+  }
 
   if (isSmallScreen) {
     const itm = columns.shift();

@@ -15,9 +15,10 @@ import OwnersList from 'pagesComponents/Detail/component/OwnersList';
 import useGetState from 'store/state/getState';
 import { useWebLogin } from 'aelf-web-login';
 import { OmittedType, addPrefixSuffix, getOmittedStr, getOriginalAddress } from 'utils';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import BigNumber from 'bignumber.js';
 import styles from './style.module.css';
+import HonourLabel from 'baseComponents/HonourLabel';
 
 const { Text } = Typography;
 
@@ -28,6 +29,11 @@ interface INFTListTableProps {
 }
 
 export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListTableProps) {
+  const { address } = useParams();
+  const nftCollectionId = address[0];
+
+  const isSchrondinger = nftCollectionId.endsWith('-SGRTEST-0') || nftCollectionId.endsWith('-SGR-0');
+
   const { isLG: isSmallScreen } = useResponsive();
   const { infoState } = useGetState();
   const { wallet } = useWebLogin();
@@ -71,7 +77,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
         </div>
         <Text
           className=" font-semibold !text-textPrimary"
-          style={{ width: isSmallScreen ? 88 : 142 }}
+          style={{ width: isSmallScreen ? 88 : 222 }}
           ellipsis={{
             tooltip: record.tokenName,
           }}>
@@ -155,7 +161,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       dataIndex: 'tokenName',
       key: 'tokenName',
       fixed: 'left',
-      width: isSmallScreen ? 144 : 240,
+      width: isSmallScreen ? 144 : 296,
       ellipsis: true,
       render: (_, record) => {
         if (isSmallScreen) return renderNftTitle(record);
@@ -172,11 +178,21 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       },
     },
     {
+      title: 'Rarity',
+      dataIndex: 'describe',
+      key: 'describe',
+      width: isSmallScreen ? 136 : 181,
+      render: (text: string | null) => {
+        if (!text) return '--';
+        return <HonourLabel text={text} theme="white" />;
+      },
+    },
+    {
       title: 'Current Price',
       dataIndex: 'listingPrice',
       key: 'listingPrice',
       ellipsis: true,
-      width: isSmallScreen ? 144 : 240,
+      width: isSmallScreen ? 144 : 181,
       render: renderPrice,
     },
     {
@@ -184,7 +200,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       dataIndex: 'offerPrice',
       key: 'offerPrice',
       ellipsis: true,
-      width: isSmallScreen ? 144 : 220,
+      width: isSmallScreen ? 144 : 181,
       render: renderPrice,
     },
     {
@@ -192,7 +208,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       dataIndex: 'latestDealPrice',
       key: 'latestDealPrice',
       ellipsis: true,
-      width: isSmallScreen ? 144 : 220,
+      width: isSmallScreen ? 144 : 181,
       render: renderPrice,
     },
     {
@@ -200,7 +216,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       dataIndex: 'allOwnerCount',
       key: 'ownerCount',
       ellipsis: true,
-      width: 260,
+      width: 224,
       render: (text, record) => {
         const number = Number(text);
         if (number === -1 || isNaN(number) || text === undefined || text === '') return '-';
@@ -225,7 +241,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       dataIndex: 'listingPriceCreateTime',
       key: 'listingPriceCreateTime',
       ellipsis: true,
-      width: isSmallScreen ? 140 : 220,
+      width: isSmallScreen ? 140 : 192,
       align: 'right',
       render: (text, record) => {
         const listPirce = Number(record.listingPrice);
@@ -243,6 +259,11 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
       },
     },
   ];
+
+  if (!isSchrondinger) {
+    columns.splice(1, 1);
+  }
+
   return (
     <>
       <Table
@@ -256,7 +277,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
         }}
         dataSource={dataSource}
         loading={loading}
-        scroll={{ x: isSmallScreen ? 1080 : 1280 }}
+        scroll={{ x: isSmallScreen ? 1076 : 1436 }}
         sticky={{
           offsetHeader: isSmallScreen ? 198 : 224,
         }}

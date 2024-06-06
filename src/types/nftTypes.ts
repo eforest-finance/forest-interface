@@ -171,6 +171,9 @@ export interface INftInfo {
     deployTime?: number;
     mintLimit?: number;
   };
+  describe?: string;
+  rarity?: string;
+  level?: string;
   generation: number;
   traitPairsDictionary: Array<Pick<ITraitInfo, 'key' | 'value'>>;
   _rankStrForShow?: string;

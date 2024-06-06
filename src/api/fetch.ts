@@ -67,6 +67,7 @@ import {
   IHotNFTsRes,
   IGenerateParams,
   IGenerateRes,
+  ICollectionRarityInfoRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -317,6 +318,12 @@ export const fetchCollectionAllTraitsInfos = async (nftCollectionId: string) => 
 
 export const fetchCollectionGenerationInfos = async (nftCollectionId: string) => {
   return request.get<ICollecionGenerationInfoRes>('app/trait/nft-collection-generation-info', {
+    params: { id: nftCollectionId },
+  });
+};
+
+export const fetchCollectionRarityInfos = async (nftCollectionId: string) => {
+  return request.get<ICollectionRarityInfoRes>('app/trait/nft-collection-rarity-info', {
     params: { id: nftCollectionId },
   });
 };

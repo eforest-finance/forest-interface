@@ -25,6 +25,7 @@ import clsx from 'clsx';
 import useDetailGetState from 'store/state/detailGetState';
 import { store } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+import { RarityInfoCard } from 'pagesComponents/Detail/component/DetailCard/RarityInfoCard';
 
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
@@ -87,16 +88,24 @@ export default function DetailMobile() {
         )}
         <div ref={tabsRef} className="mt-10">
           <Tabs
-            activeKey={currentTab}
+            defaultActiveKey={Number(nftTraitInfos?.generation || '') > 0 ? 'rarityInfos' : 'detail'}
             onChange={(activeKey) => {
               store.dispatch(setCurrentTab(activeKey));
               resetScrollTopOnTabChange();
             }}
             className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
             animated={false}>
+            {Number(nftTraitInfos?.generation || '') > 0 ? (
+              <Tabs.TabPane tab="Rarity Information" key="rarityInfos">
+                <GenerationInfoCard />
+                <RarityInfoCard />
+              </Tabs.TabPane>
+            ) : null}
+
             <Tabs.TabPane tab="Details" key="detail">
               <DetailCard />
               <GenerationInfoCard />
+              <RarityInfoCard />
             </Tabs.TabPane>
             {nftTraitInfos?.traitInfos?.length ? (
               <Tabs.TabPane tab="Traits" key="traits">

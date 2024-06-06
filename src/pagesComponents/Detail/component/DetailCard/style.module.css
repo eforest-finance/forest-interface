@@ -38,3 +38,9 @@
     @apply stroke-textSecondary;
   }
 }
+
+.detail-card .title.help-svg {
+  svg {
+    @apply !h-4 !w-4;
+  }
+}
