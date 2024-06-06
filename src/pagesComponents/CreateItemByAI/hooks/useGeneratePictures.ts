@@ -28,6 +28,7 @@ export default function useGeneratePictures() {
   const info = store.getState().aelfInfo.aelfInfo;
   const contractAddress = getForestContractAddress().side;
   const { version } = useWebLogin();
+  const chainId = info.curChain as Chain;
 
   const CreateArt = async (params: ICreateArt, aiGuessFee: number) => {
     try {
@@ -60,7 +61,7 @@ export default function useGeneratePictures() {
             amount: bigA.toNumber(),
           },
           {
-            chain: SupportedELFChainId.TDVW_NET,
+            chain: chainId,
           },
         );
         console.log('token approve finish', approveRes);
@@ -75,7 +76,6 @@ export default function useGeneratePictures() {
 
     try {
       const caContractAddress = version === 'v2' ? info.sideCaAddressV2 : info.sideCaAddress;
-      const chainId = info.curChain as Chain;
       const rpcUrl = getRpcUrls()[chainId];
 
       const rawTransaction = await getRawTransaction({

@@ -3,12 +3,16 @@ import { Layout } from 'antd';
 import clsx from 'clsx';
 import styles from './style.module.css';
 import { useMemo } from 'react';
-import { ICollecionGenerationInfo, ICollectionTraitInfo } from 'api/types';
+import { ICollecionGenerationInfo, ICollectionRarityInfo, ICollectionTraitInfo } from 'api/types';
 import { getComponentByType } from './util';
 import CollapsedIcon from 'assets/images/Collapsed.svg';
 
 import SearchCheckBoxGroups from '../SearchCheckBoxGroups';
 import { FilterKeyEnum } from 'pagesComponents/ExploreItem/constant';
+
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import Tooltip from 'baseComponents/Tooltip';
+import useGetState from 'store/state/getState';
 
 interface IFilterContainerProps {
   options?: any[];
@@ -18,6 +22,7 @@ interface IFilterContainerProps {
   open: boolean;
   traitsInfo?: ICollectionTraitInfo[];
   generationInfos?: ICollecionGenerationInfo[];
+  rarityInfos?: ICollectionRarityInfo[];
   filterSelect: IFilterSelect;
   filterList: (CheckboxItemType | RangeItemType | SearchCheckBoxItemType)[];
   mobileMode?: boolean;
@@ -73,6 +78,7 @@ export function FilterContainer({
   open,
   traitsInfo,
   generationInfos,
+  rarityInfos,
   onFilterChange,
   filterSelect,
   filterList,
@@ -80,6 +86,8 @@ export function FilterContainer({
   pcRenderMode,
   toggleOpen,
 }: IFilterContainerProps) {
+  const { aelfInfo } = useGetState();
+
   const collapseItems = useMemo(() => {
     const resTargetList = [...filterList];
 
@@ -90,6 +98,11 @@ export function FilterContainer({
 
     if (!generationInfos?.length) {
       const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Generation);
+      index > -1 && resTargetList.splice(index, 1);
+    }
+
+    if (!rarityInfos?.length) {
+      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Rarity);
       index > -1 && resTargetList.splice(index, 1);
     }
 
@@ -109,6 +122,45 @@ export function FilterContainer({
       }
 
       const Comp: React.FC<ICompProps> = getComponentByType(item.type);
+
+      if (item.key === FilterKeyEnum.Rarity) {
+        item.data = (rarityInfos || []).map((itm) => ({
+          value: `${itm.rarity}`,
+          label: `${itm.rarity}`,
+        }));
+
+        return {
+          key: FilterKeyEnum.Rarity,
+          label: (
+            <div className=" inline-flex items-center">
+              <span className=" text-sm font-semibold text-textPrimary">Rarity</span>
+              <Tooltip
+                overlayInnerStyle={{ borderRadius: '6px' }}
+                title={
+                  <div className=" flex flex-col gap-y-1">
+                    <span className=" text-textDisable text-xs">Rarity rank by Schrödinger.</span>
+                    <a href={aelfInfo.officialWebsiteOfSchrodinger} target="_blank" rel="noreferrer">
+                      <span className=" text-xs text-textWhite font-medium cursor-pointer hover:text-brandHover">
+                        Learn more
+                      </span>
+                    </a>
+                  </div>
+                }>
+                <QuestionCircleOutlined className="text-textSecondary ml-2" />
+              </Tooltip>
+            </div>
+          ),
+          children: [
+            {
+              key: `${FilterKeyEnum.Rarity}-1`,
+              label: (
+                <Comp dataSource={item} defaultValue={defaultValue} onChange={onFilterChange} showSelectAll={true} />
+              ),
+            },
+          ],
+        };
+      }
+
       return {
         key: item.key,
         label: item.title,

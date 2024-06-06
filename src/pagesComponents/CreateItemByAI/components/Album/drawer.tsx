@@ -69,16 +69,19 @@ const AlbumDrawer = (props: AlbumProps) => {
                     {row.map((item: IAIImage, key: number) => (
                       <Col span={12} className="!flex justify-between" key={key.toString()}>
                         <div className="relative w-[164px] h-[164px]">
-                          <Image
-                            className="object-contain"
-                            wrapperClassName={`border-[1px] border-solid border-[var(--line-border)] bg-[var(--fill-hover-bg)] !w-full h-full overflow-hidden rounded-[12px] !flex justify-center`}
-                            preview={{
-                              visible: previewOpen,
-                              onVisibleChange: (visible) => setPreviewOpen(visible),
-                            }}
-                            placeholder={ImagePlaceHolder}
-                            src={item.url}
-                          />
+                          <Image.PreviewGroup preview>
+                            <Image
+                              className="object-contain"
+                              wrapperClassName={`border-[1px] border-solid border-[var(--line-border)] bg-[var(--fill-hover-bg)] !w-full h-full overflow-hidden rounded-[12px] !flex justify-center`}
+                              preview={{
+                                visible: previewOpen,
+                                onVisibleChange: (visible) => setPreviewOpen(visible),
+                              }}
+                              placeholder={ImagePlaceHolder}
+                              src={item.url}
+                            />
+                          </Image.PreviewGroup>
+
                           <div className="absolute top-[12px] right-[12px] cursor-pointer">
                             {selectedImages.map((selectedItem: IAIImage) => selectedItem.url).includes(item.url) ? (
                               <Check onClick={() => handleUnSelected(item)} />

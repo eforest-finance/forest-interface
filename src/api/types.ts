@@ -688,10 +688,20 @@ export interface ICollecionGenerationInfo {
   generation: number;
   generationItemsCount: number;
 }
+
 export interface ICollecionGenerationInfoRes {
   totalCount: number;
   id: string;
   items: ICollecionGenerationInfo[];
+}
+
+export interface ICollectionRarityInfo {
+  rarity: string;
+}
+export interface ICollectionRarityInfoRes {
+  totalCount: number;
+  id: string;
+  items: ICollectionRarityInfo[];
 }
 
 export interface INftRankingInfoParams {
@@ -739,6 +749,7 @@ export interface ICollectionActivitiesRes {
 }
 
 export interface IHotNFT {
+  describe: string | null;
   collectionName: string;
   collectionSymbol: string;
   collectionImage: string;
@@ -752,6 +763,9 @@ export interface IHotNFT {
   link?: string;
   chainId: string;
   id: string;
+  rarity?: string;
+  describe?: string;
+  level?: string;
 }
 
 export interface IHotNFTsRes {

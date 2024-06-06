@@ -8,8 +8,11 @@ import { RecommendSeeds } from './components/RecommendSeeds';
 import ActionWrapper from './components/ActionWrapper';
 import { fetchBanner, fetchHotNFTs } from 'api/fetch';
 import { IBanner, IHotNFT } from 'api/types';
+import useGetState from 'store/state/getState';
 
 export default function Home() {
+  const { walletInfo } = useGetState();
+
   const [bannerList, setBannerList] = useState<IBanner[]>();
   const [hotNFTs, setHotNfts] = useState<IHotNFT[]>();
   const [isFetchingHotNFTs, setIsFetchingHotNFTs] = useState(false);
@@ -36,8 +39,11 @@ export default function Home() {
 
   useEffect(() => {
     getBannerList();
-    getHotNfts();
   }, []);
+
+  useEffect(() => {
+    getHotNfts();
+  }, [walletInfo]);
 
   return (
     <div className="!min-h-[100vh] px-[16px] mdb:px-[32px] mdb:py-[48px] py-[32px] flex items-center flex-col	">

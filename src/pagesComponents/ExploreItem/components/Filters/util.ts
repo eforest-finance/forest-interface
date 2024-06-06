@@ -78,6 +78,13 @@ export const getFilterList = (
       type: FilterType.Checkbox,
       data: [],
     },
+    {
+      key: FilterKeyEnum.Rarity,
+      title: FilterKeyEnum.Rarity,
+      showClearAll: true,
+      type: FilterType.Checkbox,
+      data: [],
+    },
   ];
   if (type === 'nft') {
     filterList.splice(3, 1);
@@ -162,6 +169,7 @@ const bigStr = (str: string) => {
 export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => {
   const status = filterSelect.Status.data.map((item: SourceItemType) => item.value);
   const generation = filterSelect.Generation.data.map((item: SourceItemType) => item.value);
+  const RarityList = filterSelect.Rarity?.data?.map?.((item: SourceItemType) => item.value);
   const traits = getTraitsInfo();
   const params: { [key: string]: any } = {
     ChainList: filterSelect.Chain.data.map((item: SourceItemType) => item.value as 'AELF' | 'tDVV'),
@@ -180,6 +188,12 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
   if (traits?.length) {
     Object.assign(params, {
       traits,
+    });
+  }
+
+  if (RarityList?.length) {
+    Object.assign(params, {
+      RarityList,
     });
   }
 

@@ -8,6 +8,7 @@ import styles from './style.module.css';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 import useDetailGetState from 'store/state/detailGetState';
+import HonourLabel from 'baseComponents/HonourLabel';
 
 export default function Picture() {
   const { isSmallScreen } = useSelector(selectInfo);
@@ -37,6 +38,11 @@ export default function Picture() {
               <Preview />
             </div>
           ) : null)}
+        {nftInfo?.describe ? (
+          <div className="absolute top-3 right-3">
+            <HonourLabel text={nftInfo?.describe} />
+          </div>
+        ) : null}
       </div>
       <FileView
         visible={visible}

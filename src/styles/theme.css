@@ -232,6 +232,18 @@
   --fill-mask-1: rgb(0 0 0 / 60%);
   --fill-mask-2: rgb(0 0 0 / 80%);
   --share-svg-hover: #000;
+  --rarity-platinum: #91c0cc;
+  --rarity-bronze: #d2965e;
+  --rarity-silver: #adc4d5;
+  --rarity-gold: #e3ca69;
+  --rarity-halcyon: #7dc7ad;
+  --rarity-diamond: #aa98ff;
+  --rarity-platinum-white: #78becf;
+  --rarity-bronze-white: #eba25c;
+  --rarity-silver-white: #b6d2e8;
+  --rarity-gold-white: #e7c852;
+  --rarity-halcyon-white: #6ad2ad;
+  --rarity-diamond-white: #9782ff;
 }
 
 .dark-theme {
@@ -372,4 +384,10 @@
   --fill-mask-1: rgb(0 0 0 / 60%);
   --fill-mask-2: rgb(0 0 0 / 80%);
   --share-svg-hover: #fff;
+  --rarity-platinum: #91c0cc;
+  --rarity-bronze: #d2965e;
+  --rarity-silver: #adc4d5;
+  --rarity-gold: #e3ca69;
+  --rarity-halcyon: #7dc7ad;
+  --rarity-diamond: #aa98ff;
 }

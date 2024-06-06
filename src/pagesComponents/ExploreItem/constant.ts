@@ -14,6 +14,7 @@ enum FilterKeyEnum {
   Generation = 'Generation',
   Traits = 'Traits',
   ActivityType = 'ActivityType',
+  Rarity = 'Rarity',
 }
 
 enum SymbolTypeEnum {

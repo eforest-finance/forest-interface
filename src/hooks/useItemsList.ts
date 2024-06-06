@@ -164,7 +164,7 @@ export default function useItemsList(page = 0, pageSize = 20, nftCollectionIdOrA
     const result = await fetchNftInfos({
       ...param,
     });
-    const targetItems = await fetchRankingDataOfNft(result.items);
+    const targetItems = result.items;
     setLoading(false);
     if (!result || typeof result?.totalCount !== 'number') return;
     const action = page === 0 ? setItemsList : addItemsList;

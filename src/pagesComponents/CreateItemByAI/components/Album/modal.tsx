@@ -54,16 +54,18 @@ const AlbumModal = (props: AlbumProps) => {
                   <Row className="pb-[16px]" gutter={16} wrap={false} key={`row-${keyRow}`}>
                     {row.map((item: IAIImage, key: number) => (
                       <Col span={6} className="" key={key.toString()}>
-                        <Image
-                          className="object-contain relative"
-                          wrapperClassName={`border-[1px] border-solid border-[var(--line-border)] bg-[var(--fill-hover-bg)] !w-[164px] h-[164px] overflow-hidden rounded-[12px] !flex justify-center`}
-                          preview={{
-                            visible: previewOpen,
-                            onVisibleChange: (visible) => setPreviewOpen(visible),
-                          }}
-                          placeholder={ImagePlaceHolder}
-                          src={item.url}
-                        />
+                        <Image.PreviewGroup preview>
+                          <Image
+                            className="object-contain relative"
+                            wrapperClassName={`border-[1px] border-solid border-[var(--line-border)] bg-[var(--fill-hover-bg)] !w-[164px] h-[164px] overflow-hidden rounded-[12px] !flex justify-center`}
+                            preview={{
+                              visible: previewOpen,
+                              onVisibleChange: (visible) => setPreviewOpen(visible),
+                            }}
+                            placeholder={ImagePlaceHolder}
+                            src={item.url}
+                          />
+                        </Image.PreviewGroup>
 
                         <div className="absolute top-[12px] right-[12px] cursor-pointer">
                           {selectedImages.map((selectedItem: IAIImage) => selectedItem.url).includes(item.url) ? (
