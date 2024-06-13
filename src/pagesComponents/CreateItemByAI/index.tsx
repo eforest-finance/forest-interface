@@ -18,9 +18,14 @@ import CollectionTag from 'pagesComponents/CreateItemV2/components/CollectionTag
 import { useMount } from 'react-use';
 import { clearNftInfoFormList } from 'store/reducer/create/itemsByAI';
 import { useWebLogin } from 'aelf-web-login';
+import FailedIcon from 'assets/images/nftAi/failed_Icon.svg';
+import Link from 'next/link';
+import { Badge } from 'antd';
+import clsx from 'clsx';
 
 export default function CreateNFTByAIPage() {
-  const { isSmallScreen, createStep, nextStep, preStep, optionsForCollection } = useCreateItemAIPageService();
+  const { isSmallScreen, createStep, nextStep, preStep, optionsForCollection, failedAINftCount } =
+    useCreateItemAIPageService();
   const { CreateArt } = useGeneratePictures();
   const { nftInfoFormList } = store.getState().createItemAI;
   const { version } = useWebLogin();
@@ -146,7 +151,27 @@ export default function CreateNFTByAIPage() {
   };
   return (
     <section className="max-w-[1360px] !mx-auto !px-4 mb-20">
-      <PageTitle title="AI NFT Generator" />
+      <PageTitle
+        title="AI NFT Generator"
+        extra={
+          failedAINftCount ? (
+            <div className="relative">
+              <Link href="/failed-order-ai">
+                <Badge count={failedAINftCount} overflowCount={99}>
+                  <div
+                    className={clsx(
+                      'inline-flex gap-x-2 justify-center items-center bg-fillCardBg hover:bg-fillHoverBg',
+                      isSmallScreen ? 'w-10 h-10 rounded-md' : 'h-12 px-7 rounded-lg',
+                    )}>
+                    <FailedIcon className=" fill-textPrimary" />
+                    {!isSmallScreen ? <span className=" font-semibold text-textPrimary"> Failed order</span> : null}
+                  </div>
+                </Badge>
+              </Link>
+            </div>
+          ) : null
+        }
+      />
 
       <div className="flex gap-x-10">
         {isSmallScreen ? null : renderUploadComp()}

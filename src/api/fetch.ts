@@ -68,6 +68,7 @@ import {
   IGenerateParams,
   IGenerateRes,
   ICollectionRarityInfoRes,
+  IFailedAIArtRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -363,4 +364,17 @@ export const fetchRandomAIPrompt = async (): Promise<{
   return request.get<{
     data: string;
   }>('app/nft/ai-prompts');
+};
+
+export const fetchFailedAIArtsNFT = async (params: {
+  SkipCount: number;
+  MaxResultCount: number;
+}): Promise<IFailedAIArtRes> => {
+  return request.post<{ SkipCount: number; MaxResultCount: number }, IFailedAIArtRes>('app/nft/ai-arts-fail', params);
+};
+
+export const fetchRetryGenerateAIArts = async (transactionId: string): Promise<IGenerateRes> => {
+  return request.get<IGenerateRes>('app/nft/create-ai-arts-retry', {
+    params: { transactionId },
+  });
 };

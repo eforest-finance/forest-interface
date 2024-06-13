@@ -1,5 +1,5 @@
 import useResponsive from 'hooks/useResponsive';
-import { fetchCollections } from 'api/fetch';
+import { fetchCollections, fetchFailedAIArtsNFT } from 'api/fetch';
 import { useRequest } from 'ahooks';
 import useGetState from 'store/state/getState';
 import { useState } from 'react';
@@ -38,6 +38,8 @@ export function useCreateItemAIPageService() {
     },
   );
 
+  const { data: failedAINft } = useRequest(() => fetchFailedAIArtsNFT({ SkipCount: 0, MaxResultCount: 32 }));
+
   const onCreateNFTHandler = (values: any) => {
     console.log('onCreateNFTHandler', values);
   };
@@ -50,5 +52,7 @@ export function useCreateItemAIPageService() {
     preStep,
     nextStep,
     createStep,
+
+    failedAINftCount: failedAINft?.totalCount || 0,
   };
 }

@@ -1,0 +1,5 @@
+.failed-arts-table :global {
+  .ant-table-tbody .ant-table-row > .ant-table-cell {
+    @apply !py-2 !px-3;
+  }
+}
