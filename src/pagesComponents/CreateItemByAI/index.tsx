@@ -1,19 +1,20 @@
-import { AIForm } from './components/AIForm';
+import { AICreateForm } from './components/AIForm';
 import { PageTitle } from 'components/PageTitle';
 import { CreateStep } from './components/CreateStep';
 import { useCreateItemAIPageService } from './hooks/useCreateItemAIPageService';
 import ImagePreview from './components/ImagePreview';
 import useGeneratePictures, { ICreateArt } from './hooks/useGeneratePictures';
-import { useEffect, useState } from 'react';
+import { ElementRef, Ref, useEffect, useRef, useState } from 'react';
 import Progressing from './components/Progressing';
 import Album from './components/Album';
+import RetryModal from './components/RetryModal';
 import { message } from 'antd';
 import { SingleCreateForm } from 'pagesComponents/CreateItemV2/components/CreateForm/SingleCreateForm';
 import { useEditNftInfoService } from './hooks/useEditNftInfoService';
 import useGetState from 'store/state/getState';
 import { fetchAiImages, fetchTransactionFee, updateAiImagesStatus } from 'api/fetch';
 import { dispatch, store } from 'store/store';
-import { IAIImage } from 'api/types';
+import { IAIImage, ICreateAIArtResult } from 'api/types';
 import CollectionTag from 'pagesComponents/CreateItemV2/components/CollectionTag';
 import { useMount } from 'react-use';
 import { clearNftInfoFormList } from 'store/reducer/create/itemsByAI';
@@ -21,7 +22,7 @@ import { useWebLogin } from 'aelf-web-login';
 
 export default function CreateNFTByAIPage() {
   const { isSmallScreen, createStep, nextStep, preStep, optionsForCollection } = useCreateItemAIPageService();
-  const { CreateArt } = useGeneratePictures();
+  const { CreateArt, TryAgain } = useGeneratePictures();
   const { nftInfoFormList } = store.getState().createItemAI;
   const { version } = useWebLogin();
 
@@ -29,12 +30,16 @@ export default function CreateNFTByAIPage() {
 
   const [albumImages, setAlbumImages] = useState<IAIImage[]>([]);
   const [unusedImages, setUnusedImages] = useState<IAIImage[]>([]);
+  const [arts, setArts] = useState<ICreateAIArtResult>();
 
   const [albumOpen, setAlbumOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [aiGuessFee, setAiGuessFee] = useState<number>();
+  const [showTryAgainModal, setShowTryAgainModal] = useState(false);
 
+  const [aiGuessFee, setAiGuessFee] = useState<number>();
   const [selectedId, setSelectedId] = useState<number>(0);
+  const aiFormRef = useRef<any>();
+
   const {
     initNftInfoFormListByImageArr,
     currentSelNftInfoForm,
@@ -84,19 +89,29 @@ export default function CreateNFTByAIPage() {
 
     setIsLoading(true);
     try {
-      const images = await CreateArt(values, aiGuessFee || 0);
-      if (images?.length) {
-        setAlbumImages(images);
-        setUnusedImages(images);
+      const artResult = await CreateArt(values, aiGuessFee || 0);
+      setArts(artResult);
+      const { success, items } = artResult;
+      if (success && items?.length) {
+        setAlbumImages(items);
+        setUnusedImages(items);
         setTimeout(() => {
           setAlbumOpen(true);
         }, 50);
-      } else {
-        message.error('create fail');
+      }
+
+      if (!success) {
+        setShowTryAgainModal(true);
       }
     } catch (error) {
       console.log(error);
-      message.error('create fail');
+
+      if (typeof error === 'string') {
+        setShowTryAgainModal(true);
+      } else {
+        const messageError = error as unknown as Error;
+        message.error(messageError?.message);
+      }
     }
     setIsLoading(false);
   };
@@ -118,6 +133,35 @@ export default function CreateNFTByAIPage() {
     setTimeout(() => {
       setAlbumOpen(true);
     }, 50);
+  };
+
+  const handleConfirm = () => {
+    setShowTryAgainModal(false);
+  };
+
+  const handleRetry = async () => {
+    const { transactionId, canRetry } = arts || {};
+    setShowTryAgainModal(false);
+
+    if (canRetry) {
+      setIsLoading(true);
+
+      try {
+        const items = await TryAgain(transactionId!);
+        setAlbumImages(items);
+        setUnusedImages(items);
+        setIsLoading(false);
+
+        setTimeout(() => {
+          setAlbumOpen(true);
+        }, 50);
+      } catch (error: any) {
+        message.error(error);
+        setIsLoading(false);
+      }
+    } else {
+      aiFormRef.current!.generate();
+    }
   };
 
   const renderUploadComp = () => {
@@ -153,7 +197,9 @@ export default function CreateNFTByAIPage() {
         <div className="flex-1 flex flex-col gap-y-8">
           {!isSmallScreen ? null : renderUploadComp()}
           <CreateStep currentStep={createStep} />
-          {createStep === 0 ? <AIForm onCreate={handleCreate} aiImageFee={aiGuessFee ?? '--'} /> : null}
+          {createStep === 0 ? (
+            <AICreateForm ref={aiFormRef} onCreate={handleCreate} aiImageFee={aiGuessFee ?? '--'} />
+          ) : null}
           {createStep === 1 ? (
             <SingleCreateForm
               key={selectedId}
@@ -181,6 +227,7 @@ export default function CreateNFTByAIPage() {
           updateAiImagesStatus({ status: 3, imageList: unusedImages.map((item) => item.hash) }); // abandon all
         }}
       />
+      <RetryModal isModalOpen={showTryAgainModal} onConfirm={handleConfirm} onRetry={handleRetry} />
     </section>
   );
 }

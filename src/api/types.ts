@@ -797,3 +797,12 @@ export interface IGenerateRes {
   totalCount: number;
   items: IAIImage[];
 }
+
+export interface ICreateAIArtResult {
+  canRetry: boolean;
+  transactionId: string;
+  success: boolean;
+  errorMsg: string;
+  totalCount: number;
+  items: IAIImage[];
+}

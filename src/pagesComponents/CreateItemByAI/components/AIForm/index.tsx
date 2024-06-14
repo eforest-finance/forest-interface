@@ -1,3 +1,5 @@
+import React, { useRef, useImperativeHandle, Ref } from 'react';
+
 import { Collapse, Divider, Form } from 'antd5/';
 import { TextPrompt } from '../TextPrompt';
 import Arrow from 'assets/images/icon/arrow.svg';
@@ -28,13 +30,19 @@ function FormItemLabel({ title, description }: { title: string; description?: st
   );
 }
 
-export function AIForm({ onCreate, aiImageFee }: IAIFormProps) {
+function AIForm({ onCreate, aiImageFee }: IAIFormProps, ref: Ref<{ generate: () => void }>) {
   const { login, isLogin } = useCheckLoginAndToken();
   const [form] = Form.useForm();
 
   const handleFormSubmit = () => {
     form.submit();
   };
+
+  useImperativeHandle(ref, () => ({
+    generate: () => {
+      handleFormSubmit();
+    },
+  }));
 
   return (
     <Form
@@ -148,3 +156,7 @@ export function AIForm({ onCreate, aiImageFee }: IAIFormProps) {
     </Form>
   );
 }
+
+const AICreateForm = React.forwardRef(AIForm);
+
+export { AICreateForm, AIForm };
