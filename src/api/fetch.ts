@@ -68,6 +68,8 @@ import {
   IGenerateParams,
   IGenerateRes,
   ICollectionRarityInfoRes,
+  ICreateAIArtResult,
+  IFailedAIArtRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -343,8 +345,12 @@ export const fetchHotNFTs = async (): Promise<IHotNFTsRes> => {
   return request.get<IHotNFTsRes>('app/nft/hot-nft-infos');
 };
 
-export const fetchGenerate = async (params: IGenerateParams): Promise<IGenerateRes> => {
-  return request.post<IGenerateParams, IGenerateRes>('app/nft/create-ai-arts', params);
+export const fetchGenerate = async (params: IGenerateParams): Promise<ICreateAIArtResult> => {
+  return request.post<IGenerateParams, ICreateAIArtResult>('app/nft/create-ai-arts/v2', params);
+};
+
+export const fetchCreateAIRetry = async (params: { transactionId: string }): Promise<IGenerateRes> => {
+  return request.get<IGenerateRes>('app/nft/create-ai-arts-retry', { params });
 };
 
 export const fetchAiImages = async (params: { status: number; address: string }): Promise<IGenerateRes> => {
@@ -363,4 +369,17 @@ export const fetchRandomAIPrompt = async (): Promise<{
   return request.get<{
     data: string;
   }>('app/nft/ai-prompts');
+};
+
+export const fetchFailedAIArtsNFT = async (params: {
+  SkipCount: number;
+  MaxResultCount: number;
+}): Promise<IFailedAIArtRes> => {
+  return request.post<{ SkipCount: number; MaxResultCount: number }, IFailedAIArtRes>('app/nft/ai-arts-fail', params);
+};
+
+export const fetchRetryGenerateAIArts = async (transactionId: string): Promise<IGenerateRes> => {
+  return request.get<IGenerateRes>('app/nft/create-ai-arts-retry', {
+    params: { transactionId },
+  });
 };

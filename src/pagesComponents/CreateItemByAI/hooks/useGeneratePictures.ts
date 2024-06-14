@@ -1,5 +1,5 @@
 import { useWebLogin } from 'aelf-web-login';
-import { fetchGenerate } from 'api/fetch';
+import { fetchGenerate, fetchCreateAIRetry } from 'api/fetch';
 import BigNumber from 'bignumber.js';
 import { SupportedELFChainId } from 'constants/chain';
 import { Approve, GetAllowance } from 'contract/multiToken';
@@ -42,11 +42,7 @@ export default function useGeneratePictures() {
       console.log('allowance---', allowance);
 
       if (allowance.error) {
-        console.log('create error');
-        throw {
-          step: FailStepOfCollectionEnum.Approve,
-          message: allowance.error || 'create error',
-        };
+        throw new Error(`${allowance.error}`);
       }
 
       const bigA = timesDecimals(Number(params.number) * aiGuessFee, 8);
@@ -68,17 +64,16 @@ export default function useGeneratePictures() {
       }
     } catch (error) {
       const resError = error as IContractError;
-      throw {
-        step: FailStepOfCollectionEnum.Approve,
-        message: resError?.errorMessage?.message || 'create error',
-      };
+      throw new Error(`${resError?.errorMessage?.message}`);
     }
+
+    let rawTransaction;
 
     try {
       const caContractAddress = version === 'v2' ? info.sideCaAddressV2 : info.sideCaAddress;
       const rpcUrl = getRpcUrls()[chainId];
 
-      const rawTransaction = await getRawTransaction({
+      rawTransaction = await getRawTransaction({
         walletInfo,
         contractAddress,
         caContractAddress,
@@ -92,24 +87,34 @@ export default function useGeneratePictures() {
         chainId,
       });
       console.log(rawTransaction);
-      if (!rawTransaction) {
-        throw {
-          step: FailStepOfCollectionEnum.Approve,
-          message: 'rawTransaction error',
-        };
-      }
 
-      const { items = [] } = await fetchGenerate({
+      if (!rawTransaction) {
+        throw new Error(`creation failed. Please try again later.`);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(`creation failed. Please try again later.`);
+    }
+
+    try {
+      const result = await fetchGenerate({
         rawTransaction,
         chainId,
       });
-      return items;
+
+      return result;
     } catch (error) {
-      console.log(error);
+      throw 'An error was created by the server';
     }
+  };
+
+  const TryAgain = async (transactionId: string) => {
+    const { items } = await fetchCreateAIRetry({ transactionId });
+    return items;
   };
 
   return {
     CreateArt,
+    TryAgain,
   };
 }
