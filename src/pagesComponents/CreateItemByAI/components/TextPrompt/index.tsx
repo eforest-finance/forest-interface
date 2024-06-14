@@ -14,6 +14,15 @@ export function TextPrompt(props: ITextPromptProps) {
     manual: true,
   });
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value: inputValue } = e.target;
+
+    const reg = /[\u4E00-\u9FA5]/g;
+    const resVal = inputValue.replace(reg, '');
+    e.target.value = resVal;
+    props.onChange?.(e);
+  };
+
   return (
     <div className=" relative">
       <Input.TextArea
@@ -22,6 +31,7 @@ export function TextPrompt(props: ITextPromptProps) {
         placeholder="Enter desired prompt here"
         rows={7}
         {...props}
+        onChange={handleChange}
       />
       <Button
         type="text"

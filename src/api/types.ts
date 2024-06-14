@@ -764,7 +764,6 @@ export interface IHotNFT {
   chainId: string;
   id: string;
   rarity?: string;
-  describe?: string;
   level?: string;
 }
 
@@ -796,4 +795,28 @@ export interface IAIImage {
 export interface IGenerateRes {
   totalCount: number;
   items: IAIImage[];
+}
+
+export interface ICreateAIArtResult {
+  canRetry: boolean;
+  transactionId: string;
+  success: boolean;
+  errorMsg: string;
+  totalCount: number;
+  isSensitive: boolean;
+  items: IAIImage[];
+}
+export interface IFailedAIArt {
+  aiPaintingStyleType: string;
+  size: string;
+  quality: string;
+  number: number;
+  transactionId: string;
+  negativePrompt: string;
+  prompt: string;
+}
+
+export interface IFailedAIArtRes {
+  totalCount: number;
+  items: IFailedAIArt[];
 }
