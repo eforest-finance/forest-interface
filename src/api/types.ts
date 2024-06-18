@@ -820,3 +820,21 @@ export interface IFailedAIArtRes {
   totalCount: number;
   items: IFailedAIArt[];
 }
+
+export interface IMessage {
+  id: string;
+  title: string;
+  body: string;
+  singlePrice: string;
+  totalPrice: string;
+  amount: number;
+  image: string;
+  status: number;
+  businessId: string;
+  secondLevelType: string;
+}
+
+export interface IMessageListRes {
+  totalCount: number;
+  items: IMessage[];
+}

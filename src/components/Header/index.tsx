@@ -1,6 +1,6 @@
 import { Drawer, Layout, Menu, Space } from 'antd';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
 import WalletMenu from './components/WalletMenu';
 import { useRouter, usePathname } from 'next/navigation';
@@ -38,6 +38,8 @@ import { hideHeaderPage } from 'constants/common';
 import { WalletType, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useUpdateEffect } from 'ahooks';
+import { fetchMessageList } from 'api/fetch';
+import { IMessage } from 'api/types';
 
 function Header() {
   const [theme, changeTheme] = useTheme();
@@ -50,7 +52,12 @@ function Header() {
   const [visible, setVisible] = useState(false);
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
-  const { aelfInfo } = useGetState();
+  const [messagePageQuery, setMessagePageQuery] = useState({
+    skipCount: 0,
+    maxResultCount: 100,
+  });
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
+  const { aelfInfo, walletInfo } = useGetState();
 
   const { walletType } = useWebLogin();
 
@@ -91,9 +98,20 @@ function Header() {
     });
   };
 
+  const getMessageList = async () => {
+    const { items, totalCount } = await fetchMessageList(messagePageQuery);
+    setMessageList(items);
+  };
+
   useUpdateEffect(() => {
     onClose();
   }, [pathname]);
+
+  useEffect(() => {
+    if (walletInfo.address) {
+      getMessageList();
+    }
+  }, [walletInfo.address]);
 
   const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
 
@@ -289,6 +307,11 @@ function Header() {
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
+              <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
+                <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
+                  <User />
+                </span>
+              </DropMenu>
               <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
                 <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
                   <User />
