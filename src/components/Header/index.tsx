@@ -1,4 +1,4 @@
-import { Drawer, Layout, Menu, Space } from 'antd';
+import { Badge, Drawer, Layout, Menu, Space } from 'antd';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
@@ -22,6 +22,8 @@ import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
 import DropIcon from 'assets/images/events/drops.svg';
 import Close from 'components/Close';
+import NotificationIcon from 'assets/images/v2/notification.svg';
+import NotificationIconMobile from 'assets/images/v2/notification_mobile.svg';
 
 import './style.css';
 import styles from './style.module.css';
@@ -40,6 +42,7 @@ import useGetState from 'store/state/getState';
 import { useUpdateEffect } from 'ahooks';
 import { fetchMessageList } from 'api/fetch';
 import { IMessage } from 'api/types';
+import { NotificationList } from './components/NotificationList';
 
 function Header() {
   const [theme, changeTheme] = useTheme();
@@ -58,6 +61,7 @@ function Header() {
   });
   const [messageList, setMessageList] = useState<IMessage[]>([]);
   const { aelfInfo, walletInfo } = useGetState();
+  const [notificationModalVisible, setNotificationModalVisible] = useState(false);
 
   const { walletType } = useWebLogin();
 
@@ -79,10 +83,19 @@ function Header() {
       login({});
     }
   };
+
+  const showNotification = async () => {
+    if (isLogin) {
+      setNotificationModalVisible(true);
+    } else {
+      login({});
+    }
+  };
   const onClose = () => {
     setTimeout(() => {
       setVisible(false);
       setChildVisible(false);
+      setNotificationModalVisible(false);
     }, 10);
   };
   const onChildClose = () => {
@@ -179,6 +192,25 @@ function Header() {
                       <Profile /> <span>Profile</span>
                     </AuthNavLink>
                   </p>
+                  <p className="menu-item" onClick={showNotification}>
+                    <Badge dot={true} count={1} className=" !ml-0">
+                      <NotificationIconMobile width={32} height={32} />
+                    </Badge>
+                    <span>Notifications</span>
+                    <Drawer
+                      className="header-drawer child-drawer"
+                      extra={<span className=" text-textPrimary font-semibold text-xl">Notifications</span>}
+                      placement="right"
+                      destroyOnClose={true}
+                      onClose={onClose}
+                      bodyStyle={{
+                        paddingLeft: 0,
+                        paddingRight: 0,
+                      }}
+                      open={notificationModalVisible}>
+                      <NotificationList hiddenTitle={true} />
+                    </Drawer>
+                  </p>
                   <p className="menu-item" onClick={onClose}>
                     <AuthNavLink to={'/my-collections'}>
                       <MyCollection /> <span>My Collections</span>
@@ -191,6 +223,7 @@ function Header() {
                       extra={
                         <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
                       }
+                      closeIcon={<Close />}
                       placement="right"
                       destroyOnClose={true}
                       onClose={onClose}
@@ -307,11 +340,18 @@ function Header() {
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
-              <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
-                <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
-                  <User />
-                </span>
+              <DropMenu
+                overlay={<NotificationList />}
+                dropMenuClassName=" border border-solid border-lineBorder w-[430px] bg-fillPageBg rounded-lg overflow-hidden"
+                placement="bottomCenter"
+                getPopupContainer={(v) => v}>
+                <Badge dot={true}>
+                  <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
+                    <NotificationIcon />
+                  </span>
+                </Badge>
               </DropMenu>
+
               <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
                 <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
                   <User />
