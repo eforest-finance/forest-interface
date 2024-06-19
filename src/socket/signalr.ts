@@ -15,6 +15,7 @@ const messageType: Array<string> = [
   'ReceiveSymbolAuctionInfo',
   'ReceiveListingChangeSignal',
   'ReceiveOfferChangeSignal',
+  'ReceiveMessageChangeSignal',
 ];
 
 export default class SignalR {

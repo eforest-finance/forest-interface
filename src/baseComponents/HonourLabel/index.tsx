@@ -56,8 +56,6 @@ export default function HonourLabel({
     return undefined;
   }, [text]);
 
-  console.log('theme', theme);
-
   return (
     <div
       className={clsx(
