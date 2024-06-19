@@ -70,6 +70,7 @@ import {
   ICollectionRarityInfoRes,
   ICreateAIArtResult,
   IFailedAIArtRes,
+  IMessageListRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -381,5 +382,11 @@ export const fetchFailedAIArtsNFT = async (params: {
 export const fetchRetryGenerateAIArts = async (transactionId: string): Promise<IGenerateRes> => {
   return request.get<IGenerateRes>('app/nft/create-ai-arts-retry', {
     params: { transactionId },
+  });
+};
+
+export const fetchMessageList = async (params?: { skipCount?: number; maxResultCount?: number }) => {
+  return request.get<IMessageListRes>('app/message/list', {
+    params,
   });
 };
