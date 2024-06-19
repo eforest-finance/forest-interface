@@ -1,6 +1,6 @@
-import { Drawer, Layout, Menu, Space } from 'antd';
+import { Badge, Drawer, Layout, Menu, Space } from 'antd';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
 import WalletMenu from './components/WalletMenu';
 import { useRouter, usePathname } from 'next/navigation';
@@ -22,6 +22,8 @@ import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
 import DropIcon from 'assets/images/events/drops.svg';
 import Close from 'components/Close';
+import NotificationIcon from 'assets/images/v2/notification.svg';
+import NotificationIconMobile from 'assets/images/v2/notification_mobile.svg';
 
 import './style.css';
 import styles from './style.module.css';
@@ -38,6 +40,10 @@ import { hideHeaderPage } from 'constants/common';
 import { WalletType, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useUpdateEffect } from 'ahooks';
+import { fetchMessageList } from 'api/fetch';
+import { IMessage } from 'api/types';
+import { NotificationList } from './components/NotificationList';
+import useReceiveNotification from './hooks/useReceiveNotification';
 
 function Header() {
   const [theme, changeTheme] = useTheme();
@@ -50,7 +56,14 @@ function Header() {
   const [visible, setVisible] = useState(false);
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
-  const { aelfInfo } = useGetState();
+  const [messagePageQuery, setMessagePageQuery] = useState({
+    skipCount: 0,
+    maxResultCount: 100,
+  });
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
+  const { aelfInfo, walletInfo } = useGetState();
+  const [notificationModalVisible, setNotificationModalVisible] = useState(false);
+  const { notifications } = useReceiveNotification(walletInfo.address);
 
   const { walletType } = useWebLogin();
 
@@ -72,10 +85,19 @@ function Header() {
       login({});
     }
   };
+
+  const showNotification = async () => {
+    if (isLogin) {
+      setNotificationModalVisible(true);
+    } else {
+      login({});
+    }
+  };
   const onClose = () => {
     setTimeout(() => {
       setVisible(false);
       setChildVisible(false);
+      setNotificationModalVisible(false);
     }, 10);
   };
   const onChildClose = () => {
@@ -91,11 +113,35 @@ function Header() {
     });
   };
 
+  const getMessageList = async () => {
+    const { items, totalCount } = await fetchMessageList(messagePageQuery);
+    setMessageList(items);
+  };
+
   useUpdateEffect(() => {
     onClose();
   }, [pathname]);
 
+  useEffect(() => {
+    if (walletInfo.address || (notifications && notifications.hasChanged)) {
+      getMessageList();
+    }
+  }, [walletInfo.address, notifications]);
+
   const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
+
+  const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
+  console.log('rerender', unReadMessageCount, messageList);
+
+  const toggleMessageReadStatus = () => {
+    if (!messageList?.length) return;
+    setMessageList(
+      messageList.map((item) => ({
+        ...item,
+        status: 1,
+      })),
+    );
+  };
 
   return (
     <Layout.Header
@@ -161,6 +207,28 @@ function Header() {
                       <Profile /> <span>Profile</span>
                     </AuthNavLink>
                   </p>
+                  <p className="menu-item" onClick={showNotification}>
+                    <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0">
+                      <NotificationIconMobile width={32} height={32} />
+                    </Badge>
+                    <span>Notifications</span>
+                    <Drawer
+                      className="header-drawer child-drawer"
+                      extra={<span className=" text-textPrimary font-semibold text-xl">Notifications</span>}
+                      placement="right"
+                      destroyOnClose={true}
+                      onClose={() => {
+                        toggleMessageReadStatus();
+                        onClose();
+                      }}
+                      bodyStyle={{
+                        paddingLeft: 0,
+                        paddingRight: 0,
+                      }}
+                      open={notificationModalVisible}>
+                      <NotificationList hiddenTitle={true} dataSource={messageList} />
+                    </Drawer>
+                  </p>
                   <p className="menu-item" onClick={onClose}>
                     <AuthNavLink to={'/my-collections'}>
                       <MyCollection /> <span>My Collections</span>
@@ -173,6 +241,7 @@ function Header() {
                       extra={
                         <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
                       }
+                      closeIcon={<Close />}
                       placement="right"
                       destroyOnClose={true}
                       onClose={onClose}
@@ -289,6 +358,24 @@ function Header() {
             </Space>
 
             <Space className={styles['icon-btn-wrap']}>
+              <DropMenu
+                overlay={<NotificationList dataSource={messageList} />}
+                dropMenuClassName=" border border-solid border-lineBorder w-[430px] bg-fillPageBg rounded-lg overflow-hidden"
+                placement="bottomCenter"
+                onOpenChange={(open: boolean) => {
+                  console.log('onOpenChange', open);
+                  if (!open && messageList.length) {
+                    toggleMessageReadStatus();
+                  }
+                }}
+                getPopupContainer={(v) => v}>
+                <Badge dot={true} count={unReadMessageCount}>
+                  <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
+                    <NotificationIcon />
+                  </span>
+                </Badge>
+              </DropMenu>
+
               <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
                 <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
                   <User />
