@@ -13,6 +13,8 @@ import { store } from 'store/store';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import { GetTotalEffectiveListedNFTAmount, GetTotalOfferAmount } from 'contract/market';
 import { SupportedELFChainId } from 'constants/chain';
+import { IPortkeyProvider, MethodsBase } from '@portkey/provider-types';
+import { detectDiscoverProvider } from 'aelf-web-login';
 const { transform, decodeAddressRep } = AElf.utils;
 
 const httpProviders: any = {};
@@ -96,6 +98,7 @@ export const approve = async (spender: string, symbol: string, amount: string, c
         spender: spender,
         symbol,
         amount,
+        batchApproveNFT: false,
       },
       {
         chain: chainId,
@@ -267,6 +270,23 @@ const isNightEl = () => {
   return isNightElStatus;
 };
 
+const getWalletType = () => {
+  const walletInfo = localStorage.getItem('wallet-info');
+  const walletInfoObj = walletInfo ? JSON.parse(walletInfo) : {};
+
+  if (!walletInfoObj) {
+    return 'null';
+  }
+
+  if (walletInfoObj?.discoverInfo) {
+    return 'discover';
+  } else if (walletInfoObj?.portkeyInfo) {
+    return 'portkey';
+  } else {
+    return 'nightElf';
+  }
+};
+
 export const checkELFApprove = async (options: {
   chainId?: Chain;
   address: string;
@@ -301,6 +321,7 @@ export const checkELFApprove = async (options: {
         const amount = isNightEl()
           ? CONTRACT_AMOUNT
           : Number(BigNumber.sum(totalAmount, bigA.multipliedBy(quantity).multipliedBy(10 ** 8)));
+        await openBatchApprovalEntrance();
         return await approve(spender, 'ELF', `${amount}`, chainId);
       }
       return true;
@@ -349,11 +370,13 @@ export const checkNFTApprove = async (options: {
       const allowanceBN = new BigNumber(res?.allowance ?? 0);
       if (allowanceBN.lt(BigNumber.sum(bigA, totalAmount))) {
         const amount = isNightEl() ? CONTRACT_AMOUNT : Number(BigNumber.sum(totalAmount, bigA));
+        await openBatchApprovalEntrance();
         return await approve(spender, symbol, `${amount}`, chainId);
       }
       return true;
     } else {
       const amount = isNightEl() ? CONTRACT_AMOUNT : Number(bigA);
+      await openBatchApprovalEntrance();
       return await approve(spender, symbol, `${amount}`, chainId);
     }
   } catch (error) {
@@ -531,4 +554,30 @@ export const encodedParams = (inputType: any, params: any) => {
   input = transform.transform(inputType, input, AElf.utils.transform.INPUT_TRANSFORMERS);
   const message = inputType.create(input);
   return inputType.encode(message).finish();
+};
+
+export const openBatchApprovalEntrance = async () => {
+  try {
+    if (getWalletType() === 'discover') {
+      const discoverProvider = async () => {
+        const provider: IPortkeyProvider | null = await detectDiscoverProvider();
+        if (provider) {
+          if (!provider.isPortkey) {
+            throw new Error('Discover provider found, but check isPortkey failed');
+          }
+          return provider;
+        } else {
+          return null;
+        }
+      };
+      const provider = await discoverProvider();
+      if (!provider) return null;
+      await provider.request({
+        method: MethodsBase.SET_WALLET_CONFIG_OPTIONS,
+        payload: { batchApproveNFT: false },
+      });
+    }
+  } catch (error) {
+    /* empty */
+  }
 };

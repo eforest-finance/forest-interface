@@ -16,9 +16,9 @@
     "prepare": "husky install"
   },
   "resolutions": {
-    "@portkey/did-ui-react": "2.2.0",
+    "@portkey/did-ui-react": "2.6.6",
     "@portkey/detect-provider": "^2.1.0",
-    "@portkey/provider-types": "^2.1.0"
+    "@portkey/provider-types": "^2.2.1"
   },
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
@@ -30,7 +30,10 @@
     "@portkey-v1/types": "1.5.4-alpha.20",
     "@portkey-v1/utils": "1.5.4-alpha.20",
     "@portkey/contracts": "2.2.0",
-    "@portkey/did-ui-react": "2.2.0",
+    "@portkey/detect-provider": "^2.1.0",
+    "@portkey/did-ui-react": "2.6.6",
+    "@portkey/onboarding": "^2.2.0",
+    "@portkey/provider-types": "^2.2.1",
     "@portkey/request": "2.2.0",
     "@portkey/services": "2.2.0",
     "@portkey/types": "2.2.0",
@@ -41,7 +44,7 @@
     "@types/react-infinite-scroller": "^1.2.4",
     "aelf-design": "^1.0.0-alpha.13",
     "aelf-sdk": "^3.4.1",
-    "aelf-web-login": "2.0.1-beta.7",
+    "aelf-web-login": "2.0.1-beta.15",
     "ahooks": "^3.7.8",
     "antd": "^4.24.12",
     "aws-sdk": "^2.1399.0",
