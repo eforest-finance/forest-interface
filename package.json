@@ -16,7 +16,6 @@
     "prepare": "husky install"
   },
   "resolutions": {
-    "@portkey/did-ui-react": "2.2.0",
     "@portkey/detect-provider": "^2.1.0",
     "@portkey/provider-types": "^2.1.0"
   },

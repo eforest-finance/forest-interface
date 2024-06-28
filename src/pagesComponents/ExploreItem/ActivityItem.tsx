@@ -9,7 +9,7 @@ import { getFilter, getTagList } from './components/Filters/util';
 import FilterTags from './components/FilterTags';
 import { ICollectionActivitiesParams } from 'api/types';
 import { useCollectionActiviesDataServices } from './hooks/useCollectionActivitiesDataServices';
-import AcitvityItemsSearch from './components/ActivityItemsSearch';
+import ActivityItemsSearch from './components/ActivityItemsSearch';
 import { ActivityListTable } from './components/ActivityListTable';
 import { useFilterForActivitiesService } from './hooks/useFilterForActivitiesService';
 import { FilterKeyEnum, FilterType } from './constant';
@@ -81,7 +81,7 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
 
   return (
     <>
-      <AcitvityItemsSearch
+      <ActivityItemsSearch
         collapsed={collapsed}
         collapsedChange={() => setCollapsed(!collapsed)}
         searchParams={{

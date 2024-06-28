@@ -13,7 +13,7 @@ interface IProps {
   chainId: Chain;
 }
 
-const getFloorPricePercentage = (floorPrice: number, currentOffer: number) => {
+export const getFloorPricePercentage = (floorPrice: number, currentOffer: number) => {
   const floorPriceBig = new BigNumber(floorPrice);
   const currentOfferBig = new BigNumber(currentOffer);
   if (floorPriceBig.lt(0)) {

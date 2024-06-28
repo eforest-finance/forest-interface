@@ -33,7 +33,7 @@ const renderPrice = (text?: string | number, tokenSymbol?: string) => {
 
 export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: IActivityListTableProps) {
   const { address } = useParams();
-  const nftCollectionId = address[0];
+  const nftCollectionId = address?.[0] || '';
 
   const isSchrondinger = nftCollectionId.endsWith('-SGRTEST-0') || nftCollectionId.endsWith('-SGR-0');
 
@@ -54,7 +54,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
         }}>
         <div className={clsx(isSmallScreen ? 'mr-2' : 'mr-4')}>
           <ImageEnhance
-            src={record.previewImage || 'error'}
+            src={record.previewImage || record.nftUrl || 'error'}
             className={clsx(
               'shrink-0 object-cover ',
               isSmallScreen ? '!w-8 !h-8 !rounded-sm' : '!w-[52px] !h-[52px] !rounded-md ',
@@ -89,7 +89,9 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
     if (!addrObj) return '-';
     if (!!currentUserAddress && getOriginalAddress(addrObj.address) === getOriginalAddress(currentUserAddress)) {
       return (
-        <span onClick={() => nav.push(`/account/${addrObj?.address}`)} className=" text-brandHover cursor-pointer">
+        <span
+          onClick={() => nav.push(`/account/${addrObj?.address}#Collected`)}
+          className=" text-brandHover cursor-pointer">
           You
         </span>
       );
@@ -100,14 +102,16 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       getOriginalAddress(addrObj.name) !== addrObj.address
     )
       return (
-        <div onClick={() => nav.push(`/account/${addrObj?.address}`)} className="flex items-center  cursor-pointer">
+        <div
+          onClick={() => nav.push(`/account/${addrObj?.address}#Collected`)}
+          className="flex items-center  cursor-pointer">
           <span className=" text-brandHover">{getOmittedStr(addrObj.name, OmittedType.NAME)}</span>
         </div>
       );
     if (addrObj.address)
       return (
         <div className="flex items-center cursor-pointer">
-          <span className=" text-brandHover" onClick={() => nav.push(`/account/${addrObj?.address}`)}>
+          <span className=" text-brandHover" onClick={() => nav.push(`/account/${addrObj?.address}#Collected`)}>
             {getOmittedStr(addPrefixSuffix(addrObj.address), OmittedType.ADDRESS)}
           </span>
           <Copy className="w-4 h-4 fill-textSecondary ml-2" toCopy={addrObj.address}></Copy>
@@ -229,9 +233,6 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       dataSource={dataSource}
       loading={loading}
       scroll={{ x: 1280 }}
-      sticky={{
-        offsetHeader: stickeyOffsetHeight,
-      }}
     />
   );
 }

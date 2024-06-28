@@ -316,3 +316,85 @@ export const getFilterListForActivity = (
   }
   return filterList;
 };
+
+export const getFilterListForMyItem = (
+  ChainId: string,
+): Array<CheckboxItemType | RangeItemType | SearchCheckBoxItemType> => {
+  const filterList = [
+    {
+      key: FilterKeyEnum.Status,
+      title: FilterKeyEnum.Status,
+      type: FilterType.Checkbox,
+      data: [
+        {
+          value: CollectionsStatus['Buy Now'],
+          label: CollectionsStatus[1],
+        },
+        {
+          value: CollectionsStatus['Has Offers'],
+          label: CollectionsStatus[4],
+        },
+      ],
+    },
+    {
+      key: FilterKeyEnum.Chain,
+      title: FilterKeyEnum.Chain,
+      type: FilterType.Checkbox,
+      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+    },
+    {
+      key: FilterKeyEnum.Price,
+      title: FilterKeyEnum.Price,
+      type: FilterType.Range,
+      data: [],
+    },
+    {
+      key: FilterKeyEnum.Collections,
+      title: FilterKeyEnum.Collections,
+      type: FilterType.Checkbox,
+      data: [],
+    },
+  ];
+
+  return filterList;
+};
+
+export const getDefaultFilterForMyItems = (ChainId: string): IFilterSelect => {
+  const res: IFilterSelect = {
+    [FilterKeyEnum.Status]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Chain]: {
+      type: FilterType.Checkbox,
+      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+    },
+    [FilterKeyEnum.Price]: {
+      type: FilterType.Range,
+      data: [
+        {
+          min: '',
+          max: '',
+        },
+      ],
+    },
+    [FilterKeyEnum.Symbol]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Generation]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Traits]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+    [FilterKeyEnum.Collections]: {
+      type: FilterType.Checkbox,
+      data: [],
+    },
+  };
+
+  return res;
+};

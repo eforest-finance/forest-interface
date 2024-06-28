@@ -30,7 +30,7 @@ interface INFTListTableProps {
 
 export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListTableProps) {
   const { address } = useParams();
-  const nftCollectionId = address[0];
+  const nftCollectionId = address?.[0] || '';
 
   const isSchrondinger = nftCollectionId.endsWith('-SGRTEST-0') || nftCollectionId.endsWith('-SGR-0');
 
@@ -97,7 +97,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              nav.push('/account');
+              nav.push(`/account/${getOriginalAddress(wallet?.address)}#Created`);
             }}>
             You
           </span>
@@ -117,7 +117,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              nav.push(`/account/${addrObj.address}`);
+              nav.push(`/account/${addrObj.address}#Created`);
             }}>
             {getOmittedStr(addrObj.name, OmittedType.NAME)}
           </span>
@@ -131,7 +131,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            nav.push(`/account/${addrObj.address}`);
+            nav.push(`/account/${addrObj.address}#Created`);
           }}>
           <Tooltip title={addPrefixSuffix(addrObj.address)}>
             <span className=" text-base text-brandHover font-medium cursor-pointer">

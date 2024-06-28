@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AElf from 'utils/aelf';
 
-import { Approve, GetAllowance } from 'contract/multiToken';
+import { GetAllowance } from 'contract/multiToken';
 import { CreateToken } from 'contract/tokenAdapter';
 import { IContractError, ICreateCollectionParams, ICreateItemsParams, IIssuerParams } from 'contract/type';
 import {
@@ -17,7 +17,7 @@ import { CHAIN_ID_VALUE } from 'constants/index';
 import { store } from 'store/store';
 import { BatchCreateNFT, ForwardCall, GetProxyAccountByProxyAccountAddress } from 'contract/proxy';
 import tokenContractJson from 'proto/token_contract.json';
-import { encodedParams } from 'utils/aelfUtils';
+import { approve, encodedParams, openBatchApprovalEntrance } from 'utils/aelfUtils';
 import { message } from 'antd';
 import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
@@ -138,15 +138,12 @@ const createContractByCollection = async (params: ICreateCollectionParams) => {
     const bigA = timesDecimals(1, '0');
     const allowanceBN = new BigNumber(allowance?.allowance);
     if (allowanceBN.lt(bigA)) {
-      const approveRes = await Approve(
-        {
-          spender: info?.tokenAdapterMainAddress,
-          symbol: params.seedSymbol,
-          amount: '1',
-        },
-        {
-          chain: SupportedELFChainId.MAIN_NET,
-        },
+      await openBatchApprovalEntrance();
+      const approveRes = await approve(
+        info?.tokenAdapterMainAddress,
+        params.seedSymbol,
+        '1',
+        SupportedELFChainId.MAIN_NET,
       );
       console.log('token approve finish', approveRes);
     }

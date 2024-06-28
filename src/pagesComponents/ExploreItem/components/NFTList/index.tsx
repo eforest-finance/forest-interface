@@ -39,8 +39,10 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
     if (dataSource?.fileExtension === 'mp4') return 'video';
     return 'image';
   }, [dataSource?.fileExtension]);
+  const price = dataSource?.price || dataSource?.listingPrice;
+
   return (
-    <Link href={`/detail/buy/${dataSource?.id ?? ''}/${dataSource?.chainIdStr ?? ''}`}>
+    <Link href={`/detail/buy/${dataSource?.id ?? ''}/${(dataSource?.chainIdStr || dataSource?.chainId) ?? ''}`}>
       <Card
         className={`${styles['items-card-wrapper']} h-full ${className}`}
         onClick={onClick}
@@ -69,9 +71,7 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
           <div className={clsx(styles.token__price, priceClassName)}>
             <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
             <span className={styles.token__price__text}>
-              {(dataSource?.price || dataSource?.price === 0) && dataSource?.price >= 0
-                ? formatTokenPrice(dataSource.price) + ' ELF'
-                : '--'}
+              {price && price >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
             </span>
           </div>
         </div>
