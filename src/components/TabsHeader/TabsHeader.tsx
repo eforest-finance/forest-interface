@@ -45,7 +45,6 @@ export default function TabsHeader({ tabNav, activeKey, onChange, ...props }: Ta
     <Tabs
       tabBarGutter={0}
       activeKey={activeKey || tabNav?.[0]?.key}
-      centered
       className={`${styles['tabs-header']} ${isSmallScreen ? styles['mobile-tabs-header'] : ''}`}
       onChange={onChange}
       {...props}>

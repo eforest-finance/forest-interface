@@ -7,8 +7,6 @@ interface IReceiveMessageChange {
 
 const useReceiveNotification = (address: string) => {
   const socket = Socket();
-  console.log('socket--', socket);
-
   const [notifications, setNotifications] = useState<IReceiveMessageChange>();
   const fetchAndReceiveWs = () => {
     if (!socket) {

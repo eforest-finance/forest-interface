@@ -2,7 +2,7 @@ import { useWebLogin } from 'aelf-web-login';
 import { fetchGenerate, fetchCreateAIRetry } from 'api/fetch';
 import BigNumber from 'bignumber.js';
 import { SupportedELFChainId } from 'constants/chain';
-import { Approve, GetAllowance } from 'contract/multiToken';
+import { GetAllowance } from 'contract/multiToken';
 import { IContractError } from 'contract/type';
 import { FailStepOfCollectionEnum } from 'hooks/useCreate';
 import useGetState from 'store/state/getState';
@@ -11,6 +11,7 @@ import { timesDecimals } from 'utils/calculate';
 import { getRawTransaction } from 'utils/getRawTransaction';
 import { getForestContractAddress } from 'contract/forest';
 import { getRpcUrls } from 'constants/url';
+import { approve, openBatchApprovalEntrance } from 'utils/aelfUtils';
 
 export interface ICreateArt {
   model?: string;
@@ -50,16 +51,9 @@ export default function useGeneratePictures() {
       console.log(allowanceBN, bigA);
 
       if (allowanceBN.lt(bigA)) {
-        const approveRes = await Approve(
-          {
-            spender: contractAddress,
-            symbol: 'ELF',
-            amount: bigA.toNumber(),
-          },
-          {
-            chain: chainId,
-          },
-        );
+        await openBatchApprovalEntrance();
+        const approveRes = await approve(contractAddress, 'ELF', String(bigA.toNumber()), chainId);
+
         console.log('token approve finish', approveRes);
       }
     } catch (error) {

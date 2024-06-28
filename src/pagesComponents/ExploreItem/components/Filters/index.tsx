@@ -13,6 +13,7 @@ import { FilterKeyEnum } from 'pagesComponents/ExploreItem/constant';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import Tooltip from 'baseComponents/Tooltip';
 import useGetState from 'store/state/getState';
+import CollectionSearchCheckBoxGroups from '../SearchCheckBoxGroups/collectionSearch';
 
 interface IFilterContainerProps {
   options?: any[];
@@ -23,6 +24,8 @@ interface IFilterContainerProps {
   traitsInfo?: ICollectionTraitInfo[];
   generationInfos?: ICollecionGenerationInfo[];
   rarityInfos?: ICollectionRarityInfo[];
+  mineInfos?: any[];
+  collectionInfos?: any[];
   filterSelect: IFilterSelect;
   filterList: (CheckboxItemType | RangeItemType | SearchCheckBoxItemType)[];
   mobileMode?: boolean;
@@ -72,6 +75,31 @@ const getTraitSelectorData = (
   };
 };
 
+const getCollectionSelectorData = (
+  collectionArrayInfo: ICollectionTraitInfo[],
+  filterChange: (val: ItemsSelectSourceType) => void,
+  filterSelectData: IFilterSelect,
+) => {
+  const selectValues = filterSelectData[FilterKeyEnum.Collections].data.map((itm) => itm.value);
+
+  return {
+    key: FilterKeyEnum.Collections,
+    label: FilterKeyEnum.Collections,
+    children: [
+      {
+        key: `${FilterKeyEnum.Collections}-1`,
+        label: (
+          <CollectionSearchCheckBoxGroups
+            dataSource={collectionArrayInfo}
+            onChange={filterChange}
+            values={selectValues}
+          />
+        ),
+      },
+    ],
+  };
+};
+
 export function FilterContainer({
   clearAll,
   onClose,
@@ -79,6 +107,8 @@ export function FilterContainer({
   traitsInfo,
   generationInfos,
   rarityInfos,
+  mineInfos,
+  collectionInfos,
   onFilterChange,
   filterSelect,
   filterList,
@@ -101,6 +131,16 @@ export function FilterContainer({
       index > -1 && resTargetList.splice(index, 1);
     }
 
+    if (!mineInfos?.length) {
+      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Mine);
+      index > -1 && resTargetList.splice(index, 1);
+    }
+
+    if (!collectionInfos?.length) {
+      const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Collections);
+      index > -1 && resTargetList.splice(index, 1);
+    }
+
     if (!rarityInfos?.length) {
       const index = resTargetList.findIndex((itm) => itm.key === FilterKeyEnum.Rarity);
       index > -1 && resTargetList.splice(index, 1);
@@ -113,12 +153,26 @@ export function FilterContainer({
         return getTraitSelectorData(traitsInfo || [], onFilterChange, filterSelect);
       }
 
+      if (item.key === FilterKeyEnum.Collections) {
+        return getCollectionSelectorData(collectionInfos || [], onFilterChange, filterSelect);
+      }
+
       if (item.key === FilterKeyEnum.Generation) {
         item.data = (generationInfos || []).map((itm) => ({
           value: `${itm.generation}`,
           label: `${itm.generation}`,
           extra: `${itm.generationItemsCount}`,
         }));
+      }
+
+      if (item.key === FilterKeyEnum.Mine) {
+        item.data = (mineInfos || []).map((itm: any) => {
+          return {
+            value: `${itm.value}`,
+            label: `${itm.value}`,
+            extra: 'Mine',
+          };
+        });
       }
 
       const Comp: React.FC<ICompProps> = getComponentByType(item.type);
@@ -181,7 +235,7 @@ export function FilterContainer({
         ],
       };
     });
-  }, [filterSelect, filterList, traitsInfo, generationInfos]);
+  }, [filterSelect, filterList, traitsInfo, generationInfos, mineInfos, collectionInfos]);
 
   if (mobileMode) {
     return (

@@ -66,3 +66,11 @@
 .collapsed-wrapper svg path {
   @apply fill-[var(--color-secondary)];
 }
+
+.moreWrapper {
+  :global {
+    .base-select {
+      @apply !hidden;
+    }
+  }
+}

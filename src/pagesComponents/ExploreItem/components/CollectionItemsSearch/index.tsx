@@ -14,6 +14,8 @@ import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
 interface ICollectionItemsSearch {
   size: BoxSizeEnum;
+  hiddenFilter?: boolean;
+  hiddenSize?: boolean;
   collapsed: boolean;
   searchParams: InputProps;
   sizeChange: (value: BoxSizeEnum) => void;
@@ -25,31 +27,45 @@ interface ICollectionItemsSearch {
 
 export function CollectionItemsSearch(params: ICollectionItemsSearch) {
   const { isLG } = useResponsive();
-  const { size, collapsed, searchParams, selectProps, sizeChange, collapsedChange, selectTagCount, extraInfo } = params;
+  const {
+    size,
+    hiddenFilter,
+    hiddenSize,
+    collapsed,
+    searchParams,
+    selectProps,
+    sizeChange,
+    collapsedChange,
+    selectTagCount,
+    extraInfo,
+  } = params;
   return (
     <>
       <div className={styles.collection__search}>
-        <div
-          className={clsx(
-            'flex justify-between items-center',
-            !isLG ? 'mr-8' : 'mr-4',
-            !collapsed && !isLG ? 'w-[360px]' : 'w-auto',
-          )}>
-          <FilterButton onClick={collapsedChange} badge={selectTagCount || ''} showBadge={!!selectTagCount && isLG} />
-          {extraInfo && !collapsed && !isLG ? (
-            <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
-          ) : null}
-        </div>
+        {!hiddenFilter ? (
+          <div
+            className={clsx(
+              'flex justify-between items-center',
+              !isLG ? 'mr-8' : 'mr-4',
+              !collapsed && !isLG ? 'w-[360px]' : 'w-auto',
+            )}>
+            <FilterButton onClick={collapsedChange} badge={selectTagCount || ''} showBadge={!!selectTagCount && isLG} />
+            {extraInfo && !collapsed && !isLG ? (
+              <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
+            ) : null}
+          </div>
+        ) : null}
+
         <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
           <CollectionSearch {...searchParams} />
         </div>
         {!isLG && (
-          <div>
+          <div className="base-select">
             <BaseSelect dataSource={dropDownCollectionsMenu} {...selectProps} />
           </div>
         )}
 
-        {!isLG && (
+        {!isLG && !hiddenSize && (
           <div className={styles.size_container}>
             <div
               className={clsx(styles['btn-icon'], size === BoxSizeEnum.details && styles.active)}
@@ -75,8 +91,8 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
           </div>
         )}
       </div>
-      {isLG && (
-        <div className="flex mb-4">
+      {isLG && !hiddenSize && (
+        <div className="flex mb-4 base-select">
           <BaseSelect className="!flex-1" dataSource={dropDownCollectionsMenu} {...selectProps} />
 
           <div className={styles['size_container']}>

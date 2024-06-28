@@ -29,6 +29,7 @@ declare type InfoStateType = {
     open: boolean;
   };
   hasToken: boolean;
+  elfRate: number;
 };
 
 declare type WalletInfoType = {

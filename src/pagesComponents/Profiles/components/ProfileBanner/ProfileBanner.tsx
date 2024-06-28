@@ -1,13 +1,21 @@
-import { Avatar } from 'antd';
+import { Avatar, Upload, message } from 'antd';
+import type { UploadProps } from 'antd';
+import AWSManagerInstance from 'utils/S3';
+
 import styles from './ProfileBanner.module.css';
 
 import { useSelector } from 'store/store';
 import Copy from 'components/Copy';
 
-import Image from 'next/image';
 import AvatarDefault from 'assets/images/avatar.png';
 
 import { OmittedType, getOmittedStr } from 'utils';
+import { ImageEnhance } from 'components/ImgLoading';
+import clsx from 'clsx';
+import { acceptFileType } from 'pagesComponents/CreateItemV2/components/Upload/UploadBatch';
+import { useCallback } from 'react';
+import { saveUserSettings } from 'api/fetch';
+import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
 export default function ProfileBanner({
   bannerImage,
@@ -26,28 +34,89 @@ export default function ProfileBanner({
   const {
     info: { isSmallScreen },
   } = useSelector((store) => store);
+  const { login, isLogin } = useCheckLoginAndToken();
+
+  const props: UploadProps = {
+    name: 'File',
+    accept: acceptFileType.picture,
+    showUploadList: false,
+    action: '',
+    beforeUpload(file: File) {
+      handleFileUpload(file, 'bannerImage');
+    },
+  };
+
+  const profileImageProps: UploadProps = {
+    ...props,
+    beforeUpload: (file: File) => {
+      handleFileUpload(file, 'profileImage');
+    },
+  };
+
+  const handleFileUpload = useCallback(async (file: File, type: string) => {
+    if (!isLogin) {
+      login();
+      return;
+    }
+
+    if (file.size > 100 * 1024 * 1024) {
+      message.error(`File upload failed. Please choose a file within the size limit.`);
+      return false;
+    }
+
+    try {
+      const { url, hash } = await AWSManagerInstance.uploadFile(file);
+      console.log('url:', url);
+      const res = await saveUserSettings({
+        [type]: url,
+      });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+      message.error('File upload failed.');
+    }
+  }, []);
+
   return (
-    <div
-      className={styles['profile-banner-wrapper']}
-      style={{
-        backgroundImage: `url(${bannerImage})`,
-      }}>
-      <div className={`${styles['profile-banner-mask']} ${bannerImage ? styles['shadow'] : ''}`}>
+    <>
+      <div
+        className={clsx(styles['profile-banner-wrapper'], 'group/bg')}
+        style={{
+          backgroundImage: `url(${bannerImage})`,
+        }}>
+        {/* <Upload {...props}>
+          <div className="w-full h-full absolute top-0 left-0"></div>
+        </Upload> */}
+
         <Avatar
-          className={`border border-solid border-[var(--line-box)] ${
-            isSmallScreen ? styles['avatar-m'] : styles['avatar-pc']
-          }`}
+          className="!absolute left-4  -bottom-5  mdl:left-[40px] mdl:-bottom-[30px] !w-[82px] !h-[82px] mdl:!w-[168px] mdl:!h-[168px]   !bg-textWhite overflow-hidden"
           icon={
-            <Image src={profileImage || AvatarDefault} className="pointer-events-none" alt="" width={96} height={96} />
+            <div className="relative w-full h-full flex justify-center items-center">
+              <ImageEnhance
+                src={profileImage || AvatarDefault.src}
+                className="pointer-events-none w-[76px] h-[76px] mdl:!w-[156px] mdl:!h-[156px] overflow-hidden rounded-full"
+              />
+              {/* <EditOutlined
+                onClick={() => {
+                  alert('todo');
+                }}
+                className=" hidden group-hover/avatar:block absolute top-[26px] left-[26px] mdl:top-[66px] mdl:left-[66px] text-xl mdl:text-[48px] !text-textWhite"
+              /> */}
+              {/* <Upload {...profileImageProps}>
+                <div className="w-full h-full absolute top-0 left-0"></div>
+              </Upload> */}
+            </div>
           }
           alt="Avatar"
         />
-        <div className={styles['user-name']}>{name || 'Unnamed'}</div>
-        <div className="flex items-center justify-center">
-          <div className={styles['user-address']}>{getOmittedStr(address, OmittedType.ADDRESS)}</div>
-          <Copy className="w-4 h-4 fill-textSecondary ml-2 cursor-pointer hover:fill-brandNormal" toCopy={address} />
-        </div>
+
+        {/* <EditOutlined className=" hidden group-hover/bg:block text-xl mdl:text-[48px] !text-textWhite" /> */}
       </div>
-    </div>
+      <div className={styles['user-name']}>{name || 'Unnamed'}</div>
+      <div className="flex items-center px-4 mdl:px-10 mt-2 ">
+        <div className={styles['user-address']}>{getOmittedStr(address, OmittedType.ADDRESS)}</div>
+        <Copy className="w-4 h-4 fill-textSecondary ml-2 cursor-pointer hover:fill-brandNormal" toCopy={address} />
+      </div>
+    </>
   );
 }

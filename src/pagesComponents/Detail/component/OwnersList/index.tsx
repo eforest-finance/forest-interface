@@ -56,7 +56,7 @@ function OwnersList({ id, chainId, visible, onCancel }: IProps) {
       return;
     }
     if (address) {
-      nav.push(`/account/${address}`);
+      nav.push(`/account/${address}#Collected`);
     }
   };
 
