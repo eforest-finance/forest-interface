@@ -147,7 +147,7 @@ export default function Activity() {
             className={`cursor-pointer text-[var(--brand-base)] font-medium from ${
               isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
             }`}
-            onClick={() => from?.address && nav.push(`/account/${from?.address}`)}>
+            onClick={() => from?.address && nav.push(`/account/${from?.address}#Collected`)}>
             {getOmittedStr(from?.name || '--', OmittedType.ADDRESS)}
           </p>
         ),
@@ -163,7 +163,7 @@ export default function Activity() {
                 className={`cursor-pointer text-[var(--brand-base)] font-medium from ${
                   isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
                 }`}
-                onClick={() => to?.address && nav.push(`/account/${to?.address}`)}>
+                onClick={() => to?.address && nav.push(`/account/${to?.address}#Collected`)}>
                 {getOmittedStr(to?.name || '', OmittedType.ADDRESS)}
               </p>
             ) : (

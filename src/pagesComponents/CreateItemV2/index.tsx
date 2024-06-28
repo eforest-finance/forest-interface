@@ -11,6 +11,7 @@ import { useSelector } from 'store/store';
 import { SegmentedValue } from 'antd/lib/segmented';
 
 import { useState } from 'react';
+import useGetState from 'store/state/getState';
 
 export default function CreateNFTItemPage() {
   const {
@@ -33,11 +34,12 @@ export default function CreateNFTItemPage() {
 
   const { collection, tokenId, nftName, singleFile } = useSelector((store) => store.createItem);
   const [type, setType] = useState<SegmentedValue>('single');
+  const { walletInfo } = useGetState();
 
   const renderSyncChainModal = () => {
     if (!modalState.isVisible) return null;
 
-    const successUrl = '/account#Created';
+    const successUrl = `/account/${walletInfo.address}#Collected`;
 
     return (
       <CreateNFTSyncChainModal

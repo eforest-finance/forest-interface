@@ -21,11 +21,11 @@ const aProps = { target: '_blank', rel: 'noreferrer' };
 
 function BatchCreateNFTSuccessModalContructor(props: IBatchCreatedSuccessModalProps) {
   const { logoImage, collectionName, collectionLogoImage, explorerUrl } = props;
-  const { infoState } = useGetState();
+  const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const nav = useRouter();
   useMount(() => {
-    nav.prefetch('/account#Created');
+    nav.prefetch(`/account/${walletInfo.address}#Collected`);
   });
 
   const modal = useModal();
@@ -40,7 +40,7 @@ function BatchCreateNFTSuccessModalContructor(props: IBatchCreatedSuccessModalPr
         className={`${!isSmallScreen ? '!w-[256px]' : 'w-full'}`}
         onClick={() => {
           modal.hide();
-          nav.push('/account#Created');
+          nav.push(`/account/${walletInfo.address}#Collected`);
         }}>
         View Item in Collection
       </Button>

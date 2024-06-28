@@ -71,6 +71,15 @@ import {
   ICreateAIArtResult,
   IFailedAIArtRes,
   IMessageListRes,
+  IMyHold,
+  IMyHoldSearch,
+  IMyHoldSearchRes,
+  IActivitySearch,
+  IActivitySearchRes,
+  IOfferMadeItemRes,
+  IOfferMadeParams,
+  IReceivedOfferParams,
+  IMyHoLdCollectionRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -389,4 +398,38 @@ export const fetchMessageList = async (params?: { skipCount?: number; maxResultC
   return request.get<IMessageListRes>('app/message/list', {
     params,
   });
+};
+
+export const fetchAvatar = async () => {
+  return request.get<string>('app/icon/random-image');
+};
+
+export const fetchNFTCollectionMyHold = async (params: IMyHold) => {
+  return request.get<IMyHoLdCollectionRes>('app/nft/nft-collections/myhold', {
+    params,
+  });
+};
+
+export const fetchNFTMyHoldSearch = async (params: IMyHoldSearch) => {
+  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/myhold', params);
+};
+
+export const fetchCollectionsByMyCreated = async (params: IMyHoldSearch) => {
+  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/mycreated', params);
+};
+
+export const fetchActivitiesSearch = async (params: IActivitySearch): Promise<IActivitySearchRes> => {
+  return request.post<IActivitySearch, IActivitySearchRes>('app/nft/collected-collection-activities', params);
+};
+
+export const fetchOfferMade = async (params: IOfferMadeParams): Promise<IOfferMadeItemRes> => {
+  return request.post<IOfferMadeParams, IOfferMadeItemRes>('app/market/collected-collection-offers-made', params);
+};
+
+export const fetchReceivedOffer = async (params: IReceivedOfferParams): Promise<IOfferMadeItemRes> => {
+  return request.post<IOfferMadeParams, IOfferMadeItemRes>('app/market/collected-collection-received-offer', params);
+};
+
+export const fetchMoreListings = async (params: IReceivedOfferParams): Promise<IOfferMadeItemRes> => {
+  return request.post<IOfferMadeParams, IOfferMadeItemRes>('app/market/collected-collection-listings', params);
 };

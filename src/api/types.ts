@@ -90,10 +90,11 @@ export interface IPricesList {
 }
 
 export interface IListingsParams {
-  chainId: Chain;
-  symbol: string;
-  skipCount: number;
-  maxResultCount: number;
+  searchParam: string;
+  chainId?: Chain;
+  symbol?: string;
+  skipCount?: number;
+  maxResultCount?: number;
   excludedAddress?: string;
   address?: string;
 }
@@ -139,6 +140,7 @@ export interface IPriceToken {
 }
 
 export interface IActivitiesItem {
+  chainId?: string;
   nftInfoId: string;
   type: number;
   from?: IFrom | null;
@@ -146,12 +148,15 @@ export interface IActivitiesItem {
   amount: number;
   price: number;
   priceToken: IPriceToken | null;
+  purchaseToken?: IPriceToken | null;
   id: string;
   transactionHash: string;
   timestamp: number;
   nftCollectionName: string;
+  collectionName: string;
   nftName: string;
   previewImage: string;
+  nftUrl?: string;
 }
 
 export interface IActivities {
@@ -838,4 +843,268 @@ export interface IMessage {
 export interface IMessageListRes {
   totalCount: number;
   items: IMessage[];
+}
+
+export interface IMyHold {
+  skipCount: number;
+  maxResultCount: number;
+  address: string;
+  keyWord: string;
+  queryType: string;
+}
+
+export interface CollectionHoldItem {
+  chainId: Chain;
+  symbol: string;
+  tokenName: string;
+  logoImage: string;
+  itemTotal: number;
+  floorPrice: number;
+  floorPriceSymbol: string;
+}
+
+export interface IMyHoldSearch {
+  collectionIds?: string[];
+  chainList?: string[];
+  hasListingFlag?: boolean;
+  hasAuctionFlag?: boolean;
+  hasOfferFlag?: boolean;
+  sorting: string;
+  priceLow?: number;
+  priceHigh?: number;
+  skipCount: number;
+  maxResultCount: number;
+  address: string;
+  keyWord: string;
+  queryType: string;
+}
+
+export interface NFTHoldItem {
+  collectionSymbol?: string[];
+  nftSymbol?: string[];
+  previewImage?: boolean;
+  priceDescription?: boolean;
+  price?: boolean;
+  tokenName: string;
+  issueChainIdStr?: number;
+  chainIdStr?: number;
+  fileExtension: number;
+  generation: number;
+  traitPairsDictionary: string[];
+  listingPrice: number;
+  listingPriceCreateTime: string;
+  offerPrice: number;
+  latestDealPrice: number;
+  allOwnerCount: number;
+  realOwner: {
+    address: string;
+    name: string;
+    aelfAddress: string;
+    profileImage: string;
+    email: string;
+    twitter: string;
+    instagram: string;
+    id: string;
+  };
+  rank: string;
+  level: string;
+  grade: string;
+  star: string;
+  rarity: string;
+  describe: string;
+  id: string;
+}
+
+export interface IMyHoLdCollectionRes {
+  totalCount: number;
+  items: CollectionHoldItem[];
+}
+
+export interface IMyHoldSearchRes {
+  totalCount: number;
+  items: NFTHoldItem[];
+}
+
+export interface IActivitySearch {
+  collectionIdList?: string[];
+  chainList?: string[];
+  traits?: {
+    key: string;
+    value: string;
+  }[];
+  type: string[];
+  skipCount: number;
+  maxResultCount: number;
+  address: string;
+  hasListingFlag?: boolean;
+  hasAuctionFlag?: boolean;
+  hasOfferFlag?: boolean;
+  sorting: string;
+  priceLow?: number;
+  priceHigh?: number;
+  keyWord: string;
+  queryType: string;
+}
+
+export interface ActivityNFTItem {
+  nftInfoId: string;
+  type: number;
+  from: {
+    address: string;
+    aelfAddress: string;
+    caHash: string;
+    name: string;
+    profileImage: string;
+    email: string;
+    twitter: string;
+    instagram: string;
+    id: string;
+  };
+  to: {
+    address: string;
+    aelfAddress: string;
+    caHash: string;
+    name: string;
+    profileImage: string;
+    email: string;
+    twitter: string;
+    instagram: string;
+    id: string;
+  };
+  amount: number;
+  priceToken: string;
+  symbol: string;
+  collectionName: string;
+  totalPrice: number;
+  nftUrl: string;
+  nftName: string;
+  id: string;
+  collectionSymbol?: string[];
+  nftSymbol?: string[];
+  previewImage?: boolean;
+  priceDescription?: boolean;
+  price?: number;
+  tokenName: string;
+  issueChainIdStr?: number;
+  chainIdStr?: number;
+  fileExtension: number;
+  generation: number;
+  traitPairsDictionary: string[];
+  listingPrice: number;
+  listingPriceCreateTime: string;
+  offerPrice: number;
+  latestDealPrice: number;
+  allOwnerCount: number;
+  rank: string;
+  level: string;
+  grade: string;
+  star: string;
+  rarity: string;
+  describe: string;
+}
+
+export interface IActivitySearchRes {
+  totalCount: number;
+  items: ActivityNFTItem[];
+}
+
+export interface IOfferMadeParams {
+  skipCount?: number;
+  maxResultCount?: number;
+  address?: string;
+  collectionIdList?: string[];
+  chainList?: string[];
+  traits?: {
+    key?: string;
+    value?: string;
+  }[];
+}
+
+export interface OfferMadeItem {
+  nftInfoId: string;
+  nftCollectionName: string;
+  type: number;
+  chainId: string;
+  fromAddress: string;
+  toAddress: string;
+  floorPrice: number;
+  floorPriceSymbol: string;
+  quantity: number;
+  nftInfo: string;
+  purchaseToken: {
+    chainId: string;
+    address: string;
+    symbol: string;
+    decimals: number;
+    id: string;
+  };
+  from: {
+    address: string;
+    aelfAddress: string;
+    caHash: string;
+    name: string;
+    profileImage: string;
+    email: string;
+    twitter: string;
+    instagram: string;
+    id: string;
+  };
+  to: {
+    address: string;
+    aelfAddress: string;
+    caHash: string;
+    name: string;
+    profileImage: string;
+    email: string;
+    twitter: string;
+    instagram: string;
+    id: string;
+  };
+  amount: number;
+  priceToken: string;
+  symbol: string;
+  collectionName: string;
+  totalPrice: number;
+  nftUrl: string;
+  nftName: string;
+  id: string;
+  collectionSymbol?: string[];
+  nftSymbol?: string[];
+  previewImage?: string;
+  priceDescription?: boolean;
+  price?: number;
+  tokenName: string;
+  issueChainIdStr?: number;
+  chainIdStr?: number;
+  fileExtension: number;
+  generation: number;
+  traitPairsDictionary: string[];
+  listingPrice: number;
+  listingPriceCreateTime: string;
+  offerPrice: number;
+  latestDealPrice: number;
+  allOwnerCount: number;
+  rank: string;
+  level: string;
+  grade: string;
+  star: string;
+  rarity: string;
+  describe: string;
+}
+
+export interface IOfferMadeItemRes {
+  totalCount: number;
+  items: OfferMadeItem[];
+}
+
+export interface IReceivedOfferParams {
+  skipCount: number;
+  maxResultCount: number;
+  address: string;
+  collectionIdList?: string[];
+  chainList?: string[];
+  traits?: {
+    key: string;
+    value: string;
+  }[];
 }

@@ -1,29 +1,27 @@
 .profile-banner-wrapper {
-  @apply relative bg-[var(--bg-dark)] bg-center bg-no-repeat bg-cover text-center;
+  @apply relative flex justify-center items-center bg-fillHoverBg bg-center bg-no-repeat bg-cover;
+  @apply h-[94px] mb-5 mdl:h-[348px] mdl:mb-[30px];
 }
 
 .profile-banner-wrapper .profile-banner-mask {
-  @apply pt-[48px] w-full h-full;
+  @apply w-full h-full;
 }
 
 .profile-banner-wrapper .profile-banner-mask.shadow {
   background-color: rgb(25 31 46 / 50%);
 }
 
-.profile-banner-wrapper .user-name {
-  @apply pt-[16px] pb-[4px];
-  @apply font-semibold text-[32px] leading-normal text-[--text-item] truncate;
-}
-:global(.has-banner) .profile-banner-wrapper .user-name {
-  @apply text-white;
+.user-name {
+  @apply px-4 pt-4 mdl:pt-6 mdl:px-10;
+  @apply font-semibold  text-4xl text-textPrimary truncate;
 }
 
-.profile-banner-wrapper .user-address {
-  @apply text-[18px] leading-normal text-[--text-secondary];
+.user-address {
+  @apply text-lg text-textPrimary;
 }
-:global(.has-banner) .profile-banner-wrapper .user-address {
+/* :global(.has-banner) .profile-banner-wrapper .user-address {
   color: rgb(256 256 256 / 60%);
-}
+} */
 .profile-banner-wrapper .links {
   @apply w-fit mt-[12px] mx-auto mb-0 h-[48px] bg-[var(--bg-card)] rounded-[45px];
 }
@@ -44,12 +42,12 @@
 }
 
 .profile-banner-wrapper .avatar-pc {
-  @apply w-[96px] h-[96px];
+  @apply w-[200px] h-[200px] p-[10px] bg-textWhite;
 }
 
-.profile-banner-wrapper {
+/* .profile-banner-wrapper {
   @apply mdl:pb-[64px] pb-[32px];
-}
+} */
 
 /* :global(.forest-marketplace-mobile) .profile-banner-wrapper {
   @apply pb-[32px];
@@ -61,10 +59,10 @@
   /* background-color: rgb(25 31 46 / 50%); */
 }
 
-:global(.forest-marketplace-mobile) .profile-banner-wrapper .user-name {
+/* :global(.forest-marketplace-mobile) .profile-banner-wrapper .user-name {
   @apply pt-[12px] pb-[4px] px-[16px] text-[24px];
-}
+} */
 
-:global(.forest-marketplace-mobile) .profile-banner-wrapper .user-address {
+/* :global(.forest-marketplace-mobile) .profile-banner-wrapper .user-address {
   @apply text-[16px] leading-normal mt-[8px];
-}
+} */

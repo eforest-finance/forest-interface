@@ -203,7 +203,7 @@ function Header() {
                 </div>
                 <div className="menu-wrap">
                   <p className="menu-item" onClick={onClose}>
-                    <AuthNavLink to={'/account'}>
+                    <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
                       <Profile /> <span>Profile</span>
                     </AuthNavLink>
                   </p>
@@ -229,11 +229,11 @@ function Header() {
                       <NotificationList hiddenTitle={true} dataSource={messageList} />
                     </Drawer>
                   </p>
-                  <p className="menu-item" onClick={onClose}>
+                  {/* <p className="menu-item" onClick={onClose}>
                     <AuthNavLink to={'/my-collections'}>
                       <MyCollection /> <span>My Collections</span>
                     </AuthNavLink>
-                  </p>
+                  </p> */}
                   <p className="menu-item" onClick={showChildDrawer}>
                     <Wallet /> <span>Wallet</span>
                     <Drawer

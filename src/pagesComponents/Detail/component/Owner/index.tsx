@@ -28,7 +28,7 @@ const Owner = ({ className, isERC721 }: { className?: string; isERC721?: boolean
       return;
     }
     if (nftInfo?.owner?.address) {
-      nav.push(`/account/${nftInfo.owner.address}`);
+      nav.push(`/account/${nftInfo.owner.address}#Collected`);
     }
   };
 

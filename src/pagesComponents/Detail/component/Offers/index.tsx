@@ -283,7 +283,7 @@ export default function Offers(options: { rate: number }) {
                   walletInfo.address === from?.address ? 'you' : getOmittedStr(from?.name || '', OmittedType.ADDRESS)
                 }
                 isLink={true}
-                onClick={() => from?.address && nav.push(`/account/${from.address}`)}
+                onClick={() => from?.address && nav.push(`/account/${from.address}#Collected`)}
                 tooltip={from?.address && addPrefixSuffix(from.address)}
               />
               <Copy className="copy-svg ml-2 cursor-pointer" toCopy={addPrefixSuffix(from?.address || '')} />

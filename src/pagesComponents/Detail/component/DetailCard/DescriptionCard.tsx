@@ -54,7 +54,7 @@ export function DescriptionCard() {
                               jump('AELF', `/address/${nftInfo?.minter?.name}`);
                               return;
                             }
-                            nav.push(`/account/${nftInfo?.minter?.address}`);
+                            nav.push(`/account/${nftInfo?.minter?.address}#Collected`);
                           }}>
                           {showName}
                         </span>

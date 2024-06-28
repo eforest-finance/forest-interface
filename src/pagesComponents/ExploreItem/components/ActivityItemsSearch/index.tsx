@@ -15,7 +15,8 @@ export enum BoxSizeEnum {
   small,
   details,
 }
-interface IAcitvityItemsSearch {
+interface IActivityItemsSearch {
+  hiddenFilter?: boolean;
   collapsed: boolean;
   searchParams: InputProps;
   collapsedChange: () => void;
@@ -26,6 +27,7 @@ interface IAcitvityItemsSearch {
   nftType: string;
   selectTagCount?: number;
   extraInfo?: string;
+  noMenuData?: string[];
 }
 
 function SelectTag({ text }: { text: string }) {
@@ -36,18 +38,39 @@ function SelectTag({ text }: { text: string }) {
   );
 }
 
-export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
+export default function ActivityItemsSearch(params: IActivityItemsSearch) {
   const { isLG } = useResponsive();
-  const { collapsed, searchParams, selectProps, collapsedChange, nftType, selectTagCount, extraInfo } = params;
+  const {
+    hiddenFilter,
+    collapsed,
+    searchParams,
+    selectProps,
+    collapsedChange,
+    nftType,
+    selectTagCount,
+    extraInfo,
+    noMenuData,
+  } = params;
   const [visible, setVisible] = useState<boolean>(false);
 
-  const menuForShow =
-    nftType === 'nft'
-      ? {
-          ...dropDownActivitiesMenu,
-          data: dropDownActivitiesMenu.data.slice(0, 8),
-        }
-      : dropDownActivitiesMenu;
+  const menuForShow = () => {
+    const menu =
+      nftType === 'nft'
+        ? {
+            ...dropDownActivitiesMenu,
+            data: dropDownActivitiesMenu.data.slice(0, 8),
+          }
+        : dropDownActivitiesMenu;
+
+    const filterData = menu.data.filter((item) => {
+      if (!noMenuData?.includes(item.label)) {
+        return item;
+      }
+    });
+
+    menu.data = filterData;
+    return menu;
+  };
 
   const onSelectChange = (isChecked: boolean, value: number | string) => {
     if (isChecked && !selectProps.value.includes(value)) {
@@ -63,7 +86,7 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
   };
 
   const dropdownMenu = {
-    items: menuForShow.data.map((item) => {
+    items: menuForShow().data.map((item) => {
       return {
         label: (
           <Checkbox
@@ -99,17 +122,19 @@ export default function AcitvityItemsSearch(params: IAcitvityItemsSearch) {
   return (
     <>
       <div className={styles.collection__search} id="collection-search">
-        <div
-          className={clsx(
-            'flex justify-between items-center',
-            !isLG ? 'mr-8' : 'mr-4',
-            !collapsed && !isLG ? 'w-[360px]' : 'w-auto',
-          )}>
-          <FilterButton onClick={collapsedChange} badge={selectTagCount || ''} showBadge={!!selectTagCount && isLG} />
-          {extraInfo && !collapsed && !isLG ? (
-            <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
-          ) : null}
-        </div>
+        {!hiddenFilter ? (
+          <div
+            className={clsx(
+              'flex justify-between items-center',
+              !isLG ? 'mr-8' : 'mr-4',
+              !collapsed && !isLG ? 'w-[360px]' : 'w-auto',
+            )}>
+            <FilterButton onClick={collapsedChange} badge={selectTagCount || ''} showBadge={!!selectTagCount && isLG} />
+            {extraInfo && !collapsed && !isLG ? (
+              <span className=" text-base font-medium text-textPrimary">{extraInfo}</span>
+            ) : null}
+          </div>
+        ) : null}
         <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
           <CollectionSearch {...searchParams} />
         </div>

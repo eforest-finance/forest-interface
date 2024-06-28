@@ -138,7 +138,9 @@ const BidList = ({ bidInfos }: { bidInfos: IBidInfo[] }) => {
       with: 200,
       render: (text: string) => {
         return (
-          <Link className="text-[var(--brand-base)] cursor-pointer" href={`/account/${getOriginalAddress(text)}`}>
+          <Link
+            className="text-[var(--brand-base)] cursor-pointer"
+            href={`/account/${getOriginalAddress(text)}#Collected`}>
             {getOmittedStr(text, OmittedType.CUSTOM, { prevLen: 6, endLen: 7, limitLen: 13 }) || ''}
           </Link>
         );

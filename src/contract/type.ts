@@ -181,6 +181,7 @@ export interface IApproveParams {
   spender: string;
   symbol: string;
   amount: number | string;
+  batchApproveNFT?: boolean;
 }
 
 export interface ITagInfo {

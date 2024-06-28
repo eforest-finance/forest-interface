@@ -161,7 +161,7 @@ function Listings(option: { rate: number }) {
                 record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)
               }
               isLink={true}
-              onClick={() => nav.push(`/account/${record.ownerAddress}`)}
+              onClick={() => nav.push(`/account/${record.ownerAddress}#Collected`)}
               tooltip={addPrefixSuffix(record.ownerAddress)}
             />
             <Copy className="copy-svg ml-2 cursor-pointer" toCopy={addPrefixSuffix(record.ownerAddress)} />

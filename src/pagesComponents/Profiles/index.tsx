@@ -1,73 +1,54 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import ProfileBanner from './components/ProfileBanner';
 import styles from './Profile.module.css';
-import CollectedMenu from 'assets/images/CollectedMenu.svg';
-import Created from 'assets/images/Created.svg';
 import { useProfilePageService } from './hooks/useProfilePageService';
-import TabsHeader from 'components/TabsHeader/TabsHeader';
-import { useHash } from 'react-use';
-import { Layout } from 'antd';
-import { FilterContainer } from 'pagesComponents/ExploreItem/components/Filters';
-import useResponsive from 'hooks/useResponsive';
-import { useFilterService } from './hooks/useFilterService';
-import { useDataService } from './hooks/useDataService';
-import { LoadingMore } from 'baseComponents/LoadingMore';
-import { NFTList } from './components/NFTList';
-import { INftInfoParams } from 'api/types';
-import { getParamsFromFilter } from './helper';
-import FilterTags from 'pagesComponents/ExploreItem/components/FilterTags';
-import { getTagList } from 'pagesComponents/ExploreItem/components/Filters/util';
-import Button from 'baseComponents/Button';
-import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
-import { useWebLogin } from 'aelf-web-login';
+import { ExploreTab } from 'pagesComponents/ExploreItem/components/ExploreTab';
+import { CollectedItem } from './CollectedItem';
+import { CreatedItem } from './CreatedItem';
+import { ActivityItem } from './ActivityItem';
+import { MoreCard, moreActiveKey } from './MoreItem';
+import Dropdown from 'baseComponents/Dropdown';
+import { MenuProps } from 'antd';
+import { useState } from 'react';
+import Down from 'assets/images/arrow-down.svg';
 import clsx from 'clsx';
+import useGetState from 'store/state/getState';
+import useTokenData from 'hooks/useTokenData';
 
 export default function Profile() {
-  const navigate = useRouter();
+  const { userInfo, collectedTotalCount, createdTotalCount, avatar } = useProfilePageService();
 
-  const [hash, setHash] = useHash();
-  const [activeKey, setActiveKey] = useState<string>(hash?.slice(1) ?? '');
+  const [activeKey, setActiveKey] = useState('collected');
+  const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreActiveKey.made);
+  const { address } = useProfilePageService();
+  const { walletInfo, aelfInfo } = useGetState();
+  const elfRate = useTokenData();
 
-  const { isLG } = useResponsive();
-  const [collapsed, setCollapsed] = useState<boolean>(isLG);
+  const onMoreMenuClick: MenuProps['onClick'] = ({ key }) => {
+    console.log('======key:', key);
+    setSelectedKey(key as moreActiveKey);
+  };
 
-  const { wallet } = useWebLogin();
-
-  const { createdTotalCount, collectedTotalCount, userInfo, walletAddress } = useProfilePageService();
-  const { filterList, filterSelect, clearAll, onFilterChange } = useFilterService();
-
-  const requestParams = useMemo(() => {
-    const params = getParamsFromFilter(activeKey, walletAddress, filterSelect);
-    return params as Partial<INftInfoParams>;
-  }, [activeKey, filterSelect, walletAddress]);
-
-  const { loading, loadingMore, noMore, data } = useDataService({
-    params: requestParams,
-    loginAddress: wallet?.address,
-  });
-
-  const tagList = useMemo(() => {
-    return getTagList(filterSelect, '');
-  }, [filterSelect]);
-
-  useEffect(() => {
-    if (!walletAddress) return navigate.push('/collections');
-  }, []);
-  const tabsArr = [
+  const itemsForMore: MenuProps['items'] = [
     {
-      title: 'Collected',
-      key: 'Collected',
-      icon: <CollectedMenu />,
-      tips: collectedTotalCount || 0,
+      key: moreActiveKey.made,
+      label: (
+        <span
+          onClick={() => {
+            setActiveKey('more');
+          }}>
+          Offers made
+        </span>
+      ),
     },
     {
-      title: 'Created',
-      key: 'Created',
-      icon: <Created />,
-      tips: createdTotalCount || 0,
+      key: moreActiveKey.receive,
+      label: <span onClick={() => setActiveKey('more')}>Offers received</span>,
+    },
+    {
+      key: moreActiveKey.list,
+      label: <span onClick={() => setActiveKey('more')}>Active listings</span>,
     },
   ];
 
@@ -76,67 +57,81 @@ export default function Profile() {
       <div className={`${styles['profile']} ${userInfo?.bannerImage ? 'has-banner' : ''}`}>
         <ProfileBanner
           bannerImage={userInfo?.bannerImage || ''}
-          profileImage={userInfo?.profileImage || ''}
+          profileImage={avatar || userInfo?.profileImage || ''}
           name={userInfo?.name || ''}
-          address={userInfo?.fullAddress || ''}
+          address={userInfo?.fullAddress || `ELF_${address}_${aelfInfo.curChain}`}
           email={userInfo?.email || ''}
           twitter={userInfo?.twitter || ''}
           instagram={userInfo?.instagram || ''}
         />
       </div>
-      <TabsHeader
-        tabNav={tabsArr}
-        activeKey={activeKey}
-        onChange={(activeKey: string) => {
-          setActiveKey(activeKey);
-          setHash(activeKey);
-          clearAll();
-        }}
-      />
-
-      <Layout className="!bg-fillPageBg">
-        <FilterContainer
-          filterList={filterList}
-          filterSelect={filterSelect}
-          open={!collapsed}
-          onClose={() => {
-            setCollapsed(true);
+      <div className="px-4 mdl:px-10 mt-4">
+        <ExploreTab
+          destroyInactiveTabPane={true}
+          items={[
+            {
+              key: 'collected',
+              label: (
+                <span
+                  className={clsx(
+                    ' text-base font-semibold ',
+                    activeKey === 'collected' ? 'text-textPrimary' : 'text-textSecondary',
+                  )}>
+                  Collected {collectedTotalCount ? <span>({collectedTotalCount})</span> : null}
+                </span>
+              ),
+              children: <CollectedItem />,
+            },
+            {
+              key: 'created',
+              label: (
+                <span
+                  className={clsx(
+                    ' text-base font-semibold ',
+                    activeKey === 'created' ? 'text-textPrimary' : 'text-textSecondary',
+                  )}>
+                  Created {createdTotalCount ? <span>({createdTotalCount})</span> : null}
+                </span>
+              ),
+              children: <CreatedItem />,
+            },
+            {
+              key: 'activity',
+              label: (
+                <span
+                  className={clsx(
+                    ' text-base font-semibold ',
+                    activeKey === 'activity' ? 'text-textPrimary' : 'text-textSecondary',
+                  )}>
+                  Activity
+                </span>
+              ),
+              children: <ActivityItem />,
+            },
+            {
+              key: 'more',
+              label: (
+                <Dropdown menu={{ items: itemsForMore, onClick: onMoreMenuClick }}>
+                  <div
+                    className={clsx(
+                      'flex gap-x-2 items-center text-base font-semibold ',
+                      activeKey === 'more' ? 'text-textPrimary' : 'text-textSecondary',
+                    )}>
+                    <span>More</span> <Down className=" text-textSecondary fill-textSecondary" />
+                  </div>
+                </Dropdown>
+              ),
+              children: <MoreCard activityKey={selectedKey} />,
+            },
+          ]}
+          activeKey={activeKey}
+          onTabClick={(key) => {
+            console.log('onTabClick', key);
+            if (key === 'more') return;
+            setActiveKey(key);
           }}
-          mobileMode={isLG}
-          onFilterChange={onFilterChange}
-          clearAll={clearAll}
-          pcRenderMode="left"
-          toggleOpen={() => setCollapsed(!collapsed)}
         />
-        <Layout className={clsx('!bg-fillPageBg', isLG ? '!p-4' : '!p-6')}>
-          <FilterTags
-            isMobile={isLG}
-            tagList={tagList}
-            SearchParam={''}
-            filterSelect={filterSelect}
-            clearAll={() => {
-              clearAll();
-            }}
-            onchange={onFilterChange}
-          />
-          <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
-            Your NFT possessions with quantities less than 1 are hidden.
-          </div>
-          <NFTList dataSource={data?.list || []} loading={loading} collapsed={collapsed} sizes={BoxSizeEnum.small} />
-          {loadingMore ? <LoadingMore /> : null}
-          {noMore && data?.list.length && !loading ? (
-            <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
-          ) : null}
-        </Layout>
-      </Layout>
-      {isLG ? (
-        <Button
-          type={'primary'}
-          className="!fixed flex justify-center items-center text-base h-auto font-semibold p-4 backdrop-blur-[6px]  bottom-4 right-4 leading-normal !rounded-full"
-          onClick={() => setCollapsed(false)}>
-          Filter
-        </Button>
-      ) : null}
+      </div>
     </>
   );
 }

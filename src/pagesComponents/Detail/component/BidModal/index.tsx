@@ -11,7 +11,7 @@ import Question from 'assets/images/question.svg';
 import clsx from 'clsx';
 import Modal from 'baseComponents/Modal';
 import Button from 'baseComponents/Button';
-import { Approve, GetAllowance } from 'contract/multiToken';
+import { GetAllowance } from 'contract/multiToken';
 import { PlaceBid } from 'contract/auction';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import useDetailGetState from 'store/state/detailGetState';
@@ -21,6 +21,7 @@ import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
 import ElfLogo from 'assets/images/explore/elf';
+import { approve, openBatchApprovalEntrance } from 'utils/aelfUtils';
 
 interface IBidModalProps {
   auctionInfo: IAuctionInfoResponse & Partial<IBidInfo>;
@@ -81,12 +82,12 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
       const allowanceBN = new BigNumber(allowance?.allowance || 0);
 
       if (allowanceBN.lt(bigA)) {
-        const approveRes = await Approve({
-          spender: aelfInfo?.auctionSideAddress,
-          symbol: 'ELF',
-          amount: timesDecimals(totalPrice, 8).toNumber(),
-          // amount: timesDecimals(10000, 8).toString(),
-        });
+        await openBatchApprovalEntrance();
+        const approveRes = await approve(
+          aelfInfo?.auctionSideAddress,
+          'ELF',
+          String(timesDecimals(totalPrice, 8).toNumber()),
+        );
         console.log('token approve finish', approveRes);
       }
 
