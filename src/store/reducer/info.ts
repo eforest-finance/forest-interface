@@ -16,6 +16,7 @@ const initialState: InfoStateType = {
     open: false,
   },
   hasToken: false,
+  elfRate: 0,
 };
 
 // Actual Slice
@@ -50,6 +51,9 @@ export const infoSlice = createSlice({
     setHasToken(state, action) {
       state.hasToken = action.payload;
     },
+    setElfRate(state, action) {
+      state.elfRate = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -71,6 +75,7 @@ export const {
   setShowDisconnectTip,
   setLoading,
   setHasToken,
+  setElfRate,
 } = infoSlice.actions;
 
 export const selectIsMobile = (state: AppState) => state.info.isMobile;

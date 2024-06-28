@@ -109,8 +109,6 @@ export function MoreCard(props: IMoreCard) {
     }
   }, [searchInputValue, activityKey]);
 
-  console.log('tableColumns:', tableColumns);
-
   useEffect(() => {
     if (walletAddress) {
       setSearchInputValue('');

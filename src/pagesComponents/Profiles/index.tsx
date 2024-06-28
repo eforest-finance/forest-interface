@@ -14,6 +14,7 @@ import { useState } from 'react';
 import Down from 'assets/images/arrow-down.svg';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
+import useTokenData from 'hooks/useTokenData';
 
 export default function Profile() {
   const { userInfo, collectedTotalCount, createdTotalCount, avatar } = useProfilePageService();
@@ -22,6 +23,7 @@ export default function Profile() {
   const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreActiveKey.made);
   const { address } = useProfilePageService();
   const { walletInfo, aelfInfo } = useGetState();
+  const elfRate = useTokenData();
 
   const onMoreMenuClick: MenuProps['onClick'] = ({ key }) => {
     console.log('======key:', key);

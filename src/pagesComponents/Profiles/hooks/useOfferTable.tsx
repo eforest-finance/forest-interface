@@ -6,7 +6,7 @@ import { ImageEnhance } from 'components/ImgLoading';
 import { useResponsive } from 'hooks/useResponsive';
 import { useRouter } from 'next/navigation';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormatListingType, FormatOffersType } from 'store/types/reducer';
 import TableCell from 'pagesComponents/Detail/component/TableCell';
 import getExpiryTime from 'utils/getExpiryTime';
@@ -16,6 +16,7 @@ import useGetState from 'store/state/getState';
 import { getFloorPricePercentage } from 'pagesComponents/Detail/utils/getOffers';
 import { useCancelListing } from './useCancelListing';
 import useTokenData from 'hooks/useTokenData';
+import { getExchangeRate } from 'pagesComponents/Detail/utils/getExchangeRate';
 
 const { Text } = Typography;
 
@@ -30,9 +31,10 @@ export function useOfferTable(props: IUseOfferTableProps) {
   const { cancelListingByRecord } = useCancelListing();
   const navigate = useRouter();
   const [tableColumns, setTableColumns] = useState<any>();
-  const elfRate = useTokenData();
 
-  const { walletInfo } = useGetState();
+  const { walletInfo, infoState } = useGetState();
+  const elfRate = infoState.elfRate;
+  console.log('elfRate:', elfRate);
 
   const renderActivityTitle = useCallback((record: IActivitiesItem) => {
     return (
@@ -78,82 +80,86 @@ export function useOfferTable(props: IUseOfferTableProps) {
     return `${formatTokenPrice(text)} ${tokenSymbol ?? ''}`;
   }, []);
 
-  const columns = {
-    offer: {
-      title: 'Offer',
-      dataIndex: 'offer',
-      key: 'offer',
-      ellipsis: true,
-      width: isSmallScreen ? 240 : 300,
-      render: (_, record: any) => {
-        return renderActivityTitle(record);
+  const columns = useMemo(() => {
+    return {
+      offer: {
+        title: 'Offer',
+        dataIndex: 'offer',
+        key: 'offer',
+        ellipsis: true,
+        width: isSmallScreen ? 240 : 300,
+        render: (_, record: any) => {
+          return renderActivityTitle(record);
+        },
       },
-    },
-    price: {
-      title: 'Unit Price',
-      dataIndex: 'price',
-      key: 'price',
-      ellipsis: true,
-      width: isSmallScreen ? 180 : undefined,
-      render: (text: string, record: FormatListingType) => {
-        return <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />;
+      price: {
+        title: 'Unit Price',
+        dataIndex: 'price',
+        key: 'price',
+        ellipsis: true,
+        width: isSmallScreen ? 180 : undefined,
+        render: (text: string, record: FormatListingType) => {
+          return <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />;
+        },
       },
-    },
-    usdPrice: {
-      title: 'USD Unit Price',
-      dataIndex: 'price',
-      key: 'usdPrice',
-      width: isSmallScreen ? 180 : undefined,
-      ellipsis: true,
-      render: (_, record: FormatListingType) => {
-        const usdPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? elfRate : 1);
-        return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
+      usdPrice: {
+        title: 'USD Unit Price',
+        dataIndex: 'price',
+        key: 'usdPrice',
+        width: isSmallScreen ? 180 : undefined,
+        ellipsis: true,
+        render: (_, record: FormatListingType) => {
+          console.log('elfRate:', elfRate);
+
+          const usdPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? elfRate : 1);
+          return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
+        },
       },
-    },
-    floorPrice: {
-      title: 'Floor Difference',
-      key: 'floorPrice',
-      dataIndex: 'floorPrice',
-      width: isSmallScreen ? 120 : 170,
-      render: (text: string, record: FormatOffersType) => (
-        <TableCell
-          content={getFloorPricePercentage(record.floorPrice || -1, record?.price)}
-          tooltip={
-            record.floorPrice !== -1
-              ? `Collection floor price ${formatTokenPrice(record.floorPrice)} ${record.floorPriceSymbol}`
-              : ''
-          }
-        />
-      ),
-    },
-    timestamp: {
-      title: 'Expiration',
-      dataIndex: 'expireTime',
-      key: 'expireTime',
-      render: (text: string) => {
-        return <div>{getExpiryTime(Number(text))}</div>;
+      floorPrice: {
+        title: 'Floor Difference',
+        key: 'floorPrice',
+        dataIndex: 'floorPrice',
+        width: isSmallScreen ? 120 : 170,
+        render: (text: string, record: FormatOffersType) => (
+          <TableCell
+            content={getFloorPricePercentage(record.floorPrice || -1, record?.price)}
+            tooltip={
+              record.floorPrice !== -1
+                ? `Collection floor price ${formatTokenPrice(record.floorPrice)} ${record.floorPriceSymbol}`
+                : ''
+            }
+          />
+        ),
       },
-    },
-    expirationDate: {
-      title: 'Expiration Date',
-      dataIndex: 'endTime',
-      key: 'endTime',
-      render: (text: string) => {
-        return <div>{getExpiryTime(Number(text))}</div>;
+      timestamp: {
+        title: 'Expiration',
+        dataIndex: 'expireTime',
+        key: 'expireTime',
+        render: (text: string) => {
+          return <div>{getExpiryTime(Number(text))}</div>;
+        },
       },
-    },
-    received: {
-      title: 'Received',
-      dataIndex: 'received',
-      key: 'received',
-    },
-    quantity: {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-      width: 144,
-    },
-  };
+      expirationDate: {
+        title: 'Expiration Date',
+        dataIndex: 'endTime',
+        key: 'endTime',
+        render: (text: string) => {
+          return <div>{getExpiryTime(Number(text))}</div>;
+        },
+      },
+      received: {
+        title: 'Received',
+        dataIndex: 'received',
+        key: 'received',
+      },
+      quantity: {
+        title: 'Quantity',
+        dataIndex: 'quantity',
+        key: 'quantity',
+        width: 144,
+      },
+    };
+  }, [elfRate]);
 
   const cancelAction = {
     title: 'Action',
@@ -193,7 +199,7 @@ export function useOfferTable(props: IUseOfferTableProps) {
     },
   };
 
-  const shiftColumns = () => {
+  const shiftColumns = async () => {
     const tColumns = getColumns();
     setTableColumns(tColumns);
   };
@@ -211,9 +217,6 @@ export function useOfferTable(props: IUseOfferTableProps) {
           columns.quantity,
           columns.timestamp,
         ];
-        if (walletAddress === walletInfo.address) {
-          tColumns.push(cancelAction);
-        }
         break;
       }
       case moreActiveKey.receive:
@@ -231,9 +234,6 @@ export function useOfferTable(props: IUseOfferTableProps) {
       case moreActiveKey.list:
         {
           tColumns = [columns.offer, columns.price, columns.floorPrice, columns.expirationDate];
-          if (walletAddress === walletInfo.address) {
-            tColumns.push(cancelAction);
-          }
         }
         break;
 
@@ -245,7 +245,16 @@ export function useOfferTable(props: IUseOfferTableProps) {
 
   useEffect(() => {
     shiftColumns();
-  }, [activityKey, elfRate]);
+  }, [activityKey]);
+
+  // const getRate = async () => {
+  //   const result = await getExchangeRate();
+  //   setElRate(result);
+  // };
+
+  useEffect(() => {
+    // getRate();
+  }, []);
 
   // useEffect(() => {
   //   if (walletAddress === walletInfo.address) {
