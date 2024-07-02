@@ -51,7 +51,7 @@ export default function useGeneratePictures() {
       console.log(allowanceBN, bigA);
 
       if (allowanceBN.lt(bigA)) {
-        await openBatchApprovalEntrance();
+        await openBatchApprovalEntrance(false);
         const approveRes = await approve(contractAddress, 'ELF', String(bigA.toNumber()), chainId);
 
         console.log('token approve finish', approveRes);

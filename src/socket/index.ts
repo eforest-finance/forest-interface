@@ -8,7 +8,6 @@ export default function Socket() {
   const pathName = usePathname();
   useEffect(() => {
     const signalR = new SignalR({ url: '/signalr-hubs/market' });
-    console.log('signalR---', signalR);
     // if (error !== false) {
     signalR
       .initAndStart()

@@ -10,7 +10,6 @@ export interface IIntervalDataForBid {
 const useIntervalRequestForBid = (isCanBeBid: boolean, nftSymbol: string | undefined, bidSuccess: () => void) => {
   const [biddings, setBiddings] = useState<Array<IBidInfo>>([]);
   const [auctionInfo, setAuctionInfo] = useState<IAuctionInfoResponse & Partial<IBidInfo>>();
-  console.log('signalR----------refresh');
   const socket = Socket();
 
   const intervalDataForBid: IIntervalDataForBid = useMemo(() => {
@@ -33,15 +32,12 @@ const useIntervalRequestForBid = (isCanBeBid: boolean, nftSymbol: string | undef
       }
 
       socket.registerHandler('ReceiveSymbolBidInfos', (data) => {
-        console.log('socket---1', data);
         setBiddings(data?.items || []);
       });
       socket.registerHandler('ReceiveSymbolBidInfo', (data) => {
         setBiddings((c) => [data, ...c]);
-        console.log('socket---2', data);
       });
       socket.registerHandler('ReceiveSymbolAuctionInfo', (data) => {
-        console.log('socket----3', data);
         setAuctionInfo(data);
         bidSuccess();
       });
@@ -52,7 +48,6 @@ const useIntervalRequestForBid = (isCanBeBid: boolean, nftSymbol: string | undef
     fetchAndReceiveWs();
 
     return () => {
-      console.log('signalR----destroy');
       socket?.destroy();
       socket?.sendEvent('UnsubscribeSymbolAuctionInfo', nftSymbol);
       socket?.sendEvent('UnsubscribeSymbolBidInfo', nftSymbol);

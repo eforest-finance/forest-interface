@@ -138,7 +138,7 @@ const createContractByCollection = async (params: ICreateCollectionParams) => {
     const bigA = timesDecimals(1, '0');
     const allowanceBN = new BigNumber(allowance?.allowance);
     if (allowanceBN.lt(bigA)) {
-      await openBatchApprovalEntrance();
+      await openBatchApprovalEntrance(true);
       const approveRes = await approve(
         info?.tokenAdapterMainAddress,
         params.seedSymbol,

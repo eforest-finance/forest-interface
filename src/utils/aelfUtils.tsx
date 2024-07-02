@@ -91,14 +91,20 @@ export const approveNFT: ApproveFunc = async ({ nftInfo, spender, chainId }) => 
   }
 };
 
-export const approve = async (spender: string, symbol: string, amount: string, chainId?: Chain) => {
+export const approve = async (
+  spender: string,
+  symbol: string,
+  amount: string,
+  chainId?: Chain,
+  batchApproveNFT?: boolean,
+) => {
   try {
     const approveResult = await Approve(
       {
         spender: spender,
         symbol,
         amount,
-        batchApproveNFT: false,
+        batchApproveNFT,
       },
       {
         chain: chainId,
@@ -321,7 +327,7 @@ export const checkELFApprove = async (options: {
         const amount = isNightEl()
           ? CONTRACT_AMOUNT
           : Number(BigNumber.sum(totalAmount, bigA.multipliedBy(quantity).multipliedBy(10 ** 8)));
-        await openBatchApprovalEntrance();
+        await openBatchApprovalEntrance(false);
         return await approve(spender, 'ELF', `${amount}`, chainId);
       }
       return true;
@@ -365,19 +371,21 @@ export const checkNFTApprove = async (options: {
 
     const bigA = new BigNumber(amount);
 
+    console.log('GetTotalEffectiveListedNFTAmount:', res?.allowance);
+
     if (res) {
       const totalAmount = new BigNumber(res?.totalAmount ?? 0);
       const allowanceBN = new BigNumber(res?.allowance ?? 0);
       if (allowanceBN.lt(BigNumber.sum(bigA, totalAmount))) {
         const amount = isNightEl() ? CONTRACT_AMOUNT : Number(BigNumber.sum(totalAmount, bigA));
-        await openBatchApprovalEntrance();
-        return await approve(spender, symbol, `${amount}`, chainId);
+        await openBatchApprovalEntrance(true);
+        return await approve(spender, symbol, `${amount}`, chainId, true);
       }
       return true;
     } else {
       const amount = isNightEl() ? CONTRACT_AMOUNT : Number(bigA);
-      await openBatchApprovalEntrance();
-      return await approve(spender, symbol, `${amount}`, chainId);
+      await openBatchApprovalEntrance(true);
+      return await approve(spender, symbol, `${amount}`, chainId, true);
     }
   } catch (error) {
     message.destroy();
@@ -556,7 +564,7 @@ export const encodedParams = (inputType: any, params: any) => {
   return inputType.encode(message).finish();
 };
 
-export const openBatchApprovalEntrance = async () => {
+export const openBatchApprovalEntrance = async (batchApproveNFT: boolean) => {
   try {
     if (getWalletType() === 'discover') {
       const discoverProvider = async () => {
@@ -574,7 +582,7 @@ export const openBatchApprovalEntrance = async () => {
       if (!provider) return null;
       await provider.request({
         method: MethodsBase.SET_WALLET_CONFIG_OPTIONS,
-        payload: { batchApproveNFT: false },
+        payload: { batchApproveNFT },
       });
     }
   } catch (error) {

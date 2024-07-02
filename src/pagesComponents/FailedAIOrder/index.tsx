@@ -55,8 +55,6 @@ export default function FailedAIOrderPage() {
     },
   });
 
-  console.log('rerender ', isRetrying);
-
   const [showTryAgainModal, setShowTryAgainModal] = useState(false);
 
   const handleRetry = () => {
