@@ -21,7 +21,6 @@ export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   const info = store.getState().aelfInfo.aelfInfo;
   const getAccountInAELF = useGetAccount('AELF');
   const { wallet, walletType } = useWebLogin();
-  console.log(walletType, wallet, 'walletType');
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
   const { discoverProvider } = useDiscoverProvider();
