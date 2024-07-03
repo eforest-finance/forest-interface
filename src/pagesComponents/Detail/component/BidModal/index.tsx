@@ -82,7 +82,7 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
       const allowanceBN = new BigNumber(allowance?.allowance || 0);
 
       if (allowanceBN.lt(bigA)) {
-        await openBatchApprovalEntrance();
+        await openBatchApprovalEntrance(false);
         const approveRes = await approve(
           aelfInfo?.auctionSideAddress,
           'ELF',

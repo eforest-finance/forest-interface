@@ -35,7 +35,7 @@ export function ActivityItem() {
       <ActivityItemsSearch
         hiddenFilter={true}
         collapsed={true}
-        noMenuData={['Transfer', 'Issue', 'Burn']}
+        noMenuData={['Issue', 'Burn']}
         collapsedChange={() => {
           console.log('change');
         }}

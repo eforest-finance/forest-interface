@@ -13,7 +13,6 @@ const useIntervalRequestForOffers = (nftId: string, chainId: Chain) => {
     if (!socket) {
       return;
     }
-    console.log('socket offers---0');
 
     socket.registerHandler('ReceiveOfferChangeSignal', (data) => {
       const walletInfo = store.getState().userInfo.walletInfo;
@@ -49,7 +48,6 @@ const useIntervalRequestForOffers = (nftId: string, chainId: Chain) => {
         }
       }
     });
-    console.log('socket offers---2');
     socket.sendEvent('RequestNftOfferChange', nftId);
   };
 
@@ -57,8 +55,6 @@ const useIntervalRequestForOffers = (nftId: string, chainId: Chain) => {
     fetchAndReceiveWs();
 
     return () => {
-      console.log('socket offers---3');
-
       socket?.destroy();
       socket?.sendEvent('UnsubscribeNftOfferChange', nftId);
     };

@@ -123,15 +123,16 @@ function Header() {
   }, [pathname]);
 
   useEffect(() => {
-    if (walletInfo.address || (notifications && notifications.hasChanged)) {
-      getMessageList();
+    if (isLogin) {
+      if (walletInfo.address || (notifications && notifications.hasChanged)) {
+        getMessageList();
+      }
     }
-  }, [walletInfo.address, notifications]);
+  }, [isLogin, walletInfo.address, notifications]);
 
   const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
 
   const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
-  console.log('rerender', unReadMessageCount, messageList);
 
   const toggleMessageReadStatus = () => {
     if (!messageList?.length) return;
