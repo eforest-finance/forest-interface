@@ -17,7 +17,14 @@ import useGetState from 'store/state/getState';
 import { OmittedType, addPrefixSuffix, getExploreLink, getOmittedStr, getOriginalAddress } from 'utils';
 import { AcitvityItemArray } from 'pagesComponents/ExploreItem/constant';
 import HonourLabel from 'baseComponents/HonourLabel';
+import Logo from 'components/Logo';
+import ELF from 'assets/images/ELF.png';
+
 const { Text } = Typography;
+
+export const getLogoUrl = (symbol: string) => {
+  return symbol && symbol.toUpperCase() === 'ELF' ? ELF : '';
+};
 
 interface IActivityListTableProps {
   dataSource: IActivitiesItem[];
@@ -164,7 +171,28 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       key: 'price',
       ellipsis: true,
       width: 160,
-      render: (text, record) => renderPrice(text, record.priceToken?.symbol || 'ELF'),
+      render: (text, record) => {
+        return (
+          <div className="text-[var(--color-secondary)] font-medium text-[16px] flex items-center overflow-x-auto h-full">
+            <Logo className="w-[16px] h-[16px] mr-[4px]" src={getLogoUrl(record?.priceToken?.symbol)} />
+            &nbsp;
+            <span
+              className={`text-[var(--color-primary)] font-semibold ${
+                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+              }`}>
+              {formatTokenPrice(+text)}
+            </span>
+            &nbsp;
+            <span
+              className={`text-[var(--color-secondary)] font-medium ${
+                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+              }`}>
+              {record?.priceToken?.symbol}
+            </span>
+          </div>
+        );
+      },
+      // render: (text, record) => renderPrice(text, record.priceToken?.symbol || 'ELF'),
     },
     {
       title: 'Quantity',

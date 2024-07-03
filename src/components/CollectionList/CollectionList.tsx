@@ -36,8 +36,6 @@ export default function CollectionList(options: {
     document.querySelector(parentId)?.addEventListener('scroll', handleScroll);
   });
 
-  console.log('collection rerender', loading);
-
   return (
     <div
       id="protocol-infinite-list"
