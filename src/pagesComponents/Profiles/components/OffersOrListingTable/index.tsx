@@ -6,11 +6,14 @@ interface IOffersOrListingTableProps {
   columns: any;
   loading: boolean;
   stickeyOffsetHeight?: number;
+  rowSelection?: {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: IActivitiesItem[]) => {};
+  };
 }
-
-export function OffersOrListingTable({ dataSource, loading, columns }: IOffersOrListingTableProps) {
+export function OffersOrListingTable({ dataSource, loading, columns, rowSelection }: IOffersOrListingTableProps) {
   return (
     <Table
+      className="mt-[16px]"
       size="middle"
       emptyText="No Data"
       pagination={false}
@@ -18,6 +21,7 @@ export function OffersOrListingTable({ dataSource, loading, columns }: IOffersOr
       dataSource={dataSource}
       loading={loading}
       scroll={{ x: 1280 }}
+      rowSelection={rowSelection}
     />
   );
 }

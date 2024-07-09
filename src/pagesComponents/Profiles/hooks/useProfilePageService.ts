@@ -23,7 +23,7 @@ export function useProfilePageService() {
 
   const { data: userInfo } = useRequest(
     async () => {
-      if (!walletAddress) return Promise.resolve(null);
+      // if (!walletAddress) return Promise.resolve(null);
       const res = await fetchUserInfo({ address: walletAddress });
       if (!res?.profileImage) {
         const avatar = await fetchAvatar();

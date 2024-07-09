@@ -436,3 +436,41 @@ export interface IBatchCreateNFTParams {
   issuerProxyAccountHash: string;
   nftInfos: any[];
 }
+
+export interface ICancelOfferItem {
+  symbol: string;
+  expireTime: {
+    seconds: string;
+    nanos: number;
+  };
+  offerTo: string;
+  price: {
+    symbol: string;
+    amount: number;
+  };
+}
+
+export interface IBatchCancelOfferListParams {
+  batchCancelOfferInfo: {
+    cancelOfferList: ICancelOfferItem[];
+  };
+}
+
+export interface IBatchCancelListInfo {
+  cancelList: {
+    symbol: string;
+    quantity: number;
+    price: {
+      symbol: string;
+      amount: number;
+    };
+    startTime: {
+      seconds: string;
+      nanos: number;
+    };
+  }[];
+}
+
+export interface IBatchCancelListParams {
+  batchCancelListInfo: IBatchCancelListInfo;
+}

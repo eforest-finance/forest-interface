@@ -72,5 +72,9 @@
     .base-select {
       @apply !hidden;
     }
+
+    .search-bar {
+      @apply !mr-[0];
+    }
   }
 }

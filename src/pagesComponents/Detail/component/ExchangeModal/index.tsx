@@ -26,6 +26,7 @@ import { handlePlurality } from 'utils/handlePlurality';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import styles from './index.module.css';
+import { INftInfo } from 'types/nftTypes';
 
 export type ArtType = {
   id: number;
@@ -41,7 +42,13 @@ export type ArtType = {
   collection?: string;
 };
 
-function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: number; nftBalance: number }) {
+function ExchangeModalNew(options: {
+  onClose?: () => void;
+  art: ArtType;
+  rate: number;
+  nftBalance: number;
+  nftInfo?: INftInfo;
+}) {
   const modal = useModal();
   const promptModal = useModal(PromptModal);
   const resultModal = useModal(ResultModal);
@@ -49,8 +56,11 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
 
   const { walletInfo } = useGetState();
   const { detailInfo } = useDetailGetState();
-  const { nftInfo, nftNumber } = detailInfo;
-  const { onClose, art, nftBalance } = options;
+  const { nftInfo: stateInfo, nftNumber } = detailInfo;
+  const { onClose, art, nftBalance, nftInfo } = options;
+
+  const info = nftInfo || stateInfo;
+
   const [loading, setLoading] = useState<boolean>(false);
   const [offerFromBalance, setOfferFromBalance] = useState<BigNumber>(ZERO);
   const [quantityTip, setQuantityTip] = useState('');
@@ -61,11 +71,11 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
     return Number(res);
   }, [art?.quantity, nftBalance, offerFromBalance]);
 
-  const deal = useDeal(nftInfo?.chainId);
+  const deal = useDeal(info?.chainId);
 
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
+  const { getAccountInfoSync } = useWalletSyncCompleted(info?.chainId);
 
   const onVisibleChange = () => {
     setQuantity(1);
@@ -130,17 +140,17 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
       setLoading(false);
       onCancel();
       promptModal.hide();
-      const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', nftInfo?.chainId) : '';
+      const explorerUrl = TransactionId ? getExploreLink(TransactionId, 'transaction', info?.chainId) : '';
       resultModal.show({
-        previewImage: nftInfo?.previewImage || '',
+        previewImage: info?.previewImage || '',
         title: 'Offer Successfully Accepted!',
-        description: `You have accepted the offer for the ${nftInfo?.tokenName} NFT in the ${nftInfo?.nftCollection?.tokenName} Collection.`,
+        description: `You have accepted the offer for the ${info?.tokenName} NFT in the ${info?.nftCollection?.tokenName} Collection.`,
         hideButton: true,
         info: {
-          logoImage: nftInfo?.nftCollection?.logoImage || '',
-          subTitle: nftInfo?.nftCollection?.tokenName,
-          title: nftInfo?.tokenName,
-          extra: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
+          logoImage: info?.nftCollection?.logoImage || '',
+          subTitle: info?.nftCollection?.tokenName,
+          title: info?.tokenName,
+          extra: info && isERC721(info) ? undefined : handlePlurality(quantity, 'item'),
         },
         jumpInfo: {
           url: explorerUrl,
@@ -156,13 +166,13 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
     modal.hide();
     promptModal.show({
       nftInfo: {
-        image: nftInfo?.previewImage || '',
-        collectionName: nftInfo?.nftCollection?.tokenName,
-        nftName: nftInfo?.tokenName,
-        priceTitle: nftInfo && isERC721(nftInfo) ? 'Offer Amount' : 'Total Offer Amount',
+        image: info?.previewImage || '',
+        collectionName: info?.nftCollection?.tokenName,
+        nftName: info?.tokenName,
+        priceTitle: info && isERC721(info) ? 'Offer Amount' : 'Total Offer Amount',
         price: `${formatTokenPrice(totalPrice)} ${art.token.symbol || 'ELF'}`,
         usdPrice: formatUSDPrice(totalUSDPrice),
-        item: nftInfo && isERC721(nftInfo) ? undefined : handlePlurality(quantity, 'item'),
+        item: info && isERC721(info) ? undefined : handlePlurality(quantity, 'item'),
       },
       title: DealMessage.title,
       content: {
@@ -222,7 +232,13 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
       open={modal.visible}
       className={styles['deal-modal-custom']}>
       <div className="content">
-        <PriceInfo quantity={quantity} price={art.price} convertPrice={art.convertPrice} type={PriceTypeEnum.DEAL} />
+        <PriceInfo
+          nftInfo={info}
+          quantity={quantity}
+          price={art.price}
+          convertPrice={art.convertPrice}
+          type={PriceTypeEnum.DEAL}
+        />
         {BigNumber(maxQuantity).gt(1) && (
           <div className="mt-[32px]">
             <InputQuantity
@@ -236,7 +252,7 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
         )}
 
         <div className="mt-[32px]">
-          <DealSummary />
+          <DealSummary nftInfo={info!} />
         </div>
         <div className="mt-[32px]">
           <TotalPrice
@@ -246,7 +262,7 @@ function ExchangeModalNew(options: { onClose?: () => void; art: ArtType; rate: n
           />
         </div>
         <div className="mt-[32px]">
-          <Balance itemDesc="Quantity of NFTs Owned" amount={nftNumber.nftBalance} />
+          <Balance itemDesc="Quantity of NFTs Owned" amount={nftBalance} />
         </div>
       </div>
     </Modal>

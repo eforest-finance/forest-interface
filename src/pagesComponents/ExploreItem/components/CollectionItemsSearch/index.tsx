@@ -56,7 +56,7 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
           </div>
         ) : null}
 
-        <div className={clsx('flex-1', !isLG && 'mr-[32px]')}>
+        <div className={clsx('flex-1', !isLG && 'mr-[32px]', 'search-bar')}>
           <CollectionSearch {...searchParams} />
         </div>
         {!isLG && (
