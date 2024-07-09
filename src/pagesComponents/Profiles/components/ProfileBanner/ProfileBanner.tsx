@@ -17,11 +17,14 @@ import { useCallback } from 'react';
 import { saveUserSettings } from 'api/fetch';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
+import EditOutlined from 'assets/images/edit.svg';
+
 export default function ProfileBanner({
   bannerImage,
   profileImage,
   name,
   address,
+  onChange,
 }: {
   bannerImage: string;
   profileImage: string;
@@ -30,6 +33,7 @@ export default function ProfileBanner({
   email: string | null;
   twitter: string | null;
   instagram: string | null;
+  onChange: (type: string, src: string) => void;
 }) {
   const {
     info: { isSmallScreen },
@@ -68,8 +72,10 @@ export default function ProfileBanner({
       const { url, hash } = await AWSManagerInstance.uploadFile(file);
       console.log('url:', url);
       const res = await saveUserSettings({
+        userUpdateType: type === 'profileImage' ? 1 : 2,
         [type]: url,
       });
+      onChange(type, url);
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -80,37 +86,32 @@ export default function ProfileBanner({
   return (
     <>
       <div
-        className={clsx(styles['profile-banner-wrapper'], 'group/bg')}
+        className={clsx(styles['profile-banner-wrapper'], '')}
         style={{
           backgroundImage: `url(${bannerImage})`,
         }}>
-        {/* <Upload {...props}>
-          <div className="w-full h-full absolute top-0 left-0"></div>
-        </Upload> */}
+        <Upload {...props}>
+          <div className="flex justify-center items-center group/bg w-full h-full absolute top-0 left-0 cursor-pointer">
+            <EditOutlined className="left z-10  hidden group-hover/bg:block text-xl mdl:text-[48px] !text-textWhite" />
+          </div>
+        </Upload>
 
         <Avatar
-          className="!absolute left-4  -bottom-5  mdl:left-[40px] mdl:-bottom-[30px] !w-[82px] !h-[82px] mdl:!w-[168px] mdl:!h-[168px]   !bg-textWhite overflow-hidden"
+          className=" !absolute left-4  -bottom-5  mdl:left-[40px] mdl:-bottom-[30px] !w-[82px] !h-[82px] mdl:!w-[168px] mdl:!h-[168px]   !bg-textWhite overflow-hidden"
           icon={
-            <div className="relative w-full h-full flex justify-center items-center">
+            <div className="group/avatar relative w-full h-full flex justify-center items-center">
               <ImageEnhance
                 src={profileImage || AvatarDefault.src}
-                className="pointer-events-none w-[76px] h-[76px] mdl:!w-[156px] mdl:!h-[156px] overflow-hidden rounded-full"
+                className="group/avatar pointer-events-none w-[76px] h-[76px] mdl:!w-[156px] mdl:!h-[156px] overflow-hidden rounded-full"
               />
-              {/* <EditOutlined
-                onClick={() => {
-                  alert('todo');
-                }}
-                className=" hidden group-hover/avatar:block absolute top-[26px] left-[26px] mdl:top-[66px] mdl:left-[66px] text-xl mdl:text-[48px] !text-textWhite"
-              /> */}
-              {/* <Upload {...profileImageProps}>
-                <div className="w-full h-full absolute top-0 left-0"></div>
-              </Upload> */}
+              <EditOutlined className="z-10 hidden group-hover/avatar:block absolute top-[26px] left-[26px] mdl:top-[66px] mdl:left-[66px] text-xl mdl:text-[48px] !text-textWhite" />
+              <Upload {...profileImageProps}>
+                <div className="group/avatar w-full h-full absolute top-0 left-0 cursor-pointer"></div>
+              </Upload>
             </div>
           }
           alt="Avatar"
         />
-
-        {/* <EditOutlined className=" hidden group-hover/bg:block text-xl mdl:text-[48px] !text-textWhite" /> */}
       </div>
       <div className={styles['user-name']}>{name || 'Unnamed'}</div>
       <div className="flex items-center px-4 mdl:px-10 mt-2 ">

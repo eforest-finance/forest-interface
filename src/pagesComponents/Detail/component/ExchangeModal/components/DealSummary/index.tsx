@@ -1,8 +1,14 @@
 import useGetTransitionFee from 'pagesComponents/Detail/hooks/useGetTransitionFee';
+import { INftInfo } from 'types/nftTypes';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
-export default function DealSummary() {
-  const transactionFee = useGetTransitionFee();
+export interface IDealSummary {
+  nftInfo?: INftInfo;
+}
+
+export default function DealSummary(props: IDealSummary) {
+  const { nftInfo } = props;
+  const transactionFee = useGetTransitionFee(nftInfo);
   return (
     <>
       <h3 className="text-[18px] leading-[26px] font-medium text-[var(--text-primary)]">Preview</h3>

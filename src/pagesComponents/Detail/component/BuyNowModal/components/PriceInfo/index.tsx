@@ -1,6 +1,7 @@
 import { ImageEnhance } from 'components/ImgLoading';
 import { useMemo } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
+import { INftInfo } from 'types/nftTypes';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { handlePlurality } from 'utils/handlePlurality';
 
@@ -21,14 +22,16 @@ const typeDescMaps: Record<PriceTypeEnum, string> = {
 };
 
 export default function PriceInfo(props: {
+  nftInfo?: INftInfo;
   quantity: number | string;
   price: string | number;
   convertPrice: string | number;
   type: PriceTypeEnum;
 }) {
   const { detailInfo } = useDetailGetState();
-  const { nftInfo } = detailInfo;
-  const { quantity, price, convertPrice, type } = props;
+  const { nftInfo: stateInfo } = detailInfo;
+  const { quantity, price, convertPrice, type, nftInfo: pNftInfo } = props;
+  const nftInfo = pNftInfo || stateInfo;
 
   const priceDesc = useMemo(() => {
     return typeDescMaps[type];

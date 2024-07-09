@@ -1,6 +1,7 @@
 import { fetchTransactionFee } from 'api/fetch';
 import { useEffect, useState } from 'react';
 import useDetailGetState from 'store/state/detailGetState';
+import { INftInfo } from 'types/nftTypes';
 
 export interface ITransitionFee {
   transactionFee?: number;
@@ -10,13 +11,14 @@ export interface ITransitionFee {
   aiImageFee?: number;
 }
 
-export default function useGetTransitionFee() {
+export default function useGetTransitionFee(nftInfo?: INftInfo) {
   const { detailInfo } = useDetailGetState();
-  const { nftInfo } = detailInfo;
+  const { nftInfo: stateNftInfo } = detailInfo;
+  const info = nftInfo || stateNftInfo;
   const [transactionFee, setTransactionFee] = useState<ITransitionFee>();
   useEffect(() => {
     async function fetchData() {
-      if (!nftInfo) {
+      if (!info) {
         return;
       }
       const transactionFeeData = fetchTransactionFee();
@@ -28,7 +30,7 @@ export default function useGetTransitionFee() {
       }
     }
     fetchData();
-  }, [nftInfo]);
+  }, [info]);
 
   return transactionFee;
 }
