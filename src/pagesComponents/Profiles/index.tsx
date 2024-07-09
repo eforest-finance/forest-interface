@@ -10,7 +10,7 @@ import { ActivityItem } from './ActivityItem';
 import { MoreCard, moreActiveKey } from './MoreItem';
 import Dropdown from 'baseComponents/Dropdown';
 import { MenuProps } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Down from 'assets/images/arrow-down.svg';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
@@ -18,6 +18,7 @@ import useTokenData from 'hooks/useTokenData';
 
 export default function Profile() {
   const { userInfo, collectedTotalCount, createdTotalCount, avatar } = useProfilePageService();
+  console.log(userInfo);
 
   const [activeKey, setActiveKey] = useState('collected');
   const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreActiveKey.made);
@@ -25,9 +26,24 @@ export default function Profile() {
   const { walletInfo, aelfInfo } = useGetState();
   const elfRate = useTokenData();
 
+  const [bannerImage, setBannerImage] = useState(userInfo?.bannerImage);
+  const [profileImage, setProfileImage] = useState(userInfo?.profileImage);
+
+  useEffect(() => {
+    setBannerImage(userInfo?.bannerImage);
+    setProfileImage(userInfo?.profileImage);
+  }, [userInfo?.bannerImage, userInfo?.profileImage]);
+
   const onMoreMenuClick: MenuProps['onClick'] = ({ key }) => {
-    console.log('======key:', key);
     setSelectedKey(key as moreActiveKey);
+  };
+
+  const handleProfileChange = (type: string, src: string) => {
+    if (type === 'bannerImage') {
+      setBannerImage(src);
+    } else {
+      setProfileImage(src);
+    }
   };
 
   const itemsForMore: MenuProps['items'] = [
@@ -56,8 +72,9 @@ export default function Profile() {
     <>
       <div className={`${styles['profile']} ${userInfo?.bannerImage ? 'has-banner' : ''}`}>
         <ProfileBanner
-          bannerImage={userInfo?.bannerImage || ''}
-          profileImage={avatar || userInfo?.profileImage || ''}
+          onChange={handleProfileChange}
+          bannerImage={bannerImage || ''}
+          profileImage={profileImage || ''}
           name={userInfo?.name || ''}
           address={userInfo?.fullAddress || `ELF_${address}_${aelfInfo.curChain}`}
           email={userInfo?.email || ''}

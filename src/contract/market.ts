@@ -2,6 +2,8 @@ import { webLoginInstance } from './webLogin';
 import {
   ContractMethodType,
   IBatchBuyNowParams,
+  IBatchCancelListParams,
+  IBatchCancelOfferListParams,
   IBatchDeListParams,
   ICancelOfferParams,
   IContractError,
@@ -219,6 +221,30 @@ export const BatchBuyNow = async (
 export const BatchDeList = async (params: IBatchDeListParams, options?: IContractOptions): Promise<IContractError> => {
   try {
     const res = (await marketContractRequest('BatchDeList', params, options)) as IContractError;
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const BatchCancelList = async (
+  params: IBatchCancelListParams,
+  options?: IContractOptions,
+): Promise<IContractError> => {
+  try {
+    const res = (await marketContractRequest('BatchCancelList', params, options)) as IContractError;
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const BatchCancelOfferList = async (
+  params: IBatchCancelOfferListParams,
+  options?: IContractOptions,
+): Promise<IContractError> => {
+  try {
+    const res = (await marketContractRequest('BatchCancelOfferList', params, options)) as IContractError;
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject(error);

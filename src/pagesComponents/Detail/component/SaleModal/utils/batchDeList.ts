@@ -1,4 +1,4 @@
-import { BatchDeList } from 'contract/market';
+import { BatchCancelList, BatchCancelOfferList, BatchDeList } from 'contract/market';
 import { BatchDeListType, IBatchDeListParams } from 'contract/type';
 import { message } from 'antd';
 

@@ -11,30 +11,38 @@ import { FormatListingType, FormatOffersType } from 'store/types/reducer';
 import TableCell from 'pagesComponents/Detail/component/TableCell';
 import getExpiryTime from 'utils/getExpiryTime';
 import { moreActiveKey } from '../MoreItem';
-import { useInitializationDetail } from 'pagesComponents/Detail/hooks/useInitializationDetail';
 import useGetState from 'store/state/getState';
 import { getFloorPricePercentage } from 'pagesComponents/Detail/utils/getOffers';
-import { useCancelListing } from './useCancelListing';
-import useTokenData from 'hooks/useTokenData';
-import { getExchangeRate } from 'pagesComponents/Detail/utils/getExchangeRate';
+import useCancelListing from './useActionService';
+import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
 const { Text } = Typography;
 
 interface IUseOfferTableProps {
   activityKey: moreActiveKey;
   walletAddress: string;
+  fetchTableData: () => void;
+  onAction?: () => void;
 }
 
 export function useOfferTable(props: IUseOfferTableProps) {
-  const { activityKey, walletAddress } = props;
+  const { activityKey, walletAddress, fetchTableData, onAction } = props;
   const { isLG: isSmallScreen } = useResponsive();
-  const { cancelListingByRecord } = useCancelListing();
   const navigate = useRouter();
   const [tableColumns, setTableColumns] = useState<any>();
+  const [rowSelection, setRowSelection] = useState<any>(undefined);
+  const { login, isLogin } = useCheckLoginAndToken();
 
-  const { walletInfo, infoState } = useGetState();
+  const { walletInfo, infoState, aelfInfo } = useGetState();
   const elfRate = infoState.elfRate;
-  console.log('elfRate:', elfRate);
+
+  const reloadData = useCallback(() => {
+    onAction && onAction();
+  }, []);
+
+  const { cancelListingByRecord, dealTheOffer } = useCancelListing({
+    onFinish: reloadData,
+  });
 
   const renderActivityTitle = useCallback((record: IActivitiesItem) => {
     return (
@@ -164,6 +172,7 @@ export function useOfferTable(props: IUseOfferTableProps) {
   const cancelAction = {
     title: 'Action',
     align: 'right',
+    width: isSmallScreen ? 100 : 192,
     fixed: 'right',
     render: (_, record: any) => {
       return (
@@ -172,7 +181,12 @@ export function useOfferTable(props: IUseOfferTableProps) {
           className=" !rounded-md"
           size="middle"
           onClick={() => {
-            cancelListingByRecord(record, 1);
+            cancelListingByRecord(
+              record,
+              elfRate,
+              activityKey === moreActiveKey.made ? 'cancel offer' : 'cancel list',
+              aelfInfo?.curChain,
+            );
           }}>
           Cancel
         </Button>
@@ -182,6 +196,7 @@ export function useOfferTable(props: IUseOfferTableProps) {
 
   const acceptAction = {
     title: 'Action',
+    width: isSmallScreen ? 100 : 192,
     align: 'right',
     fixed: 'right',
     render: (_, record: any) => {
@@ -191,9 +206,9 @@ export function useOfferTable(props: IUseOfferTableProps) {
           className=" !rounded-md"
           size="middle"
           onClick={() => {
-            navigate.push(`/detail/buy/${record?.id}/${record.chainId}`);
+            dealTheOffer(record, elfRate);
           }}>
-          Accept
+          Deal
         </Button>
       );
     },
@@ -201,12 +216,18 @@ export function useOfferTable(props: IUseOfferTableProps) {
 
   const shiftColumns = async () => {
     const tColumns = getColumns();
-    setTableColumns(tColumns);
+
+    if (walletAddress === walletInfo.address) {
+      const action = activityKey === moreActiveKey.receive ? acceptAction : cancelAction;
+      const tColumns = getColumns();
+      setTableColumns([...tColumns, action]);
+    } else {
+      setTableColumns(tColumns);
+    }
   };
 
   const getColumns = () => {
     let tColumns = [] as any;
-
     switch (activityKey) {
       case moreActiveKey.made: {
         tColumns = [
@@ -247,27 +268,22 @@ export function useOfferTable(props: IUseOfferTableProps) {
     shiftColumns();
   }, [activityKey]);
 
-  // const getRate = async () => {
-  //   const result = await getExchangeRate();
-  //   setElRate(result);
-  // };
-
   useEffect(() => {
-    // getRate();
-  }, []);
-
-  // useEffect(() => {
-  //   if (walletAddress === walletInfo.address) {
-  //     const action = activityKey === moreActiveKey.receive ? acceptAction : cancelAction;
-  //     const tColumns = getColumns();
-  //     setTableColumns([...tColumns, action]);
-  //   }
-  // }, [walletInfo.address]);
+    if (isLogin && walletAddress === walletInfo.address) {
+      const action = activityKey === moreActiveKey.receive ? acceptAction : cancelAction;
+      const tColumns = getColumns();
+      setTableColumns([...tColumns, action]);
+    } else {
+      const tColumns = getColumns();
+      setTableColumns(tColumns);
+    }
+  }, [isLogin, walletAddress, walletInfo.address]);
 
   return {
     actions: [cancelAction, acceptAction],
     shiftColumns,
     tableColumns,
+    rowSelection,
     columns,
     renderActivityTitle,
     renderPrice,

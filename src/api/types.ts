@@ -157,6 +157,13 @@ export interface IActivitiesItem {
   nftName: string;
   previewImage: string;
   nftUrl?: string;
+  key?: string | number;
+  nftSymbol?: string;
+  expireTime?: number;
+  toAddress?: string;
+  quantity?: number;
+  startTime?: number;
+  originQuantity?: number;
 }
 
 export interface IActivities {
@@ -399,6 +406,7 @@ export interface IUserSettingParams {
   instagram?: string;
   bannerImage?: string;
   profileImage?: string;
+  userUpdateType?: number;
 }
 
 export interface ITokenParams {
