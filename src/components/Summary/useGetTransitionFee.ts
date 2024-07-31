@@ -8,14 +8,14 @@ export interface ITransitionFee {
   creatorLoyaltyRate?: number;
 }
 
-export default function useGetTransitionFee() {
+export default function useGetTransitionFee(symbol?: string) {
   const [transactionFee, setTransactionFee] = useState<ITransitionFee>();
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
-        const transactionFee = await fetchTransactionFee();
+        const transactionFee = await fetchTransactionFee(symbol);
         setTransactionFee(transactionFee);
       } catch (e) {
         console.log('error', e);
