@@ -7,7 +7,7 @@
     "dev:testnet": "NODE_OPTIONS='--max-old-space-size=10240' NEXT_PUBLIC_APP_ENV=test next dev",
     "test": "NODE_OPTIONS='--max-old-space-size=10240' NEXT_PUBLIC_APP_ENV=test next dev",
     "out": "SKIP_SSR=1 next build && next export",
-    "build": "NEXT_PUBLIC_APP_ENV=production NODE_OPTIONS='--max-old-space-size=10240' next build",
+    "build:production": "NEXT_PUBLIC_APP_ENV=production NODE_OPTIONS='--max-old-space-size=10240' next build",
     "build:dev": "NEXT_PUBLIC_APP_ENV=development NODE_OPTIONS='--max-old-space-size=10240' next build",
     "build:test": "NEXT_PUBLIC_APP_ENV=test NODE_OPTIONS='--max-old-space-size=10240' next build",
     "start": "next start",
