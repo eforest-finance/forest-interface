@@ -293,8 +293,8 @@ export const fetchMinMarkupPrice = async (params: { Symbol: string }) => {
   return request.get<IMinMarkupPriceResponse>('app/seed/bid-price', { params });
 };
 
-export const fetchTransactionFee = async () => {
-  return request.get<ITransitionFee>('app/seed/transaction-fee');
+export const fetchTransactionFee = async (symbol?: string) => {
+  return request.get<ITransitionFee>('app/seed/transaction-fee', { params: { symbol } });
 };
 
 export const fetchNftInfoOwners = async (params: INftInfoOwnersParams) => {

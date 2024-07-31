@@ -27,6 +27,7 @@ import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils
 import { getExploreLink } from 'utils';
 import styles from './index.module.css';
 import { INftInfo } from 'types/nftTypes';
+import useGetTransitionFee from 'components/Summary/useGetTransitionFee';
 
 export type ArtType = {
   id: number;
@@ -213,6 +214,8 @@ function ExchangeModalNew(options: {
     modal.hide();
   }, [pathname]);
 
+  const { transactionFee } = useGetTransitionFee(info?.nftCollection?.symbol);
+
   return (
     <Modal
       footer={
@@ -259,6 +262,8 @@ function ExchangeModalNew(options: {
             totalPrice={totalPrice.toNumber()}
             convertTotalPrice={totalUSDPrice.toNumber()}
             title="Total Earnings"
+            fee={transactionFee}
+            rate={options.rate}
           />
         </div>
         <div className="mt-[32px]">

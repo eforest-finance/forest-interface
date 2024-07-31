@@ -1,4 +1,4 @@
-import useGetTransitionFee from 'pagesComponents/Detail/hooks/useGetTransitionFee';
+import useGetTransitionFee from 'components/Summary/useGetTransitionFee';
 import { INftInfo } from 'types/nftTypes';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 
@@ -8,7 +8,7 @@ export interface IDealSummary {
 
 export default function DealSummary(props: IDealSummary) {
   const { nftInfo } = props;
-  const transactionFee = useGetTransitionFee(nftInfo);
+  const { transactionFee } = useGetTransitionFee(nftInfo?.nftCollection?.symbol);
   return (
     <>
       <h3 className="text-[18px] leading-[26px] font-medium text-[var(--text-primary)]">Preview</h3>
@@ -18,10 +18,12 @@ export default function DealSummary(props: IDealSummary) {
           {(transactionFee?.forestServiceRate || 0) * 100}%
         </span>
       </div>
-      {/* <div className="flex justify-between mt-[8px]">
-        <span className="text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">Creator Royalty Fee</span>
-        <span className="text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">2.5%</span>
-      </div> */}
+      <div className="flex justify-between mt-[8px]">
+        <span className="text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">Creator Earnings</span>
+        <span className="text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">
+          {(transactionFee?.creatorLoyaltyRate || 0) * 100}%
+        </span>
+      </div>
       <div className="flex justify-between mt-[8px]">
         <span className="text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">
           Est. Transaction Fee
