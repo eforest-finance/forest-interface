@@ -13,6 +13,9 @@ import NftInfoListCard from 'components/NftInfoListCard';
 import { handlePlurality } from 'utils/handlePlurality';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import styles from './index.module.css';
+import { useEffect, useState } from 'react';
+import { fetchTransactionFee } from 'api/fetch';
+import useGetTransitionFee, { ITransitionFee } from 'components/Summary/useGetTransitionFee';
 
 interface ISaleModalProps {
   nftInfo: INftInfo;
@@ -39,6 +42,10 @@ export function SaleModalERC721Constructor({ nftInfo, type = 'edit', defaultData
     onCancelAllListings,
     onEditListingForERC721,
   } = useSaleService(nftInfo, modal, type, defaultData);
+
+  console.log('nftInfo.nftCollection?.symbol:', nftInfo.nftCollection?.symbol);
+
+  const { transactionFee } = useGetTransitionFee(nftInfo.nftCollection?.symbol);
 
   const footer =
     type === 'add' ? (
@@ -106,7 +113,7 @@ export function SaleModalERC721Constructor({ nftInfo, type = 'edit', defaultData
         defaultPrice={listingPrice?.price}
       />
       <Duration onChange={setDuration} defaultExpirationData={defaultData?.duration} tooltip={tooltipForDuration} />
-      <SummaryInfo listingPrice={listingPrice?.price} />
+      <SummaryInfo listingPrice={listingPrice?.price} creatorEarns={transactionFee?.creatorLoyaltyRate} />
     </BaseModal>
   );
 }
@@ -130,6 +137,9 @@ export function SaleModalERC1155Constructor({ nftInfo, type = 'edit', defaultDat
     setItemsForSell,
     availableItemForSell,
   } = useSaleService(nftInfo, modal, type, defaultData);
+  console.log('nftInfo.nftCollection?.symbol:', nftInfo.nftCollection?.symbol);
+
+  const { transactionFee } = useGetTransitionFee(nftInfo.nftCollection?.symbol);
 
   const footer =
     type === 'add' && !listItems ? (
@@ -190,7 +200,11 @@ export function SaleModalERC1155Constructor({ nftInfo, type = 'edit', defaultDat
         defaultPrice={listingPrice.price}
       />
       <Duration onChange={setDuration} defaultExpirationData={defaultData?.duration} />
-      <SummaryInfo listingPrice={listingPrice?.price || ''} itemsForSell={itemsForSell} />
+      <SummaryInfo
+        listingPrice={listingPrice?.price || ''}
+        itemsForSell={itemsForSell}
+        creatorEarns={transactionFee?.creatorLoyaltyRate}
+      />
     </BaseModal>
   );
 }
