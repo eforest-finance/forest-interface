@@ -9,11 +9,12 @@ export default function TotalPrice(info: {
   title?: string;
   fee?: ITransitionFee;
   rate: number;
+  suffix?: string;
+  amount?: number | string;
 }) {
-  const { totalPrice, title, fee = {}, rate = 1 } = info;
+  const { totalPrice, title, fee = {}, rate = 1, amount, suffix } = info;
   const { forestServiceRate = 0, creatorLoyaltyRate = 0 } = fee;
   const totalPriceBig = new BigNumber(totalPrice);
-
   const resultPrice = totalPriceBig.isNaN()
     ? '--'
     : totalPriceBig.times(1 - (forestServiceRate + creatorLoyaltyRate)).toNumber();
@@ -31,6 +32,12 @@ export default function TotalPrice(info: {
           <span className="mt-[8px] text-[16px] leading-[24px] font-medium text-[var(--text-secondary)]">
             {formatUSDPrice(priceUsd)}
           </span>
+          {amount !== undefined && (
+            <span className="mt-[8px] flex font-medium text-[16px] text-[var(--text-primary)]">
+              <span className="mr-[4px]">Balance:</span>
+              <span>{`${formatTokenPrice(amount)}${suffix ? ` ${suffix}` : ''}`}</span>
+            </span>
+          )}
         </div>
       </div>
     </>

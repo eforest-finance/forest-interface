@@ -773,6 +773,7 @@ export interface IHotNFT {
   nftId: string;
   latestDealPrice: number;
   offerPrice: number;
+  price: number;
   link?: string;
   chainId: string;
   id: string;

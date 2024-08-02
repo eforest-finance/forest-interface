@@ -30,6 +30,8 @@ export interface ISetPriceProps {
   placeholder?: string;
   valid?: InputStatus;
   defaultErrorTip?: string;
+  amount?: number;
+  suffix?: string;
 }
 
 export function useSetPriceService({ onChange, defaultPrice, checkValid }: ISetPriceProps) {

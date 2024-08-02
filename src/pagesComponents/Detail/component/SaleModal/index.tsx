@@ -99,7 +99,6 @@ export function SaleModalERC721Constructor({ nftInfo, type = 'edit', defaultData
         image={nftSaleInfo?.logoImage || ''}
         collectionName={nftSaleInfo?.collectionName}
         nftName={nftSaleInfo?.tokenName}
-        item={handlePlurality(itemsForSell, 'item')}
         priceTitle={'Listing Price'}
         price={`${listingPrice?.price ? formatTokenPrice(listingPrice?.price) : '--'} ELF`}
         usdPrice={listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --'}
