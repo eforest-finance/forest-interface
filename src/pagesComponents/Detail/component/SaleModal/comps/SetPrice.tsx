@@ -134,7 +134,7 @@ export function SetPrice(props: ISetPriceProps) {
 
   const { price, setToken, setPrice, inputChangeHandler, status } = useSetPriceService(props);
 
-  const { errorTip, placeholder, defaultErrorTip } = props;
+  const { errorTip, placeholder, defaultErrorTip, suffix, amount } = props;
 
   const showPrice = getShowPrice(price || '');
 
@@ -199,6 +199,12 @@ export function SetPrice(props: ISetPriceProps) {
         status={props?.valid || status}
       />
       {renderError()}
+      {amount !== undefined && (
+        <span className="mt-[8px] flex justify-end	font-medium text-[16px] text-[var(--text-primary)]">
+          <span className="mr-[4px]">Balance:</span>
+          <span>{`${formatTokenPrice(amount)}${suffix ? ` ${suffix}` : ''}`}</span>
+        </span>
+      )}
     </div>
   );
 }

@@ -27,10 +27,11 @@ export default function PriceInfo(props: {
   price: string | number;
   convertPrice: string | number;
   type: PriceTypeEnum;
+  totalSupply: string | number;
 }) {
   const { detailInfo } = useDetailGetState();
   const { nftInfo: stateInfo } = detailInfo;
-  const { quantity, price, convertPrice, type, nftInfo: pNftInfo } = props;
+  const { quantity, price, convertPrice, type, nftInfo: pNftInfo, totalSupply } = props;
   const nftInfo = pNftInfo || stateInfo;
 
   const priceDesc = useMemo(() => {
@@ -51,9 +52,11 @@ export default function PriceInfo(props: {
           <p className="mt-[4px] text-[20px] leading-[28px] font-semibold text-[var(--text-primary)]">
             {nftInfo?.tokenName}
           </p>
-          <p className="text-[16px] leading-[24px] font-medium text-[var(--text-secondary)] mt-[4px] hidden mdTW:block">
-            {handlePlurality(Number(quantity), 'item')}
-          </p>
+          {Number(totalSupply) > 1 && (
+            <p className="text-[16px] leading-[24px] font-medium text-[var(--text-secondary)] mt-[4px] hidden mdTW:block">
+              {handlePlurality(Number(quantity), 'item')}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-col items-end justify-between">
@@ -66,9 +69,11 @@ export default function PriceInfo(props: {
             {formatUSDPrice(convertPrice)}
           </div>
         </div>
-        <div className="text-[16px] leading-[24px] font-medium text-[var(--text-secondary)] mt-[4px] mdTW:hidden">
-          {handlePlurality(Number(quantity), 'item')}
-        </div>
+        {Number(totalSupply) > 1 && (
+          <div className="text-[16px] leading-[24px] font-medium text-[var(--text-secondary)] mt-[4px] mdTW:hidden">
+            {handlePlurality(Number(quantity), 'item')}
+          </div>
+        )}
       </div>
     </div>
   );

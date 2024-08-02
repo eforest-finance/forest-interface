@@ -49,7 +49,7 @@ export default function CollectionTable(props: ICollectionProps) {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [TokenName, setTokenName] = useState<string>('');
-  const [dateRangeType, setDateRangeType] = useState<number>(0);
+  const [dateRangeType, setDateRangeType] = useState<number>(2);
   const [total, setTotal] = useState<number>(0);
 
   const [dataSource, setDataSource] = useState<TableDataItem[]>();
@@ -181,12 +181,20 @@ export default function CollectionTable(props: ICollectionProps) {
                   className={clsx(isMobile ? 'w-[86px]' : 'w-[146px]', 'mr-6')}
                   options={[
                     {
+                      value: 3,
+                      label: 'ALL',
+                    },
+                    {
                       value: 0,
                       label: '24H',
                     },
                     {
                       value: 1,
                       label: '7D',
+                    },
+                    {
+                      value: 2,
+                      label: '30D',
                     },
                   ]}></Select>
                 <CollectionSearch

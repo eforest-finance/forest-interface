@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { formatTokenPrice } from 'utils/format';
 import { IHotNFT } from 'api/types';
 import HonourLabel from 'baseComponents/HonourLabel';
+import item from 'store/reducer/create/item';
 
 interface IHotNFTsProps {
   hotNFTs: IHotNFT[];
@@ -37,6 +38,18 @@ export default function HotNFTs({ hotNFTs }: IHotNFTsProps) {
       setMaxResultCount(4);
     }
   }, [is2XL, is4XL]);
+
+  const getPrice = (item: IHotNFT) => {
+    if (item.price > 0) {
+      return [`${formatTokenPrice(item.price)} ELF`, 'Price'];
+    }
+
+    if (item.offerPrice > 0) {
+      return [`${formatTokenPrice(item.offerPrice)} ELF`, 'Best Offer'];
+    }
+
+    return ['- -', 'Price'];
+  };
 
   return (
     <div className="mt-[48px]">
@@ -132,10 +145,8 @@ export default function HotNFTs({ hotNFTs }: IHotNFTsProps) {
                           <p>{formatTokenPrice(item.latestDealPrice)} ELF</p>
                         </div>
                         <div className="w-full h-[48px] bg-fillHoverBg flex justify-between items-center rounded-sm px-[8px] py-[12px] mt-[8px]">
-                          <p className="text-textSecondary font-medium">Price</p>
-                          <p className="text-base font-semibold text-textPrimary ">
-                            {formatTokenPrice(item.offerPrice)} ELF
-                          </p>
+                          <p className="text-textSecondary font-medium">{getPrice(item)[1]}</p>
+                          <p className="text-base font-semibold text-textPrimary ">{getPrice(item)[0]}</p>
                         </div>
                       </div>
                     </div>
