@@ -489,11 +489,17 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
         <Summary />
       </div>
       <div className="mt-[24px] mdTW:mt-[32px]">
-        <TotalPrice totalPrice={totalPrice} convertTotalPrice={convertTotalPrice} />
+        <TotalPrice
+          totalPrice={totalPrice}
+          convertTotalPrice={convertTotalPrice}
+          rate={elfRate}
+          amount={divDecimals(Number(tokenBalance), 8).toNumber()}
+          suffix="ELF"
+        />
       </div>
-      <div className="mt-[24px] mdTW:mt-[32px]">
+      {/* <div className="mt-[24px] mdTW:mt-[32px]">
         <Balance amount={divDecimals(Number(tokenBalance), 8).toNumber()} suffix="ELF" />
-      </div>
+      </div> */}
       <div className="mt-[8px]">{insufficientTip}</div>
     </Modal>
   );

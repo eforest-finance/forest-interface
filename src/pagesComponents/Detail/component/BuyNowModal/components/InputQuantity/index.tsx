@@ -18,7 +18,7 @@ export default function InputQuantity(props: InputProps & { availableMount: numb
           {...props}
           status={errorTip && 'error'}
         />
-        <span className="leading-[20px] font-normal text-[var(--text-disable)] absolute right-0 top-[-28px]">
+        <span className="leading-[20px] font-normal text-[var(--text-disable)] absolute right-0 bottom-[-26px]">
           {formatTokenPrice(availableMount)} available
         </span>
       </div>

@@ -387,10 +387,11 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
           quantity={nftTotalSupply === '1' ? 1 : quantity || 0}
           price={totalPrice}
           convertPrice={convertPrice}
+          totalSupply={nftTotalSupply}
           type={nftTotalSupply === '1' ? PriceTypeEnum.MAKEOFFER721 : PriceTypeEnum.MAKEOFFER}
         />
         <SetPrice
-          title="Offer Amount Per Item"
+          title={Number(nftTotalSupply) === 1 ? 'Offer Amount' : 'Offer Amount Per Item'}
           className="mt-[32px]"
           floorPrice={salesInfo?.floorPrice}
           bestOfferPrice={salesInfo?.maxOfferPrice}
@@ -399,8 +400,10 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
           placeholder="Please enter your offer amount"
           defaultErrorTip="Please enter a valid value."
           valid={!priceValid ? 'error' : ''}
+          amount={divDecimals(Number(tokenBalance), 8).toNumber()}
+          suffix="ELF"
         />
-        {nftTotalSupply !== '1' && (
+        {Number(nftTotalSupply) !== 1 && (
           <div className="mt-[60px]">
             <InputQuantity
               availableMount={availableMount}
@@ -413,9 +416,9 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
         <div className="mt-[60px]">
           <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
         </div>
-        <div className="mt-[32px]">
+        {/* <div className="mt-[32px]">
           <Balance amount={divDecimals(Number(tokenBalance), 8).toNumber()} suffix="ELF" />
-        </div>
+        </div> */}
       </div>
     </Modal>
   );
