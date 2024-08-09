@@ -8,35 +8,18 @@ export function useHMService() {
   const { isLG } = useResponsive();
   const [size, setSize] = useState<BoxSizeEnum>(BoxSizeEnum.small);
   const [collapsedFilter, setCollapsedFilter] = useState<boolean>(isLG);
-  const [sort, setSort] = useState<string>(dropDownCollectionsMenu.data[0].value as string);
-  const [SearchParam, setSearchParam] = useState<string>('');
-  const [searchInputValue, setSearchInputValue] = useState<string>('');
-
-  const { run: changeSearchParam } = useDebounceFn(
-    (searchKeyWord: string) => {
-      setSearchParam(searchKeyWord.trim());
-    },
-    {
-      wait: 500,
-    },
-  );
-
-  const searchInputValueChange = (e: any) => {
-    setSearchInputValue(e.target.value);
-    changeSearchParam(e.target.value);
-  };
+  // const [SearchParam, setSearchParam] = useState<string>('');
+  // const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   return {
     isLG,
-    searchInputValue,
-    setSearchInputValue,
-    searchInputValueChange,
-    SearchParam,
-    setSearchParam,
+    // searchInputValue,
+    // setSearchInputValue,
+    // searchInputValueChange,
+    // SearchParam,
+    // setSearchParam,
     size,
     setSize,
-    sort,
-    setSort,
     collapsedFilter,
     setCollapsedFilter,
   };

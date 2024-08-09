@@ -11,14 +11,26 @@ import { fetchFooterNavItems } from 'api/fetch';
 import Logo from 'assets/images/night/forestLogo.svg';
 import LogoLight from 'assets/images/light/forestLogo.svg';
 import { hideFooterPage } from 'constants/common';
+import Telegram from 'assets/images/v2/tg.svg';
+import Twitter from 'assets/images/v2/twitter.svg';
+import Discord from 'assets/images/v2/discord.svg';
+import Medium from 'assets/images/v2/medium-mono.svg';
 
 type MediaItemType = {
   id: number;
   link?: string;
   name?: string;
+  icon?: any;
 };
 
 const { Footer } = Layout;
+
+const FooterIconMap = {
+  Telegram,
+  Twitter,
+  Discord,
+  Medium,
+};
 
 export default function BaseFooter() {
   const [theme] = useTheme();
@@ -49,13 +61,22 @@ export default function BaseFooter() {
   const getFooterNav = useCallback(async () => {
     const communityList = await fetchFooterNavItems();
     if (!communityList?.length) return;
-    setFooterNav(communityList);
+    setFooterNav(
+      communityList.map((item) => {
+        return {
+          ...item,
+          icon: FooterIconMap[item.name],
+        };
+      }),
+    );
   }, []);
   useEffect(() => {
     getFooterNav();
   }, [getFooterNav]);
 
   const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
+
+  console.log(footerNav);
 
   return (
     <Footer
@@ -69,7 +90,7 @@ export default function BaseFooter() {
         <ul className={`${styles['navigate-wrapper']} flex ml-auto`}>
           {footerNav?.length ? (
             <li className={styles['navigate-list-item']}>
-              <h5>Join the community</h5>
+              <h5 className="text-[14px] font-medium t-textPrimary">Community and News</h5>
               {footerNav?.length && (
                 <ul className={styles['navigate-list-children']}>
                   {footerNav?.map((navItem) => (
@@ -78,7 +99,10 @@ export default function BaseFooter() {
                       href={navItem?.link ?? undefined}
                       target={isSmallScreen || !navItem.link ? '_self' : '_blank'}
                       rel="noreferrer">
-                      <li className={styles['children-item']}>{navItem.name}</li>
+                      <div className="flex items-center mb-[8px] ">
+                        <navItem.icon className="mr-[8px]" />
+                        <li className={styles['children-item']}>{navItem.name}</li>
+                      </div>
                     </a>
                   ))}
                 </ul>
@@ -89,7 +113,7 @@ export default function BaseFooter() {
         {isSmallScreen ? (
           <ul className={`${styles['navigate-wrapper']} flex !border-t-0 !pt-[30px]`}>
             <li className={styles['navigate-list-item']}>
-              <h5>Legal</h5>
+              <h5 className="text-[14px] font-medium text-textPrimary">Legal</h5>
               <ul className={styles['navigate-list-children']}>
                 <a href="/term-service" target="_blank">
                   <li className={styles['children-item']}>Terms of Service</li>
@@ -103,7 +127,7 @@ export default function BaseFooter() {
         ) : (
           <ul className={`${styles['navigate-wrapper']} flex ml-[100px]`}>
             <li className={styles['navigate-list-item']}>
-              <h5>Legal</h5>
+              <h5 className="text-[14px] font-medium t-textPrimary">Legal</h5>
               <ul className={styles['navigate-list-children']}>
                 <a href="/term-service" target="_blank">
                   <li className={styles['children-item']}>Terms of Service</li>

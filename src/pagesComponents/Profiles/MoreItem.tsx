@@ -18,6 +18,7 @@ import { useProfilePageService } from './hooks/useProfilePageService';
 import useActionService from './hooks/useActionService';
 import { IActivitiesItem } from 'api/types';
 import PageLoading from 'components/PageLoading';
+import { useFilterService } from './hooks/useFilterService';
 
 export enum moreActiveKey {
   made = 'made',
@@ -53,12 +54,17 @@ export function MoreCard(props: IMoreCard) {
     setCollapsedFilter,
     size,
     setSize,
-    sort,
-    setSort,
-    searchInputValue,
-    searchInputValueChange,
-    setSearchInputValue,
+    // sort,
+    // setSort,
+    // searchInputValue,
+    // searchInputValueChange,
+    // setSearchInputValue,
   } = useHMService();
+
+  const { searchInputValue, searchInputValueChange, sort, setSort, setSearchInputValue } = useFilterService(
+    'more',
+    walletAddress,
+  );
 
   const fetchData = async () => {
     setLoading(true);

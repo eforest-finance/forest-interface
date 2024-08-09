@@ -1,5 +1,5 @@
 .footer-wrapper {
-  @apply !bg-[var(--bg-home)] py-[69px] px-[16px] pcMin:px-[40px] border-0 border-t !border-lineBorder border-solid;
+  @apply !bg-fillHoverBg py-[69px] px-[16px] pcMin:px-[40px] !border-0 border-t !border-lineBorder border-solid;
 }
 
 .footer-wrapper .footer-content {
@@ -21,14 +21,14 @@
   @apply text-[var(--text-secondary)] text-[14px] leading-normal mb-[8px];
 }
 
-.footer-wrapper .footer-content .navigate-wrapper .navigate-list-item h5 {
+/* .footer-wrapper .footer-content .navigate-wrapper .navigate-list-item h5 {
   @apply font-medium text-[16px] leading-[24px] text-[var(--text8)];
-}
+} */
 .footer-wrapper .footer-content .navigate-wrapper .navigate-list-item .navigate-list-children {
   @apply mt-[12px];
 }
 .footer-wrapper .footer-content .navigate-wrapper .navigate-list-item .children-item {
-  @apply mb-[8px] text-[var(--text-secondary-new)] text-[14px] leading-[22px] font-medium;
+  @apply text-textSecondary text-[14px] leading-[22px] font-medium flex items-center;
 }
 
 .footer-wrapper .footer-content .navigate-wrapper .navigate-list-item:not(.navigate-list-item:last-child) {

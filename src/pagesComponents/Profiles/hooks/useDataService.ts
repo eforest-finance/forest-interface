@@ -1,6 +1,7 @@
 import { useInfiniteScroll } from 'ahooks';
 import { fetchActivitiesSearch, fetchCollectionsByMyCreated, fetchNFTMyHoldSearch } from 'api/fetch';
 import { IMyHoldSearch } from 'api/types';
+import { useRouter } from 'next/navigation';
 
 export function useDataService({
   pageSize = 96,
@@ -19,11 +20,26 @@ export function useDataService({
     activity: fetchActivitiesSearch,
   };
 
+  const nav = useRouter();
+
+  const updateSorting = (query: string) => {
+    const pathname = location.pathname;
+
+    if (location.search !== `?${query}`) {
+      nav.push(`${pathname}?${query}`);
+
+      window.history.pushState(null, '', `${pathname}?${query}`);
+    }
+  };
+
   const fetchDataApi = fetchDataAPIMap[tabType];
 
   const { data, loading, loadingMore, noMore } = useInfiniteScroll(
     (d) => {
       const _page = !d?._page ? 1 : d._page + 1;
+      const query = `filterParams=${encodeURI(JSON.stringify(params))}`;
+
+      updateSorting(query);
 
       if (!loginAddress) {
         return Promise.resolve({

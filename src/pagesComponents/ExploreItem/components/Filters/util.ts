@@ -93,7 +93,7 @@ export const getFilterList = (
   return filterList;
 };
 
-export function getFilterFromSearchParams(filterParamStr: string | null) {
+export function getFilterFromSearchParams(filterParamStr: string | null, generationInfos: any) {
   if (!filterParamStr) return {};
 
   const filterParamsObj = JSON.parse(decodeURI(filterParamStr)) as {
@@ -101,30 +101,69 @@ export function getFilterFromSearchParams(filterParamStr: string | null) {
       key: string;
       values: string[];
     }[];
+  } as any;
+
+  filterParamsObj[FilterKeyEnum.Status] = {
+    type: FilterType.Checkbox,
+    data: [],
   };
 
-  const res: {
-    [key: string]: {
-      type: FilterType;
-      data: Array<{
-        label: string;
-        value: string;
-      }>;
-    };
-  } = {};
+  filterParamsObj[FilterKeyEnum.Rarity] = {
+    type: FilterType.Checkbox,
+    data: [],
+  };
 
-  filterParamsObj?.[FilterKeyEnum.Traits]?.forEach?.((item) => {
-    const tmpObj = {
-      type: FilterType.Checkbox,
-      data: (item.values || []).map((itm) => ({
-        label: itm,
-        value: itm,
-      })),
-    };
-    res[`${FilterKeyEnum.Traits}-${item.key}`] = tmpObj;
-  });
+  filterParamsObj[FilterKeyEnum.Price] = {
+    type: FilterType.Range,
+    data: [
+      {
+        min: '',
+        max: '',
+      },
+    ],
+  };
 
-  return res;
+  filterParamsObj[FilterKeyEnum.Generation] = {
+    type: FilterType.Checkbox,
+    data: [],
+  };
+
+  const statusMap = {
+    HasListingFlag: 'Buy Now',
+    HasAuctionFlag: 'On Auction',
+    HasOfferFlag: 'Has Offers',
+  };
+
+  const priceMap = {
+    PriceLow: 'min',
+    PriceHigh: 'max',
+  };
+
+  const keys = Object.keys(filterParamsObj);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (Object.keys(statusMap).includes(key) && filterParamsObj[key]) {
+      filterParamsObj[FilterKeyEnum.Status].data.push({
+        label: statusMap[key],
+        value: CollectionsStatus[statusMap[key]],
+      });
+    }
+
+    if (Object.keys(priceMap).includes(key)) {
+      filterParamsObj[FilterKeyEnum.Price].data[0][priceMap[key]] = filterParamsObj[key];
+    }
+
+    if (['RarityList'].includes(key) && filterParamsObj[key]) {
+      filterParamsObj[key].forEach((rarity) => {
+        filterParamsObj[FilterKeyEnum.Rarity].data.push({
+          label: rarity,
+          value: rarity,
+        });
+      });
+    }
+  }
+
+  return filterParamsObj;
 }
 
 export const getDefaultFilter = (ChainId: string): IFilterSelect => {

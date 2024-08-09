@@ -3,22 +3,44 @@ import useGetState from 'store/state/getState';
 import { getDefaultFilter, getFilter, getFilterFromSearchParams, getFilterList } from '../components/Filters/util';
 import { useRequest } from 'ahooks';
 import { fetchCollectionAllTraitsInfos, fetchCollectionGenerationInfos, fetchCollectionRarityInfos } from 'api/fetch';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isEqual } from 'lodash-es';
+import qs from 'query-string';
 
 export function useFilterForItemService(nftCollectionId: string) {
   const nftType = String(nftCollectionId).endsWith('-SEED-0') ? 'seed' : 'nft';
+  const queryObj = qs.parse(location.search);
 
   const { aelfInfo, walletInfo } = useGetState();
   const params = useSearchParams();
   const filterParamStr = params.get('filterParams');
-  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr);
+
+  const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
+    refreshDeps: [nftCollectionId],
+    cacheKey: `all-generation-info-${nftCollectionId}`,
+    staleTime: 300000,
+  });
+
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr, generationInfos);
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
   const filterList = getFilterList(nftType, aelfInfo.curChain);
 
   const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
     Object.assign({}, defaultFilter, paramsFromUrlForFilter),
   );
+
+  console.log('filterParamStr:', paramsFromUrlForFilter, filterSelect);
+
+  const getFilterBySearchQuery = () => {
+    // setFilterSelect((pre) => ({
+    //   ...pre,
+    //   ...val,
+    // }));
+  };
+
+  useEffect(() => {
+    getFilterBySearchQuery();
+  });
 
   const clearAll = () => {
     if (isEqual(defaultFilter, filterSelect)) return;
@@ -28,11 +50,6 @@ export function useFilterForItemService(nftCollectionId: string) {
   const { data: traitsInfo } = useRequest(() => fetchCollectionAllTraitsInfos(nftCollectionId), {
     refreshDeps: [nftCollectionId],
     cacheKey: `all-traits-info-${nftCollectionId}`,
-    staleTime: 300000,
-  });
-  const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
-    refreshDeps: [nftCollectionId],
-    cacheKey: `all-generation-info-${nftCollectionId}`,
     staleTime: 300000,
   });
 

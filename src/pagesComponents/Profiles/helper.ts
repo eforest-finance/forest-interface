@@ -13,21 +13,21 @@ export function getParamsFromFilter(activeKey: string, walletAddress: string, fi
 
     PriceLow: bigStr(filterSelect?.Price?.data?.[0]?.min),
     PriceHigh: bigStr(filterSelect?.Price?.data?.[0]?.max),
-    hasListingFlag: status.includes(CollectionsStatus['Buy Now']),
-    hasAuctionFlag: status.includes(CollectionsStatus['On Auction']),
-    hasOfferFlag: status.includes(CollectionsStatus['Has Offers']),
+    HasListingFlag: status.includes(CollectionsStatus['Buy Now']),
+    HasAuctionFlag: status.includes(CollectionsStatus['On Auction']),
+    HasOfferFlag: status.includes(CollectionsStatus['Has Offers']),
     collectionIds: filterSelect.Collections.data.map((itm: SourceItemType) => itm.value),
   };
   if (activeKey === 'created') {
     return {
       ...filterParams,
       address: walletAddress || '',
-      sorting: 'ListingTime DESC',
+      Sorting: 'ListingTime DESC',
     };
   }
   return {
     ...filterParams,
     address: walletAddress || '',
-    sorting: 'ListingTime DESC',
+    Sorting: 'ListingTime DESC',
   };
 }

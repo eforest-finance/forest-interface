@@ -1,3 +1,5 @@
+'use client';
+
 import { useInfiniteScroll } from 'ahooks';
 import { fetchCompositeNftInfos, fetchNftRankingInfoApi } from 'api/fetch';
 import { CompositeNftInfosParams, INftRankingInfo } from 'api/types';
@@ -5,6 +7,8 @@ import { INftInfo, ITraitInfo } from 'types/nftTypes';
 import { addPrefixSuffix } from 'utils';
 import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 import { thousandsNumber } from 'utils/unitConverter';
+import queryString from 'query-string';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
 export const fetchRankingDataOfNft = async (nftItemArr: INftInfo[], userWalletAddress?: string) => {
   if (!userWalletAddress) return nftItemArr;
@@ -68,10 +72,23 @@ export function useNFTItemsDataService({
   params: Partial<CompositeNftInfosParams>;
   userWalletAddress?: string;
 }) {
+  const nav = useRouter();
+
+  const updateSorting = (query: string) => {
+    const pathname = location.pathname;
+    if (location.search !== `?${query}`) {
+      nav.push(`${pathname}?${query}`);
+
+      window.history.pushState(null, '', `${pathname}?${query}`);
+    }
+  };
+
   const { data, loading, loadingMore, noMore } = useInfiniteScroll(
     (d) => {
       const _page = !d?._page ? 1 : d._page + 1;
+      const query = `filterParams=${encodeURI(JSON.stringify(params))}`;
 
+      updateSorting(query);
       return fetchNFTItemsData(
         {
           ...params,

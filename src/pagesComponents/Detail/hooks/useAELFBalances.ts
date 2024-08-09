@@ -21,7 +21,6 @@ export const useAELFBalances = ({ symbol = 'ELF', chain }: { symbol?: string; ch
   const { walletInfo } = useGetState();
 
   const onGetBalance = useCallback(async () => {
-    console.log('walletInfo.aelfChainAddress', walletInfo.aelfChainAddress);
     const owner = chain === SupportedELFChainId.MAIN_NET ? walletInfo.aelfChainAddress : walletInfo.address;
     if (owner) {
       const { balance } = await GetBalance(
@@ -30,10 +29,10 @@ export const useAELFBalances = ({ symbol = 'ELF', chain }: { symbol?: string; ch
           chain,
         },
       );
-      console.log('myBalance---1', balance);
+      // const randomM = Math.random() * 10000000000;
+      console.log('sideBalance: ', balance);
+
       setBalance({ balance: new BigNumber(balance || 0) });
-    } else {
-      setBalance({ balance: new BigNumber(0) });
     }
   }, [chain, symbol, walletInfo.address, walletInfo.aelfChainAddress]);
   useEffect(() => {

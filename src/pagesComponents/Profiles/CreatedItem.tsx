@@ -26,19 +26,35 @@ export function CreatedItem() {
     setCollapsedFilter,
     size,
     setSize,
+    // sort,
+    // setSort,
+    // setSearchParam,
+    // SearchParam,
+    // searchInputValue,
+    // searchInputValueChange,
+  } = useHMService();
+
+  // const { filterList, filterSelect, clearAll, onFilterChange, collectionInfos, totalCount, tagList } = useFilterService(
+  //   'created',
+  //   walletAddress,
+  // );
+
+  const {
+    searchInputValue,
+    searchInputValueChange,
+    SearchParam,
     sort,
     setSort,
     setSearchParam,
-    SearchParam,
-    searchInputValue,
-    searchInputValueChange,
-  } = useHMService();
-
-  const { filterList, filterSelect, clearAll, onFilterChange, collectionInfos, totalCount, tagList } = useFilterService(
-    'created',
-    walletAddress,
-    SearchParam,
-  );
+    setSearchInputValue,
+    filterList,
+    filterSelect,
+    clearAll,
+    onFilterChange,
+    collectionInfos,
+    totalCount,
+    tagList,
+  } = useFilterService('created', walletAddress);
 
   const { walletInfo } = useGetState();
 
@@ -131,6 +147,7 @@ export function CreatedItem() {
             hasSearch={tagList.length > 0}
             clearFilter={() => {
               setSearchParam('');
+              setSearchInputValue('');
               clearAll();
             }}
           />
