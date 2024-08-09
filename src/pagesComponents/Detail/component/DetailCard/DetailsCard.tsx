@@ -20,7 +20,7 @@ export function DetailCard() {
   const { nftInfo } = detailInfo;
 
   const items = useMemo(() => {
-    const totalQuantity = BigNumber(nftInfo?.totalQuantity || 0)
+    const totalQuantity = BigNumber(100000000 || 0)
       .dividedBy(10 ** Number(nftInfo?.decimals || 0))
       .toFixed(0)
       .toString();

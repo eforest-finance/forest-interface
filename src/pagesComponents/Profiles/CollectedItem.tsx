@@ -19,32 +19,29 @@ export function CollectedItem() {
   const { wallet } = useWebLogin();
   const { walletAddress } = useProfilePageService();
 
+  const { isLG, collapsedFilter, setCollapsedFilter, size, setSize } = useHMService();
+
   const {
-    isLG,
-    collapsedFilter,
-    setCollapsedFilter,
-    size,
-    setSize,
-    sort,
-    setSort,
     searchInputValue,
     SearchParam,
     setSearchParam,
     searchInputValueChange,
-  } = useHMService();
-
-  const { filterList, filterSelect, clearAll, onFilterChange, collectionInfos, tagList } = useFilterService(
-    'collected',
-    walletAddress,
-    SearchParam,
-  );
+    sort,
+    setSort,
+    filterList,
+    filterSelect,
+    clearAll,
+    onFilterChange,
+    collectionInfos,
+    tagList,
+  } = useFilterService('collected', walletAddress);
 
   const requestParams = useMemo(() => {
     const params = getParamsFromFilter('collected', walletAddress, filterSelect);
     return {
       ...params,
       keyword: SearchParam,
-      sorting: sort,
+      Sorting: sort,
     };
   }, [filterSelect, walletAddress, SearchParam, sort]);
 

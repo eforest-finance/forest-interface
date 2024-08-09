@@ -8,13 +8,16 @@ import { useProfilePageService } from './hooks/useProfilePageService';
 import { useDataService } from './hooks/useDataService';
 import { useHMService } from './hooks/useHMService';
 import { ActivityListTable } from 'pagesComponents/ExploreItem/components/ActivityListTable';
+import { useFilterService } from './hooks/useFilterService';
 
 export function ActivityItem() {
   const { walletAddress } = useProfilePageService();
 
   const [activityType, setActivityType] = useState<(number | string)[]>([3, 6]);
 
-  const { SearchParam, searchInputValue, searchInputValueChange } = useHMService();
+  // const { SearchParam, searchInputValue, searchInputValueChange } = useHMService();
+
+  const { searchInputValue, SearchParam, searchInputValueChange } = useFilterService('activity', walletAddress);
 
   const requestParams = useMemo(() => {
     return {

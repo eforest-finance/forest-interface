@@ -17,6 +17,7 @@ import { CompositeNftInfosParams } from 'api/types';
 import { useDebounceFn } from 'ahooks';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { BoxSizeEnum } from './constant';
+import qs from 'query-string';
 
 interface IExploreItemsProps {
   nftCollectionId: string;
@@ -31,6 +32,9 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
   const router = useRouter();
 
   const searchParams = useSearchParams();
+  console.log('searchParams', searchParams, qs.parse(location.search));
+
+  const queryObj = (qs.parse(location.search) as any) || {};
   const listType = (searchParams.get('list') as unknown as BoxSizeEnum) || BoxSizeEnum.small;
 
   const [size, setSize] = useState<BoxSizeEnum>(listType);
@@ -40,8 +44,8 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
   const { filterList, filterSelect, traitsInfo, generationInfos, rarityInfos, onFilterChange, clearAll } =
     useFilterForItemService(nftCollectionId);
 
-  const [SearchParam, setSearchParam] = useState<string>('');
-  const [searchInputValue, setSearchInputValue] = useState<string>('');
+  const [SearchParam, setSearchParam] = useState<string>(filterSelect.SearchParam || '');
+  const [searchInputValue, setSearchInputValue] = useState<string>(SearchParam);
 
   const { run: changeSearchParam } = useDebounceFn(
     (searchKeyWord: string) => {
@@ -94,7 +98,7 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
         collapsed={collapsed}
         collapsedChange={() => setCollapsed(!collapsed)}
         searchParams={{
-          placeholder: 'Search for names or token symbols',
+          placeholder: 'Search by token id or name',
           value: searchInputValue,
           onChange: searchInputValueChange,
           onPressEnter: searchInputValueChange,
