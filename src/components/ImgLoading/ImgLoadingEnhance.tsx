@@ -28,6 +28,7 @@ export function ImageEnhance({ src = '', alt, onError, ...props }: ImageProps) {
   const placeholder = (
     <Skeleton.Image active={true} className={clsx(props.className, '!w-full !h-full')}></Skeleton.Image>
   );
+
   return (
     <Image
       loading="lazy"

@@ -1,5 +1,10 @@
 /* stylelint-disable no-descending-specificity */
 .wallet-menu {
+  & {
+    li:first-child {
+      @apply !bg-fillHoverBg;
+    }
+  }
   :global(.ant-menu-item) {
     @apply !h-auto;
   }
@@ -150,7 +155,7 @@
     }
     .view-asset-btn {
       span {
-        @apply !font-semibold !text-[var(--text-white)] !text-[16px];
+        @apply !font-semibold  !text-[16px];
       }
     }
   }
@@ -209,3 +214,24 @@
 .mobile-wallet-menu :global .ant-menu-item {
   @apply h-auto m-0 pt-[16px] pb-[8px] px-0;
 } */
+
+.toolTipWrapper {
+  @apply pb-0 rounded-md text-textPrimary w-[75px] h-[40px];
+
+  :global .ant-tooltip-content {
+    @apply w-full flex justify-center items-center;
+  }
+  :global .ant-tooltip-inner {
+    @apply text-textPrimary text-[16px] font-semibold;
+  }
+}
+
+.actionSheet {
+  :global .adm-action-sheet-button-item-wrapper {
+    &:first-child {
+      :global .adm-action-sheet-button-item {
+        @apply bg-fillHoverBg;
+      }
+    }
+  }
+}

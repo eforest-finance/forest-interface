@@ -1,12 +1,15 @@
-import { Badge, Drawer, Layout, Menu, Space } from 'antd';
+import { Badge, Drawer, Layout, Menu, Space, Button as AntdButton, Avatar } from 'antd';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
 import WalletMenu from './components/WalletMenu';
+import WalletIcon from 'assets/images/v2/wallet-02.svg';
+
+import { WalletActionSheet } from './components/WalletDropdown';
+
 import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '../../hooks/useTheme';
 
-import User from 'assets/images/user.svg';
 import Wallet from 'assets/images/wallet.svg';
 import Night from 'assets/images/night.svg';
 import Light from 'assets/images/light.svg';
@@ -17,13 +20,16 @@ import Explore from 'assets/images/explore.svg';
 import Create from 'assets/images/create.svg';
 import CreateCollection from 'assets/images/CreateCollection.svg';
 import Profile from 'assets/images/profile.svg';
-import MyCollection from 'assets/images/myCollection.svg';
 import Setting from 'assets/images/setting.svg';
 import Logout from 'assets/images/logoutMobile.svg';
 import DropIcon from 'assets/images/events/drops.svg';
 import Close from 'components/Close';
-import NotificationIcon from 'assets/images/v2/notification.svg';
 import NotificationIconMobile from 'assets/images/v2/notification_mobile.svg';
+import Bell from 'assets/images/v2/bell.svg';
+import DefalutIcon from 'assets/images/icon_default.png';
+import { ImageEnhance } from 'components/ImgLoading';
+
+import ELFICon from 'assets/images/explore/aelf.svg';
 
 import './style.css';
 import styles from './style.module.css';
@@ -44,6 +50,16 @@ import { fetchMessageList } from 'api/fetch';
 import { IMessage } from 'api/types';
 import { NotificationList } from './components/NotificationList';
 import useReceiveNotification from './hooks/useReceiveNotification';
+import Image from 'next/image';
+import useUserInfo from 'hooks/useUserInfo';
+import { SupportedELFChainId } from 'constants/chain';
+import { divDecimals } from 'utils/calculate';
+import { formatTokenPrice } from 'utils/format';
+
+import { useBalance } from './hooks/useBalance';
+import { setMainBalance, setSideBalance } from 'store/reducer/userInfo';
+import { dispatch } from 'store/store';
+import useTokenData from 'hooks/useTokenData';
 
 function Header() {
   const [theme, changeTheme] = useTheme();
@@ -54,6 +70,8 @@ function Header() {
   const { isLogin, login } = useCheckLoginAndToken();
   const { isSmallScreen } = useSelector(selectInfo);
   const [visible, setVisible] = useState(false);
+  const [actionVisible, setActionVisible] = useState(false);
+
   const [childVisible, setChildVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
   const [messagePageQuery, setMessagePageQuery] = useState({
@@ -64,9 +82,22 @@ function Header() {
   const { aelfInfo, walletInfo } = useGetState();
   const [notificationModalVisible, setNotificationModalVisible] = useState(false);
   const { notifications } = useReceiveNotification(walletInfo.address);
+  const { data: sideBalance = 0, run } = useBalance({ symbol: 'ELF', chain: aelfInfo?.curChain });
+  const { data: mainBalance = 0, run: runMainChain } = useBalance({
+    symbol: 'ELF',
+    chain: SupportedELFChainId.MAIN_NET,
+  });
+
+  const rate = useTokenData();
+
+  console.log('sideBalance:', sideBalance);
+
+  useEffect(() => {
+    dispatch(setSideBalance(sideBalance));
+    dispatch(setMainBalance(mainBalance));
+  }, [sideBalance, mainBalance]);
 
   const { walletType } = useWebLogin();
-
   const hidden = useMemo(() => {
     const path = pathname?.split('/')?.[1];
     if (hideHeaderPage.includes(path)) {
@@ -113,6 +144,10 @@ function Header() {
     });
   };
 
+  const handleLogin = () => {
+    login();
+  };
+
   const getMessageList = async () => {
     const { items, totalCount } = await fetchMessageList(messagePageQuery);
     setMessageList(items);
@@ -134,6 +169,22 @@ function Header() {
 
   const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
 
+  const getUserInfo = useUserInfo();
+
+  const {
+    userInfo: { userInfo },
+  } = useSelector((store) => store);
+  const profileImage = userInfo.profileImage;
+  console.log('money:', divDecimals(sideBalance, 8).valueOf());
+
+  useEffect(() => {
+    if (isLogin) {
+      getUserInfo();
+      run();
+      runMainChain();
+    }
+  }, [isLogin]);
+
   const toggleMessageReadStatus = () => {
     if (!messageList?.length) return;
     setMessageList(
@@ -144,19 +195,106 @@ function Header() {
     );
   };
 
+  console.log('profileImage:', profileImage);
+
   return (
     <Layout.Header
       className={`${hidden && 'hidden'} ${
         isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
       } w-[100%] !p-0 !bg-transparent`}>
       <div className={`${styles['marketplace-header']} ${isSmallScreen ? styles['mobile-header-wrapper'] : ''}`}>
-        <Link href={'/'}>
-          <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
-        </Link>
+        <div className="flex  justify-center items-center">
+          <Link href={'/'}>
+            <div className={`flex justify-center items-center mr-[64px] ${styles['forest-logo']}`}>{ProjectLogo}</div>
+          </Link>
+
+          {!isSmallScreen && (
+            <Space className="!gap-[85px]">
+              <Space className="!gap-[40px] flex">
+                <Link
+                  href="/collections"
+                  className={`${styles['nav-text']} ${pathname === '/collections' && styles['text-select']}`}>
+                  Collections
+                </Link>
+                <DropMenu
+                  getPopupContainer={(v) => v}
+                  className={`${styles['nav-text']} ${
+                    ['/create-item', '/create-collection', '/create-nft-ai'].includes(pathname) && styles['text-select']
+                  }`}
+                  overlay={
+                    <Menu
+                      items={[
+                        {
+                          label: (
+                            <AuthNavLink
+                              to={'/create-item'}
+                              className={pathname === '/create-item' ? '!text-brandNormal' : ''}>
+                              Create an Item
+                            </AuthNavLink>
+                          ),
+                          key: 'item',
+                        },
+                        {
+                          label: (
+                            <AuthNavLink
+                              to={'/create-collection'}
+                              className={pathname === '/create-collection' ? '!text-brandNormal' : ''}>
+                              Create a Collection
+                            </AuthNavLink>
+                          ),
+                          key: 'Collection',
+                        },
+                        {
+                          label: (
+                            <AuthNavLink
+                              to={'/create-nft-ai'}
+                              className={pathname === '/create-nft-ai' ? '!text-brandNormal' : ''}>
+                              AI NFT Generator
+                            </AuthNavLink>
+                          ),
+                          key: 'Collection',
+                        },
+                      ]}
+                    />
+                  }>
+                  <span className="!cursor-default">Create</span>
+                </DropMenu>
+                {aelfInfo.showDropEntrance ? (
+                  <Link
+                    href="/drops"
+                    className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
+                    Drops
+                  </Link>
+                ) : null}
+              </Space>
+            </Space>
+          )}
+        </div>
+
         {isSmallScreen ? (
           <>
-            <div className={`${styles.frame} flex justify-center items-center`} onClick={showDrawer}>
-              <Frame />
+            <div className={`${styles.frame} flex justify-center items-center`}>
+              {!isLogin && (
+                <AntdButton
+                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] rounded-lg bg-brandNormal"
+                  type="primary"
+                  onClick={handleLogin}>
+                  Login
+                </AntdButton>
+              )}
+
+              {isLogin && !isPortkeyApp() && (
+                <div className="flex items-center w-[32px] h-[32px] mr-[24px]">
+                  <WalletIcon
+                    onClick={() => {
+                      setActionVisible(true);
+                    }}
+                    className="!w-[24px] !h-[24px] "
+                  />
+                </div>
+              )}
+
+              <Frame onClick={showDrawer} />
             </div>
             <Drawer
               zIndex={300}
@@ -230,38 +368,7 @@ function Header() {
                       <NotificationList hiddenTitle={true} dataSource={messageList} />
                     </Drawer>
                   </p>
-                  {/* <p className="menu-item" onClick={onClose}>
-                    <AuthNavLink to={'/my-collections'}>
-                      <MyCollection /> <span>My Collections</span>
-                    </AuthNavLink>
-                  </p> */}
-                  <p className="menu-item" onClick={showChildDrawer}>
-                    <Wallet /> <span>Wallet</span>
-                    <Drawer
-                      className="header-drawer child-drawer"
-                      extra={
-                        <div className={`flex justify-center items-center ${styles['forest-logo']}`}>{ProjectLogo}</div>
-                      }
-                      closeIcon={<Close />}
-                      placement="right"
-                      destroyOnClose={true}
-                      onClose={onClose}
-                      open={childVisible}>
-                      <h1 className="drawer-title font-semibold">Wallet</h1>
-                      <WalletMenu
-                        onclick={() => {
-                          if (walletType === WalletType.portkey) {
-                            onClose();
-                          }
-                        }}
-                      />
-                      <div className="return-wrap">
-                        <Button type="default" onClick={onChildClose}>
-                          Return
-                        </Button>
-                      </div>
-                    </Drawer>
-                  </p>
+
                   <p className="menu-item" onClick={onClose}>
                     <a onClick={onNavigateSettings}>
                       <Setting /> <span>Settings</span>
@@ -299,120 +406,76 @@ function Header() {
             </Drawer>
           </>
         ) : (
-          <Space className="!gap-[85px]">
-            <Space className="!gap-[40px] flex">
-              <Link
-                href="/collections"
-                className={`${styles['nav-text']} ${pathname === '/collections' && styles['text-select']}`}>
-                Explore
-              </Link>
-              <DropMenu
-                getPopupContainer={(v) => v}
-                className={`${styles['nav-text']} ${
-                  ['/create-item', '/create-collection', '/create-nft-ai'].includes(pathname) && styles['text-select']
-                }`}
-                overlay={
-                  <Menu
-                    items={[
-                      {
-                        label: (
-                          <AuthNavLink
-                            to={'/create-item'}
-                            className={pathname === '/create-item' ? '!text-brandNormal' : ''}>
-                            Create an Item
-                          </AuthNavLink>
-                        ),
-                        key: 'item',
-                      },
-                      {
-                        label: (
-                          <AuthNavLink
-                            to={'/create-collection'}
-                            className={pathname === '/create-collection' ? '!text-brandNormal' : ''}>
-                            Create a Collection
-                          </AuthNavLink>
-                        ),
-                        key: 'Collection',
-                      },
-                      {
-                        label: (
-                          <AuthNavLink
-                            to={'/create-nft-ai'}
-                            className={pathname === '/create-nft-ai' ? '!text-brandNormal' : ''}>
-                            AI NFT Generator
-                          </AuthNavLink>
-                        ),
-                        key: 'Collection',
-                      },
-                    ]}
-                  />
-                }>
-                <span className="!cursor-default">Create</span>
-              </DropMenu>
-              {aelfInfo.showDropEntrance ? (
-                <Link
-                  href="/drops"
-                  className={`${styles['nav-text']} ${pathname === '/drops' && styles['text-select']}`}>
-                  Drops
-                </Link>
-              ) : null}
-            </Space>
-
-            <Space className={styles['icon-btn-wrap']}>
-              <DropMenu
-                overlay={<NotificationList dataSource={messageList} />}
-                dropMenuClassName=" border border-solid border-lineBorder w-[430px] bg-fillPageBg rounded-lg overflow-hidden"
-                placement="bottomCenter"
-                onOpenChange={(open: boolean) => {
-                  console.log('onOpenChange', open);
-                  if (!open && messageList.length) {
-                    toggleMessageReadStatus();
-                  }
-                }}
-                getPopupContainer={(v) => v}>
-                <Badge dot={true} count={unReadMessageCount}>
-                  <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
-                    <NotificationIcon />
+          <>
+            {isLogin ? (
+              <Space className={styles['icon-btn-wrap']}>
+                <DropMenu
+                  overlay={<NotificationList dataSource={messageList} />}
+                  dropMenuClassName=" border border-solid border-lineBorder w-[430px] bg-fillPageBg rounded-lg overflow-hidden"
+                  placement="bottomCenter"
+                  onOpenChange={(open: boolean) => {
+                    console.log('onOpenChange', open);
+                    if (!open && messageList.length) {
+                      toggleMessageReadStatus();
+                    }
+                  }}
+                  getPopupContainer={(v) => v}>
+                  <span
+                    className={`hover:bg-fillCardBg cursor-pointer justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
+                    <Bell className="!w-[24px] !h-[24px]" />
                   </span>
-                </Badge>
-              </DropMenu>
-
-              <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
-                <span className={`${styles['header-account-btn']} flex w-[40px] h-[40px]`}>
-                  <User />
-                </span>
-              </DropMenu>
-              <DropMenu
-                className={styles['header-wallet-custom']}
-                trigger={['hover']}
-                open={walletVisible}
-                destroyPopupOnHide={true}
-                getPopupContainer={(v) => v}
-                onOpenChange={(flag) => setWalletVisible(flag)}
-                overlay={<WalletMenu />}
-                placement="bottomRight">
-                <span className={`${styles['header-wallet-btn']} flex w-[40px] h-[40px]`}>
-                  <Wallet />
-                </span>
-              </DropMenu>
-              <div
-                onClick={() => {
-                  changeTheme(theme === 'dark' ? 'light' : 'dark');
-                }}>
-                {theme !== 'dark' ? (
-                  <div className={`${styles['header-theme-btn']} flex w-[40px] h-[40px]`}>
-                    <Night />
+                </DropMenu>
+                <DropMenu
+                  className=""
+                  trigger={['hover']}
+                  open={walletVisible}
+                  // open={true}
+                  destroyPopupOnHide={true}
+                  getPopupContainer={(v) => v}
+                  onOpenChange={(flag) => setWalletVisible(flag)}
+                  overlay={<WalletMenu />}
+                  placement="bottomRight">
+                  <div className="cursor-pointer hover:bg-fillCardBg flex items-center border border-solid border-lineBorder py-[4px] px-[12px] rounded-lg h-[48px] ">
+                    <ELFICon className="mr-[12px] w-[24px] h-[24px] justify-center items-center" />
+                    <span className="text-[16px] font-medium">
+                      {formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF
+                    </span>
                   </div>
-                ) : (
-                  <div className={`${styles['header-theme-btn']} flex w-[40px] h-[40px]`}>
-                    <Light />
-                  </div>
-                )}
-              </div>
-            </Space>
-          </Space>
+                </DropMenu>
+                <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
+                  <span
+                    className={`cursor-pointer hover:bg-fillCardBg justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
+                    {profileImage ? (
+                      <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden bg-fillHoverBg">
+                        <Avatar size={24} src={profileImage} />
+                      </div>
+                    ) : (
+                      <Image
+                        src={DefalutIcon}
+                        alt=""
+                        className="!w-[24px] !h-[24px] rounded-md overflow-hidden bg-fillHoverBg"
+                      />
+                    )}
+                  </span>
+                </DropMenu>
+              </Space>
+            ) : (
+              <AntdButton
+                className="w-[103px] h-[48px] font-medium text-[16px] rounded-lg bg-brandNormal"
+                type="primary"
+                onClick={handleLogin}>
+                Login
+              </AntdButton>
+            )}
+          </>
         )}
       </div>
+      <WalletActionSheet
+        visible={actionVisible}
+        onClose={() => {
+          setActionVisible(false);
+        }}
+      />
     </Layout.Header>
   );
 }

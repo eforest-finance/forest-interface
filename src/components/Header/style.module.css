@@ -18,7 +18,7 @@
 }
 
 .marketplace-header .nav-text:hover {
-  @apply text-[var(--brand-light)];
+  @apply text-textSecondary;
 }
 
 .marketplace-header .nav-text.text-select {
@@ -26,28 +26,28 @@
 }
 
 .marketplace-header .icon-btn-wrap {
-  @apply !gap-[42.8px] flex items-center;
+  @apply !gap-[24px] flex items-center;
 }
 
-.marketplace-header .icon-btn-wrap :global .ant-space-item {
+/* .marketplace-header .icon-btn-wrap :global .ant-space-item {
   @apply w-[40px] h-[40px];
-}
+} */
 
 .marketplace-header.mobile-header-wrapper .frame svg {
-  @apply w-[32px] h-[32px] fill-[var(--color-header)];
+  @apply w-[32px] h-[32px];
 }
 .marketplace-header.mobile-header-wrapper .forest-logo svg {
   @apply w-[80px] h-[16px];
 }
 
-.marketplace-header .icon-btn-wrap :global .ant-space-item svg {
-  @apply w-[40px] h-[40px];
-}
+/* .marketplace-header .icon-btn-wrap :global .ant-space-item svg {
+  @apply w-[40px] h-[40px] flex;
+} */
 
 .marketplace-header .header-account-btn,
 .marketplace-header .header-wallet-btn,
 .marketplace-header .header-theme-btn {
-  @apply fill-[var(--color-header)];
+  /* @apply fill-[var(--color-header)]; */
 
   transition: all 0.3s;
 }
@@ -55,7 +55,7 @@
 .marketplace-header .header-account-btn *,
 .marketplace-header .header-wallet-btn *,
 .marketplace-header .header-theme-btn * {
-  @apply fill-[var(--color-header)];
+  /* @apply fill-[var(--color-header)]; */
 }
 .marketplace-header .header-account-btn:hover,
 .marketplace-header .header-wallet-btn:hover,
