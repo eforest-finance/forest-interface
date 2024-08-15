@@ -140,7 +140,7 @@ export default ({ items }: { items: TrendingCollectionItem[] }) => {
             <ImageEnhance
               width={'100%'}
               className=" w-full aspect-square overflow-hidden relative  transition-all"
-              src={item.previewImage}
+              src={item.logoImage}
             />
           </div>
 

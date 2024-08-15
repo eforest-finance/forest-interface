@@ -69,7 +69,7 @@
     @apply text-[18px] leading-[24px];
   }
   .header-drawer .ant-drawer-body .menu-wrap .menu-item span {
-    @apply ml-[18.375px] text-[18px] flex items-center leading-[0];
+    @apply text-[18px] flex items-center leading-[0];
   }
   .header-drawer .ant-drawer-body .menu-wrap .menu-item span.seconde {
     @apply text-[var(--color-secondary)] font-normal ml-[50px];

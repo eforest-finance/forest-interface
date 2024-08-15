@@ -82,6 +82,8 @@ function Header() {
 
   const rate = useTokenData();
 
+  const [headerTheme, setHeaderTheme] = useState(false);
+
   console.log('sideBalance:', sideBalance);
 
   useEffect(() => {
@@ -167,7 +169,6 @@ function Header() {
     userInfo: { userInfo },
   } = useSelector((store) => store);
   const profileImage = userInfo.profileImage;
-  console.log('money:', divDecimals(sideBalance, 8).valueOf());
 
   useEffect(() => {
     if (isLogin) {
@@ -176,6 +177,18 @@ function Header() {
       runMainChain();
     }
   }, [isLogin]);
+
+  useEffect(() => {
+    window.addEventListener(
+      'scroll',
+      () => {
+        const isWhite = document.body.scrollTop > 580;
+        setHeaderTheme(isWhite);
+        console.log(document.body.scrollTop);
+      },
+      true,
+    );
+  }, []);
 
   const toggleMessageReadStatus = () => {
     if (!messageList?.length) return;
@@ -187,11 +200,11 @@ function Header() {
     );
   };
 
-  console.log('profileImage:', profileImage);
-
   return (
     <Layout.Header
-      className={`${isHomePage && 'fixed'} top-0 z-[999] ${hidden && 'hidden'} ${
+      className={`${isHomePage ? `${headerTheme ? styles['white-header'] : styles['black-header']}` : ''}  ${
+        isHomePage && styles.homeHeader
+      } top-0 z-[999] ${hidden && 'hidden'} ${
         isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
       } w-[100%] !p-0 !bg-transparent`}>
       <div
@@ -268,10 +281,10 @@ function Header() {
 
         {isSmallScreen ? (
           <>
-            <div className={`${styles.frame} flex justify-center items-center`}>
+            <div className={` flex justify-center items-center`}>
               {!isLogin && (
                 <AntdButton
-                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-lg bg-brandNormal"
+                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-md bg-brandNormal"
                   type="primary"
                   onClick={handleLogin}>
                   Login
@@ -281,70 +294,66 @@ function Header() {
               {isLogin && !isPortkeyApp() && (
                 <div className="flex items-center w-[32px] h-[32px] mr-[24px]">
                   <WalletIcon
+                    className={`${styles.walletIcon} !w-[24px] !h-[24px] `}
                     onClick={() => {
                       setActionVisible(true);
                     }}
-                    className="!w-[24px] !h-[24px] "
                   />
                 </div>
               )}
 
-              <Frame onClick={showDrawer} />
+              <Frame className={`${styles.frame} !w-[24px] !h-[24px] `} onClick={showDrawer} />
             </div>
             <Drawer
               zIndex={300}
               className="header-drawer"
-              extra={
-                <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>
-              }
+              extra={<div className={`flex justify-center items-center font-semibold text-[20px] `}>Menu</div>}
               placement="right"
               closeIcon={<Close />}
               onClose={onClose}
               open={visible}>
               <div>
-                <div className="menu-wrap" onClick={onClose}>
-                  <p className="menu-item !mb-0">
-                    <Link href={'/collections'}>
-                      <span>Explore</span>
-                    </Link>
-                  </p>
-
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                    }}>
-                    <Collapse className="create-collapse" bordered={false} defaultActiveKey={['1']} ghost>
-                      <Panel header={<div className={'menu-item'}>Create</div>} key="1" showArrow={false}>
-                        <AuthNavLink to="/create-item" className="create-icon">
-                          <span className="menu-item-second">Create an Item</span>
-                        </AuthNavLink>
-                        <AuthNavLink to="/create-collection" className="create-collection-icon">
-                          <span className="menu-item-second">Create a Collection</span>
-                        </AuthNavLink>
-
-                        <AuthNavLink to="/create-nft-ai" className="create-icon">
-                          <span className="menu-item-second">AI NFT Generator</span>
-                        </AuthNavLink>
-                      </Panel>
-                    </Collapse>
-                  </div>
-
-                  {aelfInfo.showDropEntrance ? (
-                    <p className="menu-item">
-                      <Link href={'/drops'}>
-                        <span>Drops</span>
-                      </Link>
-                    </p>
-                  ) : null}
+                <div className="h-[64px] flex items-center">
+                  <Link href={'/collections'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Collections</div>
+                  </Link>
                 </div>
+                <div className="text-[18px] h-[64px] font-medium flex items-center">Create</div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-item'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Create an Item</div>
+                  </Link>
+                </div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-collection'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Create a Collection</div>
+                  </Link>
+                </div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-nft-ai'}>
+                    <div className="text-[18px] text-textPrimary font-medium">AI NFT Generator</div>
+                  </Link>
+                </div>
+
+                {aelfInfo.showDropEntrance ? (
+                  <div className="h-[64px] flex items-center">
+                    <Link href={'/drops'}>
+                      <div className="text-[18px] text-textPrimary font-medium">Drops</div>
+                    </Link>
+                  </div>
+                ) : null}
+
+                <div className="h-[64px] flex items-center">
+                  <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
+                    <div className="text-textPrimary">Profile</div>
+                  </AuthNavLink>
+                </div>
+
                 <div className="menu-wrap">
-                  <p className="menu-item" onClick={onClose}>
-                    <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
-                      <span>Profile</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item" onClick={showNotification}>
+                  <div className="menu-item" onClick={showNotification}>
                     <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0"></Badge>
                     <span>Notifications</span>
                     <Drawer
@@ -363,7 +372,7 @@ function Header() {
                       open={notificationModalVisible}>
                       <NotificationList hiddenTitle={true} dataSource={messageList} />
                     </Drawer>
-                  </p>
+                  </div>
 
                   <p className="menu-item" onClick={onClose}>
                     <a onClick={onNavigateSettings}>
@@ -397,8 +406,8 @@ function Header() {
                     }
                   }}
                   getPopupContainer={(v) => v}>
-                  <span className={` cursor-pointer justify-center items-center flex w-[48px] h-[48px] rounded-lg`}>
-                    <Bell className="!w-[24px] !h-[24px]" />
+                  <span className={`${styles['bell']} `}>
+                    <Bell className={` !w-[24px] !h-[24px]`} />
                   </span>
                 </DropMenu>
                 <DropMenu
@@ -411,7 +420,7 @@ function Header() {
                   onOpenChange={(flag) => setWalletVisible(flag)}
                   overlay={<WalletMenu />}
                   placement="bottomRight">
-                  <div className="bg-[rgba(255, 255, 255, 0.10)]; cursor-pointer  flex items-center py-[4px] px-[12px] rounded-lg h-[48px] ">
+                  <div className={styles['balance']}>
                     <ELFICon className="mr-[12px] w-[24px] h-[24px] justify-center items-center" />
                     <span className="text-[16px] font-medium">
                       {formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF

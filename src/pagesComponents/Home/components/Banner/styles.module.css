@@ -9,3 +9,9 @@
   /* background: linear-gradient(transparent, 20%, white); */
   filter: blur(50px);
 }
+
+.current {
+  transition: all 0.25s ease-in;
+
+  transform: translateY(-16px);
+}

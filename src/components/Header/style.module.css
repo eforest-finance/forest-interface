@@ -1,9 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 .marketplace-header {
-  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-transparent;
+  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-white;
   @apply flex items-center justify-between;
-
-  backdrop-filter: blur(6px);
 }
 
 .mobile-forest-logo svg {
@@ -87,6 +85,76 @@
     @apply !w-auto !h-auto;
     path {
       @apply !fill-[var(--color-header)];
+    }
+  }
+}
+
+.bell {
+  @apply cursor-pointer justify-center items-center flex w-[48px] h-[48px] rounded-lg;
+}
+
+.balance {
+  @apply bg-[rgba(255,255,255,0.10)] cursor-pointer  flex items-center py-[4px] px-[12px] rounded-lg h-[48px];
+}
+
+.homeHeader {
+  @apply fixed;
+
+  .marketplace-header {
+    @apply bg-transparent;
+    backdrop-filter: blur(6px);
+  }
+}
+
+.white-header {
+  .marketplace-header {
+    @apply bg-white;
+  }
+
+  .nav-text {
+    @apply text-textPrimary;
+  }
+
+  span {
+    @apply text-textPrimary;
+  }
+
+  button {
+    span {
+      @apply !text-white;
+    }
+  }
+
+  .bell,
+  .balance {
+    @apply border border-solid border-lineBorder;
+  }
+}
+
+.black-header {
+  .marketplace-header {
+    @apply bg-transparent;
+  }
+
+  .nav-text {
+    @apply text-white;
+  }
+
+  span {
+    @apply text-white;
+  }
+
+  .bell,
+  .walletIcon,
+  .frame {
+    path {
+      @apply stroke-white;
+    }
+  }
+
+  .frame {
+    path {
+      @apply fill-white;
     }
   }
 }

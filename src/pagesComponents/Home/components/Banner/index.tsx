@@ -1,7 +1,7 @@
 import { Carousel, Image, Skeleton, Button } from 'antd5/';
 import styles from './styles.module.css';
 import { IBanner, IBannerItem } from 'api/types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import NextImage from 'next/image';
 
@@ -16,6 +16,8 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
 
   const nav = useRouter();
 
+  const [current, setCurrent] = useState<number>(0);
+
   return (
     <div className="relative w-[100vw] h-[584px]  mdl:h-[720px]  overflow-hidden group">
       <Carousel
@@ -26,12 +28,23 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
         effect="fade"
         autoplay
         autoplaySpeed={5000}
+        afterChange={(current: number) => {
+          setCurrent(current);
+        }}
         dots={false}>
         {list.map((item, index: number) => (
           <div key={`list-${index}`} className="block w-[100vw] h-[584px] mdl:w-full mdl:h-full">
             {item.type === 'video' ? (
               <div className="w-full h-full flex justify-center items-center overflow-hidden">
-                <video className=" object-cover min-h-full min-w-full" muted={true} playsInline autoPlay loop={true}>
+                <video
+                  className="object-cover min-h-full min-w-full"
+                  muted={true}
+                  /* eslint-disable */
+                  webkit-playsinline={true}
+                  /* eslint-disable */
+                  playsInline={true}
+                  autoPlay
+                  loop={true}>
                   <source src={item.src} />
                 </video>
               </div>
@@ -70,13 +83,14 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
         ))}
       </Carousel>
 
-      <NextImage className="absolute bottom-0 w-full" src={Mask} alt="" />
-      {/* <div className={styles.filter} /> */}
+      <NextImage className="absolute bottom-[-1px] w-full" src={Mask} alt="" />
 
       {list.length > 1 && (
         <div className="w-[100vw] mdl:w-auto flex mdl:block justify-around absolute z-10 bottom-[24px] mdl:bottom-[40px]  mdl:right-0   mdl:mr-[40px]">
           {list.map((item: IBannerItem, index: number) => (
-            <div key={`view-list-${index}`} className="relative inline-block ">
+            <div
+              key={`view-list-${index}`}
+              className={`${index === current ? styles.current : ''} relative inline-block`}>
               <Image
                 onClick={() => {
                   sliderRef.current.goTo(index);
