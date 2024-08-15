@@ -1,4 +1,4 @@
-import { Badge, Drawer, Layout, Menu, Space, Button as AntdButton, Avatar } from 'antd';
+import { Badge, Drawer, Layout, Menu, Space, Button as AntdButton, Avatar, Collapse } from 'antd';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
@@ -10,21 +10,10 @@ import { WalletActionSheet } from './components/WalletDropdown';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '../../hooks/useTheme';
 
-import Wallet from 'assets/images/wallet.svg';
-import Night from 'assets/images/night.svg';
-import Light from 'assets/images/light.svg';
 import Logo from 'assets/images/night/forestLogo.svg';
 import LogoLight from 'assets/images/light/forestLogo.svg';
 import Frame from 'assets/images/Frame.svg';
-import Explore from 'assets/images/explore.svg';
-import Create from 'assets/images/create.svg';
-import CreateCollection from 'assets/images/CreateCollection.svg';
-import Profile from 'assets/images/profile.svg';
-import Setting from 'assets/images/setting.svg';
-import Logout from 'assets/images/logoutMobile.svg';
-import DropIcon from 'assets/images/events/drops.svg';
 import Close from 'components/Close';
-import NotificationIconMobile from 'assets/images/v2/notification_mobile.svg';
 import Bell from 'assets/images/v2/bell.svg';
 import DefalutIcon from 'assets/images/icon_default.png';
 import { ImageEnhance } from 'components/ImgLoading';
@@ -61,10 +50,13 @@ import { setMainBalance, setSideBalance } from 'store/reducer/userInfo';
 import { dispatch } from 'store/store';
 import useTokenData from 'hooks/useTokenData';
 
+const { Panel } = Collapse;
+
 function Header() {
   const [theme, changeTheme] = useTheme();
   const nav = useRouter();
   const pathname = usePathname();
+  const isHomePage = pathname?.split('/')?.[1] === '';
 
   const { logout } = useContractConnect();
   const { isLogin, login } = useCheckLoginAndToken();
@@ -199,10 +191,13 @@ function Header() {
 
   return (
     <Layout.Header
-      className={`${hidden && 'hidden'} ${
+      className={`${isHomePage && 'fixed'} top-0 z-[999] ${hidden && 'hidden'} ${
         isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
       } w-[100%] !p-0 !bg-transparent`}>
-      <div className={`${styles['marketplace-header']} ${isSmallScreen ? styles['mobile-header-wrapper'] : ''}`}>
+      <div
+        className={`${styles['marketplace-header']} ${!isHomePage && 'fixed'} ${
+          isSmallScreen ? styles['mobile-header-wrapper'] : ''
+        }`}>
         <div className="flex  justify-center items-center">
           <Link href={'/'}>
             <div className={`flex justify-center items-center mr-[64px] ${styles['forest-logo']}`}>{ProjectLogo}</div>
@@ -276,7 +271,7 @@ function Header() {
             <div className={`${styles.frame} flex justify-center items-center`}>
               {!isLogin && (
                 <AntdButton
-                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] rounded-lg bg-brandNormal"
+                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-lg bg-brandNormal"
                   type="primary"
                   onClick={handleLogin}>
                   Login
@@ -308,34 +303,37 @@ function Header() {
               open={visible}>
               <div>
                 <div className="menu-wrap" onClick={onClose}>
-                  <p className="menu-item">
+                  <p className="menu-item !mb-0">
                     <Link href={'/collections'}>
-                      <Explore /> <span>Explore</span>
+                      <span>Explore</span>
                     </Link>
                   </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-item" className="create-icon">
-                      <Create />
-                      <span>Create an Item</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-collection" className="create-collection-icon">
-                      <CreateCollection />
-                      <span>Create a Collection</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-nft-ai" className="create-icon">
-                      <Create />
-                      <span>AI NFT Generator</span>
-                    </AuthNavLink>
-                  </p>
+
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                    }}>
+                    <Collapse className="create-collapse" bordered={false} defaultActiveKey={['1']} ghost>
+                      <Panel header={<div className={'menu-item'}>Create</div>} key="1" showArrow={false}>
+                        <AuthNavLink to="/create-item" className="create-icon">
+                          <span className="menu-item-second">Create an Item</span>
+                        </AuthNavLink>
+                        <AuthNavLink to="/create-collection" className="create-collection-icon">
+                          <span className="menu-item-second">Create a Collection</span>
+                        </AuthNavLink>
+
+                        <AuthNavLink to="/create-nft-ai" className="create-icon">
+                          <span className="menu-item-second">AI NFT Generator</span>
+                        </AuthNavLink>
+                      </Panel>
+                    </Collapse>
+                  </div>
 
                   {aelfInfo.showDropEntrance ? (
                     <p className="menu-item">
                       <Link href={'/drops'}>
-                        <DropIcon /> <span>Drops</span>
+                        <span>Drops</span>
                       </Link>
                     </p>
                   ) : null}
@@ -343,13 +341,11 @@ function Header() {
                 <div className="menu-wrap">
                   <p className="menu-item" onClick={onClose}>
                     <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
-                      <Profile /> <span>Profile</span>
+                      <span>Profile</span>
                     </AuthNavLink>
                   </p>
                   <p className="menu-item" onClick={showNotification}>
-                    <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0">
-                      <NotificationIconMobile width={32} height={32} />
-                    </Badge>
+                    <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0"></Badge>
                     <span>Notifications</span>
                     <Drawer
                       className="header-drawer child-drawer"
@@ -371,25 +367,7 @@ function Header() {
 
                   <p className="menu-item" onClick={onClose}>
                     <a onClick={onNavigateSettings}>
-                      <Setting /> <span>Settings</span>
-                    </a>
-                  </p>
-                  <p
-                    className="menu-item"
-                    onClick={() => {
-                      changeTheme(theme === 'dark' ? 'light' : 'dark');
-                    }}>
-                    <a>
-                      {theme !== 'dark' ? (
-                        <div className="header-theme-btn flex items-center">
-                          <Night />
-                        </div>
-                      ) : (
-                        <div className="header-theme-btn flex items-center">
-                          <Light />
-                        </div>
-                      )}
-                      <span>{theme !== 'dark' ? 'Night' : 'Daytime'}</span>
+                      <span>Settings</span>
                     </a>
                   </p>
                 </div>
@@ -397,7 +375,6 @@ function Header() {
                 {!isPortkeyApp() && isLogin ? (
                   <div className="menu-wrap">
                     <p className="menu-item" onClick={() => logout()}>
-                      <Logout />
                       <span>Log out</span>
                     </p>
                   </div>
@@ -420,8 +397,7 @@ function Header() {
                     }
                   }}
                   getPopupContainer={(v) => v}>
-                  <span
-                    className={`hover:bg-fillCardBg cursor-pointer justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
+                  <span className={` cursor-pointer justify-center items-center flex w-[48px] h-[48px] rounded-lg`}>
                     <Bell className="!w-[24px] !h-[24px]" />
                   </span>
                 </DropMenu>
@@ -435,7 +411,7 @@ function Header() {
                   onOpenChange={(flag) => setWalletVisible(flag)}
                   overlay={<WalletMenu />}
                   placement="bottomRight">
-                  <div className="cursor-pointer hover:bg-fillCardBg flex items-center border border-solid border-lineBorder py-[4px] px-[12px] rounded-lg h-[48px] ">
+                  <div className="bg-[rgba(255, 255, 255, 0.10)]; cursor-pointer  flex items-center py-[4px] px-[12px] rounded-lg h-[48px] ">
                     <ELFICon className="mr-[12px] w-[24px] h-[24px] justify-center items-center" />
                     <span className="text-[16px] font-medium">
                       {formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF
@@ -443,8 +419,7 @@ function Header() {
                   </div>
                 </DropMenu>
                 <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
-                  <span
-                    className={`cursor-pointer hover:bg-fillCardBg justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
+                  <span className={`cursor-pointer  justify-center items-center flex w-[48px] h-[48px] rounded-lg`}>
                     {profileImage ? (
                       <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden bg-fillHoverBg">
                         <Avatar size={24} src={profileImage} />
@@ -461,7 +436,7 @@ function Header() {
               </Space>
             ) : (
               <AntdButton
-                className="w-[103px] h-[48px] font-medium text-[16px] rounded-lg bg-brandNormal"
+                className="w-[103px] h-[48px] font-medium text-[16px] !rounded-lg bg-brandNormal"
                 type="primary"
                 onClick={handleLogin}>
                 Login

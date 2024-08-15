@@ -1,7 +1,3 @@
-.seed-item-card {
-  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[32px] bg-[var(--bg-home)] cursor-pointer hover:bg-[var(--bg-home-hover)];
-}
-
 .adaptive {
   @apply rounded-md relative;
   .seed-text {
@@ -15,4 +11,121 @@
 
 .fiv {
   zoom: 42%;
+}
+
+.wrapper {
+  @apply overflow-hidden  px-[24px] mdl:px-[40px] w-full  mdl:w-[calc(100vw)];
+}
+
+.scroll {
+  position: relative;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  /* mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent); */
+  /* -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent); */
+}
+
+.scrollRight {
+  position: relative;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  /* mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent); */
+  /* -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent); */
+}
+
+.seed-item-card {
+  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[24px] mdl:p-[32px] bg-[var(--bg-home)] cursor-pointer hover:bg-[var(--bg-home-hover)];
+  @apply w-[240px] mdl:w-[444px] h-[226px] mdl:h-[202px] mr-[8px] mdl:m-[8px] inline-block flex-shrink-0;
+
+  &:hover {
+    box-shadow: 0px 4px 20px 0px rgba(64, 64, 64, 0.1);
+  }
+}
+
+.scroll,
+.scrollRight {
+}
+
+.track-first,
+.track-second {
+  @apply flex-shrink-0;
+}
+
+.scroll {
+  .track-first {
+    white-space: nowrap;
+    animation: animate var(--t) linear infinite;
+    animation-delay: calc(var(--t) * -1);
+  }
+}
+
+.scrollRight {
+  .track-first {
+    white-space: nowrap;
+    animation: animateR1 var(--t) linear infinite;
+    animation-delay: calc(var(--t) * -1);
+  }
+}
+
+@keyframes animate {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes animateR1 {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.scroll {
+  .track-second {
+    animation: animate2 var(--t) linear infinite;
+    animation-delay: calc(var(--t) / -2);
+  }
+}
+
+.scrollRight {
+  .track-second {
+    animation: animateR2 var(--t) linear infinite;
+    animation-delay: calc(var(--t) / -2);
+  }
+}
+
+@keyframes animateR2 {
+  0% {
+    transform: translateX(-200%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes animate2 {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+.scroll:hover,
+.scrollRight:hover {
+  span {
+    animation-play-state: paused;
+  }
 }

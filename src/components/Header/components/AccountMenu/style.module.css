@@ -1,14 +1,31 @@
+.menu {
+  @apply !py-[8px];
+
+  :global .ant-dropdown-menu-item {
+    @apply w-[188px] !h-[52px] !px-[8px] py-0 !border-0 bg-red-700;
+
+    .ant-dropdown-menu-title-content {
+      @apply w-full h-full hover:bg-fillHoverBg rounded-[8px];
+
+      span,
+      a {
+        @apply hover:!text-textPrimary;
+      }
+    }
+  }
+}
+
 .nav-icon {
-  @apply flex items-center;
+  @apply flex items-center px-[8px];
   svg {
-    @apply !w-[24px] !h-[24px] !fill-none !mr-[11px];
+    /* @apply !w-[24px] !h-[24px] !fill-none !mr-[11px]; */
 
     transition: all 0.3s;
 
-    path,
+    /* path,
     circle,
     span {
       @apply !fill-[var(--color-menu)] !text-[var(--color-menu)];
-    }
+    } */
   }
 }

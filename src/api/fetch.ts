@@ -80,6 +80,7 @@ import {
   IOfferMadeParams,
   IReceivedOfferParams,
   IMyHoLdCollectionRes,
+  ITrendingCollectionsRes,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -402,6 +403,10 @@ export const fetchMessageList = async (params?: { skipCount?: number; maxResultC
 
 export const fetchAvatar = async () => {
   return request.get<string>('app/icon/random-image');
+};
+
+export const fetchTrendingCollections = async () => {
+  return request.get<ITrendingCollectionsRes>('app/nft/trending-collections');
 };
 
 export const fetchNFTCollectionMyHold = async (params: IMyHold) => {

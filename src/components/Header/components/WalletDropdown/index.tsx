@@ -224,7 +224,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
               </Tooltip>
             </div>
 
-            <div className="flex justify-center items-center flex-col text-[14px] font-medium">
+            <div className="flex justify-center items-end flex-col text-[14px] font-medium">
               <div className="flex text-textPrimary items-center w-full">
                 <Image className="w-[16px] h-[16px] mr-[8px]" src={ELF} alt="icon" />
                 <p className="text-[16px]">{formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF</p>
@@ -262,7 +262,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
               </Tooltip>
             </div>
 
-            <div className="flex justify-center items-center flex-col text-[14px] font-medium">
+            <div className="flex justify-center items-end flex-col text-[14px] font-medium">
               <div className="flex text-textPrimary  items-center w-full">
                 <Image className="w-[16px] h-[16px] mr-[8px]" src={ELF} alt="icon" />
                 <p className="text-[16px]">{formatTokenPrice(divDecimals(aelfBalance, 8).valueOf())} ELF</p>

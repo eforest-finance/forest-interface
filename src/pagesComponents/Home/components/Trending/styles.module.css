@@ -1,0 +1,34 @@
+.poster-shadow {
+  @apply text-white w-full bg-fillMask1 h-[138px] absolute z-[1] bottom-0 left-0 flex justify-center items-center;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+.CollectionItem {
+  @apply mr-[20px];
+  transition: all 0.25s ease-in;
+
+  &:hover {
+    transform: translateY(-16px);
+  }
+}
+
+.arrow {
+  @apply w-[40px] h-[40px] rounded-[50%] flex items-center justify-center cursor-pointer border-[1px] border-solid border-[var(--line-border)] bg-[var(--swiper-bg)];
+  svg {
+    * {
+      @apply stroke-[var(--text-item)];
+    }
+  }
+}
+
+.leftArrow {
+  @apply absolute top-[50%]  translate-y-[-50%] left-[-20px] z-20;
+
+  backdrop-filter: blur(5px);
+}
+
+.rightArrow {
+  @apply absolute top-[50%] translate-y-[-50%] right-[-20px] z-20;
+
+  backdrop-filter: blur(5px);
+}
