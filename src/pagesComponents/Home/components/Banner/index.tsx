@@ -3,6 +3,10 @@ import styles from './styles.module.css';
 import { IBanner, IBannerItem } from 'api/types';
 import { useRef } from 'react';
 
+import NextImage from 'next/image';
+
+import Mask from 'assets/images/v2/mask.png';
+
 import { useRouter } from 'next/navigation';
 
 const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBannerItem> }) => {
@@ -65,7 +69,9 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
           </div>
         ))}
       </Carousel>
-      <div className={styles.filter} />
+
+      <NextImage className="absolute bottom-0 w-full" src={Mask} alt="" />
+      {/* <div className={styles.filter} /> */}
 
       {list.length > 1 && (
         <div className="w-[100vw] mdl:w-auto flex mdl:block justify-around absolute z-10 bottom-[24px] mdl:bottom-[40px]  mdl:right-0   mdl:mr-[40px]">
