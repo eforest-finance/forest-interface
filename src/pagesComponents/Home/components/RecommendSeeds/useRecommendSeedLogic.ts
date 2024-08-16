@@ -34,7 +34,7 @@ const useRecommendSeedLogic = () => {
     run({
       SeedTypes: [3],
       SkipCount: 0,
-      MaxResultCount: 8,
+      MaxResultCount: 16,
     });
   });
   useEffect(() => {
@@ -42,26 +42,35 @@ const useRecommendSeedLogic = () => {
   }, [data]);
 
   useEffect(() => {
-    if (isMD) {
-      setSeedList(originData.slice(0, 2));
-      return;
-    }
-    if (!isMD && isXL) {
-      setSeedList(originData.slice(0, 4));
-      return;
-    }
-    if (!isXL && is4XL) {
-      setSeedList(originData.slice(0, 6));
-      return;
-    }
-    if (!is4XL) {
-      setSeedList(originData);
-    }
+    setSeedList(originData);
+
+    // if (isMD) {
+    //   setSeedList(originData.slice(0, 2));
+    //   return;
+    // }
+    // if (!isMD && isXL) {
+    //   setSeedList(originData.slice(0, 4));
+    //   return;
+    // }
+    // if (!isXL && is4XL) {
+    //   setSeedList(originData.slice(0, 6));
+    //   return;
+    // }
+    // if (!is4XL) {
+    //   setSeedList(originData);
+    // }
   }, [originData, isMD, isXL]);
 
   const goTsm = () => {
     jumpTSM('/');
   };
+
+  const goMedia = () => {
+    window.open(
+      'https://medium.com/@NFT_Forest_NFT/symbol-market-launched-on-aelf-blockchain-enabling-users-to-craft-tokens-and-nft-collections-52c8bcf8f055',
+    );
+  };
+
   const gotTsmSeedDetail = (tokenType: number, symbol: string) => {
     jumpTSM(`/${TOKEN_TYPES[tokenType]}/${String(symbol).toUpperCase()}`);
   };
@@ -69,6 +78,7 @@ const useRecommendSeedLogic = () => {
   return {
     seedList,
     goTsm,
+    goMedia,
     gotTsmSeedDetail,
   };
 };

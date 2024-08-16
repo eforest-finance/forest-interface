@@ -49,16 +49,16 @@ export function NotificationList({ hiddenTitle, dataSource }: INotificationListP
                   <ImageEnhance src={item.image} className=" w-[72px] h-[72px] rounded-md" />
                 </Badge>
                 <div className="flex flex-col ml-4 w-[144px]">
-                  <Typography.Text ellipsis={true} className="font-semibold text-sm text-textPrimary">
+                  <Typography.Text ellipsis={true} className="font-semibold text-sm !text-textPrimary">
                     {item.title}
                   </Typography.Text>
-                  <Typography.Text ellipsis={true} className=" font-medium text-sm text-textSecondary">
+                  <Typography.Text ellipsis={true} className=" font-medium text-sm !text-textSecondary">
                     {item.body}
                   </Typography.Text>
-                  <span className=" text-xs text-textSecondary">{formatTime(item.ctime)}</span>
+                  <span className=" text-xs !text-textSecondary">{formatTime(item.ctime)}</span>
                 </div>
                 <div className="flex-1 ml-5 flex flex-col items-end">
-                  <span className=" font-semibold text-sm text-textPrimary">
+                  <span className=" font-semibold text-sm !text-textPrimary">
                     {NOTIFICATION_TITLE[item.secondLevelType]}
                   </span>
                   <span>{item.singlePrice} ELF</span>

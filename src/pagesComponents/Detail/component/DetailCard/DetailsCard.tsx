@@ -100,6 +100,7 @@ export function DetailCard() {
     ];
     return arr;
   }, [
+    nftInfo?.decimals,
     nftInfo?.issueChainIdStr,
     nftInfo?.metadata,
     nftInfo?.nftCollection?.baseUrl,

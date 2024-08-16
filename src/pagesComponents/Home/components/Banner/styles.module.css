@@ -1,3 +1,17 @@
 .carousel-item {
   @apply w-full h-full relative !flex justify-center items-end mdl:justify-normal  mdl:items-center;
 }
+
+.filter {
+  /* @apply absolute bottom-[-4px] w-[100%] h-[70px] z-10; */
+  @apply absolute bottom-[-4px] w-[100%] h-[120px] z-10 bg-white;
+
+  /* background: linear-gradient(transparent, 20%, white); */
+  filter: blur(50px);
+}
+
+.current {
+  transition: all 0.25s ease-in;
+
+  transform: translateY(-16px);
+}

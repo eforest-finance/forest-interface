@@ -384,19 +384,27 @@ export interface IConfigItems {
 }
 
 export interface IBanner {
-  h5: IBannerItem;
-  pc: IBannerItem;
+  src?: string;
+  title: string;
+  link: string;
+  target: string;
+  poster: string;
 }
 
 export interface IBannerItem {
-  image: string;
+  src: string;
   link: string;
   title: string;
-  description: string;
+  description?: string;
+  type?: 'image' | 'video';
+  name: string;
+  poster: string;
+  buttonTitle: string;
+  target?: '_blank' | '_self';
 }
 
 export interface IBannerResponse {
-  itemList: Array<IBanner>;
+  data: Array<IBannerItem>;
 }
 
 export interface IUserSettingParams {
@@ -927,6 +935,27 @@ export interface NFTHoldItem {
 export interface IMyHoLdCollectionRes {
   totalCount: number;
   items: CollectionHoldItem[];
+}
+
+export interface TrendingCollectionItem {
+  chainId: string;
+  symbol: string;
+  tokenName: string;
+  logoImage: string;
+  previewImage: string;
+
+  floorPrice: number;
+  floorChange: number;
+  floorPriceSymbol: string;
+  volumeTotal: number;
+  volumeTotalChange: number;
+  collectionName: string;
+  id: string;
+}
+
+export interface ITrendingCollectionsRes {
+  totalCount: number;
+  items: TrendingCollectionItem[];
 }
 
 export interface IMyHoldSearchRes {
