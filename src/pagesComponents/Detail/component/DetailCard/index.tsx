@@ -254,8 +254,11 @@ export default function DetailCard() {
     }
     return arr;
   }, [
+    jump,
     nav,
+    nftInfo?.chainId,
     nftInfo?.createTokenInformation,
+    nftInfo?.decimals,
     nftInfo?.inscriptionInfo,
     nftInfo?.issueChainIdStr,
     nftInfo?.metadata,

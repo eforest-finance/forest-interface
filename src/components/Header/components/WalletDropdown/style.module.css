@@ -12,7 +12,7 @@
     @apply !bg-inherit;
   }
   .user-info {
-    @apply px-0 pt-[32px] pb-[16px];
+    @apply px-0 pt-[18px] pb-[18px];
 
     span {
       @apply text-[var(--color-secondary)];
