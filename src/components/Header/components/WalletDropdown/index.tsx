@@ -58,10 +58,10 @@ function WalletActionSheet(props: any) {
     {
       text: (
         <div className="flex pt-[16px] justify-between">
-          <div className="text-[14px] font-medium text-textPrimary">
+          <div className="text-[14px] font-medium !text-textPrimary">
             <div className="flex items-center">
               <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-brandNormal rounded-[50%]" />
-              <span>SideChain {aelfInfo?.curChain}</span>
+              <span className="!text-textPrimary">SideChain {aelfInfo?.curChain}</span>
             </div>
             <Tooltip
               overlayInnerStyle={{ borderRadius: '8px' }}
@@ -86,7 +86,7 @@ function WalletActionSheet(props: any) {
           </div>
 
           <div className="flex justify-center items-center flex-col text-[12px] font-medium">
-            <div className="flex text-textPrimary items-center w-full">
+            <div className="flex !text-textPrimary items-center w-full">
               <Image className="w-[16px] h-[16px] mr-[8px]" src={ELF} alt="icon" />
               <p className="text-[16px]">{formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF</p>
             </div>
@@ -105,7 +105,7 @@ function WalletActionSheet(props: any) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="flex items-center">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-black rounded-[50%]" />
-                <span>MainChain AELF</span>
+                <span className="!text-textPrimary">MainChain AELF</span>
               </div>
 
               <Tooltip
@@ -200,7 +200,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-brandNormal rounded-[50%]" />
-                <span>SideChain {aelfInfo?.curChain}</span>
+                <span className="!text-textPrimary">SideChain {aelfInfo?.curChain}</span>
               </div>
               <Tooltip
                 overlayInnerStyle={{ borderRadius: '8px' }}
@@ -237,7 +237,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-black rounded-[50%]" />
-                <span>MainChain AELF</span>
+                <span className="!text-textPrimary">MainChain AELF</span>
               </div>
 
               <Tooltip

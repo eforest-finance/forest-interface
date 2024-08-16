@@ -14,7 +14,7 @@ export default function WalletMenu({ onclick }: { onclick?: MenuProps['onClick']
         key: 'account',
         label: (
           <div className={styles['account-tip']}>
-            <p className="text-[var(--color-primary)] text-[20px] font-medium leading-[30px]">Connect your wallet</p>
+            <p className="!text-[var(--color-primary)] text-[20px] font-medium leading-[30px]">Connect your wallet</p>
           </div>
         ),
       },

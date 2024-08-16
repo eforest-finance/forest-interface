@@ -49,6 +49,7 @@ import { useBalance } from './hooks/useBalance';
 import { setMainBalance, setSideBalance } from 'store/reducer/userInfo';
 import { dispatch } from 'store/store';
 import useTokenData from 'hooks/useTokenData';
+import clsx from 'clsx';
 
 const { Panel } = Collapse;
 
@@ -159,7 +160,7 @@ function Header() {
     }
   }, [isLogin, walletInfo.address, notifications]);
 
-  const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
+  const ProjectLogo = theme === 'dark' || (!headerTheme && isHomePage) ? <Logo /> : <LogoLight />;
 
   const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
 
@@ -406,7 +407,10 @@ function Header() {
                     }
                   }}
                   getPopupContainer={(v) => v}>
-                  <span className={`${styles['bell']} `}>
+                  <span
+                    className={`${styles['bell']} ${
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder'
+                    }`}>
                     <Bell className={` !w-[24px] !h-[24px]`} />
                   </span>
                 </DropMenu>
@@ -420,7 +424,11 @@ function Header() {
                   onOpenChange={(flag) => setWalletVisible(flag)}
                   overlay={<WalletMenu />}
                   placement="bottomRight">
-                  <div className={styles['balance']}>
+                  <div
+                    className={clsx(
+                      styles['balance'],
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder',
+                    )}>
                     <ELFICon className="mr-[12px] w-[24px] h-[24px] justify-center items-center" />
                     <span className="text-[16px] font-medium">
                       {formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF
@@ -428,16 +436,19 @@ function Header() {
                   </div>
                 </DropMenu>
                 <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
-                  <span className={`cursor-pointer  justify-center items-center flex w-[48px] h-[48px] rounded-lg`}>
+                  <span
+                    className={`cursor-pointer  justify-center items-center flex w-[48px] h-[48px] rounded-lg ${
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder'
+                    }`}>
                     {profileImage ? (
-                      <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden bg-fillHoverBg">
+                      <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden !bg-fillHoverBg">
                         <Avatar size={24} src={profileImage} />
                       </div>
                     ) : (
                       <Image
                         src={DefalutIcon}
                         alt=""
-                        className="!w-[24px] !h-[24px] rounded-md overflow-hidden bg-fillHoverBg"
+                        className="!w-[24px] !h-[24px] rounded-md overflow-hidden !bg-fillHoverBg"
                       />
                     )}
                   </span>

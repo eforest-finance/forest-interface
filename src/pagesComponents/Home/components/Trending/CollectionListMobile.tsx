@@ -105,11 +105,7 @@ export default function CollectionLists({ items }: any) {
           {items.map((item, idx) => {
             return (
               <SwiperSlide
-                className={clsx(
-                  isXS ? '!w-[240px]' : '!w-[325px] 2xl:!w-[352px] !mr-[20px]',
-                  isXS && idx === items.length - 1 ? 'mr-[16px]' : '',
-                  '',
-                )}
+                className={clsx('!w-[240px]', isXS && idx === items.length - 1 ? 'mr-[16px]' : '', '')}
                 key={item.id}>
                 <div className="relative">
                   <Link className={styles.CollectionItem} href={`/explore-items/${item.id}`}>

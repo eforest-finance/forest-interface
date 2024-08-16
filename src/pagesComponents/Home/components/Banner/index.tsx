@@ -62,6 +62,8 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
               </div>
             )}
 
+            <div className="w-full h-full absolute z-[19] bg-fillMask3 top-0 left-0" />
+
             <div className="absolute z-20 top-[218px] mdl:top-[16rem]  left-[16px] mdl:left-[40px]">
               <div className="text-[32px] mdl:text-[40px] font-semibold text-textWhite">{item.title}</div>
               <div className="max-w-[520px] mb-[32px] mdl:mb-[48px] mt-[16px] text-[14px] mdl:text-[16px] font-semibold text-textWhite">

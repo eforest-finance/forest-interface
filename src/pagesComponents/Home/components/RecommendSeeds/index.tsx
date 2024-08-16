@@ -116,13 +116,13 @@ export function RecommendSeeds() {
 
   return (
     <section className={styles.wrapper}>
-      <div className="flex justify-between items-center mt-8 mb-4 mdTW:mt-12 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
+      <div className="flex justify-between items-center mt-8 mb-4 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
         <span>Get your SEED</span>
       </div>
       {isSmallScreen ? (
         <>
           <span className="text-textSecondary mt-[8px] text-[14px] font-normal line-[22px]">
-            Get a unique SEED to create your own tokens and NFT:s on the aelf blockchain
+            Get a unique SEED to create your own tokens and NFTs on the aelf blockchain
           </span>
           <div className="w-[calc(100vw-48px)]">
             <SeedsMobile items={seedList} />
@@ -147,7 +147,7 @@ export function RecommendSeeds() {
         <>
           <div className="mb-[24px] flex justify-between">
             <span className="m-auto flex-1 text-textSecondary mt-[8px] text-[16px] font-normal">
-              Get a unique SEED to create your own tokens and NFT:s on the aelf blockchain
+              Get a unique SEED to create your own tokens and NFTs on the aelf blockchain
             </span>
             <Button
               size="middle"

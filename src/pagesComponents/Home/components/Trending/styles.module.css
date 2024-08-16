@@ -1,10 +1,12 @@
 .poster-shadow {
-  @apply text-white w-full bg-fillMask1 h-[138px] absolute z-[1] bottom-0 left-0 flex justify-center items-center;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%);
+  @apply text-white w-full bg-fillMask1 h-full absolute z-[1] bottom-0 left-0 flex justify-center items-center;
+
+  background: linear-gradient(0deg, rgb(0 0 0 / 60%) 50%, rgb(0 0 0 / 0%) 100%);
 }
 
 .CollectionItem {
-  @apply mr-[20px];
+  @apply inline-block pr-[20px] w-[240px] mdb:w-[25%] mc:w-[20%];
+
   transition: all 0.25s ease-in;
 
   &:hover {

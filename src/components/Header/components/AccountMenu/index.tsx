@@ -67,7 +67,7 @@ export default function AccountMenu() {
                     <div className={styles['nav-icon']}>
                       <Logout />
                     </div>
-                    <span className="!hover:text-textPrimary">Log Out</span>
+                    <span className="!hover:text-textPrimary !text-[var(--color-primary)]">Log Out</span>
                   </div>
                 ),
                 key: 'logOut',

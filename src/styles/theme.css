@@ -231,6 +231,8 @@
   --fill-page-bg: #fff;
   --fill-mask-1: rgb(0 0 0 / 60%);
   --fill-mask-2: rgb(0 0 0 / 80%);
+  --fill-mask-3: rgb(0 0 0 / 30%);
+  --fill-white-1: rgb(255 255 255 / 60%);
   --share-svg-hover: #000;
   --rarity-platinum: #91c0cc;
   --rarity-bronze: #d2965e;
