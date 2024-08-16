@@ -4,9 +4,15 @@ import { ISeedItemData } from 'api/types';
 import BigNumber from 'bignumber.js';
 import { useRecommendSeedLogic, SEED_STATUS, fixedPrice } from './useRecommendSeedLogic';
 import seedImg from 'assets/images/card.png';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Button from 'baseComponents/Button';
+import { Button as AntdButton } from 'antd';
+import SeedsMobile from './SeedsMobile';
 
+import Vector from 'assets/images/v2/Vector.svg';
+
+import { useSelector } from 'react-redux';
+import { selectInfo } from 'store/reducer/info';
 interface ISeedItemCardProps {
   seedItemData: ISeedItemData;
   itemClick: () => void;
@@ -72,7 +78,7 @@ function SeedItemCard({ seedItemData, itemClick }: ISeedItemCardProps) {
           <span className="text-textPrimary break-words break-all">{seedItemData.symbol || ''}</span>
         </div>
       </div>
-      <div className="flex flex-col mt-8">
+      <div className="flex flex-col mt-[32px]">
         <span className="text-textSecondary text-sm">{titleForShow}</span>
         <span className="font-semibold text-base leading-normal text-textPrimary">{`${formatSeedPrice} ${
           formatSeedPrice !== '-' && symbol
@@ -83,44 +89,136 @@ function SeedItemCard({ seedItemData, itemClick }: ISeedItemCardProps) {
 }
 
 export function RecommendSeeds() {
-  const { goTsm, gotTsmSeedDetail, seedList } = useRecommendSeedLogic();
+  const { isSmallScreen } = useSelector(selectInfo);
+
+  const { goMedia, goTsm, gotTsmSeedDetail, seedList } = useRecommendSeedLogic();
+  const [seedGroups, setSeedGroups] = useState<[ISeedItemData[], ISeedItemData[]]>([[], []]);
+  useEffect(() => {
+    const seedGroup1 = [] as any;
+    const seedGroup2 = [] as any;
+
+    if (seedList.length > 1) {
+      seedList.forEach((item, idx: number) => {
+        if (idx < seedList.length / 2) {
+          seedGroup1.push(item);
+        } else {
+          seedGroup2.push(item);
+        }
+      });
+
+      setSeedGroups([seedGroup1, seedGroup2]);
+    }
+  }, [seedList]);
 
   if (!seedList.length) return null;
 
+  const [topSeedGroups, bottomSeedGroups] = seedGroups;
+
   return (
-    <section className="w-full">
-      <div className="flex justify-between items-center mt-8 mb-4 mdTW:mt-12 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
+    <section className={styles.wrapper}>
+      <div className="flex justify-between items-center mt-8 mb-4 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
         <span>Get your SEED</span>
-        <div className="hidden mdTW:inline-flex">
+      </div>
+      {isSmallScreen ? (
+        <>
+          <span className="text-textSecondary mt-[8px] text-[14px] font-normal line-[22px]">
+            Get a unique SEED to create your own tokens and NFTs on the aelf blockchain
+          </span>
+          <div className="w-[calc(100vw-48px)]">
+            <SeedsMobile items={seedList} />
+          </div>
           <Button
             size="middle"
             type="text"
-            className="hover:!bg-fillHoverBg !bg-fillCardBg !text-textPrimary !rounded-md"
+            className="my-[16px] flex justify-center !h-[48px] w-full items-center !bg-white !text-textPrimary !rounded-lg !border  !border-solid !border-[var(--border-menu)]"
             onClick={goTsm}>
-            View All
+            <Vector className="mr-[8px]" />
+            Symbol Market
           </Button>
-        </div>
-      </div>
-      <main className="grid grid-cols-1 gap-[16px] mdb:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {seedList.map((itemData) => (
-          <SeedItemCard
-            key={itemData.seedName}
-            seedItemData={itemData}
-            itemClick={() => {
-              gotTsmSeedDetail(itemData.tokenType, itemData.symbol);
-            }}
-          />
-        ))}
-      </main>
-      <footer className="mt-4 mdTW:hidden w-full mdb:w-[166px] mx-auto">
-        <Button
-          isFull={true}
-          type="text"
-          className="hover:!bg-fillHoverBg !bg-fillCardBg !text-textPrimary !rounded-md"
-          onClick={goTsm}>
-          View All
-        </Button>
-      </footer>
+          <Button
+            size="middle"
+            type="text"
+            className="!h-[48px] w-full !bg-fillCardBg !text-textPrimary !rounded-lg mb-[48px]"
+            onClick={goMedia}>
+            Learn about Seed
+          </Button>
+        </>
+      ) : (
+        <>
+          <div className="mb-[24px] flex justify-between">
+            <span className="m-auto flex-1 text-textSecondary mt-[8px] text-[16px] font-normal">
+              Get a unique SEED to create your own tokens and NFTs on the aelf blockchain
+            </span>
+            <Button
+              size="middle"
+              type="text"
+              className="h-[40px] mr-[32px] hover:!bg-fillHoverBg !bg-fillCardBg !text-textPrimary !rounded-md"
+              onClick={goMedia}>
+              Learn about Seed
+            </Button>
+            <Button
+              size="middle"
+              type="text"
+              className="h-[40px] flex items-center hover:!bg-fillHoverBg !bg-white !text-textPrimary !rounded-md !border  !border-solid !border-[var(--border-menu)]"
+              onClick={goTsm}>
+              <Vector className="mr-[4px]" />
+              Symbol Market
+            </Button>
+          </div>
+          <div className="w-full">
+            <div className={styles.scroll} style={{ '--t': '120s' }}>
+              <span className={`inline-block w-[3680px] ${styles['track-first']}`}>
+                {topSeedGroups.map((itemData) => (
+                  <SeedItemCard
+                    key={itemData.seedName}
+                    seedItemData={itemData}
+                    itemClick={() => {
+                      gotTsmSeedDetail(itemData.tokenType, itemData.symbol);
+                    }}
+                  />
+                ))}
+              </span>
+              <span className={`inline-block w-[3680px] ${styles['track-second']}`}>
+                {topSeedGroups.map((itemData) => (
+                  <SeedItemCard
+                    key={itemData.seedName}
+                    seedItemData={itemData}
+                    itemClick={() => {
+                      gotTsmSeedDetail(itemData.tokenType, itemData.symbol);
+                    }}
+                  />
+                ))}
+              </span>
+            </div>
+
+            <div className={`${styles.scrollRight}`} style={{ '--t': '120s' }}>
+              <span className={`inline-block w-[3680px] ${styles['track-first']}`}>
+                {bottomSeedGroups.map((itemData) => (
+                  <SeedItemCard
+                    key={itemData.seedName}
+                    seedItemData={itemData}
+                    itemClick={() => {
+                      gotTsmSeedDetail(itemData.tokenType, itemData.symbol);
+                    }}
+                  />
+                ))}
+              </span>
+
+              <span className={`inline-block w-[3680px] ${styles['track-second']}`}>
+                {bottomSeedGroups.map((itemData) => (
+                  <SeedItemCard
+                    key={itemData.seedName}
+                    seedItemData={itemData}
+                    itemClick={() => {
+                      gotTsmSeedDetail(itemData.tokenType, itemData.symbol);
+                    }}
+                  />
+                ))}
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }

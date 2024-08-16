@@ -48,6 +48,7 @@ module.exports = {
         fillPageBg: 'var(--fill-page-bg)',
         fillMask1: 'var(--fill-mask-1)',
         fillMask2: 'var(--fill-mask-2)',
+        fillMask3: 'var(--fill-mask-3)',
         rarityPlatinum: 'var(--rarity-platinum)',
         rarityBronze: 'var(--rarity-bronze)',
         raritySilver: 'var(--rarity-silver)',

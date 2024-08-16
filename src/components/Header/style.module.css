@@ -1,8 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 .marketplace-header {
-  @apply fixed top-0 z-[999];
-  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-fillPageBg;
-  @apply flex items-center justify-between border-0 border-b border-solid border-lineBorder;
+  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-white;
+  @apply flex items-center justify-between;
 }
 
 .mobile-forest-logo svg {
@@ -18,7 +17,7 @@
 }
 
 .marketplace-header .nav-text:hover {
-  @apply text-textSecondary;
+  @apply text-[var(--fill-white-1)];
 }
 
 .marketplace-header .nav-text.text-select {
@@ -26,7 +25,7 @@
 }
 
 .marketplace-header .icon-btn-wrap {
-  @apply !gap-[24px] flex items-center;
+  @apply !gap-[24px] flex items-center border-0;
 }
 
 /* .marketplace-header .icon-btn-wrap :global .ant-space-item {
@@ -37,12 +36,13 @@
   @apply w-[32px] h-[32px];
 }
 .marketplace-header.mobile-header-wrapper .forest-logo svg {
-  @apply w-[80px] h-[16px];
+  @apply scale-[0.58];
 }
 
-/* .marketplace-header .icon-btn-wrap :global .ant-space-item svg {
-  @apply w-[40px] h-[40px] flex;
-} */
+.marketplace-header .icon-btn-wrap :global .ant-space-item {
+  background: rgb(255 255 255 / 10%);
+  @apply rounded-lg;
+}
 
 .marketplace-header .header-account-btn,
 .marketplace-header .header-wallet-btn,
@@ -60,7 +60,7 @@
 .marketplace-header .header-account-btn:hover,
 .marketplace-header .header-wallet-btn:hover,
 .marketplace-header .header-theme-btn:hover {
-  @apply fill-[var(--brand-base)];
+  /* @apply fill-[var(--brand-base)]; */
 }
 .marketplace-header .header-account-btn:hover *,
 .marketplace-header .header-wallet-btn:hover *,
@@ -85,6 +85,77 @@
     @apply !w-auto !h-auto;
     path {
       @apply !fill-[var(--color-header)];
+    }
+  }
+}
+
+.bell {
+  @apply cursor-pointer justify-center items-center flex w-[48px] h-[48px] rounded-lg;
+}
+
+.balance {
+  @apply bg-[rgba(255,255,255,0.10)] cursor-pointer  flex items-center py-[4px] px-[12px] rounded-lg h-[48px];
+}
+
+.homeHeader {
+  @apply fixed;
+
+  .marketplace-header {
+    @apply bg-transparent;
+
+    backdrop-filter: blur(6px);
+  }
+}
+
+.white-header {
+  .marketplace-header {
+    @apply bg-white;
+  }
+
+  .nav-text {
+    @apply text-textPrimary;
+  }
+
+  span {
+    @apply text-textPrimary;
+  }
+
+  button {
+    span {
+      @apply !text-white;
+    }
+  }
+
+  .bell,
+  .balance {
+    @apply border border-solid border-lineBorder;
+  }
+}
+
+.black-header {
+  .marketplace-header {
+    @apply !bg-[rgba(51,51,51,0.3)];
+  }
+
+  .nav-text {
+    @apply text-white;
+  }
+
+  span {
+    @apply text-white;
+  }
+
+  .bell,
+  .walletIcon,
+  .frame {
+    path {
+      @apply stroke-white;
+    }
+  }
+
+  .frame {
+    path {
+      @apply fill-white;
     }
   }
 }

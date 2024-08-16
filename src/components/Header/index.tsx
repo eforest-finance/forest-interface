@@ -1,4 +1,4 @@
-import { Badge, Drawer, Layout, Menu, Space, Button as AntdButton, Avatar } from 'antd';
+import { Badge, Drawer, Layout, Menu, Space, Button as AntdButton, Avatar, Collapse } from 'antd';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import AccountMenu from './components/AccountMenu';
@@ -10,21 +10,10 @@ import { WalletActionSheet } from './components/WalletDropdown';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '../../hooks/useTheme';
 
-import Wallet from 'assets/images/wallet.svg';
-import Night from 'assets/images/night.svg';
-import Light from 'assets/images/light.svg';
 import Logo from 'assets/images/night/forestLogo.svg';
 import LogoLight from 'assets/images/light/forestLogo.svg';
 import Frame from 'assets/images/Frame.svg';
-import Explore from 'assets/images/explore.svg';
-import Create from 'assets/images/create.svg';
-import CreateCollection from 'assets/images/CreateCollection.svg';
-import Profile from 'assets/images/profile.svg';
-import Setting from 'assets/images/setting.svg';
-import Logout from 'assets/images/logoutMobile.svg';
-import DropIcon from 'assets/images/events/drops.svg';
 import Close from 'components/Close';
-import NotificationIconMobile from 'assets/images/v2/notification_mobile.svg';
 import Bell from 'assets/images/v2/bell.svg';
 import DefalutIcon from 'assets/images/icon_default.png';
 import { ImageEnhance } from 'components/ImgLoading';
@@ -60,11 +49,15 @@ import { useBalance } from './hooks/useBalance';
 import { setMainBalance, setSideBalance } from 'store/reducer/userInfo';
 import { dispatch } from 'store/store';
 import useTokenData from 'hooks/useTokenData';
+import clsx from 'clsx';
+
+const { Panel } = Collapse;
 
 function Header() {
   const [theme, changeTheme] = useTheme();
   const nav = useRouter();
   const pathname = usePathname();
+  const isHomePage = pathname?.split('/')?.[1] === '';
 
   const { logout } = useContractConnect();
   const { isLogin, login } = useCheckLoginAndToken();
@@ -89,6 +82,8 @@ function Header() {
   });
 
   const rate = useTokenData();
+
+  const [headerTheme, setHeaderTheme] = useState(false);
 
   console.log('sideBalance:', sideBalance);
 
@@ -165,7 +160,7 @@ function Header() {
     }
   }, [isLogin, walletInfo.address, notifications]);
 
-  const ProjectLogo = theme === 'dark' ? <Logo /> : <LogoLight />;
+  const ProjectLogo = theme === 'dark' || (!headerTheme && isHomePage) ? <Logo /> : <LogoLight />;
 
   const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
 
@@ -175,7 +170,6 @@ function Header() {
     userInfo: { userInfo },
   } = useSelector((store) => store);
   const profileImage = userInfo.profileImage;
-  console.log('money:', divDecimals(sideBalance, 8).valueOf());
 
   useEffect(() => {
     if (isLogin) {
@@ -184,6 +178,18 @@ function Header() {
       runMainChain();
     }
   }, [isLogin]);
+
+  useEffect(() => {
+    window.addEventListener(
+      'scroll',
+      () => {
+        const isWhite = document.body.scrollTop > 580;
+        setHeaderTheme(isWhite);
+        console.log(document.body.scrollTop);
+      },
+      true,
+    );
+  }, []);
 
   const toggleMessageReadStatus = () => {
     if (!messageList?.length) return;
@@ -195,14 +201,17 @@ function Header() {
     );
   };
 
-  console.log('profileImage:', profileImage);
-
   return (
     <Layout.Header
-      className={`${hidden && 'hidden'} ${
+      className={`${isHomePage ? `${headerTheme ? styles['white-header'] : styles['black-header']}` : ''}  ${
+        isHomePage && styles.homeHeader
+      } top-0 z-[999] ${hidden && 'hidden'} ${
         isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
       } w-[100%] !p-0 !bg-transparent`}>
-      <div className={`${styles['marketplace-header']} ${isSmallScreen ? styles['mobile-header-wrapper'] : ''}`}>
+      <div
+        className={`${styles['marketplace-header']} ${!isHomePage && 'fixed'} ${
+          isSmallScreen ? styles['mobile-header-wrapper'] : ''
+        }`}>
         <div className="flex  justify-center items-center">
           <Link href={'/'}>
             <div className={`flex justify-center items-center mr-[64px] ${styles['forest-logo']}`}>{ProjectLogo}</div>
@@ -273,10 +282,10 @@ function Header() {
 
         {isSmallScreen ? (
           <>
-            <div className={`${styles.frame} flex justify-center items-center`}>
+            <div className={` flex justify-center items-center`}>
               {!isLogin && (
                 <AntdButton
-                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] rounded-lg bg-brandNormal"
+                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-md bg-brandNormal"
                   type="primary"
                   onClick={handleLogin}>
                   Login
@@ -286,70 +295,67 @@ function Header() {
               {isLogin && !isPortkeyApp() && (
                 <div className="flex items-center w-[32px] h-[32px] mr-[24px]">
                   <WalletIcon
+                    className={`${styles.walletIcon} !w-[24px] !h-[24px] `}
                     onClick={() => {
                       setActionVisible(true);
                     }}
-                    className="!w-[24px] !h-[24px] "
                   />
                 </div>
               )}
 
-              <Frame onClick={showDrawer} />
+              <Frame className={`${styles.frame} !w-[24px] !h-[24px] `} onClick={showDrawer} />
             </div>
             <Drawer
               zIndex={300}
               className="header-drawer"
-              extra={
-                <div className={`flex justify-center items-center ${styles['mobile-forest-logo']}`}>{ProjectLogo}</div>
-              }
+              extra={<div className={`flex justify-center items-center font-semibold text-[20px] `}>Menu</div>}
               placement="right"
               closeIcon={<Close />}
               onClose={onClose}
               open={visible}>
               <div>
-                <div className="menu-wrap" onClick={onClose}>
-                  <p className="menu-item">
-                    <Link href={'/collections'}>
-                      <Explore /> <span>Explore</span>
-                    </Link>
-                  </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-item" className="create-icon">
-                      <Create />
-                      <span>Create an Item</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-collection" className="create-collection-icon">
-                      <CreateCollection />
-                      <span>Create a Collection</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item">
-                    <AuthNavLink to="/create-nft-ai" className="create-icon">
-                      <Create />
-                      <span>AI NFT Generator</span>
-                    </AuthNavLink>
-                  </p>
-
-                  {aelfInfo.showDropEntrance ? (
-                    <p className="menu-item">
-                      <Link href={'/drops'}>
-                        <DropIcon /> <span>Drops</span>
-                      </Link>
-                    </p>
-                  ) : null}
+                <div className="h-[64px] flex items-center">
+                  <Link href={'/collections'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Collections</div>
+                  </Link>
                 </div>
+                <div className="text-[18px] h-[64px] font-medium flex items-center">Create</div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-item'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Create an Item</div>
+                  </Link>
+                </div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-collection'}>
+                    <div className="text-[18px] text-textPrimary font-medium">Create a Collection</div>
+                  </Link>
+                </div>
+
+                <div className="pl-[24px] h-[64px] flex items-center">
+                  <Link href={'/create-nft-ai'}>
+                    <div className="text-[18px] text-textPrimary font-medium">AI NFT Generator</div>
+                  </Link>
+                </div>
+
+                {aelfInfo.showDropEntrance ? (
+                  <div className="h-[64px] flex items-center">
+                    <Link href={'/drops'}>
+                      <div className="text-[18px] text-textPrimary font-medium">Drops</div>
+                    </Link>
+                  </div>
+                ) : null}
+
+                <div className="h-[64px] flex items-center">
+                  <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
+                    <div className="text-textPrimary">Profile</div>
+                  </AuthNavLink>
+                </div>
+
                 <div className="menu-wrap">
-                  <p className="menu-item" onClick={onClose}>
-                    <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
-                      <Profile /> <span>Profile</span>
-                    </AuthNavLink>
-                  </p>
-                  <p className="menu-item" onClick={showNotification}>
-                    <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0">
-                      <NotificationIconMobile width={32} height={32} />
-                    </Badge>
+                  <div className="menu-item" onClick={showNotification}>
+                    <Badge dot={!!unReadMessageCount} count={unReadMessageCount} className=" !ml-0"></Badge>
                     <span>Notifications</span>
                     <Drawer
                       className="header-drawer child-drawer"
@@ -367,29 +373,11 @@ function Header() {
                       open={notificationModalVisible}>
                       <NotificationList hiddenTitle={true} dataSource={messageList} />
                     </Drawer>
-                  </p>
+                  </div>
 
                   <p className="menu-item" onClick={onClose}>
                     <a onClick={onNavigateSettings}>
-                      <Setting /> <span>Settings</span>
-                    </a>
-                  </p>
-                  <p
-                    className="menu-item"
-                    onClick={() => {
-                      changeTheme(theme === 'dark' ? 'light' : 'dark');
-                    }}>
-                    <a>
-                      {theme !== 'dark' ? (
-                        <div className="header-theme-btn flex items-center">
-                          <Night />
-                        </div>
-                      ) : (
-                        <div className="header-theme-btn flex items-center">
-                          <Light />
-                        </div>
-                      )}
-                      <span>{theme !== 'dark' ? 'Night' : 'Daytime'}</span>
+                      <span>Settings</span>
                     </a>
                   </p>
                 </div>
@@ -397,7 +385,6 @@ function Header() {
                 {!isPortkeyApp() && isLogin ? (
                   <div className="menu-wrap">
                     <p className="menu-item" onClick={() => logout()}>
-                      <Logout />
                       <span>Log out</span>
                     </p>
                   </div>
@@ -421,8 +408,10 @@ function Header() {
                   }}
                   getPopupContainer={(v) => v}>
                   <span
-                    className={`hover:bg-fillCardBg cursor-pointer justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
-                    <Bell className="!w-[24px] !h-[24px]" />
+                    className={`${styles['bell']} ${
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder'
+                    }`}>
+                    <Bell className={` !w-[24px] !h-[24px]`} />
                   </span>
                 </DropMenu>
                 <DropMenu
@@ -435,7 +424,11 @@ function Header() {
                   onOpenChange={(flag) => setWalletVisible(flag)}
                   overlay={<WalletMenu />}
                   placement="bottomRight">
-                  <div className="cursor-pointer hover:bg-fillCardBg flex items-center border border-solid border-lineBorder py-[4px] px-[12px] rounded-lg h-[48px] ">
+                  <div
+                    className={clsx(
+                      styles['balance'],
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder',
+                    )}>
                     <ELFICon className="mr-[12px] w-[24px] h-[24px] justify-center items-center" />
                     <span className="text-[16px] font-medium">
                       {formatTokenPrice(divDecimals(sideBalance, 8).valueOf())} ELF
@@ -444,16 +437,18 @@ function Header() {
                 </DropMenu>
                 <DropMenu overlay={<AccountMenu />} placement="bottomRight" getPopupContainer={(v) => v}>
                   <span
-                    className={`cursor-pointer hover:bg-fillCardBg justify-center items-center flex w-[48px] h-[48px] border border-solid border-lineBorder rounded-lg`}>
+                    className={`cursor-pointer  justify-center items-center flex w-[48px] h-[48px] rounded-lg ${
+                      (!isHomePage || headerTheme) && 'border border-solid border-lineBorder'
+                    }`}>
                     {profileImage ? (
-                      <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden bg-fillHoverBg">
+                      <div className=" relative !w-[24px] !h-[24px] justify-center items-center flex rounded-[50%] overflow-hidden !bg-fillHoverBg">
                         <Avatar size={24} src={profileImage} />
                       </div>
                     ) : (
                       <Image
                         src={DefalutIcon}
                         alt=""
-                        className="!w-[24px] !h-[24px] rounded-md overflow-hidden bg-fillHoverBg"
+                        className="!w-[24px] !h-[24px] rounded-md overflow-hidden !bg-fillHoverBg"
                       />
                     )}
                   </span>
@@ -461,7 +456,7 @@ function Header() {
               </Space>
             ) : (
               <AntdButton
-                className="w-[103px] h-[48px] font-medium text-[16px] rounded-lg bg-brandNormal"
+                className="w-[103px] h-[48px] font-medium text-[16px] !rounded-lg bg-brandNormal"
                 type="primary"
                 onClick={handleLogin}>
                 Login
