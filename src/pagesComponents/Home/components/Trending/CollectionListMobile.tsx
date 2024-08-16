@@ -130,42 +130,46 @@ export default function CollectionLists({ items }: any) {
                         <div className="font-semibold text-textPrimary text-[20px] mdl:text-[24px]">
                           {item.tokenName}
                         </div>
-                        <div className="flex justify-around my-[16px]">
-                          <span className="m-auto flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">
+                        <div className="flex justify-around my-[16px] h-[52px]">
+                          <span className="flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">
                             Floor
                           </span>
 
-                          <Tooltip title="24h Floor price changes">
-                            <span>
-                              <NumberOfChange text={item.floorChange} />
-                              {/* { renderNumberOfChange(item.floorChange)} */}
+                          <div className="flex flex-col items-end">
+                            <span className="flex items-center mb-[8px]">
+                              <span className={'text-textPrimary ml-[16px] text-[16px] mdl:text-[18px] font-semibold'}>
+                                {(item.floorPrice || item.floorPrice === 0) && item.floorPrice >= 0
+                                  ? formatTokenPrice(item.floorPrice) + ' ' + (item.floorPriceSymbol || 'ELF')
+                                  : '-'}
+                              </span>
                             </span>
-                          </Tooltip>
-                          <span className="flex items-center">
-                            <span className={'text-textPrimary ml-[16px] text-[16px] mdl:text-[18px] font-semibold'}>
-                              {(item.floorPrice || item.floorPrice === 0) && item.floorPrice >= 0
-                                ? formatTokenPrice(item.floorPrice) + ' ' + (item.floorPriceSymbol || 'ELF')
-                                : '-'}
-                            </span>
-                          </span>
+                            <Tooltip title="24h Floor price changes">
+                              <span>
+                                <NumberOfChange text={item.floorChange} />
+                                {/* { renderNumberOfChange(item.floorChange)} */}
+                              </span>
+                            </Tooltip>
+                          </div>
                         </div>
 
-                        <div className="flex justify-around my-[16px]">
-                          <span className="m-auto flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">
+                        <div className="flex justify-around mt-[16px] h-[52px]">
+                          <span className="flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">
                             30d Vol
                           </span>
-                          <span>
-                            <NumberOfChange text={item.floorChange} />
-
-                            {/* {renderNumberOfChange(item.volumeTotalChange)} */}
-                          </span>
-                          <span className="flex items-center">
-                            <span className={'text-textPrimary ml-[16px] text-[16px] mdl:text-[18px] font-semibold'}>
-                              {(item.volumeTotal || item.volumeTotal === 0) && item.volumeTotal >= 0
-                                ? formatTokenPrice(item.volumeTotal) + ' ' + (item.floorPriceSymbol || 'ELF')
-                                : '-'}
+                          <div className="flex flex-col items-end">
+                            <span className="flex items-center mb-[8px]">
+                              <span className={'text-textPrimary ml-[16px] text-[16px] mdl:text-[18px] font-semibold'}>
+                                {(item.volumeTotal || item.volumeTotal === 0) && item.volumeTotal >= 0
+                                  ? formatTokenPrice(item.volumeTotal) + ' ' + (item.floorPriceSymbol || 'ELF')
+                                  : '-'}
+                              </span>
                             </span>
-                          </span>
+                            <span>
+                              <NumberOfChange text={item.volumeTotalChange} />
+
+                              {/* {renderNumberOfChange(item.volumeTotalChange)} */}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

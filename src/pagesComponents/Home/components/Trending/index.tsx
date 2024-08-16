@@ -58,7 +58,7 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
             <div className="absolute w-[64px] h-[64px] z-[2] -bottom-[32px] left-[24px] rounded-lg overflow-hidden">
               <ImageEnhance
                 width={'100%'}
-                className=" w-full aspect-square overflow-hidden relative  transition-all"
+                className="w-full aspect-square overflow-hidden relative  transition-all"
                 src={item.logoImage}
               />
             </div>
@@ -83,7 +83,7 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
               </div>
             </div>
 
-            <div className="flex justify-around my-[16px] h-[56px]">
+            <div className="flex justify-around h-[56px]">
               <span className="flex-1 w-[68px] text-textSecondary text-[18px] font-medium">30d Vol</span>
               <div className="flex flex-col items-end">
                 <span className="flex items-center mb-[8px]">
@@ -112,7 +112,7 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
             <CollectionListMobile items={items} />
           </div>
         ) : (
-          <div className="w-full overflow-hidden whitespace-nowrap">
+          <div className="w-full rounded-lg overflow-hidden whitespace-nowrap">
             {items.map((item, index: number) => (
               <CollectionItem key={`CollectionItem-${index}`} item={item} />
             ))}
