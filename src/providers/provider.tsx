@@ -16,6 +16,7 @@ import { setAelfInfo } from 'store/reducer/aelfInfo';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
+
   const storeConfig = async () => {
     const { data } = await fetchConfigItems();
     store.dispatch(setAelfInfo(data));
