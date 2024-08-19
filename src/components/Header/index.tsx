@@ -46,9 +46,9 @@ import { divDecimals } from 'utils/calculate';
 import { formatTokenPrice } from 'utils/format';
 
 import { useBalance } from './hooks/useBalance';
-import { setMainBalance, setSideBalance } from 'store/reducer/userInfo';
 import { dispatch } from 'store/store';
 import useTokenData from 'hooks/useTokenData';
+import { setMainBalance, setSideBalance } from 'store/reducer/balance';
 import clsx from 'clsx';
 
 const { Panel } = Collapse;
