@@ -10,7 +10,8 @@ import { BigNumber } from 'bignumber.js';
 import useTokenData from 'hooks/useTokenData';
 import { useEffect, useRef, useState } from 'react';
 import { divDecimals } from 'utils/calculate';
-import { getUserBalance, getUserInfo } from 'store/reducer/userInfo';
+import { getUserInfo } from 'store/reducer/userInfo';
+import { getBalance } from 'store/reducer/balance';
 
 import styles from './style.module.css';
 import { selectInfo } from 'store/reducer/info';
@@ -25,13 +26,14 @@ import Button from 'baseComponents/Button';
 import { useRouter } from 'next/navigation';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { useCopyToClipboard } from 'react-use';
+import { store } from 'store/store';
 
 function WalletActionSheet(props: any) {
   const { visible, onClose } = props;
 
   const userInfo = useSelector(getUserInfo);
-  const { main: aelfBalance, side: sideBalance } = useSelector(getUserBalance);
-  console.log('sideBalance:menu', sideBalance);
+  const { main: aelfBalance, side: sideBalance } = useSelector(getBalance);
+  console.log('sideBalance:menu', sideBalance, store);
 
   const { walletInfo, aelfInfo, infoState } = useGetState();
   const rate = infoState.elfRate;
@@ -172,9 +174,8 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
   const router = useRouter();
 
   const rate = infoState.elfRate;
-
-  const { main: aelfBalance, side: sideBalance } = useSelector(getUserBalance);
-  console.log('sideBalance:menu', sideBalance);
+  const { main: aelfBalance, side: sideBalance } = useSelector(getBalance);
+  console.log('sideBalance:menu', sideBalance, store);
 
   const [sideTooltip, setSideTooltip] = useState('Copy');
   const [mainTooltip, setMainTooltip] = useState('Copy');

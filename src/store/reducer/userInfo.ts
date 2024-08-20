@@ -40,12 +40,12 @@ export const userInfoSlice = createSlice({
     setWalletInfo(state, action) {
       state.walletInfo = action.payload;
     },
-    setMainBalance(state, action) {
-      state.balance.main = action.payload;
-    },
-    setSideBalance(state, action) {
-      state.balance.side = action.payload;
-    },
+    // setMainBalance(state, action) {
+    //   state.balance.main = action.payload;
+    // },
+    // setSideBalance(state, action) {
+    //   state.balance.side = action.payload;
+    // },
     setRate(state, action) {
       state.rate = action.payload;
     },
@@ -65,11 +65,10 @@ export const userInfoSlice = createSlice({
   },
 });
 
-export const { setUserInfo, setWalletInfo, removeToken, setMainBalance, setSideBalance, setRate } =
-  userInfoSlice.actions;
+export const { setUserInfo, setWalletInfo, removeToken, setRate } = userInfoSlice.actions;
 
 export const getUserInfo = (state: any): UserInfoType => state.userInfo.userInfo;
-export const getUserBalance = (state: any): UserInfoType => state.userInfo.balance;
+// export const getUserBalance = (state: any): UserInfoType => state.userInfo.balance;
 export const getRate = (state: any): UserInfoType => state.userInfo.rate;
 export const getWalletInfo = (state: any): WalletInfoType => state.userInfo.walletInfo;
 
