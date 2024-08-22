@@ -11,12 +11,12 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '../../hooks/useTheme';
 
 import Logo from 'assets/images/night/forestLogo.svg';
+
 import LogoLight from 'assets/images/light/forestLogo.svg';
 import Frame from 'assets/images/Frame.svg';
-import Close from 'components/Close';
+import Close from 'assets/images/v2/clear_icon.svg';
 import Bell from 'assets/images/v2/bell.svg';
 import DefalutIcon from 'assets/images/icon_default.png';
-import { ImageEnhance } from 'components/ImgLoading';
 
 import ELFICon from 'assets/images/explore/aelf.svg';
 
@@ -28,7 +28,6 @@ import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 import React from 'react';
 import { isPortkeyApp } from 'utils/isMobile';
-import Button from 'baseComponents/Button';
 import DropMenu from 'baseComponents/DropMenu';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { hideHeaderPage } from 'constants/common';
@@ -160,7 +159,7 @@ function Header() {
     }
   }, [isLogin, walletInfo.address, notifications]);
 
-  const ProjectLogo = theme === 'dark' || (!headerTheme && isHomePage) ? <Logo /> : <LogoLight />;
+  const ProjectLogo = !headerTheme && isHomePage ? <Logo /> : <LogoLight />;
 
   const unReadMessageCount = messageList.filter((itm) => itm.status === 0).length;
 
@@ -183,7 +182,7 @@ function Header() {
     window.addEventListener(
       'scroll',
       () => {
-        const isWhite = document.body.scrollTop > 580;
+        const isWhite = document.body.scrollTop > 20;
         setHeaderTheme(isWhite);
         console.log(document.body.scrollTop);
       },
@@ -209,7 +208,7 @@ function Header() {
         isSmallScreen ? '!h-[62.4px] !bg-transparent bg-tr' : '!h-[80px]'
       } w-[100%] !p-0 !bg-transparent`}>
       <div
-        className={`${styles['marketplace-header']} ${!isHomePage && 'fixed'} ${
+        className={`${styles['marketplace-header']} ${!isHomePage && 'fixed border border-solid border-lineBorder'} ${
           isSmallScreen ? styles['mobile-header-wrapper'] : ''
         }`}>
         <div className="flex  justify-center items-center">
@@ -227,7 +226,7 @@ function Header() {
                 </Link>
                 <DropMenu
                   getPopupContainer={(v) => v}
-                  className={`${styles['nav-text']} ${
+                  className={`${styles['nav-text']} ${styles.menu} ${
                     ['/create-item', '/create-collection', '/create-nft-ai'].includes(pathname) && styles['text-select']
                   }`}
                   overlay={
@@ -237,7 +236,7 @@ function Header() {
                           label: (
                             <AuthNavLink
                               to={'/create-item'}
-                              className={pathname === '/create-item' ? '!text-brandNormal' : ''}>
+                              className={pathname === '/create-item' ? '!text-lineDash' : ''}>
                               Create an Item
                             </AuthNavLink>
                           ),
@@ -247,7 +246,7 @@ function Header() {
                           label: (
                             <AuthNavLink
                               to={'/create-collection'}
-                              className={pathname === '/create-collection' ? '!text-brandNormal' : ''}>
+                              className={pathname === '/create-collection' ? '!text-lineDash' : ''}>
                               Create a Collection
                             </AuthNavLink>
                           ),
@@ -257,7 +256,7 @@ function Header() {
                           label: (
                             <AuthNavLink
                               to={'/create-nft-ai'}
-                              className={pathname === '/create-nft-ai' ? '!text-brandNormal' : ''}>
+                              className={pathname === '/create-nft-ai' ? '!text-lineDash' : ''}>
                               AI NFT Generator
                             </AuthNavLink>
                           ),
@@ -285,7 +284,7 @@ function Header() {
             <div className={` flex justify-center items-center`}>
               {!isLogin && (
                 <AntdButton
-                  className="mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-md bg-brandNormal"
+                  className="border-0 mr-[24px] w-[68px] h-[32px] font-medium text-[12px] !rounded-md bg-brandNormal"
                   type="primary"
                   onClick={handleLogin}>
                   Login
@@ -349,7 +348,7 @@ function Header() {
 
                 <div className="h-[64px] flex items-center">
                   <AuthNavLink to={`/account/${walletInfo.address}#Collected`}>
-                    <div className="text-textPrimary">Profile</div>
+                    <div className="text-textPrimary font-medium text-[18px]">Profile</div>
                   </AuthNavLink>
                 </div>
 
@@ -456,7 +455,7 @@ function Header() {
               </Space>
             ) : (
               <AntdButton
-                className="w-[103px] h-[48px] font-medium text-[16px] !rounded-lg bg-brandNormal"
+                className="border-0 w-[103px] h-[48px] font-medium text-[16px] !rounded-lg bg-brandNormal"
                 type="primary"
                 onClick={handleLogin}>
                 Login

@@ -14,7 +14,7 @@
 }
 
 .wrapper {
-  @apply overflow-hidden  px-[24px] mdl:px-[40px] w-full  mdl:w-[calc(100vw)];
+  @apply overflow-hidden  w-full  mdl:w-full;
 }
 
 .scroll {

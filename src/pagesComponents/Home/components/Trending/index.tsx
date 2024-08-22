@@ -7,7 +7,7 @@ import { ImageEnhance } from 'components/ImgLoading';
 import { formatTokenPrice } from 'utils/format';
 import styles from './styles.module.css';
 import BigNumber from 'bignumber.js';
-import CollectionListMobile from './CollectionListMobile';
+import CollectionList from './CollectionList';
 import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 import { TrendingCollectionItem } from 'api/types';
@@ -103,21 +103,12 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
   }, []);
 
   return (
-    <div className="mx-[24px] mdl:mx-[40px] mt-[48px] mdl:mt-[64px] flex items-center justify-center">
-      <div className="max-w-[1840px] w-full overflow-hidden">
-        <h2 className="mb-[16px] mdl:mb-[24px] text-[24px] font-semibold text-textPrimary">Trending Collections</h2>
-
-        {isSmallScreen ? (
-          <div className="w-[calc(100vw-48px)]">
-            <CollectionListMobile items={items} />
-          </div>
-        ) : (
-          <div className="w-full rounded-lg overflow-hidden whitespace-nowrap">
-            {items.map((item, index: number) => (
-              <CollectionItem key={`CollectionItem-${index}`} item={item} />
-            ))}
-          </div>
-        )}
+    <div className="mt-[48px] mdl:mt-[64px] flex items-center justify-center">
+      <div className="max-w-[1840px] w-full">
+        <h2 className="text-[24px] font-semibold text-textPrimary">Trending Collections</h2>
+        <div>
+          <CollectionList items={items} />
+        </div>
       </div>
     </div>
   );
