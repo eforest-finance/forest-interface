@@ -15,3 +15,8 @@
 
   transform: translateY(-16px);
 }
+
+.card-mask {
+  @apply rounded-b-lg mdl:left-[24px] bottom-0 w-[160px] mdl:w-[225px] h-[45px] absolute  mdl:bottom-[0px];
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+}

@@ -116,7 +116,7 @@ export function RecommendSeeds() {
 
   return (
     <section className={styles.wrapper}>
-      <div className="flex justify-between items-center mt-8 mb-4 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
+      <div className="flex justify-between items-center mt-[48px] mb-4 text-textPrimary text-xl mdTW:text-2xl font-semibold ">
         <span>Get your SEED</span>
       </div>
       {isSmallScreen ? (
