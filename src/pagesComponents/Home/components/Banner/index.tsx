@@ -1,4 +1,5 @@
-import { Carousel, Image, Skeleton, Button } from 'antd5/';
+import { Carousel, Image, Skeleton } from 'antd5/';
+import Button from 'baseComponents/Button';
 import styles from './styles.module.css';
 import { IBanner, IBannerItem } from 'api/types';
 import { useRef, useState } from 'react';
@@ -77,7 +78,7 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
                     nav.push(item.link);
                   }
                 }}
-                className="z-20 w-[164px] h-[48px] mdl:w-[170px] mdl:h-[56px] rounded-lg bg-white text-textPrimary text-[16px]">
+                className="border-0 z-20 w-[164px] h-[48px] mdl:w-[170px] mdl:h-[56px] rounded-lg bg-fillCardBg hover:bg-fillHoverBg text-textPrimary text-[16px]">
                 {item.buttonTitle}
               </Button>
             </div>
@@ -105,6 +106,7 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
                   <Skeleton.Image className="!w-full !h-[473px] mdl:!h-[332px] 2xl:!h-[473px] !rounded-[12px]" active />
                 }
               />
+              <div className={styles['card-mask']} />
               <span className="absolute  bottom-[8px] mdl:bottom-[12px] left-[12px] mdl:left-[55px] text-[12px] mdl:text-[18px] font-semibold text-white">
                 {item.name}
               </span>

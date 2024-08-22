@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { message, Skeleton, Button } from 'antd5/';
 
 import Banner from './components/Banner';
 import Trending from './components/Trending';
 import { RecommendSeeds } from './components/RecommendSeeds';
-// import ActionWrapper from './components/ActionWrapper';
 import { fetchBanner, fetchTrendingCollections } from 'api/fetch';
 import { IBanner, IBannerItem, IHotNFT, ITrendingCollectionsRes, TrendingCollectionItem } from 'api/types';
 import useGetState from 'store/state/getState';
 import styles from './styles.module.css';
 
-import Text1024 from 'assets/images/v2/home_text_1024.png';
-import Text768 from 'assets/images/v2/home_text_768.png';
-import Text375 from 'assets/images/v2/home_text_375.png';
+import useResponsive from 'hooks/useResponsive';
+
+import Text1024 from 'assets/images/v2/home_text_1024+.png';
+import Text1441 from 'assets/images/v2/home_text_1441+.png';
+import Text375 from 'assets/images/v2/home_text_x+.png';
 
 import HomeImage from 'assets/images/v2/home_image.png';
 import Image from 'next/image';
@@ -29,6 +30,8 @@ export default function Home() {
   const [collections, setCollections] = useState<TrendingCollectionItem[]>([]);
   const [isFetchingHotNFTs, setIsFetchingHotNFTs] = useState(false);
   const nav = useRouter();
+
+  const { isLG, isMD, is2XL } = useResponsive();
 
   const getBannerList = async () => {
     try {
@@ -60,32 +63,43 @@ export default function Home() {
     getHotNfts();
   }, [walletInfo]);
 
+  const getAIImageSource = () => {
+    if (!is2XL) {
+      return Text1441;
+    }
+
+    if (!isLG) {
+      return Text1024;
+    }
+    return Text375;
+  };
+
   return (
-    <div className="!min-h-[100vh] flex items-center flex-col	">
-      <div className="w-full">
-        <Banner list={bannerList}></Banner>
+    <div className={`!min-h-[100vh] flex flex-col items-center ${isMD && 'items-center'} `}>
+      <Banner list={bannerList}></Banner>
+      <div className="max-w-[1888px] px-[16px]  mdl:px-[24px] w-full">
         <Trending items={collections} />
         <RecommendSeeds />
         <div
-          className={`${styles['wrapper-width']} mt-[48px] mdl:mt-[64px] mb-[64px] py-[32px] px-[32px] mdl:py-[48px] ml-[24px] mdl:ml-[40px] h-[751px] mdl:h-[416px] bg-[#ECF6FF] rounded-lg flex flex-col mdl:flex-row  justify-around`}>
+          className={`${styles['wrapper-width']}  mdb:mt-[64px] mb-[64px] py-[32px] px-[24px] mdb:py-[48px] h-[751px] mdb:h-[416px] bg-[#ECF6FF] rounded-lg flex flex-col mdb:flex-row  justify-around items-center`}>
           <div className="flex flex-col">
             <Image
-              className="w-[254px] h-auto mdl:w-[614px] mdl:h-[112px]"
-              src={isSmallScreen ? Text375 : Text1024}
+              className="w-[254px] h-auto mc:w-[614px] mc:h-[112px] mdl:w-[338px] mdl:h-[152px] mdb:w-[254px] mdb:h-[128px]"
+              src={getAIImageSource()}
               alt=""
             />
-            <span className="mt-[16px] mdl:w-[552px]  mc:w-[820px] text-textSecondary text-[16px] mdl:text-[18px] font-medium line-[24px]">
+            <span className="mt-[16px] mdl:w-[464px] mdb:w-[254px] mc:w-[820px] w-[295px] text-textSecondary text-[16px] mdb:text-[18px] font-medium line-[24px]">
               Unlock breakthroughs in creation and creativity with Forest's AI-Empowered Generation Engine
             </span>
             <Button
-              className="mt-[32px]  mdl:mt-[48px] text-[16px] font-medium text-white !rounded-lg  w-[164px] h-[48px] mdl:w-[178px]  mdl:h-[56px] bg-brandNormal"
+              className="!border-0  hover:!bg-brandHover hover:!text-textWhite  mt-[32px]  mdb:mt-[48px] text-[16px] font-medium text-white !rounded-lg  w-[164px] h-[48px] mdb:w-[178px]  mdb:h-[56px] bg-brandNormal"
               onClick={() => {
                 nav.push('/create-nft-ai');
               }}>
               Create
             </Button>
           </div>
-          <div className="w-full mdl:w-[320px] mdl:h-[320px]">
+          <div className="w-[295px] mdb:w-[320px] mdb:h-[295px]">
             <Image className="w-full h-full" src={HomeImage} alt=""></Image>
           </div>
         </div>
