@@ -24,11 +24,18 @@ import TableCell from '../TableCell';
 import isTokenIdReuse from 'utils/isTokenIdReuse';
 import { useListingService } from '../SaleListingModal/hooks/useListingService';
 import { INftInfo } from 'types/nftTypes';
-import BuyNowModal from '../BuyNowModal';
+// import BuyNowModal from '../BuyNowModal';
+import BuyNowModal from '../BuyNowModal/BuyModal';
+import ApproveModal from 'components/ApproveModal';
+import ResultModal from 'components/ResultModal/ResultModal';
+import { FailBody, Success, SuccessFooter } from '../BuyNowModal/components/Result';
+
 import useIntervalRequestForListings from 'pagesComponents/Detail/hooks/useIntervalRequestForListings';
 import { useMount } from 'react-use';
 import { MAX_RESULT_COUNT_10 } from 'constants/common';
 import Copy from 'components/Copy';
+import useBuy from 'pagesComponents/Detail/hooks/useBuy';
+import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 
 function Listings(option: { rate: number }) {
   const { chainId, id } = useParams() as {
@@ -38,6 +45,8 @@ function Listings(option: { rate: number }) {
   };
   const { isLogin, login } = useCheckLoginAndToken();
   const buyModal = useModal(BuyNowModal);
+  const approveModal = useModal(ApproveModal);
+  const resultModal = useModal(ResultModal);
 
   const { infoState, walletInfo } = useGetState();
   const { isSmallScreen } = infoState;
@@ -45,6 +54,20 @@ function Listings(option: { rate: number }) {
   const { detailInfo, modalAction } = useDetailGetState();
   const { nftInfo, listings, nftNumber } = detailInfo;
   const columWidth = useRef<Map<string, number>>();
+  const saleInfo = useGetSalesInfo(nftInfo?.id || '');
+  const [buyItem, setBuyItem] = useState<any>();
+
+  const {
+    buyNow: handleBuyOne,
+    convertAveragePrice,
+    convertTotalPrice,
+    totalPrice,
+  } = useBuy({
+    elfRate: rate,
+    quantity: 1,
+    saleInfo,
+    buyItem,
+  });
 
   const { cancelListingItem } = useListingService(nftInfo as INftInfo, rate, undefined, true);
 
@@ -70,10 +93,110 @@ function Listings(option: { rate: number }) {
   };
 
   const onClickBuy = (record: FormatListingType) => {
-    buyModal.show({
-      elfRate: rate,
-      buyItem: record,
-    });
+    if (nftInfo) {
+      if (record.quantity === 1) {
+        setBuyItem(record);
+        approveModal.show({
+          nftInfo: {
+            ...nftInfo,
+            image: nftInfo?.previewImage || '',
+            collectionName: nftInfo?.nftCollection?.tokenName,
+            nftName: nftInfo?.tokenName,
+            priceTitle: 'Total Cost',
+            price: `${formatTokenPrice(nftInfo.listingPrice)} ELF`,
+            usdPrice: formatUSDPrice(nftInfo.listingPrice),
+          },
+          title: 'Approve purchase',
+          showBalance: false,
+          initialization: async () => {
+            try {
+              await handleBuyOne(
+                (explorerUrl: string, batchBuyNowRes: any) => {
+                  approveModal.hide();
+
+                  const { gasFee, totalDealAmountPrice = 0 } = batchBuyNowRes;
+                  const subTotal = totalDealAmountPrice / 10 ** 8;
+                  const total = subTotal + gasFee;
+                  const convertTotal = total * rate;
+
+                  resultModal.show({
+                    nftInfo: {
+                      image: nftInfo?.previewImage || '',
+                      collectionName: nftInfo?.nftCollection?.tokenName || '',
+                      nftName: nftInfo?.tokenName,
+                      gas: '1 ELF',
+                      subTotal: '2 ELF',
+                      totalPrice: `${formatTokenPrice(nftInfo.listingPrice)} ELF`,
+                      usdPrice: formatUSDPrice(nftInfo.listingPrice),
+                    },
+                    title: 'Your Purchase is complete',
+                    amount: 1,
+                    type: 'success',
+                    content: (
+                      <>
+                        <Success
+                          subTotal={`${formatTokenPrice(subTotal)} ELF`}
+                          gas={`${formatTokenPrice(gasFee)} ELF`}
+                          elf={formatTokenPrice(total)}
+                          usd={formatUSDPrice(convertTotal)}
+                        />
+                      </>
+                    ),
+                    footer: (
+                      <SuccessFooter
+                        href={explorerUrl}
+                        profile={`/account/${walletInfo.address}#Collected`}
+                        modal={resultModal}
+                      />
+                    ),
+                    onClose: () => {
+                      resultModal.hide();
+                    },
+                  });
+
+                  console.log('NFT Successfully Purchased!', explorerUrl);
+                },
+                (explorerUrl: string, list: any, errCount: number) => {
+                  approveModal.hide();
+                },
+                record,
+              );
+            } catch (error) {
+              approveModal.hide();
+
+              resultModal.show({
+                nftInfo: {
+                  image: nftInfo?.previewImage || '',
+                  collectionName: nftInfo?.nftCollection?.tokenName || '',
+                  nftName: nftInfo?.tokenName,
+                },
+                title: 'Purchase Failed',
+                amount: 1,
+                type: 'error',
+                content: (
+                  <>
+                    <FailBody />
+                  </>
+                ),
+                onClose: () => {
+                  resultModal.hide();
+                },
+              });
+            }
+          },
+          onClose: () => {
+            approveModal.hide();
+          },
+        });
+      } else {
+        buyModal.show({
+          nftInfo,
+          elfRate: rate,
+          buyItem: record,
+          amount: record.quantity,
+        });
+      }
+    }
   };
 
   const buyDisabled = useCallback(() => {

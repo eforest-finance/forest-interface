@@ -12,6 +12,8 @@ import { useComponentFlex } from 'aelf-web-login';
 import TransferIcon from 'assets/images/icon/transfer.svg';
 import clsx from 'clsx';
 import { SaleModalForERC721, SaleModalForERC1155 } from '../SaleModal';
+import SaleModal from '../SaleModal/SaleModal';
+
 import { getDefaultDataByNftInfoList, useGetListItemsForSale } from '../SaleModal/hooks/useSaleService';
 import { INftInfo } from 'types/nftTypes';
 import { SaleListingModal } from '../SaleListingModal';
@@ -20,6 +22,7 @@ function SellButton() {
   const transferModal = useModal(TransferModal);
   const sellModalForERC721 = useModal(SaleModalForERC721);
   const sellModalForERC1155 = useModal(SaleModalForERC1155);
+  const saleModal = useModal(SaleModal);
   const sellListingModal = useModal(SaleListingModal);
 
   const { infoState, walletInfo } = useGetState();
@@ -64,15 +67,27 @@ function SellButton() {
   const sell = async () => {
     if (!nftInfo) return;
     if (isERC721(nftInfo)) {
-      const defaultData = getDefaultDataByNftInfoList(listedNFTInfoList, true);
-      sellModalForERC721.show({ nftInfo, type: !isEditMode ? 'add' : 'edit', defaultData });
+      if (isEditMode) {
+        const defaultData = getDefaultDataByNftInfoList(listedNFTInfoList, true);
+        sellModalForERC721.show({ nftInfo, type: 'edit', defaultData });
+      } else {
+        saleModal.show({
+          nftInfo,
+        });
+      }
+
       return;
     } else {
       if (listItems > 0 && maxQuantity === 0) {
         sellListingModal.show(nftInfo);
         return;
       }
-      sellModalForERC1155.show({ nftInfo, type: listItems === 0 ? 'add' : 'edit' });
+
+      saleModal.show({
+        nftInfo,
+      });
+
+      // sellModalForERC1155.show({ nftInfo, type: listItems === 0 ? 'add' : 'edit' });
       return;
     }
   };

@@ -1,14 +1,14 @@
 import { SupportedELFChainId } from './chain';
 import { store } from 'store/store';
 
-enum ENVIRONMENT {
+export enum ENVIRONMENT {
   TEST = 'test',
   DEVELOPMENT = 'development',
   DEVELOPMENT4 = 'development4',
   PRODUCTION = 'production',
 }
 
-const env = process.env.NEXT_PUBLIC_APP_ENV as unknown as ENVIRONMENT;
+export const env = process.env.NEXT_PUBLIC_APP_ENV as unknown as ENVIRONMENT;
 
 const explorerUrls = {
   [ENVIRONMENT.TEST]: {

@@ -164,6 +164,7 @@ export interface IActivitiesItem {
   quantity?: number;
   startTime?: number;
   originQuantity?: number;
+  decimals: number;
 }
 
 export interface IActivities {

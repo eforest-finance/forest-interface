@@ -41,6 +41,7 @@ export type ArtType = {
   address: string;
   symbol?: string;
   collection?: string;
+  collectionSymbol?: string;
 };
 
 function ExchangeModalNew(options: {

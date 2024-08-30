@@ -38,7 +38,7 @@ export default function useMakeOffer(chainId?: Chain) {
           setTimeout(() => {
             message.destroy();
           }, 3000);
-          return Promise.reject('error');
+          return Promise.reject('not approved');
         }
 
         try {

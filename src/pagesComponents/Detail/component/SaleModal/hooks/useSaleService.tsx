@@ -3,7 +3,7 @@ import useGetState from 'store/state/getState';
 import { INftInfo } from 'types/nftTypes';
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { IPrice } from './useSetPrice';
-import { message } from 'antd';
+import { Divider, message } from 'antd';
 
 import getMaxNftQuantityOfSell from 'utils/getMaxNftQuantityOfSell';
 import { getDurationParamsForListingContractByDuration } from '../utils/getCurListDuration';
@@ -32,6 +32,9 @@ import moment from 'moment';
 import { getExploreLink } from 'utils';
 import BigNumber from 'bignumber.js';
 import PromptModal from 'components/PromptModal';
+import ApproveModal from 'components/ApproveModal';
+import ResultModal from 'components/ResultModal/ResultModal';
+
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { handlePlurality } from 'utils/handlePlurality';
 import { CancelListingMessage, ListingMessage } from 'constants/promptMessage';
@@ -40,6 +43,8 @@ import { store, useSelector } from 'store/store';
 import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { selectInfo } from 'store/reducer/info';
 import { useWalletSyncCompleted } from 'hooks/useWalletSync';
+import { Success, SuccessFooter } from '../../BuyNowModal/components/Result';
+import { Text, TotalPrice } from '../../BuyNowModal/components/Text';
 
 export function getDefaultDataByNftInfoList(infoList?: IListedNFTInfo[], showPrevious?: boolean) {
   if (!infoList?.length) return;
@@ -125,6 +130,9 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   const elfRate = useTokenData();
 
   const promptModal = useModal(PromptModal);
+  const approveModal = useModal(ApproveModal);
+  const resultModal = useModal(ResultModal);
+
   const inValidListPromptModal = useModal(PromptModal);
   const listingSuccessModal = useModal(ListingSuccessModal);
   const editListingSuccessModal = useModal(EditListingSuccessModal);
@@ -149,7 +157,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     elementScrollToView(document.getElementById('listings'), isSmallScreen ? 'start' : 'center');
   };
 
-  const listWithFixedPrice = async (amount: number, status?: EditStatusType) => {
+  const listWithFixedPrice = async (amount: number, status?: EditStatusType, modal?: 'new' | 'old') => {
     console.log('listWithFixedPrice', amount);
     try {
       const spender =
@@ -196,6 +204,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       messageHTML(TransactionId || '', 'success', nftInfo.chainId);
       const explorerUrl = getExploreLink(TransactionId, 'transaction', nftInfo.chainId);
       promptModal.hide();
+      approveModal.hide();
       if (mode === 'edit') {
         editListingSuccessModal.show({
           nftInfo,
@@ -204,11 +213,63 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
           status,
         });
       } else {
-        listingSuccessModal.show({ nftInfo, explorerUrl, onViewMyListing: hideAllModal });
+        if (modal === 'new') {
+          resultModal.show({
+            nftInfo: {
+              image: nftInfo?.previewImage || '',
+              collectionName: nftInfo?.nftCollection?.tokenName || '',
+              nftName: nftInfo?.tokenName,
+            },
+            title: 'Listing Successfully!',
+            amount,
+            type: 'success',
+            content: (
+              <>
+                <div className="w-full mt-[32px]">
+                  <Text
+                    className="!text-textPrimary !font-semibold"
+                    title="List Price per item"
+                    value={`${formatTokenPrice(listingPrice?.price)} ELF`}
+                  />
+                  <div className="text-[16px] text-right text-textSecondary">
+                    {formatUSDPrice(listingPrice?.price * elfRate)}
+                  </div>
+                </div>
+              </>
+            ),
+            footer: (
+              <SuccessFooter
+                modal={resultModal}
+                href={explorerUrl}
+                text={'View listing'}
+                profile={`/account/${walletInfo.address}#Collected`}
+              />
+            ),
+            onClose: () => {
+              resultModal.hide();
+            },
+          });
+        } else {
+          listingSuccessModal.show({ nftInfo, explorerUrl, onViewMyListing: hideAllModal });
+        }
       }
     } catch (error) {
       const resError = error as IContractError;
       message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+      const amount = !isERC721(nftInfo) ? itemsForSell : 1;
+
+      resultModal.hide();
+      approveModal.hide();
+
+      sellModalInstance.show({
+        nftInfo,
+        defaultData: {
+          listingPrice,
+          duration,
+          itemsForSell: amount,
+        },
+      });
+
       return Promise.reject(error);
     }
   };
@@ -425,6 +486,39 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     }
   };
 
+  const handleCompleteListing = async () => {
+    const mainAddress = await getAccountInfoSync();
+    if (!mainAddress) {
+      return;
+    }
+
+    if (!walletInfo.address || !nftInfo.nftSymbol || !checkInputDataBeforeSubmit()) return;
+
+    sellModalInstance.hide();
+    const extendStatus = undefined;
+
+    const amount = !isERC721(nftInfo) ? itemsForSell : 1;
+
+    console.log('showListingPromptModal', amount);
+    approveModal.show({
+      nftInfo: {
+        image: nftSaleInfo?.logoImage,
+        collectionName: nftSaleInfo?.collectionName,
+        nftName: nftInfo?.tokenName,
+        number: amount,
+        priceTitle: 'Listing Price',
+        price: `${listingPrice.price ? formatTokenPrice(listingPrice.price) : '--'} ELF`,
+        usdPrice: listingUSDPrice ? formatUSDPrice(listingUSDPrice) : '$ --',
+      },
+      title: 'List',
+      showBalance: false,
+      initialization: async () => await listWithFixedPrice(amount, extendStatus, 'new'),
+      onClose: () => {
+        approveModal.hide();
+      },
+    });
+  };
+
   useEffect(() => {
     if (!Number(listingPrice.price) || !duration?.value || !Number(itemsForSell)) {
       setListBtnDisable(true);
@@ -439,6 +533,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
   }, [elfRate, listingPrice]);
 
   return {
+    elfRate,
     nftSaleInfo,
     listingBtnDisable,
     listingPrice,
@@ -453,5 +548,6 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     onEditListingForERC721,
     onEditListingForERC1155,
     availableItemForSell,
+    handleCompleteListing,
   };
 }

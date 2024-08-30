@@ -87,14 +87,30 @@ export default function useBatchBuyNow(chainId?: Chain) {
   const getResult = async (contractAddress: string, TransactionResult: ITransactionResult, TransactionId: string) => {
     const proto = Proto.getInstance().getProto();
     const currentProto = proto[contractAddress];
+    const tokenProto = proto[aelfInfo.sideChainAddress];
     if (currentProto) {
       const log = TransactionResult?.Logs?.filter((item) => {
         return item.Name === 'BatchBuyNowResult';
       })?.[0];
+      const TransactionFeeChargedLog = TransactionResult?.Logs?.filter((item) => {
+        return item.Name === 'TransactionFeeCharged';
+      })?.[0];
+
       if (log) {
         try {
           const logResult: IBatchBuyNowResult = await deserializeLog(log, currentProto);
-          return logResult;
+          let gasFee = 0;
+          try {
+            const gasFeeResult = await deserializeLog(TransactionFeeChargedLog, tokenProto);
+            gasFee = gasFeeResult['amount'] / 10 ** 8;
+          } catch (error) {
+            console.log(error);
+          }
+
+          return {
+            logResult,
+            gasFee,
+          };
         } catch (error) {
           sendMessage({
             name: 'BatchBuyNowResultDeserializeLog',
@@ -146,7 +162,7 @@ export default function useBatchBuyNow(chainId?: Chain) {
       });
 
       if (!approveTokenResult) {
-        return 'failed';
+        return 'not approved';
       }
 
       try {
@@ -159,8 +175,10 @@ export default function useBatchBuyNow(chainId?: Chain) {
           if (TransactionResult) {
             const res = await getResult(aelfInfo.marketSideAddress, TransactionResult, TransactionId);
             if (res) {
+              const { logResult, gasFee } = res;
               return {
-                ...res,
+                ...logResult,
+                gasFee,
                 TransactionId,
               };
             } else {
@@ -173,14 +191,12 @@ export default function useBatchBuyNow(chainId?: Chain) {
           return 'failed';
         }
       } catch (error) {
-        message.destroy();
         const resError = error as unknown as IContractError;
-        if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
-          message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
-          return Promise.reject(error);
-        }
-        showErrorModal({ quantity: 0 });
-        return 'failed';
+        message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+        return Promise.reject(error);
+
+        // // showErrorModal({ quantity: 0 });
+        // return 'failed';
       }
     } else {
       login();

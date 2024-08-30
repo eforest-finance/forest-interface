@@ -1,0 +1,25 @@
+.modal {
+  .price {
+    @apply text-center w-full  h-[56px];
+
+    input {
+      @apply pl-[84px];
+    }
+  }
+
+  input {
+    @apply w-full h-[56px] text-center text-[20px] font-semibold;
+  }
+
+  :global {
+    .ant-modal-footer {
+      @apply !mx-[16px] !my-[10];
+    }
+
+    .ant-picker-input {
+      input {
+        @apply !text-[16px] font-medium;
+      }
+    }
+  }
+}

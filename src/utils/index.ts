@@ -1,6 +1,6 @@
 // import { supportedChainId } from 'constants/index';
 import EventEmitter from 'events';
-import { EXPLORE_URL } from 'constants/url';
+import { env, ENVIRONMENT, EXPLORE_URL } from 'constants/url';
 import { SupportedELFChainId } from 'constants/chain';
 import { store } from 'store/store';
 import BigNumber from 'bignumber.js';
@@ -39,7 +39,13 @@ export function getExploreLink(
   const prefix = EXPLORE_URL[target];
   switch (type) {
     case 'transaction': {
-      return `${prefix}tx/${data}`;
+      const exploreUrl = {
+        test: 'https://testnet.aelfscan.io',
+        production: 'https://www.aelfscan.io',
+      };
+      const url = exploreUrl[env];
+
+      return `${url}/${chainName}/tx/${data}`;
     }
     case 'token': {
       return `${prefix}token/${data}`;
