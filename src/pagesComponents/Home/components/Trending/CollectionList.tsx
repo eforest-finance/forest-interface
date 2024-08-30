@@ -174,7 +174,6 @@ export default function CollectionLists({ items }: any) {
           }}
           onSlideChange={onSlideChange}
           onResize={(swiper) => {
-            // debugger;
             setLast(swiper.isEnd);
           }}
           onSwiper={(swiper) => {

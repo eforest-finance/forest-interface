@@ -1,0 +1,10 @@
+.modal {
+  :global {
+    .ant-modal-body {
+      @apply pt-[24px] mdTW:!py-0 !px-[16px] mdTW:!px-[24px];
+    }
+    .ant-modal-footer {
+      @apply !py-[10px] !px-[16px] mdTW:!py-[32px] mdTW:!px-[24px];
+    }
+  }
+}

@@ -6,12 +6,14 @@ import Close from 'assets/images/icon/clear.svg';
 import useGetState from 'store/state/getState';
 export interface ModalProps extends AntdModalProps {
   subTitle?: string;
+  size?: 'm' | 'l' | 'xl';
 }
 function Modal(props: ModalProps) {
-  const { children, className, title, subTitle, wrapClassName } = props;
+  const { children, className, title, subTitle, wrapClassName, size = 'l' } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
+  console.log('size:', styles[size], size);
 
   return (
     <AntdModal
@@ -22,7 +24,9 @@ function Modal(props: ModalProps) {
       width={800}
       centered
       {...props}
-      className={`${styles.modal} ${isSmallScreen && styles['modal-mobile']} ${className || ''}`}
+      className={`${styles.modal} ${size ? styles[size] : ''} ${isSmallScreen && styles['modal-mobile']} ${
+        className || ''
+      }`}
       wrapClassName={`${styles['modal-wrap']} ${wrapClassName}`}
       okButtonProps={{
         className: `${btnStyles.button}`,

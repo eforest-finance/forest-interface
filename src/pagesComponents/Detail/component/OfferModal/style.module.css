@@ -24,15 +24,14 @@
     @apply text-right w-[200px] border-l-0 rounded-tr-[12px] rounded-br-[12px] text-[var(--color-secondary)] mb-0;
   }
 
-  :global{
-    .ant-modal-body{
+  :global {
+    .ant-modal-body {
       @apply mdTW:!pb-0;
     }
-    .ant-modal-footer{
+    .ant-modal-footer {
       @apply mdTW:!py-[32px];
     }
   }
-  
 }
 .mobile-offer-modal {
   .item-title {
@@ -67,6 +66,28 @@
 
     p {
       @apply !text-[16px] !leading-[24px] !font-medium;
+    }
+  }
+}
+
+.modal {
+  .price {
+    @apply text-center w-full  h-[56px];
+
+    input {
+      @apply pl-[84px];
+    }
+  }
+
+  input {
+    @apply w-full h-[56px] text-center text-[18px] mdl:text-[20px] font-semibold;
+  }
+
+  :global {
+    .ant-picker-input {
+      input {
+        @apply !text-[16px] font-medium;
+      }
     }
   }
 }

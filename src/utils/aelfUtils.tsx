@@ -301,6 +301,8 @@ export const checkELFApprove = async (options: {
   quantity: number;
 }) => {
   const { price, chainId, address, spender, quantity } = options;
+  // return await approve(spender, 'ELF', `${1}`, chainId);
+
   try {
     const res = await GetTotalOfferAmount(
       {

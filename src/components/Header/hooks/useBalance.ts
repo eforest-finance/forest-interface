@@ -10,6 +10,7 @@ export type BalanceType = { balance: BigNumber };
 export interface IResponseBalance {
   data?: number | BigNumber;
   run: any;
+  onGetBalance: any;
 }
 
 export const useBalance = ({ symbol = 'ELF', chain }: { symbol?: string; chain?: Chain }): IResponseBalance => {
@@ -33,5 +34,5 @@ export const useBalance = ({ symbol = 'ELF', chain }: { symbol?: string; chain?:
     pollingWhenHidden: false,
   });
 
-  return { data, run };
+  return { data, run, onGetBalance };
 };

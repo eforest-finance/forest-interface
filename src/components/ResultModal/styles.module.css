@@ -1,0 +1,15 @@
+.modal {
+  :global {
+    .ant-modal-header {
+      @apply !px-[24px] !py-[32px] text-[24px] font-semibold text-textPrimary;
+    }
+
+    .ant-modal-content {
+      @apply !rounded-lg;
+    }
+
+    .ant-modal-body {
+      @apply !px-[24px] !py-[32px] !pt-0;
+    }
+  }
+}

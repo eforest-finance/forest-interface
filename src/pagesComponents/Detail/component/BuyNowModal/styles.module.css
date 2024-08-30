@@ -1,0 +1,16 @@
+.modal {
+  :global {
+    .ant-modal-body {
+      @apply pt-[24px] !px-[16px] mdTW:!py-0 mdTW:!px-[24px];
+    }
+    .ant-modal-footer {
+      @apply !py-[10px] !px-[16px] mdTW:!px-[24px] mdTW:!py-[32px];
+    }
+
+    .ant-input-number-out-of-range {
+      input {
+        @apply text-textPrimary;
+      }
+    }
+  }
+}
