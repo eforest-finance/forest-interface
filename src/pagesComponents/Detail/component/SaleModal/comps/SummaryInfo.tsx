@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { formatTokenPrice } from 'utils/format';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import useGetState from 'store/state/getState';
 interface IInfoItemProps {
   left: string;
@@ -12,6 +12,7 @@ interface IPreviewInfo {
   forestFees?: number;
   creatorEarns?: number;
   itemsForSell?: number | string;
+  rate?: number;
 }
 
 const InfoItem = ({ left, right, className = '' }: IInfoItemProps) => {
@@ -23,11 +24,12 @@ const InfoItem = ({ left, right, className = '' }: IInfoItemProps) => {
   );
 };
 
-const getShowInfoData = ({
+export const getShowInfoData = ({
   listingPrice = '',
   itemsForSell = 1,
   forestFees = 0.025,
   creatorEarns = 0,
+  rate = 1,
 }: IPreviewInfo) => {
   const num = new BigNumber(itemsForSell);
   const price = new BigNumber(listingPrice);
@@ -41,12 +43,21 @@ const getShowInfoData = ({
           .toNumber();
   const showForestFees = new BigNumber(forestFees).times(100).toNumber();
   const showCreatorEarns = new BigNumber(creatorEarns).times(100).toNumber();
+  const totalUSDPrice =
+    num.isNaN() || price.isNaN()
+      ? '--'
+      : price
+          .times(num)
+          .times(1 - (forestFees + creatorEarns))
+          .times(rate)
+          .toNumber();
 
   return {
     showPrice: `${formatTokenPrice(showPrice)} ELF`,
     showForestFees: `${showForestFees}%`,
     showCreatorEarns: `${showCreatorEarns}%`,
     totalPrice: `${formatTokenPrice(totalPrice)} ELF`,
+    totalUSDPrice: `${formatUSDPrice(totalUSDPrice)}`,
   };
 };
 

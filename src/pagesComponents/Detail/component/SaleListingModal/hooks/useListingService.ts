@@ -15,6 +15,8 @@ import { message } from 'antd';
 import { messageHTML } from 'utils/aelfUtils';
 import { DEFAULT_ERROR } from 'constants/errorMessage';
 import PromptModal from 'components/PromptModal';
+import ApproveModal from 'components/ApproveModal';
+
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { handlePlurality } from 'utils/handlePlurality';
 import { CancelListingMessage } from 'constants/promptMessage';
@@ -33,6 +35,7 @@ export function useListingService(
   const [loading, setLoading] = useState<boolean>(false);
   const approveCancelListingModal = useModal(ApproveCancelListingModal);
   const promptModal = useModal(PromptModal);
+  const approveModal = useModal(ApproveModal);
 
   const { getAccountInfoSync } = useWalletSyncCompleted(nftInfo?.chainId);
   const getListingInfo = async () => {
@@ -150,8 +153,11 @@ export function useListingService(
         },
       });
       getListingInfo();
+      approveModal.hide();
       promptModal.hide();
     } catch (error) {
+      approveModal.hide();
+
       return Promise.reject(error);
     }
   };
@@ -163,28 +169,48 @@ export function useListingService(
     }
 
     listingModalInstance?.hide();
-    const usdPrice = item?.price * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
-
-    promptModal.show({
+    const totalPrice = item?.price * item.quantity;
+    const usdPrice = totalPrice * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
+    approveModal.show({
       nftInfo: {
         image: nftInfo?.previewImage || '',
         collectionName: nftInfo?.nftCollection?.tokenName,
         nftName: nftInfo?.tokenName,
         priceTitle: 'Listing Price',
-        price: `${formatTokenPrice(item.price)} ${item.purchaseToken.symbol || 'ELF'}`,
+        price: `${formatTokenPrice(totalPrice)} ${item.purchaseToken.symbol || 'ELF'}`,
         usdPrice: formatUSDPrice(usdPrice),
+        number: item.quantity,
         item: handlePlurality(Number(item.quantity), 'item'),
       },
-      title: CancelListingMessage.title,
-      content: {
-        title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
-        content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
-      },
+      title: 'Cancel Listing',
       initialization: () => handleDelist(item),
+      amount: item.quantity,
+      showBalance: false,
       onClose: () => {
-        promptModal.hide();
+        approveModal.hide();
       },
     });
+
+    // promptModal.show({
+    //   nftInfo: {
+    //     image: nftInfo?.previewImage || '',
+    //     collectionName: nftInfo?.nftCollection?.tokenName,
+    //     nftName: nftInfo?.tokenName,
+    //     priceTitle: 'Listing Price',
+    //     price: `${formatTokenPrice(item.price)} ${item.purchaseToken.symbol || 'ELF'}`,
+    //     usdPrice: formatUSDPrice(usdPrice),
+    //     item: handlePlurality(Number(item.quantity), 'item'),
+    //   },
+    //   title: CancelListingMessage.title,
+    //   content: {
+    //     title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
+    //     content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
+    //   },
+    //   initialization: () => handleDelist(item),
+    //   onClose: () => {
+    //     promptModal.hide();
+    //   },
+    // });
   };
 
   const cancelListingByRecord = async (item: any, rate: number) => {
@@ -194,23 +220,18 @@ export function useListingService(
     }
 
     listingModalInstance?.hide();
-    const usdPrice = item?.price * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
-
-    promptModal.show({
+    const totalPrice = item?.price * item.quantity;
+    const usdPrice = totalPrice * (item?.purchaseToken?.symbol === 'ELF' ? rate : 1);
+    approveModal.show({
       nftInfo: {
-        image: item?.previewImage || '',
-        collectionName: item.nftCollectionName,
-        nftName: item?.nftName,
-        priceTitle: 'Listing Price',
-        price: `${formatTokenPrice(item.price)} ${item.purchaseToken.symbol || 'ELF'}`,
+        image: nftInfo?.previewImage || '',
+        collectionName: nftInfo?.nftCollection?.tokenName,
+        nftName: nftInfo?.tokenName,
+        priceTitle: 'Total Offer',
+        price: `${formatTokenPrice(totalPrice)} ${item.purchaseToken.symbol || 'ELF'}`,
         usdPrice: formatUSDPrice(usdPrice),
-        item: handlePlurality(Number(item.quantity), 'item'),
       },
-      title: CancelListingMessage.title,
-      content: {
-        title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
-        content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
-      },
+      title: 'Cancel Offer',
       initialization: async () => {
         try {
           try {
@@ -236,6 +257,7 @@ export function useListingService(
             const { TransactionId } = result.result || result;
             messageHTML(TransactionId as string, 'success', item.chainId);
           } catch (error) {
+            approveModal.hide();
             const resError = error as IContractError;
             if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
               message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
@@ -243,15 +265,72 @@ export function useListingService(
             }
             message.error(resError.errorMessage?.message || DEFAULT_ERROR);
           }
-          promptModal.hide();
         } catch (error) {
+          approveModal.hide();
           return Promise.reject(error);
         }
       },
       onClose: () => {
-        promptModal.hide();
+        approveModal.hide();
       },
     });
+
+    // promptModal.show({
+    //   nftInfo: {
+    //     image: item?.previewImage || '',
+    //     collectionName: item.nftCollectionName,
+    //     nftName: item?.nftName,
+    //     priceTitle: 'Listing Price',
+    //     price: `${formatTokenPrice(item.price)} ${item.purchaseToken.symbol || 'ELF'}`,
+    //     usdPrice: formatUSDPrice(usdPrice),
+    //     item: handlePlurality(Number(item.quantity), 'item'),
+    //   },
+    //   title: CancelListingMessage.title,
+    //   content: {
+    //     title: walletInfo.portkeyInfo ? CancelListingMessage.portkey.title : CancelListingMessage.default.title,
+    //     content: walletInfo.portkeyInfo ? CancelListingMessage.portkey.message : CancelListingMessage.default.message,
+    //   },
+    //   initialization: async () => {
+    //     try {
+    //       try {
+    //         const result = await Delist(
+    //           {
+    //             symbol: item?.nftSymbol || '',
+    //             quantity: timesDecimals(item.quantity, Number(item?.decimals || 0) || '0').toNumber(),
+    //             price: {
+    //               symbol: item.purchaseToken?.symbol,
+    //               amount: new BigNumber(item?.price as number).times(10 ** 8).toNumber(),
+    //             },
+    //             startTime: {
+    //               seconds: moment.unix(Math.floor(item.startTime / 1000)).unix(),
+    //               nanos: 0,
+    //             },
+    //           },
+    //           {
+    //             chain: item.chainId,
+    //           },
+    //         );
+
+    //         message.destroy();
+    //         const { TransactionId } = result.result || result;
+    //         messageHTML(TransactionId as string, 'success', item.chainId);
+    //       } catch (error) {
+    //         const resError = error as IContractError;
+    //         if (resError.errorMessage?.message.includes(UserDeniedMessage)) {
+    //           message.error(resError?.errorMessage?.message || DEFAULT_ERROR);
+    //           return Promise.reject(error);
+    //         }
+    //         message.error(resError.errorMessage?.message || DEFAULT_ERROR);
+    //       }
+    //       promptModal.hide();
+    //     } catch (error) {
+    //       return Promise.reject(error);
+    //     }
+    //   },
+    //   onClose: () => {
+    //     promptModal.hide();
+    //   },
+    // });
   };
 
   return {

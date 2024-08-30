@@ -14,6 +14,9 @@ import Table from 'baseComponents/Table';
 import Button from 'baseComponents/Button';
 import useDefaultActiveKey from 'pagesComponents/Detail/hooks/useDefaultActiveKey';
 import ExchangeModal, { ArtType } from '../ExchangeModal/index';
+import AcceptModal from '../AcceptModal';
+import ApproveModal from 'components/ApproveModal';
+
 import { useModal } from '@ebay/nice-modal-react';
 import { getOffersInfo } from './utils/getOffersInfo';
 import useIntervalRequestForOffers from 'pagesComponents/Detail/hooks/useIntervalRequestForOffers';
@@ -43,7 +46,10 @@ export const COLUMN_TITLE = {
 
 export default function Offers(options: { rate: number }) {
   const exchangeModal = useModal(ExchangeModal);
+  const acceptModal = useModal(AcceptModal);
   const promptModal = useModal(PromptModal);
+  const approveModal = useModal(ApproveModal);
+
   const columWidth = useRef<Map<string, number>>();
 
   const { infoState, walletInfo } = useGetState();
@@ -107,34 +113,55 @@ export default function Offers(options: { rate: number }) {
         ],
       });
       promptModal.hide();
+      approveModal.hide();
     } catch (error) {
+      approveModal.hide();
       return Promise.reject(error);
     }
   };
 
   const onCancel = (data: FormatOffersType) => {
-    const usdPrice = data?.price * (data?.token?.symbol === 'ELF' ? rate : 1);
-
-    promptModal.show({
+    const totalPrice = data?.price * data.quantity;
+    const usdPrice = totalPrice * (rate || 1);
+    approveModal.show({
       nftInfo: {
         image: nftInfo?.previewImage || '',
         collectionName: nftInfo?.nftCollection?.tokenName,
         nftName: nftInfo?.tokenName,
-        priceTitle: 'Offer Price',
-        price: `${formatTokenPrice(data.price)} ${data.token.symbol || 'ELF'}`,
+        priceTitle: 'Total Offer',
+        price: `${formatTokenPrice(totalPrice)} ${data.token.symbol || 'ELF'}`,
         usdPrice: formatUSDPrice(usdPrice),
-        item: handlePlurality(Number(data.quantity), 'item'),
+        number: data.quantity,
       },
-      title: CancelOfferMessage.title,
-      content: {
-        title: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.title : CancelOfferMessage.default.title,
-        content: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.message : CancelOfferMessage.default.message,
-      },
+      title: 'Cancel Offer',
       initialization: () => handleCancelOffer(data),
+      amount: data.quantity,
+      showBalance: false,
       onClose: () => {
-        promptModal.hide();
+        approveModal.hide();
       },
     });
+
+    // promptModal.show({
+    //   nftInfo: {
+    //     image: nftInfo?.previewImage || '',
+    //     collectionName: nftInfo?.nftCollection?.tokenName,
+    //     nftName: nftInfo?.tokenName,
+    //     priceTitle: 'Offer Price',
+    //     price: `${formatTokenPrice(data.price)} ${data.token.symbol || 'ELF'}`,
+    //     usdPrice: formatUSDPrice(usdPrice),
+    //     item: handlePlurality(Number(data.quantity), 'item'),
+    //   },
+    //   title: CancelOfferMessage.title,
+    //   content: {
+    //     title: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.title : CancelOfferMessage.default.title,
+    //     content: walletInfo.portkeyInfo ? CancelOfferMessage.portkey.message : CancelOfferMessage.default.message,
+    //   },
+    //   initialization: () => handleCancelOffer(data),
+    //   onClose: () => {
+    //     promptModal.hide();
+    //   },
+    // });
   };
 
   const onDeal = (record: FormatOffersType) => {
@@ -152,13 +179,14 @@ export default function Offers(options: { rate: number }) {
         quantity: record?.quantity,
         convertPrice,
         address: record?.from?.address || '',
+        collectionSymbol: nftInfo.nftCollection?.symbol,
       };
-
-      exchangeModal.show({
+      acceptModal.show({
         art,
+        nftInfo,
         rate: rate,
         nftBalance: Number(nftNumber.nftBalance),
-        onClose: () => exchangeModal.hide(),
+        onClose: () => acceptModal.hide(),
       });
     }
   };

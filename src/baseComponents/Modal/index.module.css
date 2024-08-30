@@ -58,3 +58,15 @@
     }
   }
 }
+
+.m {
+  :global {
+    .ant-modal-header {
+      @apply mdTW:!px-[24px] mdTW:!py-[32px];
+    }
+
+    .ant-modal-body {
+      @apply mdTW:!px-[24px] mdTW:!py-0;
+    }
+  }
+}

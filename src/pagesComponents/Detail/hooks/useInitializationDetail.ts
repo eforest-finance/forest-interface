@@ -37,6 +37,7 @@ export const useInitializationDetail = () => {
 
   useEffect(() => {
     initializeProto(aelfInfo.marketSideAddress);
+    initializeProto(aelfInfo.sideChainAddress);
   }, [aelfInfo.marketSideAddress]);
 
   return {

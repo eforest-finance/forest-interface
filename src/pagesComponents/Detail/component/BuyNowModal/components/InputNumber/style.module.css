@@ -1,0 +1,21 @@
+.wrapper {
+  @apply w-full;
+
+  :global {
+    .ant-input-number {
+      @apply flex-1;
+    }
+  }
+
+  input {
+    @apply text-center;
+  }
+
+  .iconDisable {
+    @apply pointer-events-none;
+
+    path {
+      @apply fill-textDisable;
+    }
+  }
+}

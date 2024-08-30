@@ -280,6 +280,7 @@ export function useOfferTable(props: IUseOfferTableProps) {
   }, [isLogin, walletAddress, walletInfo.address]);
 
   return {
+    elfRate,
     actions: [cancelAction, acceptAction],
     shiftColumns,
     tableColumns,
