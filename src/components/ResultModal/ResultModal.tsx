@@ -38,11 +38,11 @@ interface IProps {
   };
   amount: number;
   buttonConfig?:
-  | {
-    btnText?: string;
-    onConfirm?: Function;
-  }[]
-  | false;
+    | {
+        btnText?: string;
+        onConfirm?: Function;
+      }[]
+    | false;
   initialization?: <T, R>(params?: T) => Promise<void | R>;
   onClose?: <T>(params?: T) => void;
   type: 'success' | 'warn' | 'error';

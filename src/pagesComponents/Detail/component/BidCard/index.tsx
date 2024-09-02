@@ -77,8 +77,9 @@ const BidCard = ({ isSmallScreen, auctionInfo, placeBid }: IBidCard) => {
       )}
       <div className="flex-col !items-start p-[24px] lgTW:flex flex mdTW:block !justify-between mdTW:flex-row mdTW:!items-end">
         <div
-          className={`w-full mdTW:w-auto mdTW:pt-0 mdTW:pb-[24px] px-0 pb-0 lgTW:p-0 ${isSmallScreen ? 'flex flex-col w-[100%]' : 'flex'
-            }`}>
+          className={`w-full mdTW:w-auto mdTW:pt-0 mdTW:pb-[24px] px-0 pb-0 lgTW:p-0 ${
+            isSmallScreen ? 'flex flex-col w-[100%]' : 'flex'
+          }`}>
           <PriceCard
             title={'Current Bid'}
             price={formatTokenPrice(divDecimals(auctionInfo?.priceAmount || auctionInfo?.currentELFPrice, 8))}
