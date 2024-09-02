@@ -1,7 +1,7 @@
 name: Build and Push Image
 on:
   push:
-    branches: ['dev', 'feature/*', 'fix/*', 'style/*']
+    branches: ['dev']
 jobs:
   build-and-push-image:
     runs-on: eforest-runner
