@@ -137,7 +137,7 @@ module.exports = {
       xlTW: '1280px',
       '2xlTW': '1536px',
       large: '2560px',
-    },
+    }
   },
   plugins: [],
 };

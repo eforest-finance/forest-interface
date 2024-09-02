@@ -237,7 +237,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
       title={<div>Buy Now</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       size="m"
       closeIcon={<Close />}
       onOk={() => onConfirm()}
@@ -290,7 +290,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
           usdPrice=""
         />
         <div className="flex flex-col mdTW:flex-row  justify-between mt-[16px]">
-          <span className="text-[16px] mdTW:text-[18px] font-medium">Quantity</span>
+          <span className="text-[16px] mdTW:text-[16px] font-medium">Quantity</span>
           <div className="flex flex-col items-end mt-[16px] mdTW:mt-0">
             <InputQuantity
               width={isSmallScreen ? '100%' : undefined}

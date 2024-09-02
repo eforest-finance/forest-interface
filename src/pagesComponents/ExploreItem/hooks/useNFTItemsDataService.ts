@@ -72,23 +72,23 @@ export function useNFTItemsDataService({
   params: Partial<CompositeNftInfosParams>;
   userWalletAddress?: string;
 }) {
-  const nav = useRouter();
+  // const nav = useRouter();
 
-  const updateSorting = (query: string) => {
-    const pathname = location.pathname;
-    if (location.search !== `?${query}`) {
-      nav.push(`${pathname}?${query}`);
+  // const updateSorting = (query: string) => {
+  //   const pathname = location.pathname;
+  //   if (location.search !== `?${query}`) {
+  //     nav.push(`${pathname}?${query}`);
 
-      window.history.pushState(null, '', `${pathname}?${query}`);
-    }
-  };
+  //     window.history.pushState(null, '', `${pathname}?${query}`);
+  //   }
+  // };
 
   const { data, loading, loadingMore, noMore } = useInfiniteScroll(
     (d) => {
       const _page = !d?._page ? 1 : d._page + 1;
-      const query = `filterParams=${encodeURI(JSON.stringify(params))}`;
+      // const query = `filterParams=${encodeURI(JSON.stringify(params))}`;
 
-      updateSorting(query);
+      // updateSorting(query);
       return fetchNFTItemsData(
         {
           ...params,

@@ -427,7 +427,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
       title={<div>Make an Offer</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       closeIcon={<Close />}
       onCancel={onCancel}
       afterClose={modal.remove}
@@ -449,7 +449,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           </Button>
         </div>
       }>
-      <div className="w-full h-full flex flex-col relative">
+      <div className="w-full h-full flex flex-col relative max-h-[464px]">
         <ItemInfoCard
           {...nftInfo}
           image={nftInfo?.previewImage || ''}
@@ -461,7 +461,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         />
 
         <div>
-          <div className="text-[16px] mdTW:text-[18px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
+          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
             Offer Price
           </div>
           <div className="flex justify-between mt-[16px]">
@@ -470,10 +470,10 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
               onClick={() => {
                 setPrice(nftInfo.listingPrice);
               }}>
-              <span className="text-[12px] mdTW:text-[16px] text-textSecondary">Collection Floor Price</span>
-              <span className="font-semibold text-[16px] mdTW:text-[18px] text-textPrimary">
+              <p className="text-[12px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</p>
+              <p className="font-semibold text-[14px] mdTW:text-[16px] text-textPrimary">
                 {formatTokenPrice(nftInfo.listingPrice)} ELF
-              </span>
+              </p>
             </Button>
             <Button
               disabled={nftInfo.maxOfferPrice < 0}
@@ -481,10 +481,10 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
               onClick={() => {
                 setPrice(nftInfo.maxOfferPrice);
               }}>
-              <span className="text-[12px] mdTW:text-[16px] text-textSecondary">Best Offer</span>
-              <span className="font-semibold  text-[16px] text-textPrimary">
+              <p className="text-[12px] mdTW:text-[14px] text-textSecondary">Best Offer</p>
+              <p className="font-semibold  text-[16px] text-textPrimary">
                 {nftInfo.maxOfferPrice < 0 ? '--' : `${formatTokenPrice(nftInfo.maxOfferPrice)} ELF`}
-              </span>
+              </p>
             </Button>
           </div>
         </div>
@@ -498,12 +498,12 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             onChange={setOfferPrice}
           />
           <Divider type="vertical" />
-          <span className="px-[12px] text-textSecondary text-[18px] mdTW:text-[20px] font-medium">ELF</span>
+          <span className="px-[12px] text-textSecondary text-[16px] mdTW:text-[16px] font-medium">ELF</span>
         </div>
 
         {!isERC721(nftInfo) && (
           <>
-            <div className="mt-[24px] mdTW:mt-[32px] text-[18px] font-medium text-textPrimary mb-[16px]">
+            <div className="mt-[24px] mdTW:mt-[32px] text-[16px] font-medium text-textPrimary mb-[16px]">
               Offer Amount
             </div>
             <InputNumberWithAddon

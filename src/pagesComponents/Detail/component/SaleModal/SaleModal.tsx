@@ -70,7 +70,7 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
       title={<div>List</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       closeIcon={<Close />}
       onOk={modal.hide}
       onCancel={modal.hide}
@@ -100,7 +100,7 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
         />
 
         <div>
-          <div className="text-[16px] mdTW:text-[18px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
+          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
             Set a List Price
           </div>
           <div className="flex justify-between mt-[16px]">
@@ -116,8 +116,8 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
                   price: nftInfo.listingPrice,
                 });
               }}>
-              <span className="text-[14px] mdTW:text-[16px] text-textSecondary">Collection Floor Price</span>
-              <span className="text-[16px] mdTW:text-[18px] text-textPrimary font-medium">
+              <span className="text-[14px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</span>
+              <span className="text-[16px] mdTW:text-[16px] text-textPrimary font-medium">
                 {formatTokenPrice(nftInfo.listingPrice)} ELF
               </span>
             </Button>
@@ -133,8 +133,8 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
                   price: nftInfo.latestDealPrice,
                 });
               }}>
-              <span className="text-[14px] mdTW:text-[16px] text-textSecondary">Last sales</span>
-              <span className="text-[16px] mdTW:text-[18px] text-textPrimary font-medium">
+              <span className="text-[14px] mdTW:text-[14px] text-textSecondary">Last sales</span>
+              <span className="text-[16px] mdTW:text-[16px] text-textPrimary font-medium">
                 {formatTokenPrice(nftInfo.latestDealPrice)} ELF
               </span>
             </Button>
@@ -161,12 +161,12 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
             }}
           />
           <Divider type="vertical" />
-          <span className="px-[12px] text-textSecondary text-[18px]  mdTW:text-[20px] font-medium">ELF</span>
+          <span className="px-[12px] text-textSecondary text-[16px]  mdTW:text-[16px] font-medium">ELF</span>
         </div>
 
         {!is721 && (
           <>
-            <div className="mt-[24px] mdTW:mt-[32px] text-[18px] font-medium text-textPrimary mb-[16px]">
+            <div className="mt-[24px] mdTW:mt-[32px] text-[16px] font-medium text-textPrimary mb-[16px]">
               List Amount
             </div>
             <InputNumberWithAddon

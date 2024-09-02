@@ -110,16 +110,14 @@ export default function Activity() {
             <Logo className="w-[16px] h-[16px] mr-[4px]" src={getLogoUrl(record?.priceToken?.symbol)} />
             &nbsp;
             <span
-              className={`text-[var(--color-primary)] font-semibold ${
-                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-              }`}>
+              className={`text-[var(--color-primary)] font-semibold ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+                }`}>
               {formatTokenPrice(+text)}
             </span>
             &nbsp;
             <span
-              className={`text-[var(--color-secondary)] font-medium ${
-                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-              }`}>
+              className={`text-[var(--color-secondary)] font-medium ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+                }`}>
               {record?.priceToken?.symbol}
             </span>
           </div>
@@ -131,9 +129,8 @@ export default function Activity() {
         width: isSmallScreen ? 120 : 108,
         render: (text: string) => (
           <p
-            className={`text-[var(--color-secondary)] font-medium ${
-              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-            }`}>
+            className={`text-[var(--color-secondary)] font-medium ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+              }`}>
             {text}
           </p>
         ),
@@ -144,9 +141,8 @@ export default function Activity() {
         width: isSmallScreen ? 120 : 200,
         render: (from: IFrom | null) => (
           <p
-            className={`cursor-pointer text-[var(--brand-base)] font-medium from ${
-              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-            }`}
+            className={`cursor-pointer text-[var(--brand-base)] font-medium from ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+              }`}
             onClick={() => from?.address && nav.push(`/account/${from?.address}#Collected`)}>
             {getOmittedStr(from?.name || '--', OmittedType.ADDRESS)}
           </p>
@@ -160,9 +156,8 @@ export default function Activity() {
           <>
             {to ? (
               <p
-                className={`cursor-pointer text-[var(--brand-base)] font-medium from ${
-                  isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-                }`}
+                className={`cursor-pointer text-[var(--brand-base)] font-medium from ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+                  }`}
                 onClick={() => to?.address && nav.push(`/account/${to?.address}#Collected`)}>
                 {getOmittedStr(to?.name || '', OmittedType.ADDRESS)}
               </p>
@@ -179,9 +174,8 @@ export default function Activity() {
         width: isSmallScreen ? 148 : 200,
         render: (timestamp: number, record: IActivitiesItem) => (
           <p
-            className={`${styles.jump} text-[var(--color-primary)] font-medium from flex items-center ${
-              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-            }`}>
+            className={`${styles.jump} text-[var(--color-primary)] font-medium from flex items-center ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+              }`}>
             {getDateString(timestamp)}
 
             <a
@@ -290,9 +284,8 @@ export default function Activity() {
           )}
           <div
             id="activity-table-wrap"
-            className={`border-0 border-t border-solid border-[var(--line-box)] ${
-              isSmallScreen ? 'max-h-[192px]' : 'max-h-[238px]'
-            } rounded-bl-[12px] rounded-br-[12px] overflow-y-scroll`}
+            className={`border-0 border-t border-solid border-[var(--line-box)] ${isSmallScreen ? 'max-h-[192px]' : 'max-h-[238px]'
+              } rounded-bl-[12px] rounded-br-[12px] overflow-y-scroll`}
             onScrollCapture={(e) => handleTableScroll(e.target as HTMLDivElement)}>
             <Table
               rowKey={(record) => record.id}

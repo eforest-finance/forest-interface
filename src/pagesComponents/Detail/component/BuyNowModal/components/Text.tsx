@@ -20,7 +20,7 @@ const TotalPrice = (props: any) => {
       <div className="">{title}</div>
       <div className="flex items-end flex-col">
         <div>{elf}</div>
-        <div className="mt-[4px] text-[14px] mdl:text-[16px] text-textSecondary font-normal">{usd}</div>
+        <div className="mt-[4px] text-[14px] mdl:text-[14px] text-textSecondary font-normal">{usd}</div>
       </div>
     </div>
   );

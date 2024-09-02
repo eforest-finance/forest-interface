@@ -32,7 +32,7 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  console.log('searchParams', searchParams, qs.parse(location.search));
+  console.log('searchParams11111', searchParams, qs.parse(location.search));
 
   const queryObj = (qs.parse(location.search) as any) || {};
   const listType = (searchParams.get('list') as unknown as BoxSizeEnum) || BoxSizeEnum.small;

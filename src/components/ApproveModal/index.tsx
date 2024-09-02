@@ -141,7 +141,7 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
       title={<div>{title}</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       closeIcon={
         loading ? (
           <LoadingXS />
@@ -163,18 +163,18 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
 
         {!showBalance || loading || balance >= nftInfo?.listingPrice * amount ? (
           <div>
-            <div className="text-xl font-medium text-textPrimary">Go to your wallet</div>
-            <div className="mt-[16px] text-textSecondary text-[16px]">
+            <div className="text-[16px] font-medium text-textPrimary">Go to your wallet</div>
+            <div className="mt-[16px] text-textSecondary text-[14px]">
               You'll be asked to approve this transaction from your wallet.
             </div>
           </div>
         ) : (
           <div className="">
             <div className="flex justify-between">
-              <div className="text-textSecondary text-[18px]">Your ELF Balance</div>
+              <div className="text-textSecondary text-[16px]">Your ELF Balance</div>
               <div className="flex flex-col">
-                <span className="text-[18px] text-textPrimary">{formatTokenPrice(balance)} ELF</span>
-                <span className="text-error">Insufficient balance</span>
+                <span className="text-[16px] text-textPrimary">{formatTokenPrice(balance)} ELF</span>
+                <span className="text-error text-[14px]">Insufficient balance</span>
               </div>
             </div>
             <div className="flex items-center justify-center">
