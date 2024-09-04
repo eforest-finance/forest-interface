@@ -57,6 +57,7 @@ function FilterTags({
       </div>
     );
   }, [clearAll]);
+
   return tagList.length ? (
     <div className={clsx(styles['filter-tags'])}>
       <div className={styles['filter-tags-container']}>

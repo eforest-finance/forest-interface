@@ -1,4 +1,4 @@
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 import useGetState from 'store/state/getState';
 import { getDefaultFilter, getFilter, getFilterFromSearchParams, getFilterList } from '../components/Filters/util';
 import { useRequest } from 'ahooks';
@@ -9,11 +9,12 @@ import qs from 'query-string';
 
 export function useFilterForItemService(nftCollectionId: string) {
   const nftType = String(nftCollectionId).endsWith('-SEED-0') ? 'seed' : 'nft';
-  const queryObj = qs.parse(location.search);
 
   const { aelfInfo, walletInfo } = useGetState();
-  const params = useSearchParams();
-  const filterParamStr = params.get('filterParams');
+
+  const filterParamObj: any = qs.parse(location.search);
+
+  console.log('filterParamObjfilterParamObj', filterParamObj);
 
   const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
     refreshDeps: [nftCollectionId],
@@ -21,15 +22,16 @@ export function useFilterForItemService(nftCollectionId: string) {
     staleTime: 300000,
   });
 
-  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr, generationInfos);
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, generationInfos);
+
+  console.log('paramsFromUrlForFilter------', paramsFromUrlForFilter);
+
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
   const filterList = getFilterList(nftType, aelfInfo.curChain);
 
   const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
     Object.assign({}, defaultFilter, paramsFromUrlForFilter),
   );
-
-  console.log('filterParamStr:', paramsFromUrlForFilter, filterSelect);
 
   const getFilterBySearchQuery = () => {
     // setFilterSelect((pre) => ({

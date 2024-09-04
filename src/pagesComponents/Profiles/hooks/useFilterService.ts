@@ -8,8 +8,9 @@ import {
   getFilterListForMyItem,
   getTagList,
 } from 'pagesComponents/ExploreItem/components/Filters/util';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useGetState from 'store/state/getState';
+import qs from 'qs';
 
 export function useFilterService(tabType: string, walletAddress: string) {
   const { aelfInfo, walletInfo } = useGetState();
@@ -18,22 +19,19 @@ export function useFilterService(tabType: string, walletAddress: string) {
 
   const filterList = getFilterListForMyItem(aelfInfo.curChain);
 
-  const params = useSearchParams();
-  const filterParamStr = params.get('filterParams');
+  // const params = useSearchParams();
+  // const filterParamStr = params.get('filterParams');
 
-  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr, []);
-  const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
-    Object.assign({}, defaultFilter, paramsFromUrlForFilter),
-  );
+  const filterParamObj: any = qs.parse(location.search);
+
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, []);
+
+  const [filterSelect, setFilterSelect] = useState(Object.assign({}, defaultFilter, paramsFromUrlForFilter));
 
   const [SearchParam, setSearchParam] = useState<string>(filterSelect.keyword || '');
   const [searchInputValue, setSearchInputValue] = useState<string>(SearchParam);
 
-  console.log('filterSelect:', filterSelect);
-
   const [sort, setSort] = useState<string>(filterSelect.Sorting || (dropDownCollectionsMenu.data[0].value as string));
-
-  console.log('filterSelect:', sort);
 
   const { run: changeSearchParam } = useDebounceFn(
     (searchKeyWord: string) => {

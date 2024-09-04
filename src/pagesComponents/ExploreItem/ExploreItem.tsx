@@ -29,13 +29,10 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
   const nftType = nftCollectionId.endsWith('-SEED-0') ? 'seed' : 'nft';
 
   const { wallet } = useWebLogin();
-  const router = useRouter();
 
   const searchParams = useSearchParams();
-  console.log('searchParams11111', searchParams, qs.parse(location.search));
 
-  const queryObj = (qs.parse(location.search) as any) || {};
-  const listType = (searchParams.get('list') as unknown as BoxSizeEnum) || BoxSizeEnum.small;
+  const listType = (searchParams.get('Size') as unknown as BoxSizeEnum) || BoxSizeEnum.small;
 
   const [size, setSize] = useState<BoxSizeEnum>(listType);
   const { isLG } = useResponsive();
@@ -61,18 +58,23 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
     changeSearchParam(e.target.value);
   };
 
-  const [sort, setSort] = useState<string>(dropDownCollectionsMenu.data[0].value as string);
+  const [sort, setSort] = useState<string>(
+    searchParams.get('Sorting') ?? (dropDownCollectionsMenu.data[0].value as string),
+  );
 
   const requestParams = useMemo(() => {
     const filter = getFilter(filterSelect);
+    console.log('filter--------------', filter);
+
     return {
       CollectionId: nftCollectionId,
       CollectionType: nftType,
       Sorting: sort,
       SearchParam: SearchParam,
+      Size: size,
       ...filter,
     } as Partial<CompositeNftInfosParams>;
-  }, [filterSelect, SearchParam, nftCollectionId, sort, nftType]);
+  }, [filterSelect, SearchParam, nftCollectionId, sort, size, nftType]);
 
   const sortChange = (sort: string) => {
     setSort(sort);
@@ -86,10 +88,6 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
     params: requestParams,
     userWalletAddress: wallet?.address,
   });
-
-  useEffect(() => {
-    setSize(listType);
-  }, [listType]);
 
   return (
     <>
@@ -105,9 +103,6 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
         }}
         sizeChange={(size) => {
           setSize(size);
-          const nextUrl = new URL(location.href);
-          nextUrl.searchParams.set('list', size);
-          router.push(nextUrl.href);
         }}
         selectTagCount={tagList.length}
         selectProps={{
