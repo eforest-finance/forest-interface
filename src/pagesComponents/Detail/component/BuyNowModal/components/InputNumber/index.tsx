@@ -34,7 +34,7 @@ export default function InputQuantity(props: InputQuantityProps) {
   return (
     <div className={styles.wrapper}>
       <div
-        className={`flex justify-center items-center text-[20px] font-semibold w-[${
+        className={`flex justify-center items-center text-[16px] font-semibold w-[${
           width || '240px'
         }] h-[56px] border-solid border-lineBorder border rounded-lg`}>
         <Minus
@@ -44,7 +44,7 @@ export default function InputQuantity(props: InputQuantityProps) {
         <InputNumber
           max={max}
           min={0}
-          style={{ height: 'auto', fontSize: '20px', fontWeight: 600, textAlign: 'center' }}
+          style={{ height: 'auto', fontSize: '16px', fontWeight: 600, textAlign: 'center' }}
           controls={false}
           value={quantity}
           bordered={false}

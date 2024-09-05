@@ -119,7 +119,7 @@ function CancelListModal({ title, buttonConfig, initialization, onClose, list }:
       }
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       closeIcon={
         loading ? (
           <LoadingXS />

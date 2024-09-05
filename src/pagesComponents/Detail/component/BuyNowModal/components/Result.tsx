@@ -56,7 +56,7 @@ const SuccessFooter = ({
 const FailBody = () => {
   return (
     <div className="mt-[32px] flex">
-      <span className="text-center text-[16px]  text-textSecondary ">
+      <span className="text-center text-[14px]  text-textSecondary ">
         Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item
         before you
       </span>
@@ -67,10 +67,10 @@ const FailBody = () => {
 const PartialBody = ({ count }) => {
   return (
     <div className="mt-[24px] mdTW:mt-[32px] flex flex-col">
-      <div className="mb-[24px] mdTW:mb-[32px] text-center text-[20px] font-semibold">
+      <div className="mb-[24px] mdTW:mb-[32px] text-center text-[16px] font-semibold">
         {count} items purchased failed
       </div>
-      <span className="text-center text-[16px]  text-textSecondary ">
+      <span className="text-center text-[14px]  text-textSecondary ">
         Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item
         before you
       </span>

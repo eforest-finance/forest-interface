@@ -75,7 +75,7 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
       title={<div>{type === 'edit' ? 'Edit List' : 'List'}</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       closeIcon={<Close />}
       onOk={modal.hide}
       onCancel={modal.hide}
@@ -153,8 +153,8 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
                   price: nftInfo.listingPrice,
                 });
               }}>
-              <span className="text-[14px] mdTW:text-[16px] text-textSecondary">Collection Floor Price</span>
-              <span className="text-[16px] mdTW:text-[18px] text-textPrimary font-medium">
+              <span className="text-[14px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</span>
+              <span className="text-[16px] mdTW:text-[16px] text-textPrimary font-medium">
                 {formatTokenPrice(nftInfo.listingPrice)} ELF
               </span>
             </Button>
@@ -170,8 +170,8 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
                   price: nftInfo.latestDealPrice,
                 });
               }}>
-              <span className="text-[14px] mdTW:text-[16px] text-textSecondary">Last sales</span>
-              <span className="text-[16px] mdTW:text-[18px] text-textPrimary font-medium">
+              <span className="text-[14px] mdTW:text-[14px] text-textSecondary">Last sales</span>
+              <span className="text-[16px] mdTW:text-[16px] text-textPrimary font-medium">
                 {formatTokenPrice(nftInfo.latestDealPrice)} ELF
               </span>
             </Button>
@@ -198,12 +198,12 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
             }}
           />
           <Divider type="vertical" />
-          <span className="px-[12px] text-textSecondary text-[18px]  mdTW:text-[20px] font-medium">ELF</span>
+          <span className="px-[12px] text-textSecondary text-[16px]  mdTW:text-[16px] font-medium">ELF</span>
         </div>
 
         {!is721 && (
           <>
-            <div className="mt-[24px] mdTW:mt-[32px] text-[18px] font-medium text-textPrimary mb-[16px]">
+            <div className="mt-[24px] mdTW:mt-[32px] text-[16px] font-medium text-textPrimary mb-[16px]">
               List Amount
             </div>
             <InputNumberWithAddon

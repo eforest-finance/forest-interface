@@ -15,12 +15,16 @@ import Down from 'assets/images/arrow-down.svg';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 import useTokenData from 'hooks/useTokenData';
+import qs from 'qs';
 
 export default function Profile() {
   const { userInfo, collectedTotalCount, createdTotalCount, avatar } = useProfilePageService();
   console.log(userInfo);
 
-  const [activeKey, setActiveKey] = useState('collected');
+  const searchAll: any = qs.parse(location.search);
+  const tabType = searchAll ? searchAll['tabType'] : 'Collected';
+
+  const [activeKey, setActiveKey] = useState(tabType);
   const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreActiveKey.made);
   const { address } = useProfilePageService();
   const { walletInfo, aelfInfo } = useGetState();

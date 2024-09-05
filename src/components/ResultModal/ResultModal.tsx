@@ -125,7 +125,7 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
           title={null}
           open={modal.visible}
           className={styles.modal}
-          width={630}
+          width={550}
           closeIcon={<Close />}
           onOk={() => onConfirm()}
           onCancel={onCancel}
@@ -133,13 +133,13 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
           footer={footer ? footer : null}>
           <div className="w-full h-full flex flex-col items-center relative">
             <div className="!w-[164px] h-[164px]  flex justify-center items-center overflow-hidden rounded-[20px] border border-solid border-lineBorder">
-              <ImageEnhance src={image} className="!rounded-none !w-[164px] !h-[164px]" />
+              <ImageEnhance src={image} className="!rounded-none !w-[160px] !h-[160px]" />
             </div>
             <div className="mt-[16px]">
-              <p className={clsx('text-[20px] font-semibold !text-textPrimary', styles['nft-list-card-text-ellipsis'])}>
+              <p className={clsx('text-[16px] font-semibold !text-textPrimary', styles['nft-list-card-text-ellipsis'])}>
                 {collectionName}
                 {amount && amount > 0 && (
-                  <span className="inline-block text-[16px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
+                  <span className="inline-block text-[14px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
                     x {amount}
                   </span>
                 )}
@@ -148,15 +148,15 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
             <div>
               <p
                 className={clsx(
-                  'text-base font-medium text-textSecondary mt-[8px]',
+                  'text-[14px]] font-medium text-textSecondary mt-[8px]',
                   styles['nft-list-card-text-ellipsis'],
                 )}>
                 {nftName}
               </p>
             </div>
 
-            <div className="flex items-center text-[32px] font-semibold mt-[32px]">
-              <div className="w-[40px] h-[40px] mr-[16px]">{getIcon()}</div>
+            <div className="flex items-center text-[24px] font-semibold mt-[32px]">
+              <div className="w-[32px] h-[32px] mr-[16px]">{getIcon()}</div>
               <div>{title}</div>
             </div>
             {content}

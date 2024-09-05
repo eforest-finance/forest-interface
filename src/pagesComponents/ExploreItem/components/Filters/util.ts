@@ -93,15 +93,8 @@ export const getFilterList = (
   return filterList;
 };
 
-export function getFilterFromSearchParams(filterParamStr: string | null, generationInfos: any) {
-  if (!filterParamStr) return {};
-
-  const filterParamsObj = JSON.parse(decodeURI(filterParamStr)) as {
-    [FilterKeyEnum.Traits]?: {
-      key: string;
-      values: string[];
-    }[];
-  } as any;
+export function getFilterFromSearchParams(filterParamsObj: any, generationInfos: any) {
+  if (!Object.keys(filterParamsObj).length) return {};
 
   filterParamsObj[FilterKeyEnum.Status] = {
     type: FilterType.Checkbox,
@@ -128,20 +121,110 @@ export function getFilterFromSearchParams(filterParamStr: string | null, generat
     data: [],
   };
 
-  const statusMap = {
+  const statusMap: any = {
     HasListingFlag: 'Buy Now',
     HasAuctionFlag: 'On Auction',
     HasOfferFlag: 'Has Offers',
   };
 
-  const priceMap = {
+  const priceMap: any = {
     PriceLow: 'min',
     PriceHigh: 'max',
   };
 
+  if (filterParamsObj['generation']?.length) {
+    filterParamsObj.Generation.data = filterParamsObj['generation'].split('|').map((list: number) => {
+      return {
+        value: list.toString(),
+        label: list.toString(),
+      };
+    });
+    filterParamsObj.generation = filterParamsObj['generation'].split('|');
+  }
+
+  if (filterParamsObj['RarityList']?.length) {
+    filterParamsObj.Rarity.data = filterParamsObj['RarityList']
+      .toString()
+      .split('|')
+      .map((list: number) => {
+        return {
+          value: list.toString(),
+          label: list.toString(),
+        };
+      });
+    filterParamsObj.RarityList = filterParamsObj['RarityList'].toString().split(',');
+  }
+
+  if (filterParamsObj['collectionIds']?.length) {
+    filterParamsObj.Collections = {
+      type: FilterType.Checkbox,
+      data: filterParamsObj['collectionIds']
+        .toString()
+        .split('|')
+        .map((list: number) => {
+          return {
+            value: list.toString(),
+            label: list.toString(),
+          };
+        }),
+    };
+  }
+
+  if (filterParamsObj['traits']?.length) {
+    const res: Array<{
+      key: string;
+      values: string;
+    }> = [];
+
+    const lists = filterParamsObj['traits'].split('|');
+
+    lists.length > 0 &&
+      lists.forEach((k: string) => {
+        const [keys, value] = k.split('-');
+        res.push({
+          key: keys,
+          values: value,
+        });
+      });
+    const mergeRes = mergeObjectsByKey(res);
+
+    filterParamsObj['traits'] = mergeRes;
+    mergeRes.forEach((list) => {
+      filterParamsObj[`Traits-${list.key}`] = {
+        type: FilterType.Checkbox,
+        data: list.values.map((item: string) => {
+          return { value: item, label: item };
+        }),
+      };
+    });
+  }
+
+  if (filterParamsObj['SymbolTypeList']?.length) {
+    filterParamsObj.Symbol = {
+      type: FilterType.Checkbox,
+      data: filterParamsObj['SymbolTypeList'].split('|').map((list: string) => {
+        return {
+          value: Number(list),
+          label: list === '1' ? 'NFT' : 'FT',
+        };
+      }),
+    };
+  }
+
   const keys = Object.keys(filterParamsObj);
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
+
+    if (filterParamsObj[key] == 'true') {
+      filterParamsObj[key] = true;
+    }
+    if (filterParamsObj[key] == 'false') {
+      filterParamsObj[key] = false;
+    }
+    if (filterParamsObj[key] == 'undefined') {
+      filterParamsObj[key] = '';
+    }
+
     if (Object.keys(statusMap).includes(key) && filterParamsObj[key]) {
       filterParamsObj[FilterKeyEnum.Status].data.push({
         label: statusMap[key],
@@ -152,19 +235,43 @@ export function getFilterFromSearchParams(filterParamStr: string | null, generat
     if (Object.keys(priceMap).includes(key)) {
       filterParamsObj[FilterKeyEnum.Price].data[0][priceMap[key]] = filterParamsObj[key];
     }
-
-    if (['RarityList'].includes(key) && filterParamsObj[key]) {
-      filterParamsObj[key].forEach((rarity) => {
-        filterParamsObj[FilterKeyEnum.Rarity].data.push({
-          label: rarity,
-          value: rarity,
-        });
-      });
-    }
   }
+
+  console.log('filterParamsObj-------', filterParamsObj);
 
   return filterParamsObj;
 }
+
+function mergeObjectsByKey(arr: any[]) {
+  const result: any = {};
+
+  arr.forEach((obj) => {
+    const key = obj.key;
+    const value = obj.values;
+    if (result[key]) {
+      result[key].push(value);
+    } else {
+      result[key] = [value];
+    }
+  });
+  return Object.keys(result).map((key) => ({
+    key: key,
+    values: result[key],
+  }));
+}
+
+// 示例数组
+const arr = [
+  { key: 'a', value: 1 },
+  { key: 'b', value: 2 },
+  { key: 'a', value: 3 },
+  { key: 'c', value: 4 },
+  { key: 'b', value: 5 },
+];
+
+// 调用函数合并对象
+const mergedResult = mergeObjectsByKey(arr);
+console.log(mergedResult);
 
 export const getDefaultFilter = (ChainId: string): IFilterSelect => {
   const res: IFilterSelect = {
@@ -237,10 +344,11 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
   }
 
   if (isActivity) {
-    ['PriceLow', 'PriceHigh', 'HasListingFlag', 'HasAuctionFlag', 'HasOfferFlag'].forEach((key) => delete params[key]);
+    ['PriceLow', 'PriceHigh', 'HasListingFlag', 'HasAuctionFlag', 'HasOfferFlag', 'RarityList', 'generation'].forEach(
+      (key) => delete params[key],
+    );
   }
 
-  console.log('getFilter', isActivity);
   return params;
 
   function getTraitsInfo() {
@@ -267,6 +375,8 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
 export const getTagList = (filterSelect: IFilterSelect, search: string) => {
   const result: TagItemType[] = [];
   for (const [key, value] of Object.entries(filterSelect)) {
+    console.log('datadatadatadatadatadata', key, value);
+
     const { data, type } = value;
     if (type === FilterType.Checkbox) {
       data.forEach((element: SourceItemType) => {

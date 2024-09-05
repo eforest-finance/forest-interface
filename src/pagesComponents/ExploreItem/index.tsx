@@ -9,7 +9,6 @@ import { ExploreItem } from './ExploreItem';
 import { ActivityItem } from './ActivityItem';
 
 export default function ExploreItemPage() {
-  const nav = useRouter();
   const { address } = useParams();
   const nftCollectionId = address[0];
   const activeTab = address[1];
@@ -51,7 +50,7 @@ export default function ExploreItemPage() {
         ]}
         defaultActiveKey={activeTab || 'items'}
         onChange={(key) => {
-          nav.replace(`/explore-items/${nftCollectionId}/${key}`);
+          history.pushState(null, '', `/explore-items/${nftCollectionId}/${key}`);
         }}
       />
     </div>

@@ -9,7 +9,8 @@ import { useRequest } from 'ahooks';
 import { fetchCollectionAllTraitsInfos } from 'api/fetch';
 import { useState } from 'react';
 import { isEqual } from 'lodash-es';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
+import qs from 'qs';
 
 export function useFilterForActivitiesService(nftCollectionId: string) {
   const nftType = String(nftCollectionId).endsWith('-SEED-0') ? 'seed' : 'nft';
@@ -17,12 +18,29 @@ export function useFilterForActivitiesService(nftCollectionId: string) {
   const { aelfInfo } = useGetState();
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
   const filterList = getFilterListForActivity(nftType, aelfInfo.curChain);
-  const params = useSearchParams();
-  const filterParamStr = params.get('filterParams');
+  // const params = useSearchParams();
+  // const filterParamStr = params.get('filterParams');
+
+  const filterParamObj: any = qs.parse(location.search);
+  if (Object.keys(filterParamObj).length) {
+    Object.keys(filterParamObj).forEach((key: any) => {
+      if (filterParamObj[key] == 'true') {
+        filterParamObj[key] = true;
+      }
+      if (filterParamObj[key] == 'false') {
+        filterParamObj[key] = false;
+      }
+      if (filterParamObj[key] == 'undefined') {
+        filterParamObj[key] = '';
+      }
+    });
+  }
+
+  console.log('location.search', location.search, filterParamObj);
 
   // const [filterSelect, setFilterSelect] = useState<IFilterSelect>(defaultFilter);
 
-  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamStr, []);
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, []);
   const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
     Object.assign({}, defaultFilter, paramsFromUrlForFilter),
   );

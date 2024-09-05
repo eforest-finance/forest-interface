@@ -246,7 +246,7 @@ function AcceptModal(options: {
       title={<div>Accept Offer</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       size="m"
       closeIcon={<Close />}
       onOk={() => onConfirm()}
@@ -275,13 +275,13 @@ function AcceptModal(options: {
           number={nftBalance}
         />
         <Text
-          className="mdTW:!text-[18px] mt-[24px] mdl:mt-[32px] !text-textPrimary font-medium"
+          className="mdTW:!text-[16px] mt-[24px] mdl:mt-[32px] !text-textPrimary font-medium"
           title={!isMultiple ? 'Offer Price' : 'Offer Price Per Item'}
           value={`${formatTokenPrice(art.price || '')} ELF`}
         />
         {isMultiple && (
           <div className="flex flex-col mdl:flex-row justify-between mt-[24px] mdl:mt-[32px]">
-            <span className="text-[18px] font-medium">Quantity</span>
+            <span className="text-[16px] font-medium">Quantity</span>
             <div className="flex flex-col items-end w-full mdl:w-fit mt-[16px] mdl:mt-0">
               <InputQuantity
                 width={'100%'}
@@ -291,7 +291,7 @@ function AcceptModal(options: {
                   setQuantity(quantity);
                 }}
               />
-              <span className="mt-[8px] text-textSecondary">{availableCount} available</span>
+              <span className="mt-[8px] text-textSecondary text-[14px]">{availableCount} available</span>
             </div>
           </div>
         )}

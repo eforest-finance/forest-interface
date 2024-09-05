@@ -141,7 +141,7 @@ export function Duration(props: IDurationProps) {
 
   return (
     <div className={`${isSmallScreen ? 'mt-[24px]' : 'mt-[32px]'}`}>
-      <span className="font-medium text-textPrimary text-lg rounded-lg">
+      <span className="font-medium text-textPrimary text-[16px] rounded-lg">
         Duration
         {props.tooltip ? (
           <Tooltip title={props.tooltip}>
