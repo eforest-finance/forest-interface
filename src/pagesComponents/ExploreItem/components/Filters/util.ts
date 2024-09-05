@@ -155,6 +155,21 @@ export function getFilterFromSearchParams(filterParamsObj: any, generationInfos:
     filterParamsObj.RarityList = filterParamsObj['RarityList'].toString().split(',');
   }
 
+  if (filterParamsObj['collectionIds']?.length) {
+    filterParamsObj.Collections = {
+      type: FilterType.Checkbox,
+      data: filterParamsObj['collectionIds']
+        .toString()
+        .split('|')
+        .map((list: number) => {
+          return {
+            value: list.toString(),
+            label: list.toString(),
+          };
+        }),
+    };
+  }
+
   if (filterParamsObj['traits']?.length) {
     const res: Array<{
       key: string;
@@ -221,6 +236,8 @@ export function getFilterFromSearchParams(filterParamsObj: any, generationInfos:
       filterParamsObj[FilterKeyEnum.Price].data[0][priceMap[key]] = filterParamsObj[key];
     }
   }
+
+  console.log('filterParamsObj-------', filterParamsObj);
 
   return filterParamsObj;
 }

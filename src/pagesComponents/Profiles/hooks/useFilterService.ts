@@ -10,7 +10,7 @@ import {
 } from 'pagesComponents/ExploreItem/components/Filters/util';
 import { useEffect, useMemo, useState } from 'react';
 import useGetState from 'store/state/getState';
-import qs from 'qs';
+import qs from 'query-string';
 
 export function useFilterService(tabType: string, walletAddress: string) {
   const { aelfInfo, walletInfo } = useGetState();
@@ -28,10 +28,16 @@ export function useFilterService(tabType: string, walletAddress: string) {
 
   const [filterSelect, setFilterSelect] = useState(Object.assign({}, defaultFilter, paramsFromUrlForFilter));
 
-  const [SearchParam, setSearchParam] = useState<string>(filterSelect.keyword || '');
+  console.log('filterSelectfilterSelectfilterSelectfilterSelect', filterSelect);
+
+  const [SearchParam, setSearchParam] = useState<string>(
+    tabType == 'activity' ? filterSelect.SearchParam : filterSelect.keyword || '',
+  );
   const [searchInputValue, setSearchInputValue] = useState<string>(SearchParam);
 
   const [sort, setSort] = useState<string>(filterSelect.Sorting || (dropDownCollectionsMenu.data[0].value as string));
+
+  const [size, setSize] = useState<string>(filterSelect.Size || 'small');
 
   const { run: changeSearchParam } = useDebounceFn(
     (searchKeyWord: string) => {
@@ -99,6 +105,8 @@ export function useFilterService(tabType: string, walletAddress: string) {
     tagList,
     sort,
     setSort,
+    size,
+    setSize,
     SearchParam,
     searchInputValue,
     setSearchParam,
