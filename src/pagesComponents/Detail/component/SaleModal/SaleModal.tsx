@@ -24,15 +24,17 @@ import { INftInfo } from 'types/nftTypes';
 import ItemInfo from '../AcceptModal/ItemInfo';
 import { getShowInfoData } from './comps/SummaryInfo';
 import useDetailGetState from 'store/state/detailGetState';
+import { useEdit } from './hooks/useEdit';
 
 interface ISaleModalProps {
   nftInfo: INftInfo;
+  type?: 'edit' | 'list';
   defaultData: {
     [key: string]: any;
   };
 }
 
-function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
+function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
   const modal = useModal();
   const resultModal = useModal(ResultModal);
 
@@ -42,6 +44,7 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
     elfRate,
     listingBtnDisable,
     listingPrice,
+    duration,
     setListingPrice,
     setDuration,
     itemsForSell,
@@ -49,6 +52,8 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
     availableItemForSell,
     handleCompleteListing,
   } = useSaleService(nftInfo, modal, 'add', defaultData);
+
+  const { handleCancel, handleEditListing } = useEdit(nftInfo, elfRate, modal);
   console.log('nftInfo.nftCollection?.symbol:', nftInfo.nftCollection?.symbol);
   const { detailInfo } = useDetailGetState();
 
@@ -67,7 +72,7 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
 
   return (
     <Modal
-      title={<div>List</div>}
+      title={<div>{type === 'edit' ? 'Edit List' : 'List'}</div>}
       open={modal.visible}
       className={styles.modal}
       width={630}
@@ -76,18 +81,50 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
       onCancel={modal.hide}
       afterClose={modal.remove}
       footer={
-        <div className="flex justify-center w-full">
-          <Button
-            disabled={listingBtnDisable}
-            size="ultra"
-            className=" w-full mdTW:mt-[32px] mdTW:w-[256px]"
-            type="primary"
-            onClick={() => {
-              handleCompleteListing();
-            }}>
-            List
-          </Button>
-        </div>
+        type === 'edit' ? (
+          <div className="flex w-full -mx-2 justify-center">
+            <Button
+              size="ultra"
+              className={`${!isSmallScreen ? 'min-w-[188px] mx-2' : 'flex-1 !px-0 mx-2'}`}
+              onClick={() => {
+                handleCancel({
+                  duration,
+                  listingPrice,
+                });
+              }}>
+              Cancel Listing
+            </Button>
+            <Button
+              type="primary"
+              size="ultra"
+              className={`${!isSmallScreen ? 'w-[188px] mx-2' : 'flex-1 !px-0 mx-2'}`}
+              disabled={listingBtnDisable}
+              onClick={() =>
+                handleEditListing(
+                  {
+                    duration,
+                    listingPrice,
+                  },
+                  handleCompleteListing,
+                )
+              }>
+              Edit Listing
+            </Button>
+          </div>
+        ) : (
+          <div className="flex justify-center w-full">
+            <Button
+              disabled={listingBtnDisable}
+              size="ultra"
+              className=" w-full mdTW:mt-[32px] mdTW:w-[256px]"
+              type="primary"
+              onClick={() => {
+                handleCompleteListing();
+              }}>
+              List
+            </Button>
+          </div>
+        )
       }>
       <div className="w-full h-full flex flex-col relative">
         <ItemInfo
@@ -101,7 +138,7 @@ function ListModal({ nftInfo, defaultData }: ISaleModalProps) {
 
         <div>
           <div className="text-[16px] mdTW:text-[18px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
-            Set a List Price
+            {type === 'edit' ? 'Set a New List Price' : 'Set a List Price'}
           </div>
           <div className="flex justify-between mt-[16px]">
             <Button

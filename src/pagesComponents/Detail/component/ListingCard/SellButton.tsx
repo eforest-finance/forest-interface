@@ -69,7 +69,11 @@ function SellButton() {
     if (isERC721(nftInfo)) {
       if (isEditMode) {
         const defaultData = getDefaultDataByNftInfoList(listedNFTInfoList, true);
-        sellModalForERC721.show({ nftInfo, type: 'edit', defaultData });
+        // sellModalForERC721.show({ nftInfo, type: 'edit', defaultData });
+        saleModal.show({
+          nftInfo,
+          type: 'edit',
+        });
       } else {
         saleModal.show({
           nftInfo,
