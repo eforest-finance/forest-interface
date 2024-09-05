@@ -22,12 +22,12 @@ export function getParamsFromFilter(activeKey: string, walletAddress: string, fi
     return {
       ...filterParams,
       address: walletAddress || '',
-      Sorting: 'ListingTime DESC',
+      // Sorting: 'ListingTime DESC',
     };
   }
   return {
     ...filterParams,
     address: walletAddress || '',
-    Sorting: 'ListingTime DESC',
+    // Sorting: 'ListingTime DESC',
   };
 }

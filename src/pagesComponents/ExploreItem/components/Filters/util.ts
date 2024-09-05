@@ -375,8 +375,6 @@ export const getFilter = (filterSelect: IFilterSelect, isActivity?: boolean) => 
 export const getTagList = (filterSelect: IFilterSelect, search: string) => {
   const result: TagItemType[] = [];
   for (const [key, value] of Object.entries(filterSelect)) {
-    console.log('datadatadatadatadatadata', key, value);
-
     const { data, type } = value;
     if (type === FilterType.Checkbox) {
       data.forEach((element: SourceItemType) => {
