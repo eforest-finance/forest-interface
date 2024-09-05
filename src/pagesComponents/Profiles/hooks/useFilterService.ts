@@ -1,7 +1,6 @@
 import { useDebounceFn, useRequest } from 'ahooks';
 import { fetchCollections, fetchNFTCollectionMyHold } from 'api/fetch';
 import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
-import { useSearchParams } from 'next/navigation';
 import {
   getDefaultFilterForMyItems,
   getFilterFromSearchParams,
@@ -28,11 +27,18 @@ export function useFilterService(tabType: string, walletAddress: string) {
 
   const [filterSelect, setFilterSelect] = useState(Object.assign({}, defaultFilter, paramsFromUrlForFilter));
 
-  console.log('filterSelectfilterSelectfilterSelectfilterSelect', filterSelect);
+  const initParams = () => {
+    switch (tabType) {
+      case 'activity':
+        return filterSelect.SearchParam;
+      case 'more':
+        return filterSelect.SearchParam;
+      default:
+        return filterSelect.keyWord;
+    }
+  };
 
-  const [SearchParam, setSearchParam] = useState<string>(
-    tabType == 'activity' ? filterSelect.SearchParam : filterSelect.keyword || '',
-  );
+  const [SearchParam, setSearchParam] = useState<string>(initParams());
   const [searchInputValue, setSearchInputValue] = useState<string>(SearchParam);
 
   const [sort, setSort] = useState<string>(filterSelect.Sorting || (dropDownCollectionsMenu.data[0].value as string));
