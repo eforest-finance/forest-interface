@@ -19,13 +19,16 @@ export function CollectedItem() {
   const { wallet } = useWebLogin();
   const { walletAddress } = useProfilePageService();
 
-  const { isLG, collapsedFilter, setCollapsedFilter, size, setSize } = useHMService();
+  const { isLG, collapsedFilter, setCollapsedFilter } = useHMService();
 
   const {
     searchInputValue,
     SearchParam,
     setSearchParam,
+    setSearchInputValue,
     searchInputValueChange,
+    size,
+    setSize,
     sort,
     setSort,
     filterList,
@@ -42,8 +45,9 @@ export function CollectedItem() {
       ...params,
       keyword: SearchParam,
       Sorting: sort,
+      Size: size,
     };
-  }, [filterSelect, walletAddress, SearchParam, sort]);
+  }, [filterSelect, walletAddress, SearchParam, sort, size]);
 
   const { loading, loadingMore, noMore, data } = useDataService({
     params: requestParams,
@@ -96,9 +100,14 @@ export function CollectedItem() {
             filterSelect={filterSelect}
             clearAll={() => {
               setSearchParam('');
+              setSearchInputValue('');
               clearAll();
             }}
             onchange={onFilterChange}
+            clearSearchChange={() => {
+              setSearchParam('');
+              setSearchInputValue('');
+            }}
           />
           <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
             Your NFT possessions with quantities less than 1 are hidden.

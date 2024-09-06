@@ -115,6 +115,7 @@ function BuyButton(props: IProps) {
                     footer: (
                       <SuccessFooter
                         href={explorerUrl}
+                        text="View on profile"
                         profile={`/account/${walletInfo.address}#Collected`}
                         modal={resultModal}
                       />

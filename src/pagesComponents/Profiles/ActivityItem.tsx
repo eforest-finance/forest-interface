@@ -1,6 +1,6 @@
 import ActivityItemsSearch from 'pagesComponents/ExploreItem/components/ActivityItemsSearch';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 
 import { LoadingMore } from 'baseComponents/LoadingMore';
 import { useProfilePageService } from './hooks/useProfilePageService';
@@ -9,11 +9,26 @@ import { useDataService } from './hooks/useDataService';
 import { useHMService } from './hooks/useHMService';
 import { ActivityListTable } from 'pagesComponents/ExploreItem/components/ActivityListTable';
 import { useFilterService } from './hooks/useFilterService';
+import { useSearchParams } from 'next/navigation';
 
 export function ActivityItem() {
   const { walletAddress } = useProfilePageService();
 
+  const searchParams = useSearchParams();
+
+  const selectedType = searchParams.get('Type')?.split('|').map(Number) ?? [];
+
   const [activityType, setActivityType] = useState<(number | string)[]>([3, 6]);
+
+  const setType = useCallback(() => {
+    if (searchParams.get('Type')) {
+      setActivityType(selectedType);
+    }
+  }, []);
+
+  useEffect(() => {
+    setType();
+  }, [setType]);
 
   // const { SearchParam, searchInputValue, searchInputValueChange } = useHMService();
 
@@ -21,7 +36,7 @@ export function ActivityItem() {
 
   const requestParams = useMemo(() => {
     return {
-      SearchParam,
+      SearchParam: SearchParam,
       Type: activityType,
       address: walletAddress,
     };

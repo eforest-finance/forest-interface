@@ -26,7 +26,7 @@ export default function FormItem(options: {
           '[&:not(:first-child)]:mt-[24px]',
           'mdTW:[&:not(:first-child)]:mt-[40px]',
         )}>
-        <p className="flex items-center font-medium	text-[18px] text-textPrimary">
+        <p className="flex items-center font-medium	text-[16px] text-textPrimary">
           <span className="form-title-text">{title}</span>
           {suffix ? <span className="ml-[8px] flex items-center h-[27px]">{suffix}</span> : null}
           {require ? <Required className="ml-[9px] mr-[-2px]" /> : ''}

@@ -42,7 +42,10 @@ const getTraitSelectorData = (
   const traitsChildItems = traitsArrayInfo.map((itemTraitInfo) => {
     const defaultValue = (
       (filterSelectData?.[`${FilterKeyEnum.Traits}-${itemTraitInfo.key}`]?.data as unknown as SourceItemType[]) || []
-    ).map((itm) => itm.value);
+    ).map((itm) => {
+      return itm.value;
+    });
+
     return {
       key: itemTraitInfo.key,
       label: (
@@ -80,7 +83,7 @@ const getCollectionSelectorData = (
   filterChange: (val: ItemsSelectSourceType) => void,
   filterSelectData: IFilterSelect,
 ) => {
-  const selectValues = filterSelectData[FilterKeyEnum.Collections].data.map((itm) => itm.value);
+  const selectValues = filterSelectData[FilterKeyEnum.Collections].data.map((itm: { value: any }) => itm.value);
 
   return {
     key: FilterKeyEnum.Collections,
@@ -117,6 +120,7 @@ export function FilterContainer({
   toggleOpen,
 }: IFilterContainerProps) {
   const { aelfInfo } = useGetState();
+  console.log('filterSelectfilterSelectfilterSelectfilterSelect', filterSelect);
 
   const collapseItems = useMemo(() => {
     const resTargetList = [...filterList];

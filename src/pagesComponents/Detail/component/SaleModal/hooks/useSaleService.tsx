@@ -157,7 +157,12 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     elementScrollToView(document.getElementById('listings'), isSmallScreen ? 'start' : 'center');
   };
 
-  const listWithFixedPrice = async (amount: number, status?: EditStatusType, modal?: 'new' | 'old') => {
+  const listWithFixedPrice = async (
+    amount: number,
+    status?: EditStatusType,
+    modal?: 'new' | 'old',
+    isEditMode: boolean,
+  ) => {
     console.log('listWithFixedPrice', amount);
     try {
       const spender =
@@ -220,7 +225,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
               collectionName: nftInfo?.nftCollection?.tokenName || '',
               nftName: nftInfo?.tokenName,
             },
-            title: 'Listing Successfully!',
+            title: `Listing Successfully ${isEditMode ? 'Edited' : ''}!`,
             amount,
             type: 'success',
             content: (
@@ -228,7 +233,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
                 <div className="w-full mt-[32px]">
                   <Text
                     className="!text-textPrimary !font-semibold"
-                    title="List Price per item"
+                    title={`${!isEditMode ? 'List Price per item' : 'List Price'}`}
                     value={`${formatTokenPrice(listingPrice?.price)} ELF`}
                   />
                   <div className="text-[16px] text-right text-textSecondary">
@@ -261,14 +266,16 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       resultModal.hide();
       approveModal.hide();
 
-      sellModalInstance.show({
-        nftInfo,
-        defaultData: {
-          listingPrice,
-          duration,
-          itemsForSell: amount,
-        },
-      });
+      if (!isEditMode) {
+        sellModalInstance.show({
+          nftInfo,
+          defaultData: {
+            listingPrice,
+            duration,
+            itemsForSell: amount,
+          },
+        });
+      }
 
       return Promise.reject(error);
     }
@@ -486,7 +493,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     }
   };
 
-  const handleCompleteListing = async () => {
+  const handleCompleteListing = async (isEditMode: boolean) => {
     const mainAddress = await getAccountInfoSync();
     if (!mainAddress) {
       return;
@@ -512,7 +519,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
       },
       title: 'List',
       showBalance: false,
-      initialization: async () => await listWithFixedPrice(amount, extendStatus, 'new'),
+      initialization: async () => await listWithFixedPrice(amount, extendStatus, 'new', isEditMode),
       onClose: () => {
         approveModal.hide();
       },
@@ -539,6 +546,7 @@ export function useSaleService(nftInfo: INftInfo, sellModalInstance: NiceModalHa
     listingPrice,
     setListingPrice,
     listItems,
+    duration,
     setDuration,
     onCompleteListingHandler,
     listingUSDPrice,
