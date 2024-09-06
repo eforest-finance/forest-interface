@@ -140,6 +140,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
             footer: (
               <SuccessFooter
                 href={explorerUrl}
+                text="View on profile"
                 profile={`/account/${walletInfo.address}#Collected`}
                 modal={resultModal}
               />
@@ -237,7 +238,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
       title={<div>Buy Now</div>}
       open={modal.visible}
       className={styles.modal}
-      width={630}
+      width={550}
       size="m"
       closeIcon={<Close />}
       onOk={() => onConfirm()}
@@ -289,8 +290,8 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
           price=""
           usdPrice=""
         />
-        <div className="flex flex-col mdTW:flex-row  justify-between mt-[16px]">
-          <span className="text-[16px] mdTW:text-[18px] font-medium">Quantity</span>
+        <div className="flex flex-col mdTW:flex-row  justify-between mt-[24px]">
+          <span className="text-[16px] mdTW:text-[16px] font-medium">Quantity</span>
           <div className="flex flex-col items-end mt-[16px] mdTW:mt-0">
             <InputQuantity
               width={isSmallScreen ? '100%' : undefined}
@@ -303,7 +304,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
             <span className="mt-[8px] text-textSecondary">{availableQuantity} available</span>
           </div>
         </div>
-        <Divider className="my-[24px] mdTW:my-[32px]" />
+        <Divider className="my-[24px] mdTW:my-[20px] mt-[20px]" />
         <Text title="Average item price" value={`${formatTokenPrice(averagePrice)} ELF`} />
         <TotalPrice
           className="mt-[16px]"

@@ -24,7 +24,7 @@ export enum CountdownType {
 
 function Countdown({ className, endTime, status = CountdownStatus.Normal, onChange }: ICountdownProps) {
   const { hours, minutes, seconds } = useCountdown(endTime);
-
+  console.log('13213213221', hours, minutes, seconds);
   const countdownValue: Record<CountdownType, string> = {
     Hours: timeFillDigits(hours),
     Minutes: timeFillDigits(minutes),

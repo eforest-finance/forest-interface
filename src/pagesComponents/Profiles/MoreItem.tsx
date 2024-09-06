@@ -10,7 +10,7 @@ import { OffersOrListingTable } from './components/OffersOrListingTable';
 import { fetchReceivedOffer, fetchOfferMade, fetchMoreListings } from 'api/fetch';
 
 import styles from './Profile.module.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { useOfferTable } from './hooks/useOfferTable';
 import useGetState from 'store/state/getState';
@@ -19,6 +19,8 @@ import useActionService from './hooks/useActionService';
 import { IActivitiesItem } from 'api/types';
 import PageLoading from 'components/PageLoading';
 import { useFilterService } from './hooks/useFilterService';
+import { useRouter } from 'next/navigation';
+import qs from 'query-string';
 
 export enum moreActiveKey {
   made = 'made',
@@ -28,10 +30,22 @@ export enum moreActiveKey {
 
 export interface IMoreCard {
   activityKey: moreActiveKey;
+  address: string | undefined;
+  clearInput: {
+    v: Boolean;
+    t: number;
+  };
 }
 
 export function MoreCard(props: IMoreCard) {
-  const { activityKey } = props;
+  const { activityKey, clearInput, address } = props;
+  const router = useRouter();
+  const searchAll: any = qs.parse(location.search);
+  const SearchParam = searchAll.SearchParam;
+  const moreType = searchAll.moreType;
+
+  const [type, setType] = useState(moreType);
+
   const { walletInfo, aelfInfo } = useGetState();
   const { login, isLogin } = useCheckLoginAndToken();
   const { address: walletAddress } = useProfilePageService();
@@ -61,18 +75,31 @@ export function MoreCard(props: IMoreCard) {
     // setSearchInputValue,
   } = useHMService();
 
-  const { searchInputValue, searchInputValueChange, sort, setSort, setSearchInputValue } = useFilterService(
-    'more',
-    walletAddress,
-  );
+  const { sort, setSort, filterSelect, setSearchInputValue } = useFilterService('more', walletAddress);
+
+  const [value, setValue] = useState(filterSelect.SearchParam ?? '');
+
+  useEffect(() => {
+    clearInput.v ? setValue('') : setValue(filterSelect.SearchParam ?? '');
+    console.log('filterSelect.SearchParam', filterSelect.SearchParam);
+  }, [clearInput, filterSelect]);
+
+  const addParams = (type: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('tabType', 'more');
+    url.searchParams.set('moreType', type);
+    router.push(`${url.pathname}${url.search}`);
+  };
 
   const fetchData = async () => {
+    addParams(moreActiveKey[activityKeyRef.current]);
+
     setLoading(true);
     console.log('fetchData: key2:', activityKeyRef.current);
 
     try {
       const params = {
-        searchParam: searchInputValue,
+        searchParam: value,
         skipCount: 0,
         maxResultCount: 100,
         chainList: [aelfInfo?.curChain],
@@ -89,7 +116,7 @@ export function MoreCard(props: IMoreCard) {
         case moreActiveKey.receive:
           {
             const params = {
-              searchParam: searchInputValue,
+              searchParam: value,
               skipCount: 0,
               maxResultCount: 100,
               address: walletAddress || '',
@@ -121,8 +148,13 @@ export function MoreCard(props: IMoreCard) {
     setLoading(false);
   };
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('SearchParam', value);
+    window.history.pushState({}, '', url);
+  }, [value]);
+
   const handleAction = () => {
-    console.log('fetchData: key1:', activityKeyRef.current);
     reset();
   };
 
@@ -142,7 +174,6 @@ export function MoreCard(props: IMoreCard) {
   useEffect(() => {
     if (walletAddress) {
       fetchData();
-      setSearchInputValue('');
     }
   }, [walletAddress]);
 
@@ -152,7 +183,7 @@ export function MoreCard(props: IMoreCard) {
     } else {
       login();
     }
-  }, [searchInputValue]);
+  }, [value]);
 
   useEffect(() => {
     activityKeyRef.current = activityKey;
@@ -194,6 +225,10 @@ export function MoreCard(props: IMoreCard) {
 
   const canShow = isLogin && walletAddress === walletInfo.address && activityKeyRef.current !== moreActiveKey.receive;
 
+  const changeValue = (e: any) => {
+    setValue(e.target.value);
+  };
+
   return (
     <div className={styles.moreWrapper}>
       <CollectionItemsSearch
@@ -204,9 +239,9 @@ export function MoreCard(props: IMoreCard) {
         collapsedChange={() => setCollapsedFilter(!collapsedFilter)}
         searchParams={{
           placeholder: 'Search by name',
-          value: searchInputValue,
-          onChange: searchInputValueChange,
-          onPressEnter: searchInputValueChange,
+          value: value,
+          onChange: changeValue,
+          onPressEnter: changeValue,
         }}
         sizeChange={(size) => {
           setSize(size);

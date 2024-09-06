@@ -19,7 +19,7 @@ export interface INftInfoListCard {
 }
 
 const ItemInfoCard = (props: INftInfoListCard) => {
-  const { collectionName, nftName, item, title } = props;
+  const { collectionName, nftName, item, title = [] } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
@@ -87,10 +87,12 @@ const ItemInfoCard = (props: INftInfoListCard) => {
                   className={clsx('text-[14px] font-medium text-textSecondary', styles['nft-list-card-text-ellipsis'])}>
                   {nftName}
                 </p>
-                <p className={clsx('flex', styles['nft-list-card-text-ellipsis'])}>
-                  <p className="text-[14px] font-medium text-textSecondary">{title[0]}</p>
-                  <p className="ml-[8px] text-[14px] font-semibold text-textPrimary">{title[1]}</p>
-                </p>
+                {title?.length > 0 && (
+                  <p className={clsx('flex', styles['nft-list-card-text-ellipsis'])}>
+                    <p className="text-[14px] font-medium text-textSecondary">{title[0]}</p>
+                    <p className="ml-[8px] text-[14px] font-semibold text-textPrimary">{title[1]}</p>
+                  </p>
+                )}
               </div>
             </div>
           </>

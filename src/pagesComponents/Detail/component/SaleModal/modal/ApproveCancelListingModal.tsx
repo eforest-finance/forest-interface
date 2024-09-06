@@ -98,6 +98,7 @@ function ApproveCancelListingModalConstructor({
   return (
     <Modal
       title={'Cancel Listing'}
+      width={550}
       open={modal.visible}
       onOk={modal.hide}
       onCancel={modal.hide}
@@ -117,7 +118,7 @@ function ApproveCancelListingModalConstructor({
       {renderInfoCard()}
       <div className="mt-[24px] mdTW:mt-[50px] p-[24px] bg-fillHoverBg rounded-lg">
         <p className="text-textPrimary text-[18px] leading-[26px] font-medium">Go to your wallet</p>
-        <p className="text-textSecondary text-base mt-[16px]">{tipMessage}</p>
+        <p className="text-textSecondary text-[14px] mt-[16px]">{tipMessage}</p>
       </div>
     </Modal>
   );

@@ -1,5 +1,7 @@
 {
-  "cSpell.words": ["clsx"],
+  "cSpell.words": [
+    "clsx"
+  ],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

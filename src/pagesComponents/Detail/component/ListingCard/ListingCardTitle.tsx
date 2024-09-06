@@ -74,7 +74,7 @@ function ListingCardTitle(props: IProps) {
   }, [endTime]);
 
   const ontimeupdate = (data: Record<CountdownType, number>) => {
-    const seconds = data.Hour * SECOND_PER_ONE_HOUR + data.Minutes * SECOND_PER_MINUTES + data.Seconds;
+    const seconds = data.Hours * SECOND_PER_ONE_HOUR + data.Minutes * SECOND_PER_MINUTES + data.Seconds;
     if (!seconds) return;
     if (seconds < SECOND_PER_ONE_HOUR) {
       setCountdownStatus(CountdownStatus.Danger);

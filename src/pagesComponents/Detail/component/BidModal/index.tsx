@@ -144,7 +144,7 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
 
   return (
     <Modal
-      width={800}
+      width={550}
       title="Place a Bid"
       className={`${styles['bid-modal-custom']} ${styles['bid-modal']}`}
       onCancel={() => onCancel()}
@@ -161,41 +161,41 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
           Place a Bid
         </Button>
       }>
-      <div className="mt-[24px] mdTW:mt-0">
+      <div className="mt-[24px] mdTW:mt-0 max-h-[464px]">
         <div className="flex flex-row items-center">
           <div className="relative">
             <Image
               src={nftInfo?.previewImage || ''}
               className="rounded-[12px]"
-              rootClassName=" w-[84px] h-[84px] rounded-[8px] bg-[#8B60F7] flex items-center "
+              rootClassName=" w-[72px] h-[72px] rounded-[8px] bg-[#8B60F7] flex items-center "
               preview={false}
               alt=""
               fallback={defaultImage}
             />
           </div>
           <div className="hidden flex-col ml-[16px] mdTW:flex">
-            <span className="text-secondary font-medium">{auctionInfo?.collectionSymbol || '-'}</span>
-            <span className="text-primary mt-[4px]">{nftInfo?.tokenName || '-'}</span>
+            <span className="text-secondary font-medium text-[14px]">{auctionInfo?.collectionSymbol || '-'}</span>
+            <span className="text-primary mt-[4px] text-[16px]">{nftInfo?.tokenName || '-'}</span>
           </div>
           <div className="flex flex-1 justify-end">
             <div className="flex flex-col items-end">
-              <span className="text-secondary font-medium">Bid Price</span>
-              <span className="mt-[4px] text-primary">
+              <span className="text-secondary font-medium text-[14px]">Bid Price</span>
+              <span className="mt-[4px] text-primary text-[16px]">
                 {fix4NotInt(formatAmount(auctionInfo?.priceAmount || auctionInfo?.currentELFPrice))}&nbsp;ELF
               </span>
-              <span className="mt-[4px] text-secondary">
+              <span className="mt-[4px] text-secondary text-[14px]">
                 $&nbsp;{fix4NotInt(auctionInfo?.priceUsdAmount || auctionInfo?.currentUSDPrice || 0)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col  mt-[8px] mdTW:hidden">
+        <div className="flex flex-col  mt-[8px] mdTW:hidden text-[16px]">
           <span className="text-secondary font-medium">{auctionInfo?.collectionSymbol || '-'}</span>
           <span className="text-primary md-[4px]">{nftInfo?.tokenName || '-'}</span>
         </div>
 
-        <div className="flex flex-col gap-[24px] mdTW:gap-[32px] pb-[24px] mdTW:pb-[32px] mt-[32px]">
+        <div className="flex flex-col gap-[24px] mdTW:gap-[32px] pb-[24px] mdTW:pb-[32px] mt-[32px] text-[16px]">
           <div className={clsx('flex flex-row justify-between items-start')}>
             <div className="flex items-center">
               <span className="pr-[4px] text-secondary">Minimum Bid Increment</span>
@@ -227,19 +227,19 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
           </div>
 
           <div className={clsx('flex flex-row justify-between font-medium items-start')}>
-            <div className="text-primary">Total</div>
+            <div className="text-primary text-[16px]">Total</div>
             <div className="flex flex-col items-end">
               <div className="flex items-center">
                 <ElfLogo className="mr-[8px]" />
-                <span className={clsx('text-primary', isSmallScreen && '!pr-0')}>
+                <span className={clsx('text-primary text-[16px]', isSmallScreen && '!pr-0')}>
                   {fix4NotInt(totalPriceObj.totalElf)}&nbsp;ELF
                 </span>
               </div>
-              <span className="text-secondary mt-[8px]">$&nbsp;{fix4NotInt(totalPriceObj.totalUSD)}</span>
+              <span className="text-secondary mt-[8px] text-[14px]">$&nbsp;{fix4NotInt(totalPriceObj.totalUSD)}</span>
             </div>
           </div>
         </div>
-        <div className="p-[24px] bg-[var(--fill-hover-bg)] text-secondary rounded-lg">
+        <div className="p-[24px] bg-[var(--fill-hover-bg)] text-secondary rounded-lg text-[14px]">
           <div>
             Once you&apos;ve placed your bid, the corresponding amount of tokens will be temporarily locked, and this
             hold will automatically be released if a higher bid appears. In the event that you win the bid, the tokens
@@ -253,12 +253,12 @@ function BidModal({ onClose, auctionInfo, myBalance }: IBidModalProps) {
         </div>
 
         {isHaveNoMoney && (
-          <div className={clsx('text-[#DD444D] font-medium pt-[24px]', isSmallScreen && 'text-[14px]')}>
+          <div className={clsx('text-[#DD444D] font-medium pt-[24px] text-[14px]', isSmallScreen && 'text-[14px]')}>
             Insufficient balance
           </div>
         )}
         {auctionInfo?.finishIdentifier === 2 && (
-          <div className={clsx('text-[#DD444D] font-medium pt-[24px]', isSmallScreen && 'text-[14px]')}>
+          <div className={clsx('text-[#DD444D] font-medium pt-[24px] text-[14px]', isSmallScreen && 'text-[14px]')}>
             This SEED has expired and is not available now.
           </div>
         )}

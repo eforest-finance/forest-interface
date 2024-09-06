@@ -24,7 +24,7 @@ function TransferToInput(props: InputProps & { errorTip?: ReactNode }) {
           <Input
             ref={input}
             status={props.errorTip ? 'error' : ''}
-            className="!mt-[16px]"
+            className="!mt-[16px] !text-[14px]"
             size="large"
             allowClear
             placeholder="Please enter the recipient address"
