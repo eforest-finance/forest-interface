@@ -141,13 +141,13 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
           <div className="text-[16px] mdTW:text-[18px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
             {type === 'edit' ? 'Set a New List Price' : 'Set a List Price'}
           </div>
-          <div className="flex justify-between mt-[16px]">
+          <div className="flex justify-between mt-[16px] gap-[16px]">
             <Button
               className="!border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[163px] mdTW:w-[279px] !h-[64px] mdTW:!h-[70px] py-[8px]"
               onClick={() => {
                 setListingPrice({
                   token: {
-                    symbol: 'ELF',
+                    symbol: 'EL',
                     tokenId: 'ELF',
                     decimals: 8,
                   },
