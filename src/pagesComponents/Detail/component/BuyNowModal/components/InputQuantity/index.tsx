@@ -10,6 +10,7 @@ export default function InputQuantity(props: InputProps & { availableMount: numb
     <FormItem title="Quantity" error={{ msg: errorTip || '' }}>
       <div className="mt-[16px] relative">
         <Input
+          className="!text-[14px]"
           onKeyDown={(e) => {
             /\d|\.|Backspace|ArrowRight|ArrowLeft|ArrowUp|ArrowDown/.test(e.key) || e.preventDefault();
           }}

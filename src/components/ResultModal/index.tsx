@@ -89,7 +89,7 @@ function ResultModal({
           </Button>
         ) : null}
 
-        {jumpInfo ? <div className="mt-[16px]">{JumpInfo}</div> : null}
+        {jumpInfo ? <div className="mt-[14x]">{JumpInfo}</div> : null}
       </div>
     );
 

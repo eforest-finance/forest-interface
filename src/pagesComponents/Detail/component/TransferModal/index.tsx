@@ -273,6 +273,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
   return (
     <Modal
       title={'Transfer'}
+      width={550}
       open={modal.visible}
       onCancel={onCloseModal}
       afterClose={modal.remove}
@@ -316,7 +317,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
             {nftInfo?.tokenName}
           </div>
         </div>
-        <div className="mt-[24px] mdTW:mt-[48px]">
+        <div className="mt-[12px] mdTW:mt-[12px]">
           <InputQuantity
             availableMount={nftNumber.nftBalance}
             allowClear
@@ -327,7 +328,7 @@ function TransferModal(options: { quantity: number; onClose?: () => void }) {
             max={nftNumber.nftBalance}
           />
         </div>
-        <div className="mt-[52px]">
+        <div className="mt-[32px]">
           <TransferToInput
             onBlur={onAddressBlur}
             value={inputAddress}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useResponsive from 'hooks/useResponsive';
 import { thousandsNumber } from 'utils/unitConverter';
 
@@ -13,6 +13,7 @@ import ActivityItemsSearch from './components/ActivityItemsSearch';
 import { ActivityListTable } from './components/ActivityListTable';
 import { useFilterForActivitiesService } from './hooks/useFilterForActivitiesService';
 import { FilterKeyEnum, FilterType } from './constant';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 interface IActivityItemsProps {
   nftCollectionId: string;
@@ -24,7 +25,21 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
   const { isLG } = useResponsive();
   const [collapsed, setCollapsed] = useState<boolean>(isLG);
 
+  const searchParams = useSearchParams();
+
+  const selectedType = searchParams.get('Type')?.split('|').map(Number) ?? [];
+
   const [activityType, setActivityType] = useState<(number | string)[]>([3, 6]);
+
+  const setType = useCallback(() => {
+    if (searchParams.get('Type')) {
+      setActivityType(selectedType);
+    }
+  }, []);
+
+  useEffect(() => {
+    setType();
+  }, [setType]);
 
   const { filterList, filterSelect, traitsInfo, onFilterChange, clearAll } =
     useFilterForActivitiesService(nftCollectionId);

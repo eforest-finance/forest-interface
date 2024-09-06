@@ -35,7 +35,7 @@ export default function useCountdown(endTime: string | number) {
 function getCountDown(endTime: string | number) {
   const now = moment(new Date()).valueOf();
 
-  const endTimestamp = moment(endTime).valueOf();
+  const endTimestamp = Number(endTime);
 
   const timeDiff = endTimestamp - now;
 

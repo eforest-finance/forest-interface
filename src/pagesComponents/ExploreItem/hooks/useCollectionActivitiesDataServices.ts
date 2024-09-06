@@ -1,6 +1,7 @@
 import { useInfiniteScroll } from 'ahooks';
 import { fetchCollectionActivities } from 'api/fetch';
 import { ICollectionActivitiesParams } from 'api/types';
+import { useRouter } from 'next/navigation';
 
 export function useCollectionActiviesDataServices({
   pageSize = 32,
@@ -11,9 +12,39 @@ export function useCollectionActiviesDataServices({
   params: Partial<ICollectionActivitiesParams>;
   userWalletAddress?: string;
 }) {
+  const nav = useRouter();
+  const updateURLParams = (newParams: any) => {
+    const currentURL = new URL(window.location.href);
+    let queryParams = '';
+    Object.keys(newParams).forEach((key) => {
+      queryParams += `${key}=${newParams[key]}&`;
+    });
+
+    // history.pushState(null, '', `${currentURL.pathname}?${queryParams.slice(0, -1)}`);
+    nav.replace(`${currentURL.pathname}?${queryParams.slice(0, -1)}`);
+  };
+
   const { data, loading, loadingMore, noMore } = useInfiniteScroll(
     (d) => {
       const _page = !d?._page ? 1 : d._page + 1;
+
+      const newParams = JSON.parse(JSON.stringify(params));
+
+      if (params['traits']?.length) {
+        const newTraits: string[] = [];
+        params['traits'].map((list) => {
+          list.values.map((item) => {
+            const newItem = `${list.key}-${item}`;
+            newTraits.push(newItem);
+          });
+        });
+        newParams['traits'] = newTraits.join('|');
+      }
+      if (params['Type']?.length) {
+        newParams['Type'] = params['Type'].join('|');
+      }
+
+      updateURLParams(newParams);
 
       return fetchCollectionActivities({
         ...params,

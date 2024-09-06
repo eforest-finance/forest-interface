@@ -145,6 +145,7 @@ function Listings(option: { rate: number }) {
                     footer: (
                       <SuccessFooter
                         href={explorerUrl}
+                        text="View on profile"
                         profile={`/account/${walletInfo.address}#Collected`}
                         modal={resultModal}
                       />

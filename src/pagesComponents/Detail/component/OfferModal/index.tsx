@@ -392,7 +392,7 @@ function OfferModal(options: { onClose?: () => void; rate: number }) {
         />
         <SetPrice
           title={Number(nftTotalSupply) === 1 ? 'Offer Amount' : 'Offer Amount Per Item'}
-          className="mt-[32px]"
+          className="mt-[28px]"
           floorPrice={salesInfo?.floorPrice}
           bestOfferPrice={salesInfo?.maxOfferPrice}
           onChange={setOfferPrice}

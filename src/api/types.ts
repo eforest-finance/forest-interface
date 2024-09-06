@@ -255,9 +255,11 @@ export interface CompositeNftInfosParams {
   PriceHigh: number;
   PriceLow: number;
   ChainList: ('AELF' | 'tDVV')[];
+  SymbolTypeList: number[];
   SkipCount: number;
   Sorting: string;
   generation: number[];
+  RarityList: string[];
   traits: Array<{
     key: string;
     values: string[];
@@ -759,6 +761,8 @@ export interface ICollectionActivitiesParams {
   Type: number[];
   SkipCount: number;
   MaxResultCount: number;
+  generation: number[];
+  RarityList: string[];
   traits: Array<{
     key: string;
     values: string[];
