@@ -37,6 +37,7 @@ function InValidListMsgModalConstructor({
   return (
     <Modal
       title="Cancel Listing"
+      width={550}
       open={modal.visible}
       onOk={modal.hide}
       onCancel={modal.hide}

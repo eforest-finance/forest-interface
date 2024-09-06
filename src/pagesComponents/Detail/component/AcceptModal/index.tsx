@@ -296,7 +296,7 @@ function AcceptModal(options: {
           </div>
         )}
 
-        <Divider className="my-[24px] mdl:my-[32px]" />
+        <Divider className="my-[24px] mdl:my-[20px]" />
         <Text title="Forest fee" value={`${(transactionFee?.forestServiceRate || 0) * 100}%`} />
         <Text
           className="mt-[16px]"

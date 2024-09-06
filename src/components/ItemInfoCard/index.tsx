@@ -33,7 +33,7 @@ const ItemInfoCard = (props: INftInfoListCard) => {
             </div>
           )}
 
-          <div className="flex flex-1 flex-col min-h-full items-start overflow-hidden">
+          <div className="flex flex-1 flex-col min-h-full items-start justify-center overflow-hidden">
             {collectionName && (
               <>
                 <p
@@ -53,7 +53,7 @@ const ItemInfoCard = (props: INftInfoListCard) => {
 
             <p
               className={clsx(
-                'text-[14px] font-medium text-textSecondary mt-[8px] mdTW:mt-[14px]',
+                'text-[14px] font-medium text-textSecondary mt-[10px] mdTW:mt-[20px]',
                 styles['nft-list-card-text-ellipsis'],
               )}>
               {nftName}
