@@ -140,6 +140,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
             footer: (
               <SuccessFooter
                 href={explorerUrl}
+                text="View on profile"
                 profile={`/account/${walletInfo.address}#Collected`}
                 modal={resultModal}
               />
