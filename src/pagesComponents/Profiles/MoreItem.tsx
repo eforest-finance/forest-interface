@@ -19,6 +19,7 @@ import useActionService from './hooks/useActionService';
 import { IActivitiesItem } from 'api/types';
 import PageLoading from 'components/PageLoading';
 import { useFilterService } from './hooks/useFilterService';
+import { useRouter } from 'next/navigation';
 import qs from 'query-string';
 
 export enum moreActiveKey {
@@ -29,6 +30,7 @@ export enum moreActiveKey {
 
 export interface IMoreCard {
   activityKey: moreActiveKey;
+  address: string | undefined;
   clearInput: {
     v: Boolean;
     t: number;
@@ -36,8 +38,8 @@ export interface IMoreCard {
 }
 
 export function MoreCard(props: IMoreCard) {
-  const { activityKey, clearInput } = props;
-
+  const { activityKey, clearInput, address } = props;
+  const router = useRouter();
   const searchAll: any = qs.parse(location.search);
   const SearchParam = searchAll.SearchParam;
   const moreType = searchAll.moreType;
@@ -86,10 +88,12 @@ export function MoreCard(props: IMoreCard) {
     const url = new URL(window.location.href);
     url.searchParams.set('tabType', 'more');
     url.searchParams.set('moreType', type);
-    window.history.replaceState({}, '', url);
+    router.push(`${url.pathname}${url.search}`);
   };
 
   const fetchData = async () => {
+    addParams(moreActiveKey[activityKeyRef.current]);
+
     setLoading(true);
     console.log('fetchData: key2:', activityKeyRef.current);
 
@@ -106,7 +110,6 @@ export function MoreCard(props: IMoreCard) {
         case moreActiveKey.made:
           {
             items = (await fetchOfferMade(params)).items;
-            addParams(moreActiveKey.made);
           }
 
           break;
@@ -119,16 +122,12 @@ export function MoreCard(props: IMoreCard) {
               address: walletAddress || '',
             };
             items = (await fetchReceivedOffer(params)).items;
-
-            addParams(moreActiveKey.receive);
           }
 
           break;
         case moreActiveKey.list:
           {
             items = (await fetchMoreListings(params)).items;
-
-            addParams(moreActiveKey.list);
           }
           break;
 
@@ -152,7 +151,7 @@ export function MoreCard(props: IMoreCard) {
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set('SearchParam', value);
-    window.history.replaceState({}, '', url);
+    window.history.pushState({}, '', url);
   }, [value]);
 
   const handleAction = () => {

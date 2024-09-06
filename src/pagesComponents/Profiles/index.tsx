@@ -164,7 +164,7 @@ export default function Profile() {
                   </div>
                 </Dropdown>
               ),
-              children: <MoreCard clearInput={clearInput} activityKey={selectedKey} />,
+              children: <MoreCard address={userInfo?.address} clearInput={clearInput} activityKey={selectedKey} />,
             },
           ]}
           activeKey={activeKey}
