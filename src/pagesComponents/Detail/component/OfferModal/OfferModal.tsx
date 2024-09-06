@@ -461,14 +461,13 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           price=""
           usdPrice=""
         />
-
         <div>
-          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[32px]">
+          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[28px]">
             Offer Price
           </div>
           <div className="flex justify-between mt-[16px]">
             <Button
-              className="mdTW:mr-[24px] !border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[164px] mdTW:w-[279px] !h-[70px] py-[8px]"
+              className="mdTW:mr-[14px] !border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[164px] mdTW:w-[279px] !h-[70px] py-[8px]"
               onClick={() => {
                 setPrice(salesInfo?.floorPrice || '');
               }}>
@@ -502,10 +501,9 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           <Divider type="vertical" />
           <span className="px-[12px] text-textSecondary text-[16px] mdTW:text-[16px] font-medium">ELF</span>
         </div>
-
         {!isERC721(nftInfo) && (
           <>
-            <div className="mt-[24px] mdTW:mt-[32px] text-[16px] font-medium text-textPrimary mb-[16px]">
+            <div className="mt-[16px] mdTW:mt-[28px] text-[16px] font-medium text-textPrimary mb-[14px]">
               Offer Amount
             </div>
             <InputNumberWithAddon
@@ -519,10 +517,8 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             <span className="text-right mt-[8px] text-textSecondary">{availableMount} available</span>
           </>
         )}
-
         <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
-
-        <Divider className="mdTW:my-[32px] my-[24px]" />
+        <Divider className="mdTW:my-[28px] my-[20px]" />
         <TotalPrice title="Total Offers" elf={`${formatTokenPrice(totalPrice)} ELF`} usd={`$${convertPrice}`} />
         <BalanceText
           title="Your balance"
