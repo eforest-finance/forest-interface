@@ -44,6 +44,7 @@ import { BalanceText, TotalPrice, Text } from '../BuyNowModal/components/Text';
 import InputNumberWithAddon from '../BuyNowModal/components/InputNumber';
 import ApproveModal from 'components/ApproveModal';
 import { SuccessFooter, Success } from '../BuyNowModal/components/Result';
+
 import aelfInfo from 'store/reducer/aelfInfo';
 
 function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?: any }) {
@@ -55,6 +56,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
   const { infoState, walletInfo, aelfInfo } = useGetState();
   const { isSmallScreen } = infoState;
   const [token] = useState<string>('ELF');
+
   const [quantity, setQuantity] = useState<number>(defaultValue?.quantity || 1);
   const [price, setPrice] = useState<number>(defaultValue?.price || 0);
   const [loading, setLoading] = useState(false);
@@ -468,11 +470,11 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             <Button
               className="mdTW:mr-[24px] !border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[164px] mdTW:w-[279px] !h-[70px] py-[8px]"
               onClick={() => {
-                setPrice(nftInfo.listingPrice);
+                setPrice(salesInfo?.floorPrice || '');
               }}>
               <p className="text-[12px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</p>
               <p className="font-semibold text-[14px] mdTW:text-[16px] text-textPrimary">
-                {formatTokenPrice(nftInfo.listingPrice)} ELF
+                {formatTokenPrice(salesInfo?.floorPrice || '--')} ELF
               </p>
             </Button>
             <Button
