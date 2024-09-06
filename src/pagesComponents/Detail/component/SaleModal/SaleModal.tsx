@@ -41,6 +41,7 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
   const {
+    nftSaleInfo,
     elfRate,
     listingBtnDisable,
     listingPrice,
@@ -150,12 +151,12 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
                     tokenId: 'ELF',
                     decimals: 8,
                   },
-                  price: nftInfo.listingPrice,
+                  price: nftSaleInfo?.floorPrice || '--',
                 });
               }}>
               <span className="text-[14px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</span>
               <span className="text-[16px] mdTW:text-[16px] text-textPrimary font-medium">
-                {formatTokenPrice(nftInfo.listingPrice)} ELF
+                {formatTokenPrice(nftSaleInfo?.floorPrice || '--')} ELF
               </span>
             </Button>
             <Button
