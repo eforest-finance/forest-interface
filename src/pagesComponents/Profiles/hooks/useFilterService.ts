@@ -34,7 +34,7 @@ export function useFilterService(tabType: string, walletAddress: string) {
       case 'more':
         return filterSelect.SearchParam;
       default:
-        return filterSelect.keyWord;
+        return filterSelect.keyword;
     }
   };
 
@@ -115,6 +115,8 @@ export function useFilterService(tabType: string, walletAddress: string) {
     setSize,
     SearchParam,
     searchInputValue,
+    setFilterSelect,
+    defaultFilter,
     setSearchParam,
     setSearchInputValue,
     searchInputValueChange,

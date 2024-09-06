@@ -15,17 +15,21 @@ import Down from 'assets/images/arrow-down.svg';
 import clsx from 'clsx';
 import useGetState from 'store/state/getState';
 import useTokenData from 'hooks/useTokenData';
-import qs from 'qs';
+import qs from 'query-string';
+import { useRouter } from 'next/navigation';
+import { useFilterService } from './hooks/useFilterService';
 
 export default function Profile() {
   const { userInfo, collectedTotalCount, createdTotalCount, avatar } = useProfilePageService();
-  console.log(userInfo);
+
+  const nav = useRouter();
 
   const searchAll: any = qs.parse(location.search);
   const tabType = searchAll ? searchAll['tabType'] : 'Collected';
+  const moreType = searchAll ? searchAll['moreType'] : 'made';
 
   const [activeKey, setActiveKey] = useState(tabType);
-  const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreActiveKey.made);
+  const [selectedKey, setSelectedKey] = useState<moreActiveKey>(moreType);
   const { address } = useProfilePageService();
   const { walletInfo, aelfInfo } = useGetState();
   const elfRate = useTokenData();
@@ -33,13 +37,25 @@ export default function Profile() {
   const [bannerImage, setBannerImage] = useState(userInfo?.bannerImage);
   const [profileImage, setProfileImage] = useState(userInfo?.profileImage);
 
+  const { clearAll } = useFilterService(tabType, address);
+
   useEffect(() => {
     setBannerImage(userInfo?.bannerImage);
     setProfileImage(userInfo?.profileImage);
   }, [userInfo?.bannerImage, userInfo?.profileImage]);
 
+  const [clearInput, setClearInput] = useState({ v: false, t: new Date().getTime() });
+
   const onMoreMenuClick: MenuProps['onClick'] = ({ key }) => {
     setSelectedKey(key as moreActiveKey);
+    if (moreType !== key) {
+      clearUrlParams();
+      setClearInput({ v: true, t: new Date().getTime() });
+    } else {
+      setClearInput({ v: false, t: new Date().getTime() });
+    }
+
+    console.log('clearInput', clearInput);
   };
 
   const handleProfileChange = (type: string, src: string) => {
@@ -71,6 +87,12 @@ export default function Profile() {
       label: <span onClick={() => setActiveKey('more')}>Active listings</span>,
     },
   ];
+
+  const clearUrlParams = () => {
+    const url = new URL(window.location.href);
+    url.search = '';
+    window.history.replaceState({}, '', url);
+  };
 
   return (
     <>
@@ -142,14 +164,15 @@ export default function Profile() {
                   </div>
                 </Dropdown>
               ),
-              children: <MoreCard activityKey={selectedKey} />,
+              children: <MoreCard address={userInfo?.address} clearInput={clearInput} activityKey={selectedKey} />,
             },
           ]}
           activeKey={activeKey}
-          onTabClick={(key) => {
+          onChange={(key) => {
             console.log('onTabClick', key);
             if (key === 'more') return;
             setActiveKey(key);
+            clearUrlParams();
           }}
         />
       </div>

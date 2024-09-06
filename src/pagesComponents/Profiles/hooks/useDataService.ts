@@ -28,7 +28,7 @@ export function useDataService({
       queryParams += `${key}=${newParams[key]}&`;
     });
 
-    // history.pushState(null, '', `${currentURL.pathname}?${queryParams.slice(0, -1)}`);
+    // history.replaceState(null, '', `${currentURL.pathname}?${queryParams.slice(0, -1)}`);
     nav.replace(`${currentURL.pathname}?${queryParams.slice(0, -1)}`);
   };
 
