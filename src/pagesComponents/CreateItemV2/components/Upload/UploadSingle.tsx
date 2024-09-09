@@ -16,7 +16,7 @@ import FileView from 'components/FileView/FileView';
 import { ISingleFile } from 'store/reducer/create/item';
 
 enum acceptFileType {
-  picture = 'jpeg,.jpg,.png,.gif',
+  picture = '.jpeg,.jpg,.png,.gif',
   // media = 'mp3,.mp4',
   // all = 'jpeg,.jpg,.png,.gif,.mp3,.mp4',
 }
