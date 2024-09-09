@@ -3,7 +3,7 @@ import Button from 'baseComponents/Button';
 import { Suspense, lazy } from 'react';
 import useGetState from 'store/state/getState';
 import { useRouter } from 'next/navigation';
-import Bg from 'assets/images/v2/free_mint_bg.jpeg';
+// import Bg from 'assets/images/v2/free_mint_bg.jpeg';
 
 export default function Detail() {
   const { infoState } = useGetState();
@@ -27,5 +27,5 @@ export default function Detail() {
     );
   }
 
-  return <div className={`bg-[url(${Bg.src})]`}></div>;
+  return <div className={`bg-[url(/free_mint_bg.jpeg)]`}></div>;
 }
