@@ -1,9 +1,11 @@
 'use client';
 import Button from 'baseComponents/Button';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useCallback } from 'react';
 import useGetState from 'store/state/getState';
 import { useRouter } from 'next/navigation';
-// import Bg from 'assets/images/v2/free_mint_bg.jpeg';
+import Image from 'next/image';
+import Bg from 'assets/images/v2/free_mint_bg.jpeg';
+import { End, NotStart, Created } from './components/Result';
 
 export default function Detail() {
   const { infoState } = useGetState();
@@ -27,5 +29,16 @@ export default function Detail() {
     );
   }
 
-  return <div className={`bg-[url(/free_mint_bg.jpeg)]`}></div>;
+  //   const Result = useCallback(() => {
+  //     const now = Date.now();
+  //   }, []);
+
+  return (
+    <div className="w-full h-[calc(100vh-62px)]">
+      <Image className="z-0 absolute w-full h-full" src={Bg} alt="" />
+      <div className="w-full h-full">
+        <Created />
+      </div>
+    </div>
+  );
 }
