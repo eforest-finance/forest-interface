@@ -4,6 +4,7 @@ import Congratulations from 'assets/images/v2/congratulation.png';
 import Image from 'next/image';
 import Button from 'baseComponents/Button';
 import useGetState from 'store/state/getState';
+import { useRouter } from 'next/navigation';
 
 const End = () => {
   return (
@@ -30,14 +31,21 @@ const NotStart = () => {
   );
 };
 
-const Created = () => {
+const Created = ({ collectionId }: { collectionId: string }) => {
+  const navigator = useRouter();
+
   return (
     <div className="h-full flex flex-col justify-center items-center">
       <Image className="z-10" src={Congratulations} alt="" width={160} height={146} />
       <div className="w-[343px] text-center z-10 mt-[32px] text-textPrimary text-[20px] font-semibold">
         You have already created
       </div>
-      <Button className="mt-[32px] w-[180px] h-[44px]" type="primary">
+      <Button
+        className="mt-[32px] w-[180px] h-[44px]"
+        type="primary"
+        onClick={() => {
+          navigator.push(`/explore-items/${collectionId}`);
+        }}>
         View Collection
       </Button>
     </div>

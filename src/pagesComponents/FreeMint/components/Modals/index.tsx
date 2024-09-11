@@ -8,6 +8,8 @@ import Success from 'assets/images/v2/success.svg';
 import Gif from 'assets/images/v2/icon_Referral.svg';
 import Close from 'assets/images/v2/close.svg';
 
+import { useRouter } from 'next/navigation';
+
 import Image from 'next/image';
 import clsx from 'clsx';
 
@@ -33,7 +35,7 @@ const DoubleCheck = (props: IDoubleCheckProps) => {
       onCancel={onClose}
       footer={
         <div className="w-full flex justify-between px-[24px]">
-          <Button className="flex-1 mr-[8px]" onClick={onClose}>
+          <Button className="flex-1 mr-[8px] !bg-lineDividers border-0" onClick={onClose}>
             Close
           </Button>
           <Button className="flex-1" type="primary" onClick={onCreate}>
@@ -87,7 +89,7 @@ const Creating = (props: { open: boolean }) => {
         />
         <div className="mt-[8px] text-[24px] font-semibold text-textPrimary">Creating NFT</div>
         <div className="mt-[24px] text-center text-textSecondary">
-          Please do not close the page. This may take up to 30 seconds{' '}
+          Please do not close the page. This may take up to 30 seconds
         </div>
       </div>
     </Modal>
@@ -95,12 +97,20 @@ const Creating = (props: { open: boolean }) => {
 };
 
 const SuccessModal = (props: any) => {
-  const { open, onCreate, onClose, nftInfo } = props;
-  const { collectionName = '111', nftName = '111' } = nftInfo;
+  const { open, onCreate, onClose, nftInfo = {} } = props;
+  console.log('nftInfo:', nftInfo);
+  const navigator = useRouter();
+
+  const { collectionName, nftName, collectionId, collectionIcon, nftIcon } = nftInfo;
+
   const onCancel = () => {
     // go back to collection
+    onClose();
+    navigator.push(`/explore-items/${collectionId}`);
   };
   const handleShare = () => {
+    const url = encodeURIComponent(location.href);
+    window.open(`https://twitter.com/intent/tweet?text=forest test&url=${url}`);
     // go to X
   };
   return (
@@ -114,20 +124,10 @@ const SuccessModal = (props: any) => {
       footer={null}>
       <div className="w-full h-full flex flex-col items-center relative">
         <div className="!w-[140px] h-[140px]  flex justify-center items-center overflow-hidden rounded-[20px] border border-solid border-lineBorder">
-          <ImageEnhance
-            src={
-              'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1725863931780-QmUagFPoGyNvAJMy7ditDuX7hbqYmJfCmhXzHEjrGEiKku.png'
-            }
-            className="!rounded-none !w-full !h-full"
-          />
+          <ImageEnhance src={nftIcon} className="!rounded-none !w-full !h-full" />
         </div>
         <div className="mt-[8px] flex  items-center justify-center">
-          <ImageEnhance
-            src={
-              'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1725863931780-QmUagFPoGyNvAJMy7ditDuX7hbqYmJfCmhXzHEjrGEiKku.png'
-            }
-            className="mr-[8px] overflow-hidden rounded-[4px] !w-[20px] !h-[20px]"
-          />
+          <ImageEnhance src={collectionIcon} className="mr-[8px] overflow-hidden rounded-[4px] !w-[20px] !h-[20px]" />
           <p className={clsx('text-[14px] font-semibold text-textPrimary', styles['nft-list-card-text-ellipsis'])}>
             {collectionName}
           </p>

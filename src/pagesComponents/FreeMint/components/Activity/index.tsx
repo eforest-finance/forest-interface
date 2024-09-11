@@ -11,7 +11,6 @@ import styles from './style.module.css';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { DoubleCheck, Creating, SuccessModal } from '../Modals';
 import { fetchCreatePlatformNFT } from 'api/fetch';
-import { setNftInfo } from 'store/reducer/detail/detailInfo';
 import { message } from 'antd';
 
 const Activity = () => {
@@ -22,13 +21,12 @@ const Activity = () => {
   const [doubleCheckVisible, setDoubleCheckVisible] = useState(false);
   const [creatingVisible, setCreatingVisible] = useState(false);
   const [successVisible, setSuccessVisible] = useState(false);
-  const [nftInfo, setNFTInfo] = useState<any>();
+  const [nftInfo, setNftInfo] = useState<any>();
 
   const checkValid = Boolean(!err?.length && file && name?.length);
   console.log('checkValid:', checkValid);
 
   const handleCreate = async () => {
-    // debugger;
     setDoubleCheckVisible(false);
     setCreatingVisible(true);
     try {
@@ -40,8 +38,15 @@ const Activity = () => {
         NFTName: name || '',
         urlHash: file!.hash || '',
       };
-      const res = (await fetchCreatePlatformNFT(params)) as any;
-      const nftInfo = res.data;
+      //   collectionName = '111', nftName = '111'
+      const res = await fetchCreatePlatformNFT(params);
+      const nftInfo = {
+        ...res,
+        nftName: name,
+        nftIcon: file?.url,
+      };
+
+      //   const nftInfo = res.data;
       setNftInfo(nftInfo);
       setSuccessVisible(true);
       //   debugger;
@@ -115,6 +120,7 @@ const Activity = () => {
           </div>
           <Input
             status={err ? 'error' : undefined}
+            max={30}
             className="!mt-[16px] !bg-transparent !border-textPrimary"
             placeholder="Item name"
             onBlur={() => {
@@ -171,6 +177,9 @@ const Activity = () => {
         <SuccessModal
           open={successVisible}
           nftInfo={nftInfo}
+          onClose={() => {
+            setSuccessVisible(false);
+          }}
           onCreate={() => {
             // create
           }}

@@ -7,13 +7,27 @@ import Image from 'next/image';
 import Bg from 'assets/images/v2/free_mint_bg.jpeg';
 import { End, NotStart, Created } from './components/Result';
 import Activity from './components/Activity';
+import { fetchCreatePlatformNFTInfo } from 'api/fetch';
 
 export default function Detail() {
-  const { infoState, aelfInfo } = useGetState();
+  const { infoState, aelfInfo, walletInfo } = useGetState();
   const { freeMintStart, freeMintEnd } = aelfInfo;
   const { isSmallScreen } = infoState;
   const [isActivity, setIsActivity] = useState(false);
   const navigate = useRouter();
+  const { address } = walletInfo;
+  const [isDone, setIsDone] = useState(false);
+
+  const getCount = async () => {
+    if (address) {
+      try {
+        const { isDone } = await fetchCreatePlatformNFTInfo({ address });
+        setIsDone(true || isDone);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   const renderResultCmp = useCallback(() => {
     const now = Date.now();
@@ -26,6 +40,10 @@ export default function Detail() {
     }
     return null;
   }, [freeMintStart, freeMintEnd]);
+
+  useEffect(() => {
+    getCount();
+  }, [address]);
 
   useEffect(() => {
     const now = Date.now();
@@ -53,7 +71,13 @@ export default function Detail() {
   return (
     <div className="w-full h-[calc(100vh-62px)]">
       <Image className="z-0 absolute w-full h-full" src={Bg} alt="" />
-      <div className="w-full h-full">{!isActivity ? <>{renderResultCmp()}</> : <Activity />}</div>
+      {!isDone ? (
+        <>
+          <div className="w-full h-full">{!isActivity ? <>{renderResultCmp()}</> : <Activity />}</div>
+        </>
+      ) : (
+        <Created />
+      )}
     </div>
   );
 }

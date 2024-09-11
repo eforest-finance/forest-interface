@@ -444,3 +444,9 @@ export const fetchMoreListings = async (params: IReceivedOfferParams): Promise<I
 export const fetchCreatePlatformNFT = async (params: ICreatePlatformParams): Promise<ICreatePlatformRes> => {
   return request.post<ICreatePlatformParams, ICreatePlatformRes>('app/nft/create-platform-nft', params);
 };
+
+export const fetchCreatePlatformNFTInfo = async (params: { address: string }) => {
+  return request.get<{ nftCount: number; isDone: boolean }>('app/nft/create-platform-nft/info', {
+    params,
+  });
+};

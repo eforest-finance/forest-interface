@@ -14,6 +14,7 @@ import Delete from 'assets/images/v2/delete.svg';
 import PlayIcon from 'assets/images/v2/play.svg';
 import FileView from 'components/FileView/FileView';
 import { ISingleFile } from 'store/reducer/create/item';
+import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
 enum acceptFileType {
   picture = '.jpeg,.jpg,.png,.gif',
@@ -69,6 +70,7 @@ const UploadSingle = (props: IUploadProps) => {
   const [localFile, setLocalFile] = useState<string | undefined>('');
   const [poster, setPoster] = useState<any>('');
   const [fileViewVisible, setFileViewVisible] = useState<boolean>(false);
+  const { isLogin, login } = useCheckLoginAndToken();
 
   useEffect(() => {
     setPreviewImage(previewSrc);
