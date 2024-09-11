@@ -2,7 +2,7 @@ name: Build and Push Image
 on:
   workflow_dispatch:
   push:
-    branches: ['dev', 'fix/*', 'style/*']
+    branches: ['dev', 'feature/*', 'fix/*', 'style/*']
 jobs:
   build-and-push-image:
     runs-on: eforest-runner
