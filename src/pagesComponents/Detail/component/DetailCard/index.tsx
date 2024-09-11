@@ -6,7 +6,7 @@ import CollapseForPC from 'components/Collapse';
 import { useRouter } from 'next/navigation';
 import styles from './style.module.css';
 import useDetailGetState from 'store/state/detailGetState';
-import { OmittedType, addPrefixSuffix, getOmittedStr } from 'utils';
+import { OmittedType, addPrefixSuffix, getOmittedStr, getExploreLink } from 'utils';
 import { useMemo } from 'react';
 import moment from 'moment';
 import useJumpExplorer from 'hooks/useJumpExplorer';
@@ -60,7 +60,9 @@ export default function DetailCard() {
                           className="cursor-pointer flex items-center"
                           onClick={() => {
                             if (nftInfo?.minter?.name?.endsWith?.('_AELF')) {
-                              jump('AELF', `/address/${nftInfo?.minter?.name}`);
+                              // jump('AELF', `/address/${nftInfo?.minter?.name}`);
+                              const url = getExploreLink(`${nftInfo?.minter?.name}`, 'address', `AELF`);
+                              window.open(url);
                               return;
                             }
                             nav.push(`/account/${nftInfo?.minter?.address}#Collected`);

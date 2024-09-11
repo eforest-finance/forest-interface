@@ -2,7 +2,7 @@ import { INftCollectionInfo } from 'hooks/useIsMinter';
 import styles from './style.module.css';
 import ElfIcon from 'assets/images/explore/elf';
 import LinkIcon from 'assets/images/explore/link.svg';
-import { OmittedType, addPrefixSuffix, getOmittedStr } from 'utils';
+import { OmittedType, addPrefixSuffix, getOmittedStr, getExploreLink } from 'utils';
 import useResponsive from 'hooks/useResponsive';
 import { Ellipsis } from 'antd-mobile';
 import DownIcon from 'assets/images/explore/more-down.svg';
@@ -39,10 +39,8 @@ function SeedName({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
         <span
           className="text-[14px] cursor-pointer ml-[8px] leading-[22px] font-semibold text-[var(--brand-base)]"
           onClick={() => {
-            jump(
-              collectionsInfo?.chainId || '',
-              `/address/${addPrefixSuffix(collectionsInfo?.creatorAddress || '', collectionsInfo?.chainId)}`,
-            );
+            const url = getExploreLink(`${collectionsInfo?.creatorAddress}`, 'address', `${collectionsInfo?.chainId}`);
+            window.open(url);
           }}>
           {addPrefixSuffix(
             getOmittedStr(collectionsInfo?.creatorAddress || '', OmittedType.CUSTOM, {
@@ -62,13 +60,16 @@ function SeedName({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo })
   );
 }
 function SeedLink({ collectionsInfo }: { collectionsInfo?: INftCollectionInfo }) {
+  console.log('collectionsInfo', collectionsInfo);
   const jump = useJumpExplorer();
   return (
     <div className="flex items-center justify-center">
       <div className="flex cursor-pointer items-center w-[40px] h-[40px] justify-center">
         <ElfIcon
           onClick={() => {
-            jump(collectionsInfo?.issueChainId || '', `/token/${collectionsInfo?.symbol}`);
+            const url = getExploreLink(`${collectionsInfo?.symbol}`, 'nft', `${collectionsInfo?.chainId}`);
+            window.open(url);
+            // jump(collectionsInfo?.issueChainId || '', `/token/${collectionsInfo?.symbol}`);
           }}
         />
       </div>
