@@ -1,0 +1,43 @@
+.modal {
+  :global {
+    .ant-modal-header {
+      @apply border-b-0  rounded-t-lg  !px-[24px] !py-[32px] text-[24px] font-semibold text-textPrimary;
+
+      .ant-modal-title {
+        @apply text-[20px] font-semibold leading-[28px];
+      }
+    }
+
+    .ant-modal-content {
+      @apply !rounded-lg mx-[16px];
+    }
+
+    .ant-modal-body {
+      @apply !px-[24px] !py-[32px] !pt-0;
+    }
+
+    .ant-modal-close-x {
+      @apply mt-[16px];
+    }
+
+    .ant-modal-footer {
+      @apply border-0 pb-[32px];
+    }
+  }
+}
+
+/* .modal {
+    :global {
+      .ant-modal-header {
+        @apply !px-[24px] !py-[32px] text-[24px] font-semibold text-textPrimary;
+      }
+  
+      .ant-modal-content {
+        @apply !rounded-lg;
+      }
+  
+      .ant-modal-body {
+        @apply !px-[24px] !py-[32px] !pt-0;
+      }
+    }
+  } */

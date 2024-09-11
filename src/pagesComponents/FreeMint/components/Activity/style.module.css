@@ -1,0 +1,42 @@
+.upload {
+  @apply !w-full !h-[180px] mt-[16px];
+
+  :global {
+    .ant-upload-drag-icon {
+      @apply scale-[0.615] !h-[33px] !mb-[16px];
+
+      path {
+        @apply fill-textPrimary;
+      }
+    }
+    .ant-upload {
+      @apply !bg-transparent !rounded-[12px] border-textPrimary;
+    }
+  }
+
+  .preview {
+    @apply h-full p-[20px]  border-solid	border-textPrimary rounded-[12px];
+
+    :global {
+      .ant-image {
+        @apply m-auto h-[100px] w-[149px] border-0;
+      }
+
+      .Delete {
+        @apply !text-textPrimary;
+
+        path {
+          @apply fill-textPrimary;
+        }
+      }
+
+      .Reupload {
+        @apply !text-textPrimary;
+
+        path {
+          @apply fill-textPrimary;
+        }
+      }
+    }
+  }
+}
