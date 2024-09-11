@@ -10,14 +10,49 @@ import Input, { TextArea } from 'baseComponents/Input';
 import styles from './style.module.css';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { DoubleCheck, Creating, SuccessModal } from '../Modals';
+import { fetchCreatePlatformNFT } from 'api/fetch';
+import { setNftInfo } from 'store/reducer/detail/detailInfo';
+import { message } from 'antd';
 
 const Activity = () => {
   const [file, setFile] = useState<ISingleFile>();
   const { isLogin, login } = useCheckLoginAndToken();
   const [err, setErr] = useState<string>();
   const [name, setName] = useState<string>();
+  const [doubleCheckVisible, setDoubleCheckVisible] = useState(false);
+  const [creatingVisible, setCreatingVisible] = useState(false);
+  const [successVisible, setSuccessVisible] = useState(false);
+  const [nftInfo, setNFTInfo] = useState<any>();
+
   const checkValid = Boolean(!err?.length && file && name?.length);
   console.log('checkValid:', checkValid);
+
+  const handleCreate = async () => {
+    // debugger;
+    setDoubleCheckVisible(false);
+    setCreatingVisible(true);
+    try {
+      // NFTUrl: string;
+      // NFTName: string;
+      // urlHash: string;
+      const params = {
+        NFTUrl: file!.url || '',
+        NFTName: name || '',
+        urlHash: file!.hash || '',
+      };
+      const res = (await fetchCreatePlatformNFT(params)) as any;
+      const nftInfo = res.data;
+      setNftInfo(nftInfo);
+      setSuccessVisible(true);
+      //   debugger;
+    } catch (error) {
+      console.log(error);
+      message.error(error);
+      //   debugger;
+    }
+
+    setCreatingVisible(false);
+  };
 
   return (
     <div className="w-full h-full relative">
@@ -110,12 +145,37 @@ const Activity = () => {
           />
           {err?.length && <span className="mt-[4px] ant-form-item-explain-error">{err}</span>}
         </div>
-        <Button disabled={!checkValid} type="primary" className="mt-[16px] w-[146px] h-[48px]">
+        <Button
+          onClick={() => {
+            setDoubleCheckVisible(true);
+          }}
+          disabled={!checkValid}
+          type="primary"
+          className="mt-[16px] w-[146px] h-[48px]">
           Create
         </Button>
       </div>
 
-      {/* <SuccessModal open={true} nftInfo={{}} onCreate={() => {}} /> */}
+      <DoubleCheck
+        name={name || ''}
+        file={file}
+        open={doubleCheckVisible}
+        onCreate={handleCreate}
+        onClose={() => {
+          setDoubleCheckVisible(false);
+        }}
+      />
+
+      <Creating open={creatingVisible} />
+      {successVisible && (
+        <SuccessModal
+          open={successVisible}
+          nftInfo={nftInfo}
+          onCreate={() => {
+            // create
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -21,9 +21,7 @@ export interface IDoubleCheckProps {
 
 const DoubleCheck = (props: IDoubleCheckProps) => {
   const { name, file, open, onCreate, onClose } = props;
-  const onCancel = () => {
-    // cancel
-  };
+
   return (
     <Modal
       title={<></>}
@@ -32,11 +30,13 @@ const DoubleCheck = (props: IDoubleCheckProps) => {
       className={styles.modal}
       centered
       closeIcon={null}
-      onCancel={onCancel}
+      onCancel={onClose}
       footer={
         <div className="w-full flex justify-between px-[24px]">
-          <Button className="flex-1 mr-[8px]">Close</Button>
-          <Button className="flex-1" type="primary">
+          <Button className="flex-1 mr-[8px]" onClick={onClose}>
+            Close
+          </Button>
+          <Button className="flex-1" type="primary" onClick={onCreate}>
             Create
           </Button>
         </div>
@@ -46,7 +46,7 @@ const DoubleCheck = (props: IDoubleCheckProps) => {
           <div className="w-[140px] h-[140px]  flex justify-center items-center overflow-hidden rounded-md border border-solid border-lineBorder">
             <ImageEnhance
               src={
-                file.url ||
+                file?.url ||
                 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1725863931780-QmUagFPoGyNvAJMy7ditDuX7hbqYmJfCmhXzHEjrGEiKku.png'
               }
               className="!rounded-none !w-full !h-full"
@@ -62,8 +62,8 @@ const DoubleCheck = (props: IDoubleCheckProps) => {
   );
 };
 
-const Creating = (props: any) => {
-  const { open, onCreate, onClose } = props;
+const Creating = (props: { open: boolean }) => {
+  const { open } = props;
   const onCancel = () => {
     // cancel
   };

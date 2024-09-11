@@ -81,6 +81,8 @@ import {
   IReceivedOfferParams,
   IMyHoLdCollectionRes,
   ITrendingCollectionsRes,
+  ICreatePlatformRes,
+  ICreatePlatformParams,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -437,4 +439,8 @@ export const fetchReceivedOffer = async (params: IReceivedOfferParams): Promise<
 
 export const fetchMoreListings = async (params: IReceivedOfferParams): Promise<IOfferMadeItemRes> => {
   return request.post<IOfferMadeParams, IOfferMadeItemRes>('app/market/collected-collection-listings', params);
+};
+
+export const fetchCreatePlatformNFT = async (params: ICreatePlatformParams): Promise<ICreatePlatformRes> => {
+  return request.post<ICreatePlatformParams, ICreatePlatformRes>('app/nft/create-platform-nft', params);
 };
