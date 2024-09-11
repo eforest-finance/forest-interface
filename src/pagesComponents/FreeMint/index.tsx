@@ -1,16 +1,37 @@
 'use client';
 import Button from 'baseComponents/Button';
-import { Suspense, lazy, useCallback } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import useGetState from 'store/state/getState';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Bg from 'assets/images/v2/free_mint_bg.jpeg';
 import { End, NotStart, Created } from './components/Result';
+import Activity from './components/Activity';
 
 export default function Detail() {
-  const { infoState } = useGetState();
+  const { infoState, aelfInfo } = useGetState();
+  const { freeMintStart, freeMintEnd } = aelfInfo;
   const { isSmallScreen } = infoState;
+  const [isActivity, setIsActivity] = useState(false);
   const navigate = useRouter();
+
+  const renderResultCmp = useCallback(() => {
+    const now = Date.now();
+    if (now < freeMintStart) {
+      return <NotStart />;
+    }
+
+    if (now > freeMintEnd) {
+      return <End />;
+    }
+    return null;
+  }, [freeMintStart, freeMintEnd]);
+
+  useEffect(() => {
+    const now = Date.now();
+    const isInAnActivity = now > freeMintStart && now < freeMintEnd;
+    setIsActivity(isInAnActivity);
+  }, [freeMintEnd, freeMintStart]);
 
   if (!isSmallScreen) {
     return (
@@ -29,16 +50,10 @@ export default function Detail() {
     );
   }
 
-  //   const Result = useCallback(() => {
-  //     const now = Date.now();
-  //   }, []);
-
   return (
     <div className="w-full h-[calc(100vh-62px)]">
       <Image className="z-0 absolute w-full h-full" src={Bg} alt="" />
-      <div className="w-full h-full">
-        <Created />
-      </div>
+      <div className="w-full h-full">{!isActivity ? <>{renderResultCmp()}</> : <Activity />}</div>
     </div>
   );
 }
