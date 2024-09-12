@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     images: {
       width: 1200,
       height: 675,
-      url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/Banner+1.png',
+      url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1726107869879-1200_630%20%282%29.png',
       // url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1725863931780-QmUagFPoGyNvAJMy7ditDuX7hbqYmJfCmhXzHEjrGEiKku.png',
     },
   },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     images: {
       width: 1200,
       height: 675,
-      url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/Banner+1.png',
+      url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1726107869879-1200_630%20%282%29.png',
       // url: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1725863931780-QmUagFPoGyNvAJMy7ditDuX7hbqYmJfCmhXzHEjrGEiKku.png',
     },
   },
