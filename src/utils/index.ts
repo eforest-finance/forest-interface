@@ -32,31 +32,35 @@ export function shortenString(address: string | null, chars = 10): string {
 }
 export function getExploreLink(
   data: string,
-  type: 'transaction' | 'token' | 'address' | 'block',
+  type: 'transaction' | 'token' | 'address' | 'block' | 'nft',
   chainName?: Chain,
 ): string {
   const target = (chainName && (chainName.toUpperCase() as 'AELF' | 'TDVV' | 'TDVW')) || SupportedELFChainId.MAIN_NET;
   const prefix = EXPLORE_URL[target];
-  switch (type) {
-    case 'transaction': {
-      const exploreUrl = {
-        test: 'https://testnet.aelfscan.io',
-        production: 'https://www.aelfscan.io',
-      };
-      const url = exploreUrl[env];
+  const exploreUrl = {
+    test: 'https://testnet.aelfscan.io',
+    production: 'https://www.aelfscan.io',
+  };
+  const url = exploreUrl[env];
 
+  console.log('data', data, 'chainName', chainName);
+  switch (type) {
+    case 'transaction':
       return `${url}/${chainName}/tx/${data}`;
-    }
-    case 'token': {
-      return `${prefix}token/${data}`;
-    }
-    case 'block': {
+
+    case 'token':
+      return `${url}/token/${data}`;
+
+    case 'nft':
+      return `${url}/nft?chainId=${chainName}&collectionSymbol=${data}`;
+
+    case 'block':
       return `${prefix}block/${data}`;
-    }
+
     case 'address':
-    default: {
+      return `${url}/${chainName}/address/${data}`;
+    default:
       return `${prefix}address/${data}`;
-    }
   }
 }
 

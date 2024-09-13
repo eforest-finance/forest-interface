@@ -14,9 +14,10 @@ import Delete from 'assets/images/v2/delete.svg';
 import PlayIcon from 'assets/images/v2/play.svg';
 import FileView from 'components/FileView/FileView';
 import { ISingleFile } from 'store/reducer/create/item';
+import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 
 enum acceptFileType {
-  picture = 'jpeg,.jpg,.png,.gif',
+  picture = '.jpeg,.jpg,.png,.gif',
   // media = 'mp3,.mp4',
   // all = 'jpeg,.jpg,.png,.gif,.mp3,.mp4',
 }
@@ -28,7 +29,11 @@ interface IUploadProps extends UploadProps {
   previewSrc?: string;
   wrapperClassName?: string;
   dragWrapperClassName?: string;
-  onUploadChange?: (file: ISingleFile) => void;
+  previewWrapperClassName?: string;
+  onUploadChange?: (file?: ISingleFile) => void;
+  text?: string;
+  icon?: any;
+  title?: string;
 }
 
 type ImageInfoType = {
@@ -41,7 +46,17 @@ type ImageInfoType = {
 export const ImagePlaceHolder = <Skeleton.Image active={true} className={'!w-full !h-full'}></Skeleton.Image>;
 
 const UploadSingle = (props: IUploadProps) => {
-  const { isDragger = true, onUploadChange, previewSrc, wrapperClassName, dragWrapperClassName } = props;
+  const {
+    title,
+    icon,
+    text,
+    isDragger = true,
+    onUploadChange,
+    previewSrc,
+    wrapperClassName,
+    previewWrapperClassName,
+    dragWrapperClassName,
+  } = props;
   const uploader = useRef<any>(null);
 
   const [s3File, setS3File] = useState<ImageInfoType>({
@@ -55,6 +70,7 @@ const UploadSingle = (props: IUploadProps) => {
   const [localFile, setLocalFile] = useState<string | undefined>('');
   const [poster, setPoster] = useState<any>('');
   const [fileViewVisible, setFileViewVisible] = useState<boolean>(false);
+  const { isLogin, login } = useCheckLoginAndToken();
 
   useEffect(() => {
     setPreviewImage(previewSrc);
@@ -164,10 +180,11 @@ const UploadSingle = (props: IUploadProps) => {
   const UploadButton = useCallback(() => {
     return (
       <div ref={uploader}>
-        <p className="ant-upload-drag-icon">
-          <UploadIcon />
+        <p className="ant-upload-drag-icon">{icon ? icon : <UploadIcon />}</p>
+        {title && <p className="text-[14px] font-medium text-textPrimary mb-[4px]">{title}</p>}
+        <p className="text-[15px] text-[var(--text-secondary)]">
+          {text || 'Click or drag file to this area to upload'}
         </p>
-        <p className="text-[15px] text-[var(--text-secondary)]">Click or drag file to this area to upload</p>
         {/* <p className="ant-upload-hint">Formats supported JPG, PNG, GIF. Max size 100 MB. Recommend ratio 16:9.</p> */}
       </div>
     );
@@ -182,6 +199,7 @@ const UploadSingle = (props: IUploadProps) => {
   const handleDelete = () => {
     setS3File({});
     setPreviewImage('');
+    onUploadChange && onUploadChange(undefined);
   };
 
   const handlePlay = () => {
@@ -198,7 +216,7 @@ const UploadSingle = (props: IUploadProps) => {
       {isDragger ? (
         <div className={` ${style['upload-wrapper']} ${wrapperClassName} ${previewImage ? 'mdl:!h-auto' : ''}`}>
           {s3File.url && (
-            <div className={`${style['upload-preview-wrapper']}`}>
+            <div className={`${style['upload-preview-wrapper']} ${previewWrapperClassName}`}>
               <Image
                 alt=""
                 className="object-contain"
@@ -226,11 +244,11 @@ const UploadSingle = (props: IUploadProps) => {
               )}
 
               <div className="cursor-pointer flex items-center justify-between mt-[20px]">
-                <span className="flex items-center justify-center text-[var(--bg-btn)]" onClick={handleReload}>
+                <span className="Reupload flex items-center justify-center text-[var(--bg-btn)]" onClick={handleReload}>
                   <Reload className=" mr-[10px]" /> Reupload
                 </span>
                 <span
-                  className="cursor-pointer	 flex items-center justify-center pr-[10px] text-[var(--bg-btn)]"
+                  className="Delete cursor-pointer	 flex items-center justify-center pr-[10px] text-[var(--bg-btn)]"
                   onClick={handleDelete}>
                   <Delete className=" mr-[10px]" /> Delete
                 </span>

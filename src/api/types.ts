@@ -1151,3 +1151,17 @@ export interface IReceivedOfferParams {
     value: string;
   }[];
 }
+
+export interface ICreatePlatformParams {
+  NFTUrl: string;
+  NFTName: string;
+  urlHash: string;
+}
+
+export interface ICreatePlatformRes {
+  collectionSymbol: string;
+  collectionId: string;
+  nftSymbol: string;
+  nftId: string;
+  collectionIcon: string;
+}

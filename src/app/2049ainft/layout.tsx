@@ -1,22 +1,3 @@
-import '../styles/base.css';
-
-import 'antd/dist/antd.css';
-
-import '@portkey/did-ui-react/dist/assets/index.css';
-import 'aelf-web-login/dist/assets/index.css';
-
-import Provider from '../providers/provider';
-
-import Layout from 'pagesComponents/Layout';
-
-import '../styles/global.css';
-import '../styles/theme.css';
-
-// export const metadata = {
-//   title: 'Forest',
-//   description: 'Forest',
-// };
-
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -45,23 +26,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: 'no',
-};
-
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <html lang="en">
-      <body>
-        <Provider>
-          <Layout>{children}</Layout>
-        </Provider>
-      </body>
-    </html>
-  );
-};
-
-export default RootLayout;
+export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <div className="min-h-screen">{children}</div>;
+}
