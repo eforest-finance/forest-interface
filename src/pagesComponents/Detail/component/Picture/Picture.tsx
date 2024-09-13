@@ -29,7 +29,7 @@ export default function Picture() {
         <ImageEnhance
           width={'100%'}
           height={'100%'}
-          className=" w-full h-full aspect-square rounded-lg"
+          className=" w-full h-full aspect-square rounded-lg object-contain"
           src={nftInfo?.previewImage || ''}
         />
         {nftInfo?.file &&
