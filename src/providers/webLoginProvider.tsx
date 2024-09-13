@@ -45,6 +45,10 @@ const WebLoginProviderDynamic = dynamic(
           recommendIndexes: [0, 2],
           loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Email'],
         },
+        referralInfo: {
+          referralCode: '',
+          projectCode: '13017',
+        },
         requestDefaults: {
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
           baseURL: info.portkeyServerV2,
