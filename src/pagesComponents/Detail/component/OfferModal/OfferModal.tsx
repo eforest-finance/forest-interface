@@ -273,6 +273,11 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             price: `${formatTokenPrice(totalPrice)} ELF`,
             usdPrice: formatUSDPrice(convertPrice),
             number: quantity,
+            type: 'makeOffer',
+            makeOfferInfo: {
+              quantity,
+              price,
+            },
           },
           title: 'Make Offer',
           showBalance: true,
