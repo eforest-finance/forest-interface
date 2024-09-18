@@ -290,9 +290,9 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
           price=""
           usdPrice=""
         />
-        <div className="flex flex-col mdTW:flex-row  justify-between mt-[24px]">
+        <div className="flex flex-col mdTW:flex-row  justify-between mt-[16px] lg:mt-[24px]">
           <span className="text-[16px] mdTW:text-[16px] font-medium">Quantity</span>
-          <div className="flex flex-col items-end mt-[16px] mdTW:mt-0">
+          <div className="flex flex-col items-end mt-[8px] lg:mt-[16px]">
             <InputQuantity
               width={isSmallScreen ? '100%' : undefined}
               max={availableQuantity}
@@ -304,7 +304,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
             <span className="mt-[8px] text-textSecondary">{availableQuantity} available</span>
           </div>
         </div>
-        <Divider className="my-[24px] mdTW:my-[20px] mt-[20px]" />
+        <Divider className="lg:my-[24px] my-[16px]" />
         <Text title="Average item price" value={`${formatTokenPrice(averagePrice)} ELF`} />
         <TotalPrice
           className="mt-[16px]"

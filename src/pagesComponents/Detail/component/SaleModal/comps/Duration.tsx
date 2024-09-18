@@ -80,7 +80,7 @@ export function Duration(props: IDurationProps) {
     return (
       <>
         <div
-          className="flex h-[56px] mx-2 mt-3 px-3 items-center justify-between rounded-lg border border-solid border-lineBorder"
+          className="flex h-[56px] mx-2 mt-3 px-[24px] items-center justify-between rounded-lg border border-solid border-lineBorder"
           onClick={() => {
             setMobileDateVisible(true);
           }}>

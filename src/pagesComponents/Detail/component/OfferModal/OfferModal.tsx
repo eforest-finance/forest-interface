@@ -462,12 +462,12 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           usdPrice=""
         />
         <div>
-          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[28px]">
+          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[16px] lg:mt-[24px]">
             Offer Price
           </div>
-          <div className="flex justify-between mt-[16px]">
+          <div className="grid grid-cols-2 gap-[8px] lg:gap-[12px] mt-[8px]">
             <Button
-              className="mdTW:mr-[14px] !border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[164px] mdTW:w-[279px] !h-[70px] py-[8px]"
+              className="!border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg !h-[70px] py-[8px]"
               onClick={() => {
                 setPrice(salesInfo?.floorPrice || '');
               }}>
@@ -478,7 +478,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             </Button>
             <Button
               disabled={nftInfo.maxOfferPrice < 0}
-              className="!border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg w-[164px] mdTW:w-[279px] !h-[70px] py-[8px]"
+              className="!border-0 rounded-lg flex items-center flex-col !bg-fillCardBg hover:!bg-fillHoverBg !h-[70px] py-[8px]"
               onClick={() => {
                 setPrice(nftInfo.maxOfferPrice);
               }}>
@@ -489,7 +489,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             </Button>
           </div>
         </div>
-        <div className="mt-[12px] border border-solid border-lineBorder flex items-center rounded-lg">
+        <div className="mt-[8px] lg:mt-[12px] border border-solid border-lineBorder flex items-center rounded-lg">
           <InputNumber
             bordered={false}
             controls={false}
@@ -503,9 +503,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         </div>
         {!isERC721(nftInfo) && (
           <>
-            <div className="mt-[16px] mdTW:mt-[28px] text-[16px] font-medium text-textPrimary mb-[14px]">
-              Offer Amount
-            </div>
+            <div className="mt-[16px] lg:mt-[24px] text-[16px] font-medium text-textPrimary mb-[8px]">Offer Amount</div>
             <InputNumberWithAddon
               max={Number(availableMount)}
               quantity={quantity}
