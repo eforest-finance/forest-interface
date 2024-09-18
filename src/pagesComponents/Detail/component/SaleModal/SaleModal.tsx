@@ -147,7 +147,7 @@ function ListModal({ nftInfo, defaultData, type = 'list' }: ISaleModalProps) {
               onClick={() => {
                 setListingPrice({
                   token: {
-                    symbol: 'EL',
+                    symbol: 'ELF',
                     tokenId: 'ELF',
                     decimals: 8,
                   },
