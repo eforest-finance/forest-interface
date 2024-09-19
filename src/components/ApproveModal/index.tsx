@@ -74,8 +74,16 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
           const newBalance = Number(bc);
           setBalance(newBalance);
 
-          if (newBalance >= nftInfo?.listingPrice * amount) {
-            await initialization();
+          if (nftInfo?.type === 'makeOffer') {
+            const price = nftInfo?.makeOfferInfo?.price ?? 0;
+            const quantity = nftInfo?.makeOfferInfo?.quantity ?? 0;
+            if (newBalance >= price * quantity) {
+              await initialization();
+            }
+          } else {
+            if (newBalance >= nftInfo?.listingPrice * amount) {
+              await initialization();
+            }
           }
         } else {
           await initialization();
