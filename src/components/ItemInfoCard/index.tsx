@@ -15,6 +15,11 @@ export interface INftInfoListCard extends INftInfo {
   usdPrice?: string | number;
   imageSizeType?: 'cover' | 'contain';
   number?: number;
+  type?: string;
+  makeOfferInfo?: {
+    quantity: number;
+    price: number;
+  };
 }
 
 const ItemInfoCard = (props: INftInfoListCard) => {
@@ -43,7 +48,7 @@ const ItemInfoCard = (props: INftInfoListCard) => {
                   )}>
                   {collectionName}
                   {number && number > 0 && (
-                    <span className="inline-block text-[14px] mdTW:text-[14px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
+                    <span className="inline-block text-[16px] mdTW:text-[16px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
                       x {number}
                     </span>
                   )}

@@ -74,8 +74,16 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
           const newBalance = Number(bc);
           setBalance(newBalance);
 
-          if (newBalance >= nftInfo?.listingPrice * amount) {
-            await initialization();
+          if (nftInfo?.type === 'makeOffer') {
+            const price = nftInfo?.makeOfferInfo?.price ?? 0;
+            const quantity = nftInfo?.makeOfferInfo?.quantity ?? 0;
+            if (newBalance >= price * quantity) {
+              await initialization();
+            }
+          } else {
+            if (newBalance >= nftInfo?.listingPrice * amount) {
+              await initialization();
+            }
           }
         } else {
           await initialization();
@@ -136,6 +144,29 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
     return isSmallScreen ? AntdModal : BaseModal;
   }, [isSmallScreen]);
 
+  const showInfo = useMemo(() => {
+    if (nftInfo?.type === 'makeOffer') {
+      const price = nftInfo?.makeOfferInfo?.price ?? 0;
+      const quantity = nftInfo?.makeOfferInfo?.quantity ?? 0;
+
+      console.log('32132213213123', balance, price, quantity);
+
+      return !showBalance || loading || balance >= price * quantity;
+    } else {
+      console.log('222---32132213213123', balance, nftInfo?.listingPrice, amount);
+      return !showBalance || loading || balance >= nftInfo?.listingPrice * amount;
+    }
+  }, [
+    amount,
+    balance,
+    loading,
+    nftInfo?.listingPrice,
+    nftInfo?.makeOfferInfo?.price,
+    nftInfo?.makeOfferInfo?.quantity,
+    nftInfo?.type,
+    showBalance,
+  ]);
+
   return (
     <Modal
       title={<div>{title}</div>}
@@ -159,9 +190,9 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
         <div className="mt-0">
           <ItemInfoCard {...nftInfo} />
         </div>
-        <Divider className="my-[24px] mdl:my-[32px]" />
+        <Divider className="my-[24px] mdl:my-[24px]" />
 
-        {!showBalance || loading || balance >= nftInfo?.listingPrice * amount ? (
+        {showInfo ? (
           <div>
             <div className="text-[16px] font-medium text-textPrimary">Go to your wallet</div>
             <div className="mt-[16px] text-textSecondary text-[14px]">
@@ -173,8 +204,8 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
             <div className="flex justify-between">
               <div className="text-textSecondary text-[16px]">Your ELF Balance</div>
               <div className="flex flex-col">
-                <span className="text-[16px] text-textPrimary">{formatTokenPrice(balance)} ELF</span>
-                <span className="text-error text-[14px]">Insufficient balance</span>
+                <span className="text-[14px] mdTW:text-[16px] text-textPrimary">{formatTokenPrice(balance)} ELF</span>
+                <span className="text-error text-[12px] mdTW:text-[14px]">Insufficient balance</span>
               </div>
             </div>
             <div className="flex items-center justify-center">

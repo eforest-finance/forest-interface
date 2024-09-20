@@ -37,7 +37,7 @@ export function getExploreLink(
 ): string {
   const target = (chainName && (chainName.toUpperCase() as 'AELF' | 'TDVV' | 'TDVW')) || SupportedELFChainId.MAIN_NET;
   const prefix = EXPLORE_URL[target];
-  const exploreUrl = {
+  const exploreUrl: any = {
     test: 'https://testnet.aelfscan.io',
     production: 'https://www.aelfscan.io',
   };

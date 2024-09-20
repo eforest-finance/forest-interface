@@ -4,7 +4,7 @@ function Text(props: any) {
   const { title, value, className } = props;
   return (
     <>
-      <div className={`${className} flex justify-between text-textSecondary  text-[16px]`}>
+      <div className={`${className} flex justify-between text-textSecondary  text-[14px] mdTW:text-[16px]`}>
         <span className="">{title}</span>
         <span className="text-textPrimary font-medium">{value}</span>
       </div>
@@ -16,11 +16,13 @@ const TotalPrice = (props: any) => {
   const { title = 'Total Price', elf, usd, className } = props;
 
   return (
-    <div className={`${className} flex justify-between text-textPrimary font-semibold text-[16px]`}>
+    <div className={`${className} flex justify-between text-textPrimary font-semibold  text-[14px] mdTW:text-[16px]`}>
       <div className="">{title}</div>
       <div className="flex items-end flex-col">
         <div>{elf}</div>
-        <div className="mt-[4px] text-[14px] mdl:text-[14px] text-textSecondary font-normal">{usd}</div>
+        <div className="mt-[4px] text-[12px] mdTW:text-[14px] mdl:text-[14px] text-textSecondary font-normal">
+          {usd}
+        </div>
       </div>
     </div>
   );

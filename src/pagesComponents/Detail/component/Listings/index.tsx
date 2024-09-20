@@ -107,7 +107,7 @@ function Listings(option: { rate: number }) {
             usdPrice: formatUSDPrice(nftInfo.listingPrice),
           },
           title: 'Approve purchase',
-          showBalance: false,
+          showBalance: true,
           initialization: async () => {
             try {
               await handleBuyOne(

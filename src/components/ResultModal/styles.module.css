@@ -9,7 +9,7 @@
     }
 
     .ant-modal-body {
-      @apply !px-[24px] !py-[32px] !pt-0;
+      @apply !px-[24px] !py-[24px] !pt-0;
     }
   }
 }
