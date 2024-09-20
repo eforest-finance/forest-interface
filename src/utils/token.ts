@@ -8,6 +8,9 @@ import { getOriginalAddress } from 'utils';
 import { fetchToken } from 'api/fetch';
 import { ITokenParams } from 'api/types';
 import { sleep } from '@portkey/utils';
+import deleteProvider from '@portkey/detect-provider';
+import { error } from 'console';
+
 const AElf = require('aelf-sdk');
 
 export const isCurrentPageNeedToken = (): boolean => {
@@ -63,11 +66,35 @@ export const createToken = async (
 
   if (!signInfo) {
     try {
-      sign = await signMethod({
-        appName: 'forest',
-        address: walletInfo?.address || '',
-        signInfo: walletType === WalletType.portkey ? AElf.utils.sha256(TipsMessage.SignTip) : TipsMessage.SignTip,
-      });
+      if (walletType === WalletType.discover) {
+        const signStr = `signature: ${walletInfo?.address}-${timestamp}`;
+        const hexDataStr = `${TipsMessage.SignTip}\n\n${signStr}`;
+        const hexData = Buffer.from(hexDataStr).toString('hex');
+
+        const provider: any = await deleteProvider({
+          providerName: version === 'v1' ? 'portkey' : 'Portkey',
+        });
+
+        const signature = await provider.request({
+          method: 'wallet_getManagerSignature',
+          payload: { hexData },
+        });
+
+        if (!signature || signature.recoveryParam == null) return;
+
+        const signatureStr = [
+          signature.r.toString(16, 64),
+          signature.s.toString(16, 64),
+          `0${signature.recoveryParam.toString()}`,
+        ].join('');
+        sign = { signature: signatureStr, error: 0, errorMessage: '', from: '' };
+      } else {
+        sign = await signMethod({
+          appName: 'forest',
+          address: walletInfo?.address || '',
+          signInfo: AElf.utils.sha256(TipsMessage.SignTip),
+        });
+      }
     } catch (error) {
       onError?.(error);
       return;

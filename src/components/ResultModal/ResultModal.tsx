@@ -155,7 +155,7 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
               </p>
             </div>
 
-            <div className="flex items-center text-[24px] font-semibold mt-[32px]">
+            <div className="flex items-center text-[24px] font-semibold mt-[24px]">
               <div className="w-[32px] h-[32px] mr-[16px]">{getIcon()}</div>
               <div>{title}</div>
             </div>
@@ -179,12 +179,12 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
             <div className="mt-[16px]">
               <p
                 className={clsx(
-                  'text-[18px] font-semibold !text-textPrimary flex',
+                  'text-[16px] font-semibold !text-textPrimary flex',
                   styles['nft-list-card-text-ellipsis'],
                 )}>
                 {collectionName}
                 {amount && amount > 0 && (
-                  <span className="flex items-center w-fit text-[14px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
+                  <span className="flex items-center w-fit text-[16px] text-brandNormal rounded-[4px] ml-[8px] !h-[24px] bg-functionalLinkBg px-[8px] line-[24px]">
                     x {amount}
                   </span>
                 )}
@@ -193,14 +193,14 @@ function ResultModal({ title, nftInfo, initialization, onClose, content, footer,
             <div>
               <p
                 className={clsx(
-                  'text-base font-medium text-textSecondary mt-[4px]',
+                  'text-[14px] font-medium text-textSecondary mt-[4px]',
                   styles['nft-list-card-text-ellipsis'],
                 )}>
                 {nftName}
               </p>
             </div>
 
-            <div className="flex flex-col items-center text-[24px] font-semibold mt-[24px]">
+            <div className="flex flex-col items-center text-[20px] font-semibold mt-[24px]">
               <div className="w-[40px] h-[40px]">{getIcon()}</div>
               <div className="mt-[8px]">{title}</div>
             </div>

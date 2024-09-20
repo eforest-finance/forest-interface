@@ -132,7 +132,7 @@ export interface INftInfo {
   totalQuantity: number;
   uri: string | null;
   whitelistId: string | null;
-  price?: number;
+  price?: number | string;
   priceDescription?: string;
   whitelistPrice: number;
   whitelistPriceToken: SaleTokens | null;
@@ -177,6 +177,11 @@ export interface INftInfo {
   generation: number;
   traitPairsDictionary: Array<Pick<ITraitInfo, 'key' | 'value'>>;
   _rankStrForShow?: string;
+  type?: string;
+  makeOfferInfo?: {
+    quantity: number | string;
+    price: number | string;
+  };
 }
 
 export interface INftTraitInfo {

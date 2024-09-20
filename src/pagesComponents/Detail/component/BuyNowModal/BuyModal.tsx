@@ -301,7 +301,9 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
                 setQuantity(quantity);
               }}
             />
-            <span className="mt-[8px] text-textSecondary">{availableQuantity} available</span>
+            <span className="text-[12px] mdTW:text-[14px] mt-[8px] text-textSecondary">
+              {availableQuantity} available
+            </span>
           </div>
         </div>
         <Divider className="my-[24px] mdTW:my-[20px] mt-[20px]" />

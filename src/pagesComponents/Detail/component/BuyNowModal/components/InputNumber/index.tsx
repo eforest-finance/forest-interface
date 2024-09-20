@@ -44,6 +44,7 @@ export default function InputQuantity(props: InputQuantityProps) {
         <InputNumber
           max={max}
           min={0}
+          className="text-[18px] mdl:text-[16px]"
           style={{ height: 'auto', fontSize: '16px', fontWeight: 600, textAlign: 'center' }}
           controls={false}
           value={quantity}
