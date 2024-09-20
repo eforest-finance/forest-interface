@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 const Success = ({ subTotal, gas, elf, usd }) => {
   return (
     <>
-      <div className="w-full mt-[32px]">
+      <div className="w-full mt-[24px]">
         <Text title="Subtotal" value={`${subTotal}`} />
         <Text className={'mt-[12px] mdTW:mt-[16px]'} title="Gas fees" value={`${gas}`} />
         <Divider className="my-[12px] mdTW:my-[16px]" />
@@ -30,7 +30,7 @@ const SuccessFooter = ({
 }) => {
   const nav = useRouter();
   return (
-    <div className="mt-[24px] mdTW:mt-[32px] w-full mdTW:w-fit">
+    <div className="mt-[24px] mdTW:mt-0 w-full mdTW:w-fit">
       <Button
         type="primary"
         className="w-full mdTW:w-[256px] !h-[56px]"
@@ -55,7 +55,7 @@ const SuccessFooter = ({
 
 const FailBody = () => {
   return (
-    <div className="mt-[32px] flex">
+    <div className="mt-[24px] flex">
       <span className="text-center text-[14px]  text-textSecondary ">
         Purchase failure could be due to network issues, transaction fee increases, or someone else acquiring the item
         before you
@@ -66,8 +66,8 @@ const FailBody = () => {
 
 const PartialBody = ({ count }) => {
   return (
-    <div className="mt-[24px] mdTW:mt-[32px] flex flex-col">
-      <div className="mb-[24px] mdTW:mb-[32px] text-center text-[16px] font-semibold">
+    <div className="mt-[24px] mdTW:mt-[24px] flex flex-col">
+      <div className="mb-[24px] mdTW:mb-[24px] text-center text-[16px] font-semibold">
         {count} items purchased failed
       </div>
       <span className="text-center text-[14px]  text-textSecondary ">

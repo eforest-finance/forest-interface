@@ -190,7 +190,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             type: 'success',
             content: (
               <>
-                <div className="w-full mt-[24px] mdTW:mt-[32px] ">
+                <div className="w-full mt-[24px] mdTW:mt-[24px] ">
                   <Text title="Offer Price" value={`${formatTokenPrice(price)} ELF`} />
                   <Divider className="my-[16px]" />
                   <TotalPrice
@@ -273,6 +273,11 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             price: `${formatTokenPrice(totalPrice)} ELF`,
             usdPrice: formatUSDPrice(convertPrice),
             number: quantity,
+            type: 'makeOffer',
+            makeOfferInfo: {
+              quantity,
+              price,
+            },
           },
           title: 'Make Offer',
           showBalance: true,
@@ -437,7 +442,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         <div className="flex justify-center w-full mdTW:w-fit">
           <Button
             size="ultra"
-            className="mdTW:mt-[32px] w-full mdTW:w-[256px]"
+            className="mdTW:mt-[24px] w-full mdTW:w-[256px]"
             type="primary"
             disabled={!isNotEnoughBalance && makeOfferDisabled()}
             onClick={() => {
@@ -462,7 +467,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           usdPrice=""
         />
         <div>
-          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[28px]">
+          <div className="text-[16px] mdTW:text-[16px] font-medium text-textPrimary mt-[24px] mdTW:mt-[24px]">
             Offer Price
           </div>
           <div className="flex justify-between mt-[16px]">
@@ -472,7 +477,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
                 setPrice(salesInfo?.floorPrice || '');
               }}>
               <p className="text-[12px] mdTW:text-[14px] text-textSecondary">Collection Floor Price</p>
-              <p className="font-semibold text-[14px] mdTW:text-[16px] text-textPrimary">
+              <p className="font-semibold text-[16px]  mdTW:text-[16px] text-textPrimary">
                 {formatTokenPrice(salesInfo?.floorPrice || '--')} ELF
               </p>
             </Button>
@@ -503,7 +508,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         </div>
         {!isERC721(nftInfo) && (
           <>
-            <div className="mt-[16px] mdTW:mt-[28px] text-[16px] font-medium text-textPrimary mb-[14px]">
+            <div className="mt-[16px] mdTW:mt-[24px] text-[16px] font-medium text-textPrimary mb-[14px]">
               Offer Amount
             </div>
             <InputNumberWithAddon
@@ -518,7 +523,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
           </>
         )}
         <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
-        <Divider className="mdTW:my-[28px] my-[20px]" />
+        <Divider className="mdTW:my-[24px] my-[16px]" />
         <TotalPrice title="Total Offers" elf={`${formatTokenPrice(totalPrice)} ELF`} usd={`$${convertPrice}`} />
         <BalanceText
           title="Your balance"
