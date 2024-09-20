@@ -22,8 +22,6 @@ import ELF from 'assets/images/ELF.png';
 
 const { Text } = Typography;
 
-const { NEXT_PUBLIC_APP_ENV } = process.env;
-
 export const getLogoUrl = (symbol: string) => {
   return symbol && symbol.toUpperCase() === 'ELF' ? ELF : '';
 };
@@ -234,11 +232,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
             className=" inline-flex items-center cursor-pointer !text-textPrimary"
             target="_blank"
             rel="noreferrer"
-            href={getExploreLink(
-              record.transactionHash,
-              'transaction',
-              NEXT_PUBLIC_APP_ENV === 'production' ? 'AELF' : sideChain,
-            )}>
+            href={getExploreLink(record.transactionHash, 'transaction', sideChain)}>
             <Tooltip title={moment(number).format('YYYY/MM/DD HH:mm:ss')}>
               <span>{getDateString(number)}</span>
             </Tooltip>
