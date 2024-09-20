@@ -174,7 +174,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       render: (text, record) => {
         return (
           <div className="text-[var(--color-secondary)] font-medium text-[16px] flex items-center overflow-x-auto h-full">
-            <Logo className="w-[16px] h-[16px] mr-[4px]" src={getLogoUrl(record?.priceToken?.symbol)} />
+            <Logo className="w-[16px] h-[16px] mr-[4px]" src={getLogoUrl(record?.priceToken?.symbol || '')} />
             &nbsp;
             <span
               className={`text-[var(--color-primary)] font-semibold ${
@@ -232,7 +232,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
             className=" inline-flex items-center cursor-pointer !text-textPrimary"
             target="_blank"
             rel="noreferrer"
-            href={getExploreLink(record.transactionHash, 'transaction', sideChain)}>
+            href={getExploreLink(record.transactionHash, 'transaction', record?.priceToken?.chainId || 'tDVV')}>
             <Tooltip title={moment(number).format('YYYY/MM/DD HH:mm:ss')}>
               <span>{getDateString(number)}</span>
             </Tooltip>
