@@ -1,7 +1,7 @@
 .detail {
   @apply pt-[80px] px-[40px] pb-[20px] mx-auto max-w-[1360px];
   &.mobile-detail {
-    @apply !block !pt-[40px] !px-[16px] !pb-[16px];
+    @apply !block !pt-[24px] !px-[16px] !pb-[16px];
   }
 }
 
@@ -59,7 +59,7 @@
   }
 }
 
-.fixedTabs.has-sticky :global(.ant-tabs-content-holder){
+.fixedTabs.has-sticky :global(.ant-tabs-content-holder) {
   @apply mt-16;
 }
 

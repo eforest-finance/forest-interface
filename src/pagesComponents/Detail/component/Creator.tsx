@@ -8,6 +8,7 @@ export default function Creator() {
   const nav = useRouter();
   const { detailInfo } = useDetailGetState();
   const { nftInfo } = detailInfo;
+  console.log('detailInfo', detailInfo);
   return (
     <div
       className={`text-brandNormal inline-block font-semibold truncate ${
