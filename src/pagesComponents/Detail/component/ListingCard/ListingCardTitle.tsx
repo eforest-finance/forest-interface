@@ -13,6 +13,7 @@ import Countdown, { CountdownStatus, CountdownType } from 'baseComponents/Countd
 import Segmented from 'baseComponents/Segmented';
 import { SegmentedValue } from 'antd/lib/segmented';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
+import Alarm from 'assets/images/v2/alarm.svg';
 
 export enum ListingCardType {
   LISTING = 'listing',
@@ -87,7 +88,8 @@ function ListingCardTitle(props: IProps) {
     <div className={styles['listing-card-title']}>
       <div className="flex-1 flex flex-col justify-center">
         {isShowTimeCard ? (
-          <>
+          <div className="flex items-center">
+            <Alarm className="mr-[8px]" />
             <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime as string)}`}</span>
             {isCountdown && (
               <Countdown
@@ -97,7 +99,7 @@ function ListingCardTitle(props: IProps) {
                 onChange={ontimeupdate}
               />
             )}
-          </>
+          </div>
         ) : null}
       </div>
       {hasChange && (

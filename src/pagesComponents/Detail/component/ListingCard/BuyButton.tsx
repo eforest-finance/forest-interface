@@ -22,6 +22,8 @@ import useBuy from 'pagesComponents/Detail/hooks/useBuy';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 import { FailBody, Success, SuccessFooter } from '../BuyNowModal/components/Result';
 import { UserDeniedMessage } from 'contract/formatErrorMsg';
+import Box from 'assets/images/v2/box.svg';
+import ButtonWithPrefix from './ButtonWithPrefix';
 
 interface IProps {
   rate: number;
@@ -205,20 +207,11 @@ function BuyButton(props: IProps) {
 
   return (
     <div className={clsx('flex flex-row mdTW:flex-col lgTW:flex-row', `${isSmallScreen && styles['mobile-button']}`)}>
-      {!disabledBuyNow && (
-        <Button
-          className={`mdTW:mr-0 mr-[16px] mb-2 lgTW:mb-0 lgTW:mr-[16px] lgTW:w-auto mdTW:w-full lgTW:min-w-[140px] w-auto mdTW:flex-none flex-1`}
-          size="ultra"
-          type="primary"
-          onClick={buyNow}>
-          Buy Now
-        </Button>
-      )}
-
+      {!disabledBuyNow && <ButtonWithPrefix onClick={buyNow} title="Buy Now" prefix={<Box />} />}
       <Button
         type="default"
         size="ultra"
-        className="lgTW:w-auto lgTW:min-w-[140px] w-auto mdTW:flex-none flex-1"
+        className="bg-lineDividers lgTW:w-auto !h-[48px] lgTW:min-w-[206px] w-auto mdTW:flex-none flex-1"
         onClick={onMakeOffer}>
         Make Offer
       </Button>

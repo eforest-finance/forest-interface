@@ -50,6 +50,7 @@ function ListingCard(options: { rate: number }) {
       className={`${styles['listing-card']} mdTW:mt-[40px] mb-[16px] ${
         isSmallScreen && styles['mobile-listing-card']
       }`}>
+      <ListingCardBody isERC721={isERC721} rate={rate} currentRole={currentRole} />
       {!isHiddenTitle && (
         <ListingCardTitle
           showTime={!!(isListing && nftInfo?.listingEndTime)}
@@ -60,8 +61,6 @@ function ListingCard(options: { rate: number }) {
           isERC721={isERC721}
         />
       )}
-
-      <ListingCardBody isERC721={isERC721} rate={rate} currentRole={currentRole} />
     </div>
   );
 }

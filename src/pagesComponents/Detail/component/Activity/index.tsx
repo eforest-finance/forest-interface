@@ -1,3 +1,5 @@
+/* eslint-disable no-inline-styles/no-inline-styles */
+
 import { Checkbox, MenuProps, Space } from 'antd';
 import ELF from 'assets/images/ELF.png';
 import Logo from 'components/Logo';
@@ -21,14 +23,28 @@ import Loading from 'components/Loading';
 import CollapseForPC from 'components/Collapse';
 import Table from 'baseComponents/Table';
 import Dropdown from 'baseComponents/Dropdown';
-import { formatTokenPrice } from 'utils/format';
+import { formatTokenPrice, formatUSDPrice } from 'utils/format';
+import ActivityIcon from 'assets/images/v2/activity.svg';
+import BurnIcon from 'assets/images/v2/table_burn.svg';
+import CancelIcon from 'assets/images/v2/table_cancel.svg';
+import DeleteIcon from 'assets/images/v2/table_delete.svg';
+import IssueIcon from 'assets/images/v2/table_issue.svg';
+import ListPriceIcon from 'assets/images/v2/table_listprice.svg';
+import MakeOfferIcon from 'assets/images/v2/table_makeoffer.svg';
+import TransferIcon from 'assets/images/v2/table_transfer.svg';
+import SaleIcon from 'assets/images/v2/sale.svg';
+import ClearIcon from 'assets/images/v2/clear_gray.svg';
 
-export default function Activity() {
+import { Select } from 'antd';
+const { Option } = Select;
+
+export default function Activity(options: { rate: number }) {
   const { infoState } = useGetState();
   const { detailInfo } = useDetailGetState();
   const { isMobile, isSmallScreen } = infoState;
   const { nftInfo } = detailInfo;
   const [page, setPage] = useState(0);
+  const { rate } = options;
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(true);
   const [activitiesRes, setActivitiesRes] = useState<IActivities>({
@@ -42,6 +58,8 @@ export default function Activity() {
     Sale: true,
     ListWithFixedPrice: true,
   });
+
+  const [tags, setTags] = useState<string[]>([]);
 
   const activities = useMemo(() => {
     return activitiesRes.items;
@@ -89,6 +107,30 @@ export default function Activity() {
     return symbol && symbol.toUpperCase() === 'ELF' ? ELF : '';
   };
 
+  const getIconByType = (type: string) => {
+    // 'Issue',
+    // 'Burn',
+    // 'Transfer',
+    // 'Sale',
+    // 'ListWithFixedPrice',
+    // 'DeList',
+    // 'MakeOffer',
+    // 'CancelOffer',
+    const iconMap = {
+      Issue: <IssueIcon />,
+      Burn: <BurnIcon />,
+      Transfer: <TransferIcon />,
+      Sale: <SaleIcon />,
+      ListWithFixedPrice: <ListPriceIcon />,
+      DeList: <DeleteIcon />,
+      MakeOffer: <MakeOfferIcon />,
+      CancelOffer: <CancelIcon />,
+    };
+
+    // debugger;
+    return <span className="flex mr-[8px]">{iconMap[type] || null}</span>;
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -96,33 +138,12 @@ export default function Activity() {
         width: isSmallScreen ? 120 : 200,
         dataIndex: 'type',
         render: (type: number) => (
-          <p className={`font-medium ${isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'}`}>
-            {filterList[type]}
+          <p
+            className={`flex items-center font-medium ${
+              isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+            }`}>
+            {getIconByType(filterList[type])} {filterList[type]}
           </p>
-        ),
-      },
-      {
-        title: 'Price',
-        width: 180,
-        dataIndex: 'price',
-        render: (text: string, record: IActivitiesItem) => (
-          <div className="text-[var(--color-secondary)] font-medium text-[16px] flex items-center overflow-x-auto h-full">
-            <Logo className="w-[16px] h-[16px] mr-[4px]" src={getLogoUrl(record?.priceToken?.symbol)} />
-            &nbsp;
-            <span
-              className={`text-[var(--color-primary)] font-semibold ${
-                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-              }`}>
-              {formatTokenPrice(+text)}
-            </span>
-            &nbsp;
-            <span
-              className={`text-[var(--color-secondary)] font-medium ${
-                isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
-              }`}>
-              {record?.priceToken?.symbol}
-            </span>
-          </div>
         ),
       },
       {
@@ -138,6 +159,32 @@ export default function Activity() {
           </p>
         ),
       },
+      {
+        title: 'Price',
+        width: 180,
+        dataIndex: 'price',
+        render: (text: string, record: IActivitiesItem) => {
+          const usdPrice = record?.price * (rate || 1);
+          return (
+            <div className="text-textPrimary font-medium text-[14px] flex items-center overflow-x-auto h-full">
+              <span
+                className={`text-[var(--color-primary)]${
+                  isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+                }`}>
+                {formatTokenPrice(+text)}
+              </span>
+              <span
+                className={`text-textPrimary font-medium ${
+                  isSmallScreen ? 'text-[12px] leading-[18px]' : 'text-[16px] leading-[24px]'
+                }`}>
+                {record?.priceToken?.symbol}
+              </span>
+              <span className="text-textSecondary text-[12px]">({formatUSDPrice(Number(usdPrice))})</span>
+            </div>
+          );
+        },
+      },
+
       {
         title: 'From',
         dataIndex: 'from',
@@ -176,7 +223,7 @@ export default function Activity() {
         title: 'Date',
         key: 'date',
         dataIndex: 'timestamp',
-        width: isSmallScreen ? 148 : 200,
+        width: isSmallScreen ? 148 : 183,
         render: (timestamp: number, record: IActivitiesItem) => (
           <p
             className={`${styles.jump} text-[var(--color-primary)] font-medium from flex items-center ${
@@ -248,78 +295,129 @@ export default function Activity() {
     }
   }, [nftInfo?.id, filterObj, page]);
 
-  const items = [
-    {
-      key: 'activity',
-      header: (
-        <div className="text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">Activity</div>
-      ),
-      children: (
-        <div className="border-0 border-t !border-solid border-lineBorder">
-          <div id="filter" className="px-[24px] pt-[16px]">
-            <Dropdown
-              trigger={['click']}
-              overlayClassName={styles['detail-activity-dropdown']}
-              menu={dropdownMenu}
-              open={visible}
-              onOpenChange={setVisible}>
-              <div className={`filter flex justify-between`}>
-                <p className="text-textPrimary">Filter</p>
-                <DownOutlined />
-              </div>
-            </Dropdown>
-          </div>
-          {!!Object.keys(filterObj).filter((key) => filterObj[key]).length && (
-            <div className={`${styles['filter-list']} flex px-[24px]`}>
-              <Space wrap size={16}>
-                {Object.keys(filterObj)
-                  .filter((key) => filterObj[key])
-                  .map((item) => (
-                    <p className={`${styles['filter-item']} flex`} key={item}>
-                      <span className={styles['filter-item__label']}> {item}</span>
-                      <CloseOutlined onClick={() => onFilterChange(false, item)} />
-                    </p>
-                  ))}
-                <p
-                  className="px-[16px] py-[9px] text-sm font-medium text-[var(--text-item)] hover:text-textPrimary cursor-pointer"
-                  onClick={() => setFilterObj({})}>
-                  Clear All
-                </p>
-              </Space>
-            </div>
-          )}
-          <div
-            id="activity-table-wrap"
-            className={`border-0 border-t border-solid border-[var(--line-box)] ${
-              isSmallScreen ? 'max-h-[192px]' : 'max-h-[238px]'
-            } rounded-bl-[12px] rounded-br-[12px] overflow-y-scroll`}
-            onScrollCapture={(e) => handleTableScroll(e.target as HTMLDivElement)}>
-            <Table
-              rowKey={(record) => record.id}
-              sticky={{
-                offsetHeader: 0,
-              }}
-              emptyText={!tableLoading ? 'No activities yet' : ''}
-              loading={false}
-              columns={columns || []}
-              scroll={{ x: 630 }}
-              pagination={false}
-              dataSource={activities || []}
-            />
-            {tableLoading && (
-              <div className="w-full py-[12px]">
-                <Loading imgStyle="!h-[30px] !w-[30px]" />
-              </div>
-            )}
-          </div>
-        </div>
-      ),
-    },
-  ];
-
   return (
     <div id="activityWrap" className={`${styles.activity} ${isSmallScreen && styles['mobile-activity']}`}>
-      <CollapseForPC items={items} wrapClassName={`${styles.activity} ${isSmallScreen && styles['mobile-activity']}`} />
+      <div className="flex justify-between items-center mb-[24px] ">
+        <h1 className="flex items-center text-[16px] font-medium">
+          <ActivityIcon className="mr-[12px]" />
+          Activity
+        </h1>
+        <div id="filter" className={styles.select}>
+          <Select
+            mode="multiple"
+            value={tags}
+            allowClear
+            showArrow
+            className="rounded-[12px] h-[48px]"
+            clearIcon={<ClearIcon />}
+            tagRender={(value: any) => {
+              return (
+                <div className={styles.tag}>
+                  <span className="pl-[8px] pr-[4px]">{value.label}</span>
+                  <ClearIcon
+                    className=""
+                    onClick={() => {
+                      const newValues = tags.filter((tag) => tag !== value.label);
+                      setActivitiesRes({ items: [], totalCount: 0 });
+                      const newFilter = {} as any;
+                      newValues.forEach((name: string) => {
+                        newFilter[name] = true;
+                      });
+                      setFilterObj(newFilter);
+                      setPage(0);
+                      setTags(newValues);
+                    }}
+                  />
+                </div>
+              );
+            }}
+            style={{ width: 320 }}
+            optionLabelProp="label"
+            popupClassName={styles.select}
+            onChange={(value) => {
+              setActivitiesRes({ items: [], totalCount: 0 });
+              const newFilter = {} as any;
+              value.forEach((name: string) => {
+                newFilter[name] = true;
+              });
+              setFilterObj(newFilter);
+              setPage(0);
+              setTags(value);
+            }}
+            placeholder="Please select">
+            {filterList.map((item, key) => (
+              <Option key={key} value={item} label={item} className="bg-white">
+                {item}
+
+                {/* <Checkbox
+                  className={styles['detail-activity-checkbox']}
+                  checked={filterObj[item]}
+                  // onChange={(e) => onFilterChange(e.target.checked, item)}
+                >
+                  {item}
+                </Checkbox> */}
+              </Option>
+            ))}
+          </Select>
+          {/* <Dropdown
+            trigger={['click']}
+            overlayClassName={styles['detail-activity-dropdown']}
+            menu={dropdownMenu}
+            open={visible}
+            onOpenChange={setVisible}>
+            <div className={`filter flex justify-between`}>
+              <p className="text-textPrimary">Filter</p>
+              <DownOutlined />
+            </div>
+          </Dropdown> */}
+        </div>
+      </div>
+
+      <div className="border-0">
+        {/* {!!Object.keys(filterObj).filter((key) => filterObj[key]).length && (
+          <div className={`${styles['filter-list']} flex px-[24px]`}>
+            <Space wrap size={16}>
+              {Object.keys(filterObj)
+                .filter((key) => filterObj[key])
+                .map((item) => (
+                  <p className={`${styles['filter-item']} flex`} key={item}>
+                    <span className={styles['filter-item__label']}> {item}</span>
+                    <CloseOutlined onClick={() => onFilterChange(false, item)} />
+                  </p>
+                ))}
+              <p
+                className="px-[16px] py-[9px] text-sm font-medium text-[var(--text-item)] hover:text-textPrimary cursor-pointer"
+                onClick={() => setFilterObj({})}>
+                Clear All
+              </p>
+            </Space>
+          </div>
+        )} */}
+        <div
+          id="activity-table-wrap"
+          className={`border-0 ${
+            isSmallScreen ? 'max-h-[192px]' : 'max-h-[620px]'
+          } rounded-bl-[12px] rounded-br-[12px] overflow-y-scroll`}
+          onScrollCapture={(e) => handleTableScroll(e.target as HTMLDivElement)}>
+          <Table
+            rowKey={(record) => record.id}
+            sticky={{
+              offsetHeader: 0,
+            }}
+            emptyText={!tableLoading ? 'No activities yet' : ''}
+            loading={false}
+            columns={columns || []}
+            scroll={{ x: 630, y: 620 }}
+            pagination={false}
+            dataSource={activities || []}
+          />
+          {tableLoading && (
+            <div className="w-full py-[12px]">
+              <Loading imgStyle="!h-[30px] !w-[30px]" />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

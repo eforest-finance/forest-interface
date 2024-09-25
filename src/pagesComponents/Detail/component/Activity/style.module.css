@@ -195,3 +195,82 @@
     @apply top-0;
   }
 }
+
+.offers .from {
+  @apply whitespace-nowrap overflow-x-auto;
+}
+
+.mobile-offers {
+  @apply mt-[16px];
+}
+
+.activity {
+  .select {
+    :global(.ant-select-selector) {
+      @apply h-[48px] rounded-[12px];
+    }
+    .tag {
+      @apply flex items-center mr-[8px] pr-[8px] py-[4px] text-textPrimary text-[14px] bg-fillCardBg rounded-[12px] w-fit h-[30px];
+    }
+  }
+
+  :global(.ant-table-thead) {
+    tr {
+      th {
+        @apply border-0;
+      }
+      :global(.ant-table-cell) {
+        @apply bg-fillHoverBg;
+
+        &:first-of-type {
+          @apply !rounded-l-lg;
+        }
+        /* &:last-of-type {
+          @apply !rounded-lg w-0 hidden;
+        } */
+        &:nth-last-child(1) {
+          @apply !rounded-r-lg;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table-body) {
+    scrollbar-width: none;
+
+    :global(.ant-table-tbody) {
+      scrollbar-width: none;
+      &::--webkit-scrollbar {
+        display: none;
+      }
+
+      :global(.ant-table-row) {
+        > :global(.ant-table-cell) {
+          &:first-of-type {
+            @apply !rounded-none;
+          }
+          &:last-of-type {
+            @apply !rounded-none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.select {
+  @apply !rounded-[12px];
+
+  :global(.ant-select-dropdown) {
+    @apply rounded-[12px];
+  }
+  :global {
+    .ant-select-item-option-selected {
+      @apply bg-white;
+
+      .anticon-check {
+        @apply hidden;
+      }
+    }
+  }
+}

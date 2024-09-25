@@ -3,10 +3,17 @@
   &.mobile-detail {
     @apply !block !pt-[40px] !px-[16px] !pb-[16px];
   }
+
+  .tableMenu {
+    @apply flex items-center px-[24px] py-[12px] text-[16px] font-medium;
+    svg {
+      @apply mr-[8px];
+    }
+  }
 }
 
 .detail .top-panel {
-  @apply grid grid-cols-[343px_1fr] lgTW:grid-cols-[400px_1fr] gap-[40px];
+  @apply grid grid-cols-[343px_1fr] lgTW:grid-cols-[540px_1fr] gap-[40px];
 }
 
 .detail .top-panel .right-wrap {
@@ -29,6 +36,18 @@
 }
 .detail :global .ant-collapse-item :global .ant-collapse-header svg {
   @apply w-[24px] h-[24px];
+}
+
+.detail :global .ant-collapse-item :global .ant-collapse-header svg {
+  @apply w-[24px] h-[24px];
+}
+
+.detail :global .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  @apply text-textPrimary;
+}
+
+.detail :global .ant-tabs-tab:hover {
+  @apply text-inherit;
 }
 
 .mobile-detail .top-panel {

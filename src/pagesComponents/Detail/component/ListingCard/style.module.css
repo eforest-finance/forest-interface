@@ -1,12 +1,12 @@
 .listing-card {
-  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+  @apply flex flex-col rounded-[12px] bg-transparent;
 }
 
 .listing-card-title {
-  @apply border-0 border-b !border-solid border-lineBorder p-[24px] flex;
+  @apply mt-[48px] border-0 flex;
 
   .time-panel-value {
-    @apply text-base font-medium text-textSecondary;
+    @apply text-[14px] font-normal text-textSecondary;
   }
 }
 
