@@ -13,6 +13,7 @@ import { formatNumber, formatTokenPrice } from 'utils/format';
 import Owners from 'assets/images/v2/owners.svg';
 import ItemIcon from 'assets/images/v2/items.svg';
 import { Ellipsis } from 'antd-mobile';
+import BigNumber from 'bignumber.js';
 
 const Owner = ({ className, isERC721 }: { className?: string; isERC721?: boolean }) => {
   const nav = useRouter();
@@ -41,13 +42,21 @@ const Owner = ({ className, isERC721 }: { className?: string; isERC721?: boolean
     setVisible(true);
   };
 
+  const totalQuantity = useMemo(() => {
+    const totalQuantity = BigNumber(nftInfo?.totalQuantity || 0)
+      .dividedBy(10 ** Number(nftInfo?.decimals || 0))
+      .toFixed(0)
+      .toString();
+    return totalQuantity;
+  }, [nftInfo?.decimals, nftInfo?.totalQuantity]);
+
   const Items = useCallback(
     () => (
       <>
         <ItemIcon /> <span className={styles.title}>Items</span>
-        <Tooltip title={formatTokenPrice(nftInfo?.totalQuantity || '')} overlayInnerStyle={{ textAlign: 'center' }}>
+        <Tooltip title={formatTokenPrice(totalQuantity || '')} overlayInnerStyle={{ textAlign: 'center' }}>
           <span className="font-medium text-[12px] text-textPrimary  max-w-[176px] lg:max-w-[200px]">
-            <Ellipsis direction="middle" content={formatTokenPrice(nftInfo?.totalQuantity || '')} />
+            <Ellipsis direction="middle" content={formatTokenPrice(totalQuantity || '')} />
           </span>
         </Tooltip>
       </>

@@ -43,6 +43,7 @@ export function TraitsInfoCard() {
       console.warn('getRarity error', err);
     }
   }, [nftTraitInfos]);
+
   const getItemPercent = ({ itemsCount, allItemsCount, key, value }: ITraitInfo) => {
     const num = itemsCount / allItemsCount;
     if (isNaN(num) || num < 0) {

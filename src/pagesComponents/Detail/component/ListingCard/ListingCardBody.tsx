@@ -10,14 +10,28 @@ import ListingCardButton from './ListingCardButton';
 import PriceCard from '../PriceCard';
 import { formatNumber, formatTokenPrice, formatUSDPrice } from 'utils/format';
 import Pencil from 'assets/images/v2/pencil.svg';
+import Sale from 'assets/images/v2/lastSale.svg';
+import Best from 'assets/images/v2/best.svg';
+
+import { Divider } from 'antd';
+import ListingCardTitle, { ListingCardType } from './ListingCardTitle';
+import Alarm from 'assets/images/v2/alarm.svg';
+import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
+import Countdown from 'baseComponents/Countdown';
+import styles from './style.module.css';
+
 interface IProps {
   isERC721: boolean;
   rate: number;
+  isHiddenTitle: boolean;
+  isListing: boolean;
+  onChangeCurrentRole: any;
+  hasChange: boolean;
   currentRole: SegmentedValue;
 }
 
 function ListingCardBody(props: IProps) {
-  const { isERC721, currentRole, rate } = props;
+  const { isERC721, currentRole, rate, onChangeCurrentRole, isListing, isHiddenTitle, hasChange } = props;
 
   const { infoState } = useGetState();
   const { isSmallScreen } = infoState;
@@ -40,7 +54,7 @@ function ListingCardBody(props: IProps) {
     time?: string | null;
     timePrefix?: string;
   }) => {
-    console.log('getPriceComponent', price);
+    console.log('getPriceComponent', price, time);
     return (
       <PriceCard
         title={title}
@@ -80,13 +94,21 @@ function ListingCardBody(props: IProps) {
         price: nftInfo?.listingPrice,
       }),
       [NftInfoPriceType.maxOffer]: getPriceComponent({
-        title: 'Best Offer',
+        title: (
+          <div className="flex items-center  text-[16px] text-textSecondary">
+            <Best className="mr-[8px]" /> Best Offer
+          </div>
+        ),
         price: nftInfo?.maxOfferPrice,
         time: nftInfo?.maxOfferEndTime,
         timePrefix: 'Offer expires on',
       }),
       [NftInfoPriceType.latestDeal]: getPriceComponent({
-        title: 'Last Sale',
+        title: (
+          <div className="flex items-center  text-[16px] text-textSecondary">
+            <Sale className="mr-[8px]" /> Last Sale
+          </div>
+        ),
         price: nftInfo?.latestDealPrice,
       }),
     }),
@@ -103,6 +125,13 @@ function ListingCardBody(props: IProps) {
 
   if (!nftInfo) return null;
 
+  const isShowTimeCard =
+    !!(isListing && nftInfo?.listingEndTime) &&
+    nftInfo?.listingEndTime &&
+    (currentRole === 'buy' || (isERC721 && currentRole === 'sell'));
+
+  const timePrefix = 'Sale ends on';
+
   return (
     <div className="mdTW:block">
       <div
@@ -110,16 +139,55 @@ function ListingCardBody(props: IProps) {
           isSmallScreen ? 'flex flex-col w-[100%]' : ''
         }`}>
         {!isERC721 && nftNumber.nftBalance && currentRole === 'sell' ? (
-          <SellNumber />
-        ) : nftInfo.showPriceType ? (
+          // <SellNumber />
+          // <>{getPriceComponent({ title: <div>Current Price</div> })}</>
           PriceCardCom[nftInfo.showPriceType]
+        ) : nftInfo.showPriceType ? (
+          <div className="flex items-center">
+            {PriceCardCom[nftInfo.showPriceType]}
+            {nftInfo.showPriceType === NftInfoPriceType.myMinListing && nftInfo.maxOfferPrice > 0 && (
+              <>
+                <Divider className="!h-[76px] !mx-[42px]" type="vertical" /> {PriceCardCom[NftInfoPriceType.maxOffer]}
+              </>
+            )}
+          </div>
         ) : (
-          getPriceComponent({ title: <div>Current Price</div> })
+          <>
+            {getPriceComponent({
+              title: (
+                <div className="flex items-center  text-[16px] text-textSecondary">
+                  <Pencil className="mr-[8px]" /> Current Price
+                </div>
+              ),
+            })}
+          </>
         )}
       </div>
-      <div className="mt-[48px]">
+
+      {!isHiddenTitle && (
+        <ListingCardTitle
+          // showTime={!!(isListing && nftInfo?.listingEndTime)}
+          showTime={false}
+          endTime={nftInfo?.listingEndTime}
+          hasChange={hasChange}
+          currentRole={currentRole}
+          onChangeCurrentRole={onChangeCurrentRole}
+          isERC721={isERC721}
+        />
+      )}
+
+      <div className={`${isHiddenTitle ? 'mt-[48px]' : 'mt-[28px]'}`}>
         <ListingCardButton isERC721={isERC721} rate={rate} currentRole={currentRole} />
       </div>
+
+      {isShowTimeCard ? (
+        <div className="flex items-center mt-[28px]">
+          <Alarm className="mr-[8px]" />
+          <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(
+            nftInfo?.listingEndTime as string,
+          )}`}</span>
+        </div>
+      ) : null}
     </div>
   );
 }

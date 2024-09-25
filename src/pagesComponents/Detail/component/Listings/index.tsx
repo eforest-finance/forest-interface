@@ -239,23 +239,26 @@ function Listings(option: { rate: number }) {
   const columns: ColumnsType<FormatListingType> = useMemo(
     () => [
       {
-        title: titles.PRICE,
+        title: 'Price',
         key: 'price',
         width: columWidth.current?.get('price') || 150,
         dataIndex: 'price',
-        render: (text: string, record: FormatListingType) => (
-          <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />
-        ),
-      },
-      {
-        title: titles.USD_PRICE,
-        key: 'usdPrice',
-        width: columWidth.current?.get('usdPrice') || 150,
-        dataIndex: 'usdPrice',
-        render: (_, record: FormatListingType) => {
+        render: (text: string, record: FormatListingType) => {
           const usdPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? rate : 1);
-          return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
+
+          return (
+            <TableCell
+              content={
+                <span className="flex flex-col">
+                  <span className="text-textPrimary text-[14px] font-medium">{`${formatTokenPrice(text)} ELF`}</span>
+                  <span className="text-textSecondary text-[12px]">({formatUSDPrice(Number(usdPrice))})</span>
+                </span>
+              }
+            />
+          );
         },
+
+        // <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />
       },
       {
         title: 'Quantity',
@@ -274,7 +277,7 @@ function Listings(option: { rate: number }) {
         ),
       },
       {
-        title: 'From',
+        title: 'Seller',
         key: 'fromName',
         dataIndex: 'fromName',
         width: isSmallScreen ? 240 : 260,
@@ -282,7 +285,9 @@ function Listings(option: { rate: number }) {
           <div className="flex items-center">
             <TableCell
               content={
-                record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)
+                <span className="text-brandNormal">
+                  {record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)}
+                </span>
               }
               isLink={true}
               onClick={() => nav.push(`/account/${record.ownerAddress}#Collected`)}
@@ -293,7 +298,7 @@ function Listings(option: { rate: number }) {
         ),
       },
       {
-        key: 'action',
+        key: 'Operation',
         fixed: 'right',
         width: 92,
         render: (_text: string, record: FormatListingType) =>
@@ -355,26 +360,7 @@ function Listings(option: { rate: number }) {
         <div className="text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">Listings</div>
       ),
       children: (
-        <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
-          <Table
-            className={styles['listings-table-custom']}
-            loading={loading}
-            columns={columns}
-            scroll={{ x: 792, y: 326 }}
-            pagination={{
-              hideOnSinglePage: true,
-              pageSize: pageState.pageSize,
-              total: listings?.totalCount || 0,
-              onChange: (page, pageSize) => {
-                setPage({ page, pageSize });
-                getListingsData(page, pageSize);
-              },
-            }}
-            adaptation={true}
-            emptyText="No listings yet."
-            dataSource={listings?.items || []}
-          />
-        </div>
+        <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden"></div>
       ),
     },
   ];
@@ -386,7 +372,25 @@ function Listings(option: { rate: number }) {
   return (
     <div id="listings" className={`${styles.listings} ${isSmallScreen && 'mt-4'}`}>
       <Modals modalAction={modalAction} />
-      <CollapseForPC
+      <Table
+        className={styles['listings-table-custom']}
+        loading={loading}
+        columns={columns}
+        scroll={{ x: 792, y: 326 }}
+        pagination={{
+          hideOnSinglePage: true,
+          pageSize: pageState.pageSize,
+          total: listings?.totalCount || 0,
+          onChange: (page, pageSize) => {
+            setPage({ page, pageSize });
+            getListingsData(page, pageSize);
+          },
+        }}
+        adaptation={true}
+        emptyText="No listings yet."
+        dataSource={listings?.items || []}
+      />
+      {/* <CollapseForPC
         activeKey={activeKey}
         onChange={() => {
           console.log('================active key', activeKey);
@@ -394,7 +398,7 @@ function Listings(option: { rate: number }) {
         }}
         items={items}
         wrapClassName={`${styles['price-history']} ${isSmallScreen && styles['mobile-price-history']}`}
-      />
+      /> */}
     </div>
   );
 }

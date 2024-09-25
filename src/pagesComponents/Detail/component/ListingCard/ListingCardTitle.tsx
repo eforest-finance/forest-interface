@@ -14,6 +14,9 @@ import Segmented from 'baseComponents/Segmented';
 import { SegmentedValue } from 'antd/lib/segmented';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
 import Alarm from 'assets/images/v2/alarm.svg';
+import useDetailGetState from 'store/state/detailGetState';
+import { useGetListItemsForSale } from '../SaleModal/hooks/useSaleService';
+import { Divider } from 'antd';
 
 export enum ListingCardType {
   LISTING = 'listing',
@@ -44,6 +47,12 @@ function ListingCardTitle(props: IProps) {
     type = ListingCardType.LISTING,
     isERC721,
   } = props;
+
+  const { detailInfo } = useDetailGetState();
+
+  const { nftNumber, nftInfo } = detailInfo;
+  const { listItems } = useGetListItemsForSale(nftInfo);
+
   const [isCountdown, setIsCountdown] = useState<boolean>(false);
   const [countdownStatus, setCountdownStatus] = useState<CountdownStatus>(CountdownStatus.Normal);
 
@@ -86,7 +95,7 @@ function ListingCardTitle(props: IProps) {
 
   return (
     <div className={styles['listing-card-title']}>
-      <div className="flex-1 flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         {isShowTimeCard ? (
           <div className="flex items-center">
             <Alarm className="mr-[8px]" />
@@ -104,7 +113,17 @@ function ListingCardTitle(props: IProps) {
       </div>
       {hasChange && (
         <div>
-          <Segmented options={['buy', 'sell']} value={currentRole} onChange={onChangeCurrentRole} />
+          {/* nftNumber?.nftBalance - availableItemForSell}/${nftNumber.nftBalance */}
+          <Segmented options={['sell', 'buy']} value={currentRole} onChange={onChangeCurrentRole} />
+          <span className="ml-[16px]">
+            <span className="  text-textSecondary">
+              You own <span className="text-textPrimary">{nftNumber.nftBalance}</span>
+            </span>
+            <Divider type="vertical" className="mx-[12px]" />
+            <span className=" text-textSecondary">
+              You list <span className="text-textPrimary">{listItems}</span>
+            </span>
+          </span>
         </div>
       )}
       {suffix}

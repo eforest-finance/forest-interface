@@ -19,3 +19,41 @@
     }
   }
 }
+
+.listings {
+  :global(.ant-table-thead) {
+    tr {
+      th {
+        @apply border-0;
+      }
+      :global(.ant-table-cell) {
+        @apply bg-fillHoverBg;
+
+        &:first-of-type {
+          @apply !rounded-l-lg;
+        }
+        &:last-of-type {
+          @apply !rounded-lg w-0 hidden;
+        }
+        &:nth-last-child(2) {
+          @apply !rounded-r-lg;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table-body) {
+    :global(.ant-table-tbody) {
+      :global(.ant-table-row) {
+        > :global(.ant-table-cell) {
+          &:first-of-type {
+            @apply !rounded-none;
+          }
+          &:last-of-type {
+            @apply !rounded-none;
+          }
+        }
+      }
+    }
+  }
+}

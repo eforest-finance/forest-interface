@@ -211,7 +211,7 @@ function BuyButton(props: IProps) {
       <Button
         type="default"
         size="ultra"
-        className="bg-lineDividers lgTW:w-auto !h-[48px] lgTW:min-w-[206px] w-auto mdTW:flex-none flex-1"
+        className="!border-0 !bg-lineDividers lgTW:w-auto !h-[48px] lgTW:min-w-[206px] w-auto mdTW:flex-none flex-1"
         onClick={onMakeOffer}>
         Make Offer
       </Button>

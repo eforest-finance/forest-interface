@@ -50,8 +50,7 @@ function ListingCard(options: { rate: number }) {
       className={`${styles['listing-card']} mdTW:mt-[40px] mb-[16px] ${
         isSmallScreen && styles['mobile-listing-card']
       }`}>
-      <ListingCardBody isERC721={isERC721} rate={rate} currentRole={currentRole} />
-      {!isHiddenTitle && (
+      {/* {!isHiddenTitle && (
         <ListingCardTitle
           showTime={!!(isListing && nftInfo?.listingEndTime)}
           endTime={nftInfo?.listingEndTime}
@@ -60,7 +59,16 @@ function ListingCard(options: { rate: number }) {
           onChangeCurrentRole={setCurrentRole}
           isERC721={isERC721}
         />
-      )}
+      )} */}
+      <ListingCardBody
+        isHiddenTitle={isHiddenTitle}
+        isListing={isListing}
+        hasChange={hasChange}
+        currentRole={currentRole}
+        onChangeCurrentRole={setCurrentRole}
+        isERC721={isERC721}
+        rate={rate}
+      />
     </div>
   );
 }

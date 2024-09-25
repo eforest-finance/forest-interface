@@ -39,6 +39,7 @@ import {
 import Menu from 'assets/images/v2/menu.svg';
 import Detail from 'assets/images/v2/detail.svg';
 import Chart from 'assets/images/v2/chart.svg';
+import EditIcon from 'assets/images/v2/edit_l.svg';
 
 import { Tabs } from 'antd';
 
@@ -57,6 +58,59 @@ function DetailPc() {
       store.dispatch(setOffers(null));
     };
   }, []);
+
+  const renderTable = () => {
+    let items = [
+      {
+        label: (
+          <span className={styles.tableMenu}>
+            <Menu />
+            Offer
+          </span>
+        ),
+        key: 'Offer',
+        children: <Offers rate={elfRate} />,
+      },
+      {
+        label: (
+          <span className={styles.tableMenu}>
+            <Chart />
+            Chart
+          </span>
+        ),
+        key: 'Chart',
+        children: <PriceHistory />,
+      },
+      {
+        label: (
+          <span className={styles.tableMenu}>
+            <Detail />
+            Details
+          </span>
+        ),
+        key: 'Details',
+        children: <InfoCard />,
+      },
+    ];
+
+    if (!isERC721) {
+      items = [
+        {
+          label: (
+            <span className={styles.tableMenu}>
+              <EditIcon />
+              List
+            </span>
+          ),
+          key: 'List',
+          children: <Listings rate={elfRate} />,
+        },
+        ...items,
+      ];
+    }
+
+    return <Tabs defaultActiveKey="1" items={items} />;
+  };
 
   return (
     <div className={`${styles.detail}`}>
@@ -99,59 +153,7 @@ function DetailPc() {
               )}
             </div>
 
-            {!isFetching && nftInfo && (
-              <>
-                <Tabs
-                  defaultActiveKey="1"
-                  items={[
-                    {
-                      label: (
-                        <span className={styles.tableMenu}>
-                          <Menu />
-                          Offer
-                        </span>
-                      ),
-                      key: '1',
-                      children: <Offers rate={elfRate} />,
-                    },
-                    {
-                      label: (
-                        <span className={styles.tableMenu}>
-                          <Chart />
-                          Chart
-                        </span>
-                      ),
-                      key: '2',
-                      children: <PriceHistory />,
-                    },
-                    {
-                      label: (
-                        <span className={styles.tableMenu}>
-                          <Detail />
-                          Details
-                        </span>
-                      ),
-                      key: '3',
-
-                      children: <InfoCard />,
-
-                      //   children: <Listings rate={elfRate} />,
-                    },
-                  ]}
-                />
-                {/* <Row className="flex items-center justify-center flex-1 max-w-[100%]" gutter={[0, 16]}>
-                  <Col span={24}>
-                    <PriceHistory />
-                  </Col>
-                  <Col span={24}>
-                    <Listings rate={elfRate} />
-                  </Col>
-                  <Col span={24}>
-                    <Offers rate={elfRate} />
-                  </Col>
-                </Row> */}
-              </>
-            )}
+            {!isFetching && nftInfo && <>{renderTable()}</>}
           </div>
         </div>
         <div className="mdTW:mt-[16px]">
