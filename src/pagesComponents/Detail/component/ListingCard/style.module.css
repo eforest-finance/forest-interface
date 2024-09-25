@@ -21,7 +21,7 @@
 }
 
 .mobile-button {
-  @apply fixed w-full bottom-0 left-0 bg-fillPageBg p-[16px] flex z-[998] border-0 border-t border-solid border-lineBorder;
+  @apply w-full bottom-0 left-0 bg-fillPageBg flex z-[998];
 }
 
 .mobile-listing-card {

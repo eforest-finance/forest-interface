@@ -163,7 +163,6 @@ function ListingCardBody(props: IProps) {
           </>
         )}
       </div>
-
       {!isHiddenTitle && (
         <ListingCardTitle
           // showTime={!!(isListing && nftInfo?.listingEndTime)}
@@ -175,13 +174,11 @@ function ListingCardBody(props: IProps) {
           isERC721={isERC721}
         />
       )}
-
-      <div className={`${isHiddenTitle ? 'mt-[48px]' : 'mt-[28px]'}`}>
+      <div className={`${isHiddenTitle ? 'mt-[48px]' : 'mt-[24px] lg:mt-[28px]'}`}>
         <ListingCardButton isERC721={isERC721} rate={rate} currentRole={currentRole} />
       </div>
-
       {isShowTimeCard ? (
-        <div className="flex items-center mt-[28px]">
+        <div className="flex items-center mt-[24px] lg:mt-[28px]">
           <Alarm className="mr-[8px]" />
           <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(
             nftInfo?.listingEndTime as string,

@@ -112,10 +112,15 @@ function ListingCardTitle(props: IProps) {
         ) : null}
       </div>
       {hasChange && (
-        <div>
+        <div className="flex items-center flex-wrap w-full lg:w-auto gap-[16px]">
           {/* nftNumber?.nftBalance - availableItemForSell}/${nftNumber.nftBalance */}
-          <Segmented options={['sell', 'buy']} value={currentRole} onChange={onChangeCurrentRole} />
-          <span className="ml-[16px]">
+          <Segmented
+            className="w-full lg:w-[166px]"
+            options={['sell', 'buy']}
+            value={currentRole}
+            onChange={onChangeCurrentRole}
+          />
+          <span>
             <span className="  text-textSecondary">
               You own <span className="text-textPrimary">{nftNumber.nftBalance}</span>
             </span>
