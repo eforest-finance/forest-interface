@@ -11,6 +11,8 @@ import { formatTokenPrice } from 'utils/format';
 import clsx from 'clsx';
 import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
+import Multiply from 'assets/images/profile/multiply.svg';
+
 import HonourLabel from 'baseComponents/HonourLabel';
 
 interface INFTListProps {
@@ -67,11 +69,16 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
           </>
         }>
         <div className={styles.card__content}>
-          <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
-          <div className="lg:flex items-center justify-between">
-            <div className={styles.token__name}>{dataSource?.tokenName}</div>
-            <div className={styles.token__name}>{balance && balance * 1 > 1 && balance}</div>
+          <div className="flex items-center justify-between">
+            <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
+            {balance && balance * 1 > 1 && (
+              <div className="text-textNumber px-[4px] font-[500] mb-[4px]">
+                <Multiply />
+                <span className="pl-[6px]">{formatTokenPrice(balance)}</span>
+              </div>
+            )}
           </div>
+          <div className={styles.token__name}>{dataSource?.tokenName}</div>
 
           <div className={clsx(styles.token__price, priceClassName)}>
             <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>

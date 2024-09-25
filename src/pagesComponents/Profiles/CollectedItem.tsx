@@ -2,7 +2,7 @@ import { CollectionItemsSearch } from 'pagesComponents/ExploreItem/components/Co
 import { FilterContainer } from 'pagesComponents/ExploreItem/components/Filters';
 
 import { useMemo } from 'react';
-import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
+import { dropDownProfileMenu } from 'components/ItemsLayout/assets';
 import { Layout } from 'antd';
 import { useFilterService } from './hooks/useFilterService';
 import FilterTags from 'pagesComponents/ExploreItem/components/FilterTags';
@@ -40,7 +40,9 @@ export function CollectedItem() {
   } = useFilterService('collected', walletAddress);
 
   const requestParams = useMemo(() => {
-    const params = getParamsFromFilter('collected', walletAddress, filterSelect);
+    const params = getParamsFromFilter('collected', walletAddress, filterSelect, sort);
+    console.log('paramsparamsparamsparams', params);
+
     return {
       ...params,
       keyword: SearchParam,
@@ -70,10 +72,11 @@ export function CollectedItem() {
         sizeChange={(size) => {
           setSize(size);
         }}
+        type="collected"
         selectTagCount={tagList.length}
         selectProps={{
           value: sort,
-          defaultValue: dropDownCollectionsMenu.data[0].value,
+          defaultValue: dropDownProfileMenu.data[0].value,
           onChange: setSort,
         }}
       />

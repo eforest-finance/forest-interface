@@ -38,6 +38,7 @@ module.exports = {
         textPrimary: 'var(--text-primary)',
         textSecondary: 'var(--text-secondary)',
         textDisable: 'var(--text-disable)',
+        textNumber: 'var(--text12)',
         textWhite: 'var(--text-white)',
         lineBorder: 'var(--line-border)',
         lineDividers: 'var(--line-dividers)',
