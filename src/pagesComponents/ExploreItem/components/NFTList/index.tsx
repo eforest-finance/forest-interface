@@ -74,7 +74,7 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick, type
           <div className="flex items-center justify-between">
             <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
             {balance && balance * 1 > 1 && (
-              <div className="text-textNumber px-[4px] font-[500] mb-[4px]">
+              <div className="text-textNumber px-[4px] font-[500] mb-[4px] truncate">
                 <Multiply />
                 <span className="pl-[6px]">{formatTokenPrice(balance)}</span>
               </div>
@@ -85,7 +85,7 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick, type
           <div className={clsx(styles.token__price, priceClassName)}>
             {type ? (
               <span className={styles.token__label}>
-                {dataSource?.profileInfo.minListingPrice ? 'List Price' : 'Best Offer'}
+                {dataSource?.profileInfo?.minListingPrice ? 'List Price' : 'Best Offer'}
               </span>
             ) : (
               <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
