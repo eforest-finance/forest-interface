@@ -105,6 +105,10 @@ export interface INftInfo {
   description: string | null;
   file: string | undefined;
   fileExtension: string | null;
+  profileInfo: {
+    showPrice: string;
+    balance: number;
+  };
   id: string;
   isOfficial: boolean;
   issuer: string;

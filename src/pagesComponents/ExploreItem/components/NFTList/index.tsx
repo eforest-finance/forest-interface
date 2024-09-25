@@ -39,7 +39,8 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
     if (dataSource?.fileExtension === 'mp4') return 'video';
     return 'image';
   }, [dataSource?.fileExtension]);
-  const price = dataSource?.price || dataSource?.listingPrice;
+  const price = dataSource?.profileInfo?.showPrice;
+  const balance = dataSource?.profileInfo?.balance;
 
   return (
     <Link href={`/detail/buy/${dataSource?.id ?? ''}/${(dataSource?.chainIdStr || dataSource?.chainId) ?? ''}`}>
@@ -67,11 +68,15 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
         }>
         <div className={styles.card__content}>
           <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
-          <div className={styles.token__name}>{dataSource?.tokenName}</div>
+          <div className="lg:flex items-center justify-between">
+            <div className={styles.token__name}>{dataSource?.tokenName}</div>
+            <div className={styles.token__name}>{balance && balance * 1 > 1 && balance}</div>
+          </div>
+
           <div className={clsx(styles.token__price, priceClassName)}>
             <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
             <span className={styles.token__price__text}>
-              {price && price >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
+              {price && price * 1 >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
             </span>
           </div>
         </div>
