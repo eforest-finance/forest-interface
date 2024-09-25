@@ -24,6 +24,7 @@ interface INFTListProps {
   clearFilter?: () => void;
   loading: boolean;
   ELFToDollarRate: number;
+  type?: string;
 }
 
 interface ItemsCardProps {
@@ -33,9 +34,10 @@ interface ItemsCardProps {
   extraActions?: React.ReactNode;
   hiddenActions?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  type?: string;
 }
 
-export function ItemsCard({ dataSource, className, priceClassName, onClick }: ItemsCardProps) {
+export function ItemsCard({ dataSource, className, priceClassName, onClick, type }: ItemsCardProps) {
   const convertType = useMemo(() => {
     if (dataSource?.fileExtension === 'mp3') return 'audio';
     if (dataSource?.fileExtension === 'mp4') return 'video';
@@ -81,7 +83,14 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
           <div className={styles.token__name}>{dataSource?.tokenName}</div>
 
           <div className={clsx(styles.token__price, priceClassName)}>
-            <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+            {type ? (
+              <span className={styles.token__label}>
+                {dataSource?.profileInfo.minListingPrice ? 'List Price' : 'Best Offer'}
+              </span>
+            ) : (
+              <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+            )}
+
             <span className={styles.token__price__text}>
               {price && price * 1 >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
             </span>
@@ -100,6 +109,7 @@ export function NFTList({
   clearFilter,
   loading,
   ELFToDollarRate,
+  type,
 }: INFTListProps) {
   const column = useColumns(collapsed, sizes);
 
@@ -123,7 +133,7 @@ export function NFTList({
       dataSource={dataSource}
       renderItem={(item) => (
         <List.Item>
-          <ItemsCard hiddenActions={false} key={item?.id} dataSource={item} />
+          <ItemsCard hiddenActions={false} key={item?.id} dataSource={item} type={type} />
         </List.Item>
       )}
     />

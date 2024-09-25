@@ -125,6 +125,7 @@ export function CollectedItem() {
               setSearchParam('');
               clearAll();
             }}
+            type="collected"
           />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list.length && !loading ? (

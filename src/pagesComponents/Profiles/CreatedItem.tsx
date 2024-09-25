@@ -160,6 +160,7 @@ export function CreatedItem() {
               setSearchInputValue('');
               clearAll();
             }}
+            type="created"
           />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list.length && !loading ? (

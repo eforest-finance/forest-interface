@@ -25,7 +25,7 @@ export function useFilterService(tabType: string, walletAddress: string) {
 
   const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, []);
 
-  const [filterSelect, setFilterSelect] = useState(Object.assign(defaultFilter, paramsFromUrlForFilter));
+  const [filterSelect, setFilterSelect] = useState(Object.assign({}, defaultFilter, paramsFromUrlForFilter));
 
   const initParams = () => {
     switch (tabType) {

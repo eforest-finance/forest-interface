@@ -108,6 +108,7 @@ export interface INftInfo {
   profileInfo: {
     showPrice: string;
     balance: number;
+    minListingPrice: number | null;
   };
   id: string;
   isOfficial: boolean;
