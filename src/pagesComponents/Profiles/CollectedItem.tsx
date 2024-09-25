@@ -41,7 +41,6 @@ export function CollectedItem() {
 
   const requestParams = useMemo(() => {
     const params = getParamsFromFilter('collected', walletAddress, filterSelect, sort);
-    console.log('paramsparamsparamsparams', params);
 
     return {
       ...params,

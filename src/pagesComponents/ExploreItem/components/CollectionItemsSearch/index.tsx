@@ -63,7 +63,7 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
           <CollectionSearch {...searchParams} />
         </div>
         {!isLG && (
-          <div className="base-select">
+          <div className={`base-select ${type && 'w-[220px]'}`}>
             <BaseSelect dataSource={type ? dropDownProfileMenu : dropDownCollectionsMenu} {...selectProps} />
           </div>
         )}

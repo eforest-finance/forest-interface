@@ -44,8 +44,8 @@ export const dropDownProfileMenu: SingleItemType = {
   title: SORT_BY,
   type: FilterType.Single,
   data: [
-    { value: 'High to Low', label: 'Price: High to Low' },
-    { value: 'Low to High', label: 'Price: Low to High' },
+    { value: 'High to Low', label: 'List Price: High to Low' },
+    { value: 'Low to High', label: 'List Price: Low to High' },
     // { value: 'USDT-ListingPrice ASC', label: 'USDT Price：Low to High' },
     // { value: 'USDT-ListingPrice DESC', label: 'USDT Price：High to Low' },
     // { value: 'Recently Listed', label: 'Recently Listed' },
