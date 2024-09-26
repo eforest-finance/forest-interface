@@ -39,7 +39,7 @@ import {
 import Menu from 'assets/images/v2/menu.svg';
 import Detail from 'assets/images/v2/detail.svg';
 import Chart from 'assets/images/v2/chart.svg';
-import EditIcon from 'assets/images/v2/edit_l.svg';
+import EditIcon from 'assets/images/v2/edit_xs.svg';
 
 import { Tabs } from 'antd';
 
@@ -119,6 +119,7 @@ function DetailPc() {
           <div className={styles['left-wrap']}>
             <Picture />
             {/* <DescriptionCard /> */}
+            <div className="h-[40px]" />
             <TraitsInfoCard />
             {/* <GenerationInfoCard /> */}
             {/* <RarityInfoCard /> */}
@@ -152,8 +153,12 @@ function DetailPc() {
                 </>
               )}
             </div>
-
-            {!isFetching && nftInfo && <>{renderTable()}</>}
+            {!isFetching && nftInfo && (
+              <>
+                <div className="mt-[40px]" />
+                {renderTable()}
+              </>
+            )}
           </div>
         </div>
         <div className="mdTW:mt-[16px]">

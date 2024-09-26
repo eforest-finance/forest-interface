@@ -81,7 +81,7 @@ const Traits = () => {
       case CollectionType.SGR:
         return (
           <>
-            <RarityTrait text={nftInfo?.describe || ''} />
+            {nftInfo?.describe && <RarityTrait text={nftInfo?.describe || ''} />}
             <NormalTrait data={['Generation', nftTraitInfos?.generation]} />
             <div className="">
               {traitsData.map((data, key) => {
