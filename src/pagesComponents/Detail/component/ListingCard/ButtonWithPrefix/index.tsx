@@ -12,7 +12,7 @@ function ButtonWithPrefix(props: ButtonProps) {
   const { onClick, title, prefix } = props;
   return (
     <Button
-      className={` relative !h-[48px] mdTW:mr-0 mr-[16px] mb-2 lgTW:mb-0 lgTW:mr-[16px] lgTW:w-auto mdTW:w-full lgTW:min-w-[206px] w-auto `}
+      className={` relative !h-[48px] mdTW:mr-0 mr-[16px] mb-2 lgTW:mb-0 lgTW:mr-[16px] mdTW:w-[206px] lgTW:w-[206px] w-full `}
       size="ultra"
       type="primary"
       onClick={onClick}>

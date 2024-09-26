@@ -115,7 +115,7 @@ function ListingCardTitle(props: IProps) {
         <div className="flex items-center flex-wrap w-full lg:w-auto gap-[16px]">
           {/* nftNumber?.nftBalance - availableItemForSell}/${nftNumber.nftBalance */}
           <Segmented
-            className="w-full lg:w-[166px]"
+            className="w-full md:w-[166px] lg:w-[166px]"
             options={['sell', 'buy']}
             value={currentRole}
             onChange={onChangeCurrentRole}
