@@ -394,7 +394,7 @@ export default function Offers(options: { rate: number }) {
             getOffers(page, pageSize);
           },
         }}
-        adaptation={true}
+        adaptation={false}
         emptyText="No offers yet."
         columns={columns}
         dataSource={offers?.items || []}

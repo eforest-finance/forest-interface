@@ -386,7 +386,7 @@ function Listings(option: { rate: number }) {
             getListingsData(page, pageSize);
           },
         }}
-        adaptation={true}
+        adaptation={false}
         emptyText="No listings yet."
         dataSource={listings?.items || []}
       />

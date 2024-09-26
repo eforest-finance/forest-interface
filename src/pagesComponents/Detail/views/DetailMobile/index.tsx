@@ -21,7 +21,7 @@ import Listings from 'pagesComponents/Detail/component/Listings';
 import PriceHistory from 'components/PriceHistory';
 import RecommendList from 'components/RecommendList';
 import styles from './style.module.css';
-import Offers from '../../component/Offers';
+import Offers from '../../component/Offers/offer';
 import Picture from '../../component/Picture/Picture';
 import Creator from '../../component/Creator';
 import Title from '../../component/Title';
@@ -154,7 +154,9 @@ export default function DetailMobile() {
             )}
           </>
         )}
-        <TraitsInfoCard />
+        <div className="mt-[40px]">
+          <TraitsInfoCard />
+        </div>
 
         {!isFetching && nftInfo && (
           <>
@@ -220,7 +222,7 @@ export default function DetailMobile() {
             </Tabs.TabPane> */}
         {/* </Tabs> */}
         {/* </div> */}
-        <div className="mdTW:mt-[16px]">
+        <div className="mt-[40px]">
           <Activity rate={elfRate} />
         </div>
 

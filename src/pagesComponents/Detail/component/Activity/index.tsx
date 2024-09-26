@@ -297,18 +297,18 @@ export default function Activity(options: { rate: number }) {
 
   return (
     <div id="activityWrap" className={`${styles.activity} ${isSmallScreen && styles['mobile-activity']}`}>
-      <div className="flex justify-between items-center mb-[24px] ">
+      <div className="flex justify-between items-center mb-[24px] flex-wrap">
         <h1 className="flex items-center text-[16px] font-medium">
           <ActivityIcon className="mr-[12px]" />
           Activity
         </h1>
-        <div id="filter" className={styles.select}>
+        <div id="filter" className={`${styles.select} w-full lg:w-[320px] mt-[24px] lg:mt-0`}>
           <Select
             mode="multiple"
             value={tags}
             allowClear
             showArrow
-            className="rounded-[12px] h-[48px]"
+            className="rounded-[12px] h-[48px] "
             clearIcon={<ClearIcon />}
             tagRender={(value: any) => {
               return (
@@ -331,7 +331,7 @@ export default function Activity(options: { rate: number }) {
                 </div>
               );
             }}
-            style={{ width: 320 }}
+            style={{ width: '100%' }}
             optionLabelProp="label"
             popupClassName={styles.select}
             onChange={(value) => {
