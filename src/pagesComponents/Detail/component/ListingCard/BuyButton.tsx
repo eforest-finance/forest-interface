@@ -206,7 +206,7 @@ function BuyButton(props: IProps) {
   if (!nftInfo) return null;
 
   return (
-    <div className={clsx('flex flex-row mdTW:flex-col lgTW:flex-row', `${isSmallScreen && styles['mobile-button']}`)}>
+    <div className={clsx('flex  flex-row mdTW:flex-col lgTW:flex-row', `${isSmallScreen && styles['mobile-button']}`)}>
       {!disabledBuyNow && <ButtonWithPrefix onClick={buyNow} title="Buy Now" prefix={<Box />} />}
       <Button
         type="default"

@@ -17,7 +17,7 @@ const Traits = () => {
   const NormalTrait = useCallback(({ data }) => {
     const [key, value] = data;
     return (
-      <div className="mb-[8px] border-lineBorder h-[48px] w-[537px] flex items-center  justify-between rounded-lg border border-solid py-[13px] px-[24px] ">
+      <div className="mb-[8px] border-lineBorder h-[48px] w-full lg:w-[537px] flex items-center  justify-between rounded-lg border border-solid py-[13px] px-[24px] ">
         <span>{key}</span>
         <span>{value}</span>
         {/* <span>
@@ -40,7 +40,7 @@ const Traits = () => {
 
     return (
       <div
-        className={`${styleColor} border border-solid  h-[48px] w-[537px] flex items-center  justify-between rounded-lg  py-[13px] px-[24px]  mb-[8px]`}>
+        className={`${styleColor} border border-solid  h-[48px] w-full lg:w-[537px] flex items-center  justify-between rounded-lg  py-[13px] px-[24px]  mb-[8px]`}>
         <span className={`text-rarity${name}`}>Rarity</span>
         <span className="flex items-center">
           <HonourLabel className="!border-0 !text-[14px]" text={text || ''} theme="white" />
@@ -54,7 +54,7 @@ const Traits = () => {
     const [key, price, value, percent, option] = data;
     return (
       <div
-        className={`bg-[${option[0]}] h-[48px] w-[537px] flex items-center  rounded-lg  py-[13px] px-[24px] mb-[8px]`}
+        className={`bg-[${option[0]}] h-[48px] w-full lg:w-[537px] flex items-center  rounded-lg  py-[13px] px-[24px] mb-[8px]`}
         style={{
           backgroundColor: option[0],
         }}>
