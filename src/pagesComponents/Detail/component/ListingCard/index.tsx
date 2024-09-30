@@ -9,6 +9,9 @@ import { NftInfoPriceType } from 'types/nftTypes';
 import { SegmentedValue } from 'antd/lib/segmented';
 import isTokenIdReuse from 'utils/isTokenIdReuse';
 import { useGetOwnerInfo } from 'pagesComponents/Detail/hooks/useGetOwnerInfo';
+import { useParams } from 'next/navigation';
+import { getOffersInfo } from '../Offers/utils/getOffersInfo';
+import { useMount } from 'react-use';
 
 function ListingCard(options: { rate: number }) {
   const { rate } = options;
@@ -18,6 +21,23 @@ function ListingCard(options: { rate: number }) {
   const { nftInfo } = detailInfo;
   const [currentRole, setCurrentRole] = useState<SegmentedValue>('buy');
   const { isOnlyOwner, isOwner } = useGetOwnerInfo();
+
+  const { chainId, id } = useParams() as {
+    chainId: Chain;
+    id: string;
+  };
+
+  const getOffers = async (page: number, pageSize: number) => {
+    try {
+      await getOffersInfo(id, chainId, page, pageSize);
+    } catch (error) {
+      /* empty */
+    }
+  };
+
+  useMount(() => {
+    getOffers(1, 10);
+  });
 
   const isListing: boolean = useMemo(
     () =>
@@ -46,22 +66,16 @@ function ListingCard(options: { rate: number }) {
   if (!nftInfo) return null;
 
   return (
-    <div
-      className={`${styles['listing-card']} mdTW:mt-[40px] mb-[16px] ${
-        isSmallScreen && styles['mobile-listing-card']
-      }`}>
-      {!isHiddenTitle && (
-        <ListingCardTitle
-          showTime={!!(isListing && nftInfo?.listingEndTime)}
-          endTime={nftInfo?.listingEndTime}
-          hasChange={hasChange}
-          currentRole={currentRole}
-          onChangeCurrentRole={setCurrentRole}
-          isERC721={isERC721}
-        />
-      )}
-
-      <ListingCardBody isERC721={isERC721} rate={rate} currentRole={currentRole} />
+    <div className={`${styles['listing-card']} mdTW:mt-0 mb-[16px] ${isSmallScreen && styles['mobile-listing-card']}`}>
+      <ListingCardBody
+        isHiddenTitle={isHiddenTitle}
+        isListing={isListing}
+        hasChange={hasChange}
+        currentRole={currentRole}
+        onChangeCurrentRole={setCurrentRole}
+        isERC721={isERC721}
+        rate={rate}
+      />
     </div>
   );
 }

@@ -14,7 +14,7 @@
 }
 
 .wrapper {
-  @apply overflow-hidden  w-full  mdl:w-full;
+  @apply overflow-hidden w-full max-w-[1360px] m-auto;
 }
 
 .scroll {
@@ -36,7 +36,7 @@
 }
 
 .seed-item-card {
-  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[24px] mdl:p-[32px] bg-[var(--bg-home)] cursor-pointer hover:bg-[var(--bg-home-hover)];
+  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[24px] mdl:p-[32px] bg-[var(--bg-home)] cursor-pointer transition-transform ease-in-out delay-100 transform-gpu hover:-translate-y-2 hover:bg-[var(--bg-home-hover)];
   @apply w-[240px] mdl:w-[444px] h-[226px] mdl:h-[202px] mr-[8px] mdl:m-[8px] inline-block flex-shrink-0;
 
   &:hover {

@@ -1,5 +1,5 @@
 .detail-cover {
-  @apply w-full h-auto aspect-[1/1] lgTW:w-[400px] overflow-hidden  mdTW:h-[343px] lgTW:h-[400px] relative border-lineBorder border border-solid rounded-[12px];
+  @apply w-full h-auto aspect-[1/1] lgTW:w-[540px] overflow-hidden  mdTW:h-[343px] lgTW:h-[540px] relative border-0 rounded-[16px];
 }
 .detail-cover *::selection {
   @apply text-transparent bg-transparent;
@@ -24,5 +24,5 @@
   @apply h-[343px];
 }
 .mobile-detail-cover {
-  @apply w-full mt-[16px];
+  @apply w-full mt-[24px];
 }

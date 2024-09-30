@@ -1,70 +1,108 @@
 'use client';
 import { Tabs } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 
-import DetailCard from 'pagesComponents/Detail/component/DetailCard';
-import { TraitsInfoCard } from 'pagesComponents/Detail/component/DetailCard/TraitsCard';
-import { GenerationInfoCard } from 'pagesComponents/Detail/component/DetailCard/GenerationInfoCard';
+// import DetailCard from 'pagesComponents/Detail/component/DetailCard';
+// // import { TraitsInfoCard } from 'pagesComponents/Detail/component/DetailCard/TraitsCard';
+// import { GenerationInfoCard } from 'pagesComponents/Detail/component/DetailCard/GenerationInfoCard';
+
+import Activity from '../../component/Activity';
+
+// import clsx from 'clsx';
+
+// import { store } from 'store/store';
+// import { setCurrentTab } from 'store/reducer/detail/detailInfo';
+// import { RarityInfoCard } from 'pagesComponents/Detail/component/DetailCard/RarityInfoCard';
+import { BidCardWrapper, BidList } from '../../component/BidCard';
+
+import TraitsInfoCard from 'pagesComponents/Detail/component/DetailCard/Traits';
 
 import Listings from 'pagesComponents/Detail/component/Listings';
 import PriceHistory from 'components/PriceHistory';
 import RecommendList from 'components/RecommendList';
 import styles from './style.module.css';
-import Offers from '../../component/Offers';
+import Offers from '../../component/Offers/offer';
 import Picture from '../../component/Picture/Picture';
 import Creator from '../../component/Creator';
 import Title from '../../component/Title';
 import Owner from '../../component/Owner';
-import Activity from '../../component/Activity';
-import { BidCardWrapper, BidList } from '../../component/BidCard';
 import { useInitializationDetail } from 'pagesComponents/Detail/hooks/useInitializationDetail';
 import ListingCard from 'pagesComponents/Detail/component/ListingCard';
 import BigNumber from 'bignumber.js';
 import { useIntersection } from 'react-use';
-import clsx from 'clsx';
 import useDetailGetState from 'store/state/detailGetState';
-import { store } from 'store/store';
-import { setCurrentTab } from 'store/reducer/detail/detailInfo';
-import { RarityInfoCard } from 'pagesComponents/Detail/component/DetailCard/RarityInfoCard';
+
+import { DetailCard as InfoCard } from 'pagesComponents/Detail/component/InfoCard';
+
+import Menu from 'assets/images/v2/menu.svg';
+import Detail from 'assets/images/v2/detail.svg';
+import Chart from 'assets/images/v2/chart.svg';
+import EditIcon from 'assets/images/v2/edit_xs.svg';
 
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
 
-  const [showSticky, setShowSticky] = useState<boolean>(false);
-  const scrollTopWhenStickyRef = useRef<number>(0);
+  const { detailInfo } = useDetailGetState();
+  const { nftInfo } = detailInfo;
 
-  const bottom = Math.floor((window.innerHeight || document.documentElement.clientHeight) - 62);
+  const [key, setKey] = useState('0');
 
-  const tabsRef = useRef(null);
-  const intersection = useIntersection(tabsRef, {
-    root: document.body,
-    rootMargin: `0px 0px -${bottom}px 0px`,
-  });
-
-  const resetScrollTopOnTabChange = () => {
-    if (scrollTopWhenStickyRef.current < 1) return;
-    if (document.body.scrollTop < scrollTopWhenStickyRef.current) return;
-    document.body.scrollTo(0, scrollTopWhenStickyRef.current);
+  const onChange = (key: string) => {
+    setKey(key);
   };
 
-  useEffect(() => {
-    const onScroll = () => {
-      if (!tabsRef?.current) return;
-      const { top } = (tabsRef?.current as HTMLElement).getBoundingClientRect();
-      setShowSticky(top < 63);
-      if (top < 63 && !scrollTopWhenStickyRef.current) {
-        scrollTopWhenStickyRef.current = document.body.scrollTop;
-      }
-    };
-    document.body.addEventListener('scroll', onScroll);
-    return () => {
-      document.body.removeEventListener('scroll', onScroll);
-    };
-  }, []);
+  const items: any = useMemo(() => {
+    let items = [
+      {
+        label: (
+          <span className={`${styles.tableMenu} ${key == 'Offer' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+            <Menu fill={key == 'Offer' ? '#1A1A1A' : '#808080'} />
+            Offer
+          </span>
+        ),
+        key: 'Offer',
+        children: <Offers rate={elfRate} />,
+      },
+      {
+        label: (
+          <span className={`${styles.tableMenu} ${key == 'Chart' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+            <Chart fill={key == 'Chart' ? '#1A1A1A' : '#808080'} />
+            Chart
+          </span>
+        ),
+        key: 'Chart',
+        children: <PriceHistory />,
+      },
+      {
+        label: (
+          <span className={`${styles.tableMenu} ${key == 'Details' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+            <Detail fill={key == 'Details' ? '#1A1A1A' : '#808080'} />
+            Details
+          </span>
+        ),
+        key: 'Details',
+        children: <InfoCard />,
+      },
+    ];
 
-  const {
-    detailInfo: { currentTab, nftTraitInfos },
-  } = useDetailGetState();
+    if (!isERC721) {
+      items = [
+        {
+          label: (
+            <span className={`${styles.tableMenu} ${key == 'List' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+              <EditIcon fill={key == 'List' ? '#1A1A1A' : '#808080'} />
+              List
+            </span>
+          ),
+          key: 'List',
+          children: <Listings rate={elfRate} />,
+        },
+        ...items,
+      ];
+    }
+
+    return items;
+  }, [key, isERC721]);
 
   return (
     <div className={`${styles.detail} ${styles['mobile-detail']}`}>
@@ -86,33 +124,35 @@ export default function DetailMobile() {
             )}
           </>
         )}
-        <div ref={tabsRef} className="mt-10">
-          <Tabs
+        <div className="mt-[40px]">
+          <TraitsInfoCard />
+        </div>
+
+        {!isFetching && nftInfo && (
+          <>
+            <div className="mt-[40px]" />
+            <Tabs items={items} onChange={onChange} />
+          </>
+        )}
+
+        {/* <RenderTable /> */}
+
+        {/* <div ref={tabsRef} className="mt-10"> */}
+        {/* <Tabs
             defaultActiveKey={Number(nftTraitInfos?.generation || '') > 0 ? 'rarityInfos' : 'detail'}
             onChange={(activeKey) => {
               store.dispatch(setCurrentTab(activeKey));
               resetScrollTopOnTabChange();
             }}
             className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
-            animated={false}>
-            {Number(nftTraitInfos?.generation || '') > 0 ? (
+            animated={false}> */}
+        {/* {Number(nftTraitInfos?.generation || '') > 0 ? (
               <Tabs.TabPane tab="Rarity Information" key="rarityInfos">
                 <GenerationInfoCard />
                 <RarityInfoCard />
               </Tabs.TabPane>
-            ) : null}
-
-            <Tabs.TabPane tab="Details" key="detail">
-              <DetailCard />
-              <GenerationInfoCard />
-              <RarityInfoCard />
-            </Tabs.TabPane>
-            {nftTraitInfos?.traitInfos?.length ? (
-              <Tabs.TabPane tab="Traits" key="traits">
-                <TraitsInfoCard />
-              </Tabs.TabPane>
-            ) : null}
-            <Tabs.TabPane
+            ) : null} */}
+        {/* <Tabs.TabPane
               tab={intervalDataForBid?.isBidding ? 'Offers' : 'Listings & offers'}
               key="listingOffers"
               forceRender={true}>
@@ -131,17 +171,34 @@ export default function DetailMobile() {
                 </>
               )}
             </Tabs.TabPane>
+
             {!intervalDataForBid?.isBidding && (
               <Tabs.TabPane tab="Price History" key="priceHistory">
                 <PriceHistory />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Activity" key="activity">
+
+            <Tabs.TabPane tab="Details" key="detail">
+              <DetailCard />
+              <GenerationInfoCard />
+              <RarityInfoCard />
+            </Tabs.TabPane> */}
+        {/* {nftTraitInfos?.traitInfos?.length ? (
+              <Tabs.TabPane tab="Traits" key="traits">
+                <TraitsInfoCard />
+              </Tabs.TabPane>
+            ) : null} */}
+
+        {/* <Tabs.TabPane tab="Activity" key="activity">
               <Activity />
-            </Tabs.TabPane>
-          </Tabs>
+            </Tabs.TabPane> */}
+        {/* </Tabs> */}
+        {/* </div> */}
+        <div className="mt-[40px]">
+          <Activity rate={elfRate} />
         </div>
-        <RecommendList />
+
+        {/* <RecommendList /> */}
       </>
     </div>
   );

@@ -52,6 +52,8 @@ export default function BaseFooter() {
     const path = pathname?.split('/')?.[1];
     if (['drops-detail'].includes(path)) {
       setMarginBottom('mb-[130px]');
+    } else if (['detail'].includes(path)) {
+      setMarginBottom('mb-0');
     } else {
       setMarginBottom('mb-[80px]');
     }

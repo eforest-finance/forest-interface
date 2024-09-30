@@ -1,6 +1,6 @@
 import { useDebounceFn, useRequest } from 'ahooks';
 import { fetchCollections, fetchNFTCollectionMyHold } from 'api/fetch';
-import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
+import { dropDownProfileMenu } from 'components/ItemsLayout/assets';
 import {
   getDefaultFilterForMyItems,
   getFilterFromSearchParams,
@@ -41,7 +41,7 @@ export function useFilterService(tabType: string, walletAddress: string) {
   const [SearchParam, setSearchParam] = useState<string>(initParams());
   const [searchInputValue, setSearchInputValue] = useState<string>(SearchParam);
 
-  const [sort, setSort] = useState<string>(filterSelect.Sorting || (dropDownCollectionsMenu.data[0].value as string));
+  const [sort, setSort] = useState<string>(filterSelect.Sorting || (dropDownProfileMenu.data[0].value as string));
 
   const [size, setSize] = useState<string>(filterSelect.Size || 'small');
 

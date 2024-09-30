@@ -3,7 +3,7 @@
 }
 
 .footer-wrapper .footer-content {
-  @apply items-stretch flex w-full max-w-[1200px] xlTW:max-w-[1280px] m-auto;
+  @apply items-stretch flex w-full max-w-[1200px] xlTW:max-w-[1360px] m-auto;
 }
 
 .footer-wrapper .footer-content .media-wrapper {

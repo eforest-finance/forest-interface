@@ -418,11 +418,11 @@ export const fetchNFTCollectionMyHold = async (params: IMyHold) => {
 };
 
 export const fetchNFTMyHoldSearch = async (params: IMyHoldSearch) => {
-  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/myhold', params);
+  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/myhold/V2', params);
 };
 
 export const fetchCollectionsByMyCreated = async (params: IMyHoldSearch) => {
-  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/mycreated', params);
+  return request.post<IMyHoldSearch, IMyHoldSearchRes>('app/nft/nft-infos-user-profile/mycreated/V2', params);
 };
 
 export const fetchActivitiesSearch = async (params: IActivitySearch): Promise<IActivitySearchRes> => {

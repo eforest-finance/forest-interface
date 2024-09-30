@@ -1,19 +1,29 @@
 .listing-card {
-  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+  @apply flex flex-col rounded-[12px] bg-transparent;
 }
 
 .listing-card-title {
-  @apply border-0 border-b !border-solid border-lineBorder p-[24px] flex;
+  @apply lg:mt-[28px] border-0 flex;
 
-  .time-panel-value {
-    @apply text-base font-medium text-textSecondary;
+  :global {
+    .ant-segmented-item-selected {
+      @apply rounded-[8px];
+
+      .ant-segmented-item-label {
+        @apply !text-textPrimary;
+      }
+    }
   }
 }
 
+.time-panel-value {
+  @apply text-[14px] font-normal text-textSecondary;
+}
+
 .mobile-button {
-  @apply fixed w-full bottom-0 left-0 bg-fillPageBg p-[16px] flex z-[998] border-0 border-t border-solid border-lineBorder;
+  @apply w-full bottom-0 left-0 bg-fillPageBg flex z-[998];
 }
 
 .mobile-listing-card {
-  @apply mt-[16px];
+  @apply mt-[24px];
 }

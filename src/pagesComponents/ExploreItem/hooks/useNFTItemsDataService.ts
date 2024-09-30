@@ -1,14 +1,14 @@
 'use client';
 
-import { useInfiniteScroll, useTimeout } from 'ahooks';
+import { useInfiniteScroll } from 'ahooks';
 import { fetchCompositeNftInfos, fetchNftRankingInfoApi } from 'api/fetch';
 import { CompositeNftInfosParams, INftRankingInfo } from 'api/types';
 import { INftInfo, ITraitInfo } from 'types/nftTypes';
 import { addPrefixSuffix } from 'utils';
 import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 import { thousandsNumber } from 'utils/unitConverter';
-import queryString from 'query-string';
-import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import qs from 'query-string';
+import { useRouter } from 'next/navigation';
 
 export const fetchRankingDataOfNft = async (nftItemArr: INftInfo[], userWalletAddress?: string) => {
   if (!userWalletAddress) return nftItemArr;
@@ -112,8 +112,6 @@ export function useNFTItemsDataService({
         newParams['SymbolTypeList'] = params['SymbolTypeList'].join('|');
       }
 
-      updateURLParams(newParams);
-
       return fetchNFTItemsData(
         {
           ...params,
@@ -123,6 +121,8 @@ export function useNFTItemsDataService({
         userWalletAddress,
       )
         .then((res) => {
+          updateURLParams(newParams);
+
           return {
             list: res.items,
             totalCount: res.totalCount,

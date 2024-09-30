@@ -11,6 +11,8 @@ import { formatTokenPrice } from 'utils/format';
 import clsx from 'clsx';
 import { BoxSizeEnum } from 'pagesComponents/ExploreItem/constant';
 
+import Multiply from 'assets/images/profile/multiply.svg';
+
 import HonourLabel from 'baseComponents/HonourLabel';
 
 interface INFTListProps {
@@ -22,6 +24,7 @@ interface INFTListProps {
   clearFilter?: () => void;
   loading: boolean;
   ELFToDollarRate: number;
+  type?: string;
 }
 
 interface ItemsCardProps {
@@ -31,15 +34,17 @@ interface ItemsCardProps {
   extraActions?: React.ReactNode;
   hiddenActions?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  type?: string;
 }
 
-export function ItemsCard({ dataSource, className, priceClassName, onClick }: ItemsCardProps) {
+export function ItemsCard({ dataSource, className, priceClassName, onClick, type }: ItemsCardProps) {
   const convertType = useMemo(() => {
     if (dataSource?.fileExtension === 'mp3') return 'audio';
     if (dataSource?.fileExtension === 'mp4') return 'video';
     return 'image';
   }, [dataSource?.fileExtension]);
-  const price = dataSource?.price || dataSource?.listingPrice;
+  const price = dataSource?.profileInfo?.showPrice;
+  const balance = dataSource?.profileInfo?.balance;
 
   return (
     <Link href={`/detail/buy/${dataSource?.id ?? ''}/${(dataSource?.chainIdStr || dataSource?.chainId) ?? ''}`}>
@@ -66,12 +71,28 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick }: It
           </>
         }>
         <div className={styles.card__content}>
-          <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
+          <div className="flex items-center justify-between">
+            <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
+            {balance && balance * 1 > 1 && (
+              <div className="text-textNumber px-[4px] font-[500] mb-[4px] truncate">
+                <Multiply />
+                <span className="pl-[6px]">{formatTokenPrice(balance)}</span>
+              </div>
+            )}
+          </div>
           <div className={styles.token__name}>{dataSource?.tokenName}</div>
+
           <div className={clsx(styles.token__price, priceClassName)}>
-            <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+            {type ? (
+              <span className={styles.token__label}>
+                {dataSource?.profileInfo?.minListingPrice ? 'List Price' : 'Best Offer'}
+              </span>
+            ) : (
+              <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+            )}
+
             <span className={styles.token__price__text}>
-              {price && price >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
+              {price && price * 1 >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
             </span>
           </div>
         </div>
@@ -88,6 +109,7 @@ export function NFTList({
   clearFilter,
   loading,
   ELFToDollarRate,
+  type,
 }: INFTListProps) {
   const column = useColumns(collapsed, sizes);
 
@@ -111,7 +133,7 @@ export function NFTList({
       dataSource={dataSource}
       renderItem={(item) => (
         <List.Item>
-          <ItemsCard hiddenActions={false} key={item?.id} dataSource={item} />
+          <ItemsCard hiddenActions={false} key={item?.id} dataSource={item} type={type} />
         </List.Item>
       )}
     />
