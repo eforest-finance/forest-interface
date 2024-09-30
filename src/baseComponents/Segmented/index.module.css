@@ -10,13 +10,13 @@
       &.ant-segmented-item-selected {
         @apply bg-fillPageBg rounded-lg;
         .ant-segmented-item-label {
-          @apply  text-brandNormal;
+          @apply text-brandNormal;
         }
       }
+      @apply w-1/2;
     }
     .ant-segmented-thumb {
       @apply bg-fillPageBg rounded-lg;
     }
-    
   }
 }

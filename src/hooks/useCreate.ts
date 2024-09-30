@@ -537,7 +537,6 @@ export default function useCreateByStep() {
       nftInfos: paramsArr.map((params) => {
         const externalInfo = params.externalInfo.value as ICreateItemsParams['externalInfo']['value'];
         const issueChainId = params.issueChainId as keyof typeof CHAIN_ID_VALUE;
-
         const contractParams = {
           ...params,
           issueChainId: CHAIN_ID_VALUE[issueChainId],
@@ -547,6 +546,7 @@ export default function useCreateByStep() {
                 __nft_file_hash: externalInfo?.__nft_file_hash,
                 __nft_metadata: externalInfo?.__nft_metadata,
                 __nft_fileType: externalInfo?.__nft_fileType,
+                __nft_description: externalInfo?.__nft_description,
                 __nft_image_url: externalInfo?.__nft_preview_image || externalInfo?.__nft_file_url || '',
               },
               externalInfo?.__nft_fileType === 'audio' || externalInfo?.__nft_fileType === 'video'

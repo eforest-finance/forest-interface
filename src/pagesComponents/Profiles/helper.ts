@@ -5,7 +5,12 @@ const bigStr = (str: string) => {
   return str === '' ? undefined : new BigNumber(str).toNumber();
 };
 
-export function getParamsFromFilter(activeKey: string, walletAddress: string, filterSelect: IFilterSelect) {
+export function getParamsFromFilter(
+  activeKey: string,
+  walletAddress: string,
+  filterSelect: IFilterSelect,
+  sort?: string,
+) {
   const status = filterSelect.Status.data.map((item: SourceItemType) => item.value);
 
   const filterParams = {
@@ -18,11 +23,11 @@ export function getParamsFromFilter(activeKey: string, walletAddress: string, fi
     HasOfferFlag: status.includes(CollectionsStatus['Has Offers']),
     collectionIds: filterSelect.Collections.data.map((itm: SourceItemType) => itm.value),
   };
-  if (activeKey === 'created') {
+  if (activeKey == 'created' || activeKey == 'collected') {
     return {
       ...filterParams,
       address: walletAddress || '',
-      Sorting: 'Low to High',
+      Sorting: sort || 'High to Low',
     };
   }
   return {

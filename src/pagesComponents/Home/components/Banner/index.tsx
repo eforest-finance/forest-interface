@@ -20,7 +20,7 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
   const [current, setCurrent] = useState<number>(0);
 
   return (
-    <div className="relative w-[100vw] h-[584px]  mdl:h-[720px]  overflow-hidden group">
+    <div className="relative w-[100vw] h-[584px]  mdl:h-[542px]  overflow-hidden group">
       <Carousel
         ref={(slider) => {
           sliderRef.current = slider;
@@ -52,12 +52,12 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
             ) : (
               <div className="w-full h-full flex justify-center items-center overflow-hidden">
                 <Image
-                  wrapperClassName="mdl:w-full mdl:h-[720px] h-full"
+                  wrapperClassName="mdl:w-full mdl:h-[542px] h-full"
                   className="object-cover !w-auto  mdl:!w-full !h-full transition-all cursor-pointer"
                   src={item.src}
                   preview={false}
                   placeholder={
-                    <Skeleton.Image className="!w-full !h-[473px] mdl:w-full mdl:h-[720px]  !rounded-[12px]" active />
+                    <Skeleton.Image className="!w-full !h-[473px] mdl:w-full mdl:h-[542px]  !rounded-[12px]" active />
                   }
                 />
               </div>
@@ -65,22 +65,24 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
 
             <div className="w-full h-full absolute z-[19] bg-fillMask3 top-0 left-0" />
 
-            <div className="absolute z-20 top-[218px] mdl:top-[16rem]  left-[16px] mdl:left-[40px]">
-              <div className="text-[32px] mdl:text-[40px] font-semibold text-textWhite">{item.title}</div>
-              <div className="max-w-[520px] mb-[32px] mdl:mb-[48px] mt-[16px] text-[14px] mdl:text-[16px] font-semibold text-textWhite">
-                {item.description}
+            <div className="w-full max-w-[1360px] absolute z-20 top-[80px] left-[50%] -translate-x-1/2">
+              <div className="pl-[20px] pt-[180px] mdl:pt-[80px] mdl:pl-0">
+                <div className="text-[32px] mdl:text-[40px] font-semibold text-textWhite">{item.title}</div>
+                <div className="max-w-[520px] mb-[32px] mdl:mb-[48px] mt-[16px] text-[14px] mdl:text-[16px] font-semibold text-textWhite">
+                  {item.description}
+                </div>
+                <Button
+                  onClick={() => {
+                    if (item?.target === '_blank') {
+                      window.open(item.link);
+                    } else {
+                      nav.push(item.link);
+                    }
+                  }}
+                  className="border-0 z-20 h-[48px] mdl:h-[56px] rounded-lg bg-fillCardBg hover:bg-fillHoverBg text-textPrimary text-[16px]">
+                  {item.buttonTitle}
+                </Button>
               </div>
-              <Button
-                onClick={() => {
-                  if (item?.target === '_blank') {
-                    window.open(item.link);
-                  } else {
-                    nav.push(item.link);
-                  }
-                }}
-                className="border-0 z-20 w-[164px] h-[48px] mdl:w-[170px] mdl:h-[56px] rounded-lg bg-fillCardBg hover:bg-fillHoverBg text-textPrimary text-[16px]">
-                {item.buttonTitle}
-              </Button>
             </div>
           </div>
         ))}

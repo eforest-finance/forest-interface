@@ -2,7 +2,7 @@ import CollectionSearch from 'pagesComponents/Collections/components/CollectionS
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import BaseSelect from '../BaseSelect';
-import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
+import { dropDownCollectionsMenu, dropDownProfileMenu } from 'components/ItemsLayout/assets';
 import LargeIcon from 'assets/images/explore/large.svg';
 import SmallIcon from 'assets/images/explore/small.svg';
 import DetailIcon from 'assets/images/explore/detail-icon.svg';
@@ -23,6 +23,7 @@ interface ICollectionItemsSearch {
   selectProps: SelectProps;
   selectTagCount?: number;
   extraInfo?: string;
+  type?: string;
 }
 
 export function CollectionItemsSearch(params: ICollectionItemsSearch) {
@@ -38,7 +39,9 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
     collapsedChange,
     selectTagCount,
     extraInfo,
+    type,
   } = params;
+  console.log('selectProps', selectProps);
   return (
     <>
       <div className={styles.collection__search}>
@@ -60,8 +63,8 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
           <CollectionSearch {...searchParams} />
         </div>
         {!isLG && (
-          <div className="base-select">
-            <BaseSelect dataSource={dropDownCollectionsMenu} {...selectProps} />
+          <div className={`base-select ${type && 'w-[220px]'}`}>
+            <BaseSelect dataSource={type ? dropDownProfileMenu : dropDownCollectionsMenu} {...selectProps} />
           </div>
         )}
 
@@ -93,7 +96,11 @@ export function CollectionItemsSearch(params: ICollectionItemsSearch) {
       </div>
       {isLG && !hiddenSize && (
         <div className="flex mb-4 base-select">
-          <BaseSelect className="!flex-1" dataSource={dropDownCollectionsMenu} {...selectProps} />
+          <BaseSelect
+            className="!flex-1"
+            dataSource={type ? dropDownProfileMenu : dropDownCollectionsMenu}
+            {...selectProps}
+          />
 
           <div className={styles['size_container']}>
             <div

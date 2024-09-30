@@ -3,9 +3,9 @@
     @apply text-textSecondary text-base font-medium;
   }
   .price-number {
-    @apply text-textPrimary items-center mt-[16px] flex flex-wrap text-4xl font-semibold;
+    @apply text-textPrimary items-baseline mt-[8px] lg:mt-[12px] flex flex-wrap text-4xl font-semibold;
   }
   .price-time {
-    @apply mt-[16px] text-sm text-textSecondary;
+    @apply mt-[12px] text-sm text-textSecondary;
   }
 }

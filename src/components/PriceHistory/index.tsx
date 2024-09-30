@@ -94,6 +94,7 @@ const HistoryChart = memo(({ theme, nftInfo, priceList }: IHistoryChart) => {
           data: pricesList || [],
           symbol: pricesList.length !== 1 ? 'none' : 'circle',
           connectNulls: false,
+          smooth: true,
           symbolSize: 8,
           color: theme === 'dark' ? '#1667C7' : '#1B76E2',
         },
@@ -176,13 +177,13 @@ const HistoryChart = memo(({ theme, nftInfo, priceList }: IHistoryChart) => {
     setFirstTime((time !== '0' && new Date().getTime() - Number(time) * MILLISECONDS_PER_DAY) || 0);
   };
   return (
-    <div className="p-[24px] pt-[16px] border-0 border-t !border-solid border-[var(--bg-table-hover)]">
+    <div className=" lg:pt-[16px] border-0">
       <Select
         onChange={onTimeChange}
         getPopupContainer={(v) => v}
         defaultValue="7"
         popupClassName={styles['time-select-dropdown']}
-        className="!w-[172px]"
+        className="w-full lg:!w-[172px]"
         loading={isLoading}>
         <Option value="7">Last 7 Days</Option>
         <Option value="30">Last 30 Days</Option>
@@ -235,27 +236,18 @@ export default function PriceHistory() {
     getNftPrices();
   }, [getNftPrices]);
 
-  const items = [
-    {
-      key,
-      destroyInactivePanel: true,
-      header: (
-        <div className={`text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]`}>
-          Price History
-        </div>
-      ),
-      children: <HistoryChart theme={theme} priceList={pricesList} isSmallScreen={isSmallScreen} nftInfo={nftInfo} />,
-    },
-  ];
+  // const items = [
+  //   {
+  //     key,
+  //     destroyInactivePanel: true,
+  //     header: (
+  //       <div className={`text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]`}>
+  //         Price History
+  //       </div>
+  //     ),
+  //     children: ,
+  //   },
+  // ];
 
-  return (
-    <CollapseForPC
-      items={items}
-      activeKey={activeKey}
-      onChange={() => {
-        setActiveKey((c) => (c === key ? '' : key));
-      }}
-      wrapClassName={`${styles['price-history']} ${isSmallScreen && styles['mobile-price-history']}`}
-    />
-  );
+  return <HistoryChart theme={theme} priceList={pricesList} isSmallScreen={isSmallScreen} nftInfo={nftInfo} />;
 }

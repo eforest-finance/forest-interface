@@ -24,11 +24,17 @@ function PriceCard({
         {price && <span>{`${price} ${priceSymbol || ''}`}</span>}
 
         {usdPrice ? (
-          <span className="text-textSecondary text-base font-medium hidden xl:block ml-[24px]">{usdPrice}</span>
+          <div className="leading-[22px] text-textPrimary text-[14px] font-medium hidden mdTW:block ml-[8px]">
+            {usdPrice}
+          </div>
         ) : null}
       </div>
       {usdPrice ? (
-        <span className="flex text-textSecondary text-base font-medium xl:hidden mt-[16px]">{usdPrice}</span>
+        <div>
+          <span className="flex align-text-bottom  text-textPrimary text-[14px] font-medium xl:hidden mt-[4px] lg:mt-[16px]">
+            {usdPrice}
+          </span>
+        </div>
       ) : null}
       {time ? (
         <div className={styles['price-time']}>

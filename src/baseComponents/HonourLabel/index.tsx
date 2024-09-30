@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import StarSvg from 'assets/images/v2/star.svg';
 import DiamondCloseSvg from 'assets/images/v2/diamond-close.svg';
 
-enum HonourTypeEnum {
+export enum HonourTypeEnum {
   Bronze = 'Bronze',
   Silver = 'Silver',
   Gold = 'Gold',
@@ -13,7 +13,7 @@ enum HonourTypeEnum {
   Diamond = 'Diamond',
 }
 
-const stylesMap: Record<HonourTypeEnum, string> = {
+export const stylesMap: Record<HonourTypeEnum, string> = {
   [HonourTypeEnum.Bronze]: styles.bronze,
   [HonourTypeEnum.Silver]: styles.silver,
   [HonourTypeEnum.Gold]: styles.gold,

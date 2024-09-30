@@ -73,7 +73,7 @@ function Listings(option: { rate: number }) {
 
   // const [page, setPage] = useState<number>(1);
   const [pageState, setPage] = useState<IPaginationPage>({
-    pageSize: MAX_RESULT_COUNT_10,
+    pageSize: 100,
     page: 1,
   });
   const [loading, setLoading] = useState<boolean>(false);
@@ -204,7 +204,6 @@ function Listings(option: { rate: number }) {
     if (isLogin) {
       const nftBalanceBig = new BigNumber(nftNumber.nftBalance);
       const nftQuantityBig = new BigNumber(nftNumber.nftQuantity);
-
       return nftBalanceBig.comparedTo(nftQuantityBig) === 0;
     } else {
       return false;
@@ -239,50 +238,56 @@ function Listings(option: { rate: number }) {
   const columns: ColumnsType<FormatListingType> = useMemo(
     () => [
       {
-        title: titles.PRICE,
+        title: 'Price',
         key: 'price',
-        width: columWidth.current?.get('price') || 150,
+        // width: columWidth.current?.get('price') || 172,
+        width: 172,
         dataIndex: 'price',
-        render: (text: string, record: FormatListingType) => (
-          <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />
-        ),
-      },
-      {
-        title: titles.USD_PRICE,
-        key: 'usdPrice',
-        width: columWidth.current?.get('usdPrice') || 150,
-        dataIndex: 'usdPrice',
-        render: (_, record: FormatListingType) => {
+        render: (text: string, record: FormatListingType) => {
           const usdPrice = record?.price * (record?.purchaseToken?.symbol === 'ELF' ? rate : 1);
-          return <TableCell content={formatUSDPrice(Number(usdPrice))} />;
+
+          return (
+            <TableCell
+              content={
+                <span className="flex flex-col">
+                  <span className="text-textPrimary text-[14px] font-medium">{`${formatTokenPrice(text)} ELF`}</span>
+                  <span className="text-textSecondary text-[12px]">({formatUSDPrice(Number(usdPrice))})</span>
+                </span>
+              }
+            />
+          );
         },
+
+        // <TableCell content={`${formatTokenPrice(text)} ${record.purchaseToken.symbol}`} />
       },
       {
         title: 'Quantity',
         key: 'quantity',
         dataIndex: 'quantity',
-        width: isSmallScreen ? 120 : 110,
+        width: isSmallScreen ? 120 : 115,
         render: (text: number | string) => <TableCell content={formatNumber(text)} tooltip={formatTokenPrice(text)} />,
       },
       {
         title: 'Expiration',
         key: 'expiration',
         dataIndex: 'expiration',
-        width: isSmallScreen ? 120 : 140,
+        // width: isSmallScreen ? 120 : 96,
         render: (text: string, record: FormatListingType) => (
           <TableCell content={(text && text) || '-'} tooltip={timeFormat(record.endTime)} />
         ),
       },
       {
-        title: 'From',
+        title: 'Seller',
         key: 'fromName',
         dataIndex: 'fromName',
-        width: isSmallScreen ? 240 : 260,
+        width: isSmallScreen ? 240 : 216,
         render: (text: string, record: FormatListingType) => (
           <div className="flex items-center">
             <TableCell
               content={
-                record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)
+                <span className="text-brandNormal">
+                  {record.ownerAddress === walletInfo.address ? 'you' : getOmittedStr(text || '', OmittedType.ADDRESS)}
+                </span>
               }
               isLink={true}
               onClick={() => nav.push(`/account/${record.ownerAddress}#Collected`)}
@@ -293,16 +298,18 @@ function Listings(option: { rate: number }) {
         ),
       },
       {
-        key: 'action',
-        fixed: 'right',
-        width: 92,
+        title: 'Operation',
+        key: 'Operation',
+        fixed: isERC721 ? false : 'right',
+        width: 110,
         render: (_text: string, record: FormatListingType) =>
           record.ownerAddress !== walletInfo.address ? (
             <Button
               className="!w-[64px]"
               type="primary"
               size="mini"
-              disabled={buyDisabled()}
+              // disabled={buyDisabled()}
+              // disabled={true}
               onClick={() => {
                 if (isLogin) {
                   onClickBuy(record);
@@ -335,6 +342,16 @@ function Listings(option: { rate: number }) {
     ],
   );
 
+  const getColumns = useMemo(() => {
+    if (isLogin) {
+      return columns;
+    } else {
+      const newColumns = [...columns];
+      newColumns.pop();
+      return newColumns;
+    }
+  }, [isLogin]);
+
   const getListingsData = async (page: number, pageSize: number) => {
     setLoading(true);
     try {
@@ -355,38 +372,37 @@ function Listings(option: { rate: number }) {
         <div className="text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]">Listings</div>
       ),
       children: (
-        <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden">
-          <Table
-            className={styles['listings-table-custom']}
-            loading={loading}
-            columns={columns}
-            scroll={{ x: 792, y: 326 }}
-            pagination={{
-              hideOnSinglePage: true,
-              pageSize: pageState.pageSize,
-              total: listings?.totalCount || 0,
-              onChange: (page, pageSize) => {
-                setPage({ page, pageSize });
-                getListingsData(page, pageSize);
-              },
-            }}
-            adaptation={true}
-            emptyText="No listings yet."
-            dataSource={listings?.items || []}
-          />
-        </div>
+        <div className="border-0 border-t !border-solid border-lineBorder rounded-bl-[12px] rounded-br-[12px] overflow-hidden"></div>
       ),
     },
   ];
 
   useMount(() => {
-    getListingsData(1, MAX_RESULT_COUNT_10);
+    getListingsData(pageState.page, pageState.pageSize);
   });
 
   return (
-    <div id="listings" className={`${styles.listings} ${isSmallScreen && 'mt-4'}`}>
+    <div id="listings" className={`${styles.listings}`}>
       <Modals modalAction={modalAction} />
-      <CollapseForPC
+      <Table
+        className={styles['listings-table-custom']}
+        loading={loading}
+        columns={getColumns}
+        scroll={{ x: 750, y: 320 }}
+        pagination={{
+          hideOnSinglePage: true,
+          pageSize: pageState.pageSize,
+          total: listings?.totalCount || 0,
+          onChange: (page, pageSize) => {
+            setPage({ page, pageSize });
+            getListingsData(page, pageSize);
+          },
+        }}
+        adaptation={false}
+        emptyText="No listings yet."
+        dataSource={listings?.items || []}
+      />
+      {/* <CollapseForPC
         activeKey={activeKey}
         onChange={() => {
           console.log('================active key', activeKey);
@@ -394,7 +410,7 @@ function Listings(option: { rate: number }) {
         }}
         items={items}
         wrapClassName={`${styles['price-history']} ${isSmallScreen && styles['mobile-price-history']}`}
-      />
+      /> */}
     </div>
   );
 }
