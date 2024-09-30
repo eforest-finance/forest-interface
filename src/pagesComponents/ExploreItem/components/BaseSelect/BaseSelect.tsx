@@ -5,6 +5,7 @@ export interface BaseSelectProps {
   dataSource: SingleItemType | MultipleItemType;
 }
 export default function BaseSelect({ dataSource, ...params }: SelectProps & BaseSelectProps) {
+  console.log('params', dataSource, params);
   return (
     <Select className={styles['base-items-select']} getPopupContainer={(v) => v} {...params}>
       {dataSource?.data?.map?.((item) => (

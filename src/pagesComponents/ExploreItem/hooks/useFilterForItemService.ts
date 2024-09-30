@@ -1,6 +1,6 @@
 // import { useSearchParams } from 'next/navigation';
 import useGetState from 'store/state/getState';
-import { getDefaultFilter, getFilter, getFilterFromSearchParams, getFilterList } from '../components/Filters/util';
+import { getDefaultFilter, getFilter, getFilterList, getFilterFromSearchParams } from '../components/Filters/util';
 import { useRequest } from 'ahooks';
 import { fetchCollectionAllTraitsInfos, fetchCollectionGenerationInfos, fetchCollectionRarityInfos } from 'api/fetch';
 import { useEffect, useState } from 'react';
@@ -12,37 +12,37 @@ export function useFilterForItemService(nftCollectionId: string) {
 
   const { aelfInfo, walletInfo } = useGetState();
 
-  const filterParamObj: any = qs.parse(location.search);
-
-  console.log('filterParamObjfilterParamObj', filterParamObj);
-
   const { data: generationInfos } = useRequest(() => fetchCollectionGenerationInfos(nftCollectionId), {
     refreshDeps: [nftCollectionId],
     cacheKey: `all-generation-info-${nftCollectionId}`,
     staleTime: 300000,
   });
 
-  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, generationInfos);
-
-  console.log('paramsFromUrlForFilter------', paramsFromUrlForFilter);
+  const filterParamObj: any = qs.parse(location.search);
+  const paramsFromUrlForFilter = getFilterFromSearchParams(filterParamObj, []);
 
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
   const filterList = getFilterList(nftType, aelfInfo.curChain);
 
-  const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
-    Object.assign({}, defaultFilter, paramsFromUrlForFilter),
-  );
-
-  const getFilterBySearchQuery = () => {
-    // setFilterSelect((pre) => ({
-    //   ...pre,
-    //   ...val,
-    // }));
-  };
+  const [filterSelect, setFilterSelect] = useState(defaultFilter);
 
   useEffect(() => {
-    getFilterBySearchQuery();
-  });
+    setFilterSelect((prevData) => ({
+      ...prevData,
+      ...paramsFromUrlForFilter,
+    }));
+  }, []);
+
+  // const getFilterBySearchQuery = (val: IFilterSelect) => {
+  //   setFilterSelect((pre) => ({
+  //     ...pre,
+  //     ...val,
+  //   }));
+  // };
+
+  // useEffect(() => {
+  //   getFilterBySearchQuery(initFilter);
+  // }, []);
 
   const clearAll = () => {
     if (isEqual(defaultFilter, filterSelect)) return;
@@ -92,11 +92,13 @@ export function useFilterForItemService(nftCollectionId: string) {
   );
 
   const onFilterChange = (val: ItemsSelectSourceType) => {
-    setFilterSelect((pre) => ({
+    setFilterSelect((pre: any) => ({
       ...pre,
       ...val,
     }));
   };
+
+  console.log('filterSelect----filterSelect', filterSelect);
 
   return {
     traitsInfo,

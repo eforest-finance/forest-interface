@@ -32,7 +32,6 @@ export function useBatchCreateItemService({ collections }: { collections: any[] 
         }
 
         const createParamsArr = adaptorBatchCreateParamByBatchFiles(batchFiles, collectionInfo, walletInfo);
-
         batchCreateNFTModal.show({
           createParamsData: {
             collectionInfo,

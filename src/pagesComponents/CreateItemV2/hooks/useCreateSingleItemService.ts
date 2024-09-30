@@ -91,7 +91,7 @@ export function useCreateSingeItemService({ collections }: { collections: any[] 
           memo: '3',
           externalInfo: {
             value: {
-              __nft_description: formValues.descrtion || '',
+              __nft_description: formValues.description || '',
               __nft_file_url: singleFile.url,
               __nft_file_hash: singleFile.hash || '',
               __nft_external_link: formValues.externalLink,

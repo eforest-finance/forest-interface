@@ -28,7 +28,7 @@ function ListingCardButton(props: IProps) {
 
   if (!isERC721 && isOnlyOwner && currentRole !== 'sell') return null;
 
-  return <div>{isSell ? <SellButton /> : <BuyButton rate={rate} />}</div>;
+  return <div>{isSell ? <SellButton rate={rate} /> : <BuyButton rate={rate} />}</div>;
 }
 
 export default React.memo(forwardRef(ListingCardButton));

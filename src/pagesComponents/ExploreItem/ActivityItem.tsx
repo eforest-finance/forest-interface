@@ -27,19 +27,9 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
 
   const searchParams = useSearchParams();
 
-  const selectedType = searchParams.get('Type')?.split('|').map(Number) ?? [];
+  const selectedType = searchParams.get('Type')?.split('|').map(Number) ?? [3, 6];
 
-  const [activityType, setActivityType] = useState<(number | string)[]>([3, 6]);
-
-  const setType = useCallback(() => {
-    if (searchParams.get('Type')) {
-      setActivityType(selectedType);
-    }
-  }, []);
-
-  useEffect(() => {
-    setType();
-  }, [setType]);
+  const [activityType, setActivityType] = useState<(number | string)[]>(selectedType);
 
   const { filterList, filterSelect, traitsInfo, onFilterChange, clearAll } =
     useFilterForActivitiesService(nftCollectionId);
@@ -89,7 +79,6 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
   const tagList = useMemo(() => {
     return getTagList(filterSelect, '');
   }, [filterSelect]);
-
   const { data, loading, loadingMore, noMore } = useCollectionActiviesDataServices({
     params: requestParams,
   });

@@ -110,7 +110,7 @@ export default function CollectionLists({ items }: any) {
             return (
               <SwiperSlide
                 className={clsx(
-                  isXS ? '!w-[240px]' : '!w-[325px] 2xl:!w-[352px] !mr-[20px]',
+                  isXS ? '!w-[240px]' : '!w-[325px] 2xl:!w-[352px] !mr-[16px]',
                   isXS && idx === items.length - 1 ? 'mr-[16px]' : '',
                   '',
                 )}

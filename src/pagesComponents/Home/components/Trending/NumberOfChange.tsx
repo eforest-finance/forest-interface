@@ -21,7 +21,7 @@ const NumberOfChange = ({ text }: { text: string | number }) => {
     showStr = `${num < 0 ? '-' : '+'}${percentStr}%`;
   }
 
-  return <span className={`${textClassName}  text-[16px] mdl:text-[18px] font-semibold`}>{showStr}</span>;
+  return <span className={`${textClassName}  text-[14px] mdl:text-[14px] font-semibold`}>{showStr}</span>;
 };
 
 export default NumberOfChange;

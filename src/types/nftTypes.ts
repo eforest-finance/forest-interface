@@ -103,8 +103,14 @@ export interface INftInfo {
   issueChainId: number;
   issueChainIdStr: Chain;
   description: string | null;
+  bestOffer: INftInfo;
   file: string | undefined;
   fileExtension: string | null;
+  profileInfo: {
+    showPrice: string;
+    balance: number;
+    minListingPrice: number | null;
+  };
   id: string;
   isOfficial: boolean;
   issuer: string;

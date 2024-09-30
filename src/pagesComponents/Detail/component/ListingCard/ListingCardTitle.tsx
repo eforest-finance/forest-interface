@@ -13,6 +13,11 @@ import Countdown, { CountdownStatus, CountdownType } from 'baseComponents/Countd
 import Segmented from 'baseComponents/Segmented';
 import { SegmentedValue } from 'antd/lib/segmented';
 import { timeFormat } from 'pagesComponents/Detail/utils/timeFormat';
+import Alarm from 'assets/images/v2/alarm.svg';
+import useDetailGetState from 'store/state/detailGetState';
+import { useGetListItemsForSale } from '../SaleModal/hooks/useSaleService';
+import { Divider } from 'antd';
+import BigNumber from 'bignumber.js';
 
 export enum ListingCardType {
   LISTING = 'listing',
@@ -43,6 +48,12 @@ function ListingCardTitle(props: IProps) {
     type = ListingCardType.LISTING,
     isERC721,
   } = props;
+
+  const { detailInfo } = useDetailGetState();
+
+  const { nftNumber, nftInfo } = detailInfo;
+  const { listItems } = useGetListItemsForSale(nftInfo);
+
   const [isCountdown, setIsCountdown] = useState<boolean>(false);
   const [countdownStatus, setCountdownStatus] = useState<CountdownStatus>(CountdownStatus.Normal);
 
@@ -83,11 +94,22 @@ function ListingCardTitle(props: IProps) {
     }
   };
 
+  const totalQuantity = useMemo(() => {
+    const totalQuantity = BigNumber(nftInfo?.totalQuantity || 0)
+      .dividedBy(10 ** Number(nftInfo?.decimals || 0))
+      .toFixed(0)
+      .toString();
+    return totalQuantity;
+  }, [nftInfo?.decimals, nftInfo?.totalQuantity]);
+
+  const hasOwnedAll = Number(totalQuantity) === Number(nftNumber.nftBalance);
+
   return (
     <div className={styles['listing-card-title']}>
-      <div className="flex-1 flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         {isShowTimeCard ? (
-          <>
+          <div className="flex items-center">
+            <Alarm className="mr-[8px]" />
             <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime as string)}`}</span>
             {isCountdown && (
               <Countdown
@@ -97,12 +119,29 @@ function ListingCardTitle(props: IProps) {
                 onChange={ontimeupdate}
               />
             )}
-          </>
+          </div>
         ) : null}
       </div>
       {hasChange && (
-        <div>
-          <Segmented options={['buy', 'sell']} value={currentRole} onChange={onChangeCurrentRole} />
+        <div className="flex items-center flex-wrap w-full lg:w-auto gap-[16px] lg:mt-0 mt-[24px]">
+          {!hasOwnedAll && (
+            <Segmented
+              className="w-full md:w-[166px] lg:w-[166px]"
+              options={['sell', 'buy']}
+              value={currentRole}
+              onChange={onChangeCurrentRole}
+            />
+          )}
+
+          <span>
+            <span className="  text-textSecondary">
+              You own <span className="text-textPrimary">{nftNumber.nftBalance}</span>
+            </span>
+            <Divider type="vertical" className="mx-[12px]" />
+            <span className=" text-textSecondary">
+              You list <span className="text-textPrimary">{listItems}</span>
+            </span>
+          </span>
         </div>
       )}
       {suffix}

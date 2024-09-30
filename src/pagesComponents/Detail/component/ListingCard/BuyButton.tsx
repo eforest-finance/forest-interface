@@ -22,6 +22,8 @@ import useBuy from 'pagesComponents/Detail/hooks/useBuy';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 import { FailBody, Success, SuccessFooter } from '../BuyNowModal/components/Result';
 import { UserDeniedMessage } from 'contract/formatErrorMsg';
+import Box from 'assets/images/v2/box.svg';
+import ButtonWithPrefix from './ButtonWithPrefix';
 
 interface IProps {
   rate: number;
@@ -184,10 +186,19 @@ function BuyButton(props: IProps) {
       : login();
 
   const disabledBuyNow = useMemo(() => {
+    console.log(
+      '111111111111',
+      isOnlyOwner,
+      !nftInfo?.showPriceType,
+      !nftInfo?.listingPrice,
+      isLogin && BigNumber(nftNumber.nftQuantity).lt(BigNumber(nftNumber.nftBalance)),
+      !nftInfo?.canBuyFlag,
+    );
+
     return (
       isOnlyOwner ||
       !nftInfo?.showPriceType ||
-      !nftInfo?.listingPrice ||
+      nftInfo?.listingPrice < 0 ||
       (isLogin && BigNumber(nftNumber.nftQuantity).lt(BigNumber(nftNumber.nftBalance))) ||
       !nftInfo?.canBuyFlag
     );
@@ -204,21 +215,12 @@ function BuyButton(props: IProps) {
   if (!nftInfo) return null;
 
   return (
-    <div className={clsx('flex flex-row mdTW:flex-col lgTW:flex-row', `${isSmallScreen && styles['mobile-button']}`)}>
-      {!disabledBuyNow && (
-        <Button
-          className={`mdTW:mr-0 mr-[16px] mb-2 lgTW:mb-0 lgTW:mr-[16px] lgTW:w-auto mdTW:w-full lgTW:min-w-[140px] w-auto mdTW:flex-none flex-1`}
-          size="ultra"
-          type="primary"
-          onClick={buyNow}>
-          Buy Now
-        </Button>
-      )}
-
+    <div className={clsx('flex  flex-row mdTW:flex-col lgTW:flex-row', `${isSmallScreen && styles['mobile-button']}`)}>
+      {!disabledBuyNow && <ButtonWithPrefix onClick={buyNow} title="Buy Now" prefix={<Box />} />}
       <Button
         type="default"
         size="ultra"
-        className="lgTW:w-auto lgTW:min-w-[140px] w-auto mdTW:flex-none flex-1"
+        className="!border-0 !bg-lineDividers hover:!bg-fillHoverBg !h-[48px]  mdTW:w-[206px] lgTW:w-[206px] mdTW:flex-none w-full"
         onClick={onMakeOffer}>
         Make Offer
       </Button>
