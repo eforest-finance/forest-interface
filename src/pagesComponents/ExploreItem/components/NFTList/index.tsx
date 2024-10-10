@@ -43,8 +43,10 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick, type
     if (dataSource?.fileExtension === 'mp4') return 'video';
     return 'image';
   }, [dataSource?.fileExtension]);
+  const profileInfo = dataSource?.profileInfo;
   const price = dataSource?.profileInfo?.showPrice;
   const balance = dataSource?.profileInfo?.balance;
+  const listingPrice = dataSource?.listingPrice;
 
   return (
     <Link href={`/detail/buy/${dataSource?.id ?? ''}/${(dataSource?.chainIdStr || dataSource?.chainId) ?? ''}`}>
@@ -83,17 +85,25 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick, type
           <div className={styles.token__name}>{dataSource?.tokenName}</div>
 
           <div className={clsx(styles.token__price, priceClassName)}>
-            {type ? (
-              <span className={styles.token__label}>
-                {dataSource?.profileInfo?.minListingPrice ? 'List Price' : 'Best Offer'}
-              </span>
+            {profileInfo ? (
+              <>
+                {type ? (
+                  <span className={styles.token__label}>
+                    {dataSource?.profileInfo?.minListingPrice ? 'List Price' : 'Best Offer'}
+                  </span>
+                ) : (
+                  <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+                )}
+                <span className={styles.token__price__text}>
+                  {price && price * 1 >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
+                </span>
+              </>
             ) : (
-              <span className={styles.token__label}>{dataSource?.priceDescription || 'Price'}</span>
+              <>
+                <span className={styles.token__label}>Price</span>
+                <span>{listingPrice && listingPrice * 1 >= 0 ? formatTokenPrice(listingPrice) + ' ELF' : '--'}</span>
+              </>
             )}
-
-            <span className={styles.token__price__text}>
-              {price && price * 1 >= 0 ? formatTokenPrice(price) + ' ELF' : '--'}
-            </span>
           </div>
         </div>
       </Card>

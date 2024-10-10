@@ -88,7 +88,7 @@ const Banner: React.FC<{ list: Array<IBannerItem> }> = (props: { list: Array<IBa
         ))}
       </Carousel>
 
-      <NextImage className="absolute bottom-[-1px] w-full" src={Mask} alt="" />
+      <NextImage className="absolute bottom-[-1px] w-full h-[150px]" src={Mask} alt="" />
 
       {list.length > 1 && (
         <div className="w-[100vw] mdl:w-auto flex mdl:block justify-around absolute z-10 bottom-[24px] mdl:bottom-[40px]  mdl:right-0   mdl:mr-[40px]">
