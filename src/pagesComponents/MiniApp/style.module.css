@@ -1,0 +1,15 @@
+.mini-app {
+  @apply font-slkscrb;
+}
+
+.mini-app span {
+  @apply font-slkscrb;
+}
+
+.mini-app p {
+  @apply font-slkscrb;
+}
+
+.mini-app div {
+  @apply font-slkscrb;
+}

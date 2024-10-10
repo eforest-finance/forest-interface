@@ -3,7 +3,12 @@
 
 @font-face {
   font-family: Poppins;
-  src: url('../assets/fonts/Poppins-Regular.otf')
+  src: url('../assets/fonts/Poppins-Regular.otf');
+}
+
+@font-face {
+  font-family: slkscrb;
+  src: url('../assets/fonts/slkscrb.ttf');
 }
 
 html,

@@ -16,6 +16,9 @@ module.exports = {
   },
   theme: {
     extend: {
+      fontFamily: {
+        slkscrb: 'slkscrb',
+      },
       colors: {
         hover: 'var(--brand-base)',
         error: 'var(--error)',

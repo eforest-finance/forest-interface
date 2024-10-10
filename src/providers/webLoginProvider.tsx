@@ -40,7 +40,11 @@ const WebLoginProviderDynamic = dynamic(
         useLocalStorage: true,
         graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
-        socialLogin: {},
+        socialLogin: {
+          Telegram: {
+            botId: '',
+          },
+        },
         loginConfig: {
           recommendIndexes: [0, 2],
           loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Email'],
