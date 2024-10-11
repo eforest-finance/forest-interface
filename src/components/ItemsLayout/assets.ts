@@ -39,6 +39,19 @@ export const dropDownCollectionsMenu: SingleItemType = {
   ],
 };
 
+export const dropDownProfileMenu: SingleItemType = {
+  key: SORT_BY,
+  title: SORT_BY,
+  type: FilterType.Single,
+  data: [
+    { value: 'High to Low', label: 'List Price: High to Low' },
+    { value: 'Low to High', label: 'List Price: Low to High' },
+    // { value: 'USDT-ListingPrice ASC', label: 'USDT Price：Low to High' },
+    // { value: 'USDT-ListingPrice DESC', label: 'USDT Price：High to Low' },
+    // { value: 'Recently Listed', label: 'Recently Listed' },
+  ],
+};
+
 export const dropDownActivitiesMenu: MultipleItemType = {
   key: 'acitvityType',
   title: 'acitvityType',

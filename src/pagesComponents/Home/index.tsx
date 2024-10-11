@@ -80,8 +80,7 @@ export default function Home() {
       <div className="max-w-[1888px] px-[16px]  mdl:px-[24px] w-full">
         <Trending items={collections} />
         <RecommendSeeds />
-        <div
-          className={`${styles['wrapper-width']}  mdb:mt-[64px] mb-[64px] py-[32px] px-[24px] mdb:py-[48px] h-[751px] mdb:h-[416px] bg-[#ECF6FF] rounded-lg flex flex-col mdb:flex-row  justify-around items-center`}>
+        <div className="w-full max-w-[1360px]  mdb:mt-[64px] mb-[64px] p-[24px] mdl:p-[48px] mdb:py-[48px] h-[751px] mdb:h-[416px] bg-[#ECF6FF] rounded-lg flex flex-col mdb:flex-row  justify-between items-center m-auto">
           <div className="flex flex-col">
             <Image
               className="w-[254px] h-auto mc:w-[614px] mc:h-[112px] mdl:w-[338px] mdl:h-[152px] mdb:w-[254px] mdb:h-[128px]"

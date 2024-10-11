@@ -3,7 +3,8 @@ import { Suspense, lazy } from 'react';
 import useGetState from 'store/state/getState';
 
 const DetailMobile = lazy(() => import('./views/DetailMobile'));
-const DetailPc = lazy(() => import('./views/DetailPc'));
+// const DetailPc = lazy(() => import('./views/DetailPc'));
+const DetailPc = lazy(() => import('./views/DetailPc/detail'));
 
 export default function Detail() {
   const { infoState } = useGetState();

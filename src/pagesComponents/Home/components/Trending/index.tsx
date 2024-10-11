@@ -66,11 +66,11 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
 
           <div className="px-[24px] pt-[40px] pb-[24px]">
             <div className="font-semibold text-textPrimary text-[24px]">{item.tokenName}</div>
-            <div className="flex justify-around my-[16px] h-[56px]">
+            <div className="flex justify-around my-[8px]">
               <span className="flex-1 w-[68px] text-textSecondary text-[18px] font-medium">Floor</span>
 
               <div className="flex flex-col items-end">
-                <span className="flex items-center mb-[8px]">
+                <span className="flex items-center mb-[4px]">
                   <span className={'text-textPrimary text-[18px] font-semibold'}>
                     {(item.floorPrice || item.floorPrice === 0) && item.floorPrice >= 0
                       ? formatTokenPrice(item.floorPrice) + ' ' + (item.floorPriceSymbol || 'ELF')
@@ -86,7 +86,7 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
             <div className="flex justify-around h-[56px]">
               <span className="flex-1 w-[68px] text-textSecondary text-[18px] font-medium">30d Vol</span>
               <div className="flex flex-col items-end">
-                <span className="flex items-center mb-[8px]">
+                <span className="flex items-center mb-[4px]">
                   <span className={'text-textPrimary text-[18px] font-semibold'}>
                     {(item.volumeTotal || item.volumeTotal === 0) && item.volumeTotal >= 0
                       ? formatTokenPrice(item.volumeTotal) + ' ' + (item.floorPriceSymbol || 'ELF')
@@ -104,7 +104,7 @@ export default function Trending({ items }: { items: TrendingCollectionItem[] })
 
   return (
     <div className="mt-[48px] mdl:mt-[64px] flex items-center justify-center">
-      <div className="max-w-[1840px] w-full">
+      <div className="max-w-[1360px] w-full">
         <h2 className="text-[24px] font-semibold text-textPrimary">Trending Collections</h2>
         <div>
           <CollectionList items={items} />

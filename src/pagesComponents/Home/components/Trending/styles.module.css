@@ -1,7 +1,7 @@
 .poster-shadow {
-  @apply text-white w-full bg-fillMask1 h-full absolute z-[1] bottom-0 left-0 flex justify-center items-center;
+  @apply text-white w-full bg-fillMask1 h-[15%] absolute z-[1] bottom-0 left-0 flex justify-center items-center;
 
-  background: linear-gradient(0deg, rgb(0 0 0 / 60%) 50%, rgb(0 0 0 / 0%) 100%);
+  background: linear-gradient(0deg, rgb(0 0 0 / 6%) 50%, rgb(0 0 0 / 0%) 100%);
 }
 
 .CollectionItem {

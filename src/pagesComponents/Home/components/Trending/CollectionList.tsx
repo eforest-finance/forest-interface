@@ -82,14 +82,14 @@ export default function CollectionLists({ items }: any) {
             </div>
           </div>
 
-          <div className="p-[16px] pt-[48px] mdl:px-[24px] mdl:pt-[40px] mdl:pb-[24px]">
-            <div className="font-semibold text-textPrimary text-[20px] mdl:text-[24px]">{item.tokenName}</div>
-            <div className="flex justify-around my-[16px] h-[56px]">
-              <span className="flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">Floor</span>
+          <div className="p-[16px] pt-[48px] mdl:px-[24px] mdl:pt-[40px] mdl:pb-[24px] group-hover:bg-black">
+            <div className="font-semibold text-textPrimary text-[20px] mdl:text-[24px] leading-8">{item.tokenName}</div>
+            <div className="flex justify-around my-[8px] h-[44px]">
+              <span className="flex-1 w-[68px] text-textSecondary text-[14px] mdl:text-[14px] font-medium">Floor</span>
 
               <div className="flex flex-col items-end">
                 <span className="flex items-center mb-[8px]">
-                  <span className={'text-textPrimary text-[16px] mdl:text-[18px] font-semibold'}>
+                  <span className={'text-textPrimary text-[14px] mdl:text-[14px] font-semibold'}>
                     {(item.floorPrice || item.floorPrice === 0) && item.floorPrice >= 0
                       ? formatTokenPrice(item.floorPrice) + ' ' + (item.floorPriceSymbol || 'ELF')
                       : '-'}
@@ -103,13 +103,13 @@ export default function CollectionLists({ items }: any) {
               </div>
             </div>
 
-            <div className="flex justify-around h-[56px]">
-              <span className="flex-1 w-[68px] text-textSecondary text-[16px] mdl:text-[18px] font-medium">
+            <div className="flex justify-around h-[44px]">
+              <span className="flex-1 w-[68px] text-textSecondary text-[14px] mdl:text-[14px] font-medium">
                 30d Vol
               </span>
               <div className="flex flex-col items-end">
                 <span className="flex items-center mb-[8px]">
-                  <span className={'text-textPrimary text-[16px] mdl:text-[18px]  font-semibold'}>
+                  <span className={'text-textPrimary text-[14px] mdl:text-[14px]  font-semibold'}>
                     {(item.volumeTotal || item.volumeTotal === 0) && item.volumeTotal >= 0
                       ? formatTokenPrice(item.volumeTotal) + ' ' + (item.floorPriceSymbol || 'ELF')
                       : '-'}
@@ -165,10 +165,10 @@ export default function CollectionLists({ items }: any) {
               centeredSlides: false,
             },
             1650: {
-              slidesPerView: 5,
+              slidesPerView: 4,
               spaceBetween: 20,
-              slidesPerGroup: 5,
-              slidesPerGroupSkip: 5,
+              slidesPerGroup: 4,
+              slidesPerGroupSkip: 4,
               centeredSlides: false,
             },
           }}

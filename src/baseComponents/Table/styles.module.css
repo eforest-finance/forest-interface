@@ -32,7 +32,7 @@
         }
       }
       &:hover > td {
-        @apply !bg-fillCardBg;
+        @apply bg-[#FAFCFE];
       }
     }
     > tr > td:global(.ant-table-cell-row-hover) {

@@ -106,7 +106,7 @@ export default function HotNFTs({ hotNFTs }: IHotNFTsProps) {
             return (
               <SwiperSlide
                 className={clsx(
-                  isXS ? '!w-[240px]' : '!w-[325px] 2xl:!w-[352px] !mr-[20px]',
+                  isXS ? '!w-[240px]' : '!w-[325px] 2xl:!w-[352px] !mr-[20px] ',
                   isXS && idx === hotNFTs.length - 1 ? 'mr-[16px]' : '',
                   '',
                 )}

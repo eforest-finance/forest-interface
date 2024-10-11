@@ -14,7 +14,9 @@ function TableCell(props: { content: string | ReactNode; isLink?: boolean; toolt
         isLink ? 'text-brandNormal cursor-pointer' : 'text-textPrimary cursor-default'
       } ${isSmallScreen && '!text-base !font-semibold'}`}>
       <Tooltip title={!isSmallScreen && tooltip}>
-        <span onClick={onClick}>{content}</span>
+        <span className="text-[12px] text-textSecondary" onClick={onClick}>
+          {content}
+        </span>
       </Tooltip>
     </div>
   );
