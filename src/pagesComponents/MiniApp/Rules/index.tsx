@@ -13,7 +13,7 @@ import BtnBg from 'assets/images/miniApp/rules/btnBg.png';
 import SmallBg from 'assets/images/miniApp/rules/smallBg.png';
 
 import Box from 'assets/images/miniApp/rules/box.png';
-import BoxBg from 'assets/images/miniApp/rules/boxBg.png';
+import BoxBg from 'assets/images/miniApp/rules/boxBgs.png';
 
 import Level1 from 'assets/images/miniApp/rules/level1.svg';
 import Level2 from 'assets/images/miniApp/rules/level2.svg';
