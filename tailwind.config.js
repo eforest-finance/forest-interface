@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       fontFamily: {
         slkscrb: 'slkscrb',
+        pixels: 'ChillPixels-Mono',
       },
       colors: {
         hover: 'var(--brand-base)',

@@ -1,0 +1,89 @@
+.main {
+  height: calc(100vh - 95px);
+  overflow-y: scroll;
+}
+
+.mask {
+  @apply w-[358px] h-[200px] relative;
+  @apply bg-no-repeat bg-cover;
+
+  mask-image: url('../../../../assets/images/v2/ImageBgc_2x.png');
+  mask-size: cover;
+  mask-repeat: no-repeat;
+}
+
+.maskTag {
+  @apply h-[264px] relative;
+  @apply bg-no-repeat bg-cover;
+
+  mask-image: url('../../../../assets/images/v2/ImageBgc_2x.png');
+  mask-size: cover;
+  mask-repeat: no-repeat;
+}
+
+.card {
+  .title {
+    @apply mt-[16px] text-[24px] font-bold  font-slkscrb  text-white;
+
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #5c489d;
+    text-shadow: 0px 4px 0px #a09df7;
+  }
+
+  .cardMask {
+    @apply w-[358px] h-[226px] relative mt-[16px] p-[24px];
+    @apply bg-no-repeat bg-cover bg-[url('../../../../assets/images/v2/container.png')];
+
+    /* mask-image: url('../../../../assets/images/v2/container.png'); */
+    /* mask-size: cover;
+    mask-repeat: no-repeat; */
+  }
+
+  .cardTitle {
+    @apply text-[20px] font-bold  font-slkscrb  text-white;
+
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #5c489d;
+    /* text-shadow: 0px 4px 0px #a09df7; */
+  }
+
+  .progress {
+    @apply w-[310px] h-[20px] relative mt-[4px];
+    @apply bg-no-repeat bg-cover bg-[url('../../../../assets/images/v2/ProgeressContainer_2x.png')];
+
+    /* mask-image: url('../../../../assets/images/v2/container.png'); */
+    /* mask-size: cover;
+    mask-repeat: no-repeat; */
+  }
+  .progressInner {
+    @apply w-[308px] h-[17px] relative mt-[4px] pt-[2.6px] px-[2.5px];
+    @apply bg-no-repeat bg-cover;
+
+    mask-image: url('../../../../assets/images/v2/ProgeressBgc_2x.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+  }
+  .percent {
+    @apply absolute w-full flex items-center justify-center z-10  text-[16px] font-bold  font-slkscrb  text-white;
+
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #5c489d;
+  }
+
+  .tips {
+    @apply w-[310px] h-[62px] relative mt-[12px];
+
+    @apply bg-no-repeat bg-cover bg-[url('../../../../assets/images/v2/tips_border.png')];
+  }
+}
+
+.button {
+  @apply text-white font-bold text-[20px] flex items-center justify-center w-[240px] h-[48px];
+  @apply bg-no-repeat bg-cover bg-[url('../../../../assets/images/v2/o_container.png')];
+}
+
+.buttonText {
+  @apply font-slkscrb text-white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #6b4700;
+}
