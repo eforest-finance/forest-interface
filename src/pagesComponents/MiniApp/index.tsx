@@ -1,8 +1,19 @@
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Footer from './components/Footer';
 import styles from './style.module.css';
 
+import useTelegram from 'hooks/useTelegram';
+
 const Home = () => {
+  const { isInTelegram } = useTelegram();
+
+  const isInTG = useMemo(() => {
+    return isInTelegram();
+  }, [isInTelegram]);
+
+  console.log('isInTG----isInTG', isInTG);
+
   const router = useRouter();
 
   const goToRules = () => {

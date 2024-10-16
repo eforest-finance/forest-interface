@@ -22,6 +22,8 @@ const WebLoginProviderDynamic = dynamic(
 
     const weblogin = await import('aelf-web-login').then((module) => module);
 
+    console.log('info.portkeyServerV2', info.portkeyServerV2);
+
     weblogin.setGlobalConfig({
       appName: APP_NAME,
       chainId: info.curChain,
@@ -40,9 +42,10 @@ const WebLoginProviderDynamic = dynamic(
         useLocalStorage: true,
         graphQLUrl: info.graphqlServerV2,
         connectUrl: connectUrlV2,
+        serviceUrl: info.portkeyServerV2,
         socialLogin: {
           Telegram: {
-            botId: '',
+            botId: '7517807078',
           },
         },
         loginConfig: {
@@ -57,7 +60,6 @@ const WebLoginProviderDynamic = dynamic(
           timeout: info.networkType === 'TESTNET' ? 300000 : 80000,
           baseURL: info.portkeyServerV2,
         },
-        serviceUrl: info.portkeyServerV2,
       },
       aelfReact: {
         appName: APP_NAME,

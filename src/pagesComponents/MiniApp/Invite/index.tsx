@@ -31,10 +31,11 @@ const SmallBoxStyle = {
 };
 
 const titleStyle = {
-  webkitTextStrokeWidth: '1px',
-  webkitTextStrokeColor: '#5C489D',
+  WebkitTextStrokeWidth: '1px',
+  WebkitTextStrokeColor: '#5C489D',
   color: '#fff',
   // textShadow: '0px 4px 0px #A09DF7',
+  letterSpacing: '-2.56px',
 };
 
 const InviteBtnStyle = {
