@@ -12,11 +12,11 @@ import InviteBtnSm from 'assets/images/miniApp/invite/InviteBtnSm.png';
 import Copy from 'assets/images/miniApp/invite/copy.svg';
 import Person from 'assets/images/miniApp/invite/person.svg';
 
-const btnStyle = {
-  backgroundImage: `url(${BtnBg.src})`,
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: '100% 100%',
-};
+// const btnStyle = {
+//   backgroundImage: `url(${BtnBg.src})`,
+//   backgroundRepeat: 'no-repeat',
+//   backgroundSize: '100% 100%',
+// };
 
 const BoxStyle = {
   backgroundImage: `url(${Box.src})`,
