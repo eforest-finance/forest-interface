@@ -1,5 +1,5 @@
 .mini-app {
-  @apply font-slkscrb;
+  @apply font-slkscrb min-h-screen;
 }
 
 .mini-app span {
