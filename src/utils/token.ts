@@ -9,7 +9,6 @@ import { fetchToken } from 'api/fetch';
 import { ITokenParams } from 'api/types';
 import { sleep } from '@portkey/utils';
 import deleteProvider from '@portkey/detect-provider';
-import { error } from 'console';
 
 const AElf = require('aelf-sdk');
 

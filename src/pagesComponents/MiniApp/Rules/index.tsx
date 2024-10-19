@@ -14,6 +14,7 @@ import SmallBg from 'assets/images/miniApp/rules/smallBg.png';
 
 import Box from 'assets/images/miniApp/rules/box.png';
 import BoxBg from 'assets/images/miniApp/rules/boxBgs.png';
+import Cloud from 'assets/images/miniApp/rules/cloud.png';
 
 import Level1 from 'assets/images/miniApp/rules/level1.svg';
 import Level2 from 'assets/images/miniApp/rules/level2.svg';
@@ -22,6 +23,13 @@ import Level4 from 'assets/images/miniApp/rules/level4.svg';
 import Level5 from 'assets/images/miniApp/rules/level5.svg';
 import Level6 from 'assets/images/miniApp/rules/level6.svg';
 import Orange from 'assets/images/miniApp/rules/orange.svg';
+
+const cloudStyle = {
+  backgroundImage: `url(${Cloud.src})`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'contain',
+  backgroundPosition: '0 160px',
+};
 
 const btnStyle = {
   backgroundImage: `url(${BtnBg.src})`,
@@ -45,6 +53,20 @@ const SmallBoxStyle = {
   backgroundImage: `url(${BoxBg.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
+};
+
+const gradient = {
+  background: 'linear-gradient( transparent 40px, #AFADF8 40px 100%)',
+};
+
+const titleText = {
+  WebkitTextStrokeWidth: '1px',
+  WebkitTextStrokeColor: '#5C489D',
+};
+
+const btnText = {
+  WebkitTextStrokeWidth: '1px',
+  WebkitTextStrokeColor: '#6B4700',
 };
 
 const Rules = () => {
@@ -90,77 +112,92 @@ const Rules = () => {
   ];
   return (
     <div className={styles['mini-app']}>
-      <div className="w-full min-h-screen text-center bg-[#B1A7D0] py-[48px] px-[16px]">
-        <Title />
-        <div className="text-[#5C489D] text-center text-[14px] mt-[24px]">
-          Forest is the first NFT marketplace and comprehensive portal within the aelf ecosystem. The Forest miniapp is
-          a Telegram-based airdrop gaming platform in the aelf ecosystem.
+      <div className="w-full min-h-screen text-center bg-[#C8C6FA]" style={cloudStyle}>
+        <div className=" pt-[30px]">
+          <Title />
+          <div className="text-[#5C489D] text-center text-[14px] mt-[24px] px-[16px]">
+            Forest is the first NFT marketplace and comprehensive portal within the aelf ecosystem. The Forest miniapp
+            is a Telegram-based airdrop gaming platform in the aelf ecosystem.
+          </div>
         </div>
-        <div className="flex items-end justify-between text-[14px] mt-[24px]">
+        <div className="flex items-end justify-between text-[14px] mt-[24px] px-[16px]">
           <div className="flex items-center justify-center w-[114px] h-[40px]" style={btnStyle}>
             <Tree />
-            <span className="text-white stroke-black stroke-1 ml-1">WEBSITE</span>
+            <span className="text-white stroke-black stroke-1 ml-1 -tracking-[2px]" style={btnText}>
+              WEBSITE
+            </span>
           </div>
           <div className="flex items-center justify-center w-[114px] h-[36px]" style={btnStyle}>
             <X />
-            <span className="text-white stroke-black stroke-1 ml-1">X</span>
+            <span className="text-white stroke-black stroke-1 ml-1 -tracking-[2px]" style={btnText}>
+              X
+            </span>
           </div>
           <div className="flex items-center justify-center w-[114px] h-[40px]" style={btnStyle}>
             <Airplane />
-            <span className="text-white stroke-black stroke-1 ml-1">Telegram</span>
+            <span className="text-white stroke-black stroke-1 ml-1 -tracking-[2px] font-bold" style={btnText}>
+              Telegram
+            </span>
           </div>
         </div>
-        <div className="w-full mt-[24px] p-[20px]" style={BoxStyle}>
-          <div>
-            <MagicTree />
-          </div>
-          <div className="text-[#5C489D] text-center text-[14px] my-[16px]">
-            It can grow and produce star fruit. With each growth, it will yield more golden fruit.
-          </div>
-          <div className="grid grid-cols-2 gap-[12px]">
-            {levelList.map((list, index) => {
-              return (
-                <div key={index} style={SmallBoxStyle} className="min-h-[128px] px-[12px] py-[16px] text-[12px]">
-                  <div>{list.icon}</div>
-                  <div>{list.name}</div>
-                  <div className="flex items-center justify-between mt-[12px]">
-                    <div>Unlock</div>
-                    <div className="flex items-center">
-                      <span className="pr-[2px]">{list.unlock}</span>
-                      <Orange />
+        <div className="pb-[48px] px-[16px]" style={gradient}>
+          <div className="w-full mt-[40px] p-[20px]" style={BoxStyle}>
+            <div>
+              <MagicTree />
+            </div>
+            <div className="text-[#5C489D] text-center text-[14px] my-[16px]">
+              It can grow and produce star fruit. With each growth, it will yield more golden fruit.
+            </div>
+            <div className="grid grid-cols-2 gap-[12px]">
+              {levelList.map((list, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={SmallBoxStyle}
+                    className="min-h-[128px] px-[12px] py-[16px] text-[12px] text-[#5C489D]">
+                    <div>{list.icon}</div>
+                    <div className="text-white -tracking-[1px] font-bold" style={titleText}>
+                      {list.name}
+                    </div>
+                    <div className="flex items-center justify-between mt-[12px]">
+                      <div>Unlock</div>
+                      <div className="flex items-center">
+                        <span className="pr-[2px]">{list.unlock}</span>
+                        <Orange />
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-[4px]">
+                      <div>24H</div>
+                      <div>
+                        <span className="pr-[2px]">+{list.hours}</span>
+                        <Orange />
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mt-[4px]">
-                    <div>24H</div>
-                    <div>
-                      <span className="pr-[2px]">+{list.hours}</span>
-                      <Orange />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
-          <GoldenFruit />
-          <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
-            Golden fruit is associated with good luck; the more you have, the more treasures you will receive.Star fruit
-            is produced by the magical tree.
+          <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
+            <GoldenFruit />
+            <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
+              Golden fruit is associated with good luck; the more you have, the more treasures you will receive.Star
+              fruit is produced by the magical tree.
+            </div>
           </div>
-        </div>
-        <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
-          <Kettle />
-          <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
-            Each time you water, it can speed up the maturation time of star fruit by 1 hour. The watering can has a
-            maximum capacity of 60, and it replenishes once every hour.
+          <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
+            <Kettle />
+            <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
+              Each time you water, it can speed up the maturation time of star fruit by 1 hour. The watering can has a
+              maximum capacity of 60, and it replenishes once every hour.
+            </div>
           </div>
-        </div>
-        <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
-          <Drops />
-          <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
-            Airdrop rewards from the aelf ecosystem are distributed irregularly and are often related to the quantity of
-            star fruit.
+          <div className="p-[24px] mt-[24px]" style={smBoxBgStyle}>
+            <Drops />
+            <div className="text-[14px] text-[#5C489D] mt-[16px] leading-5">
+              Airdrop rewards from the aelf ecosystem are distributed irregularly and are often related to the quantity
+              of star fruit.
+            </div>
           </div>
         </div>
       </div>

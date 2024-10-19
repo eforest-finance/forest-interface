@@ -29,6 +29,9 @@ import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
+import VConsole from 'vconsole';
+
+import 'utils/telegram-web-app';
 
 // Import the functions you need from the SDKs you need
 
@@ -73,6 +76,12 @@ const Layout = dynamic(async () => {
         top: 0,
       });
     }, [pathName]);
+
+    useEffect(() => {
+      if (process.env.NEXT_PUBLIC_APP_ENV !== 'production') {
+        new VConsole();
+      }
+    }, []);
 
     const { isLogin } = useCheckLoginAndToken();
 

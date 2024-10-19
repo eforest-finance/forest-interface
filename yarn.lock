@@ -3292,7 +3292,7 @@
     "@portkey/utils" "^2.12.0"
     "@portkey/validator" "^2.12.0"
 
-"@portkey/contracts@^2.12.0", "@portkey/contracts@^2.7.1-alpha.0":
+"@portkey/contracts@^2.12.0", "@portkey/contracts@^2.7.1-alpha.3":
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-2.12.0.tgz#af9c3a14c52c7308fc3e38b45c53d53166e69abc"
   integrity sha512-YHjKOUvC4HMk/ig069C9k70o9TR+Y2yhnc58KAFM3L6Qa8te5tyt/eYFDVXT++kwqucwwjYYsmz7f8Vzgy+10Q==
@@ -3308,7 +3308,7 @@
   dependencies:
     "@portkey/provider-types" "^2.1.0"
 
-"@portkey/did-ui-react@^2.7.1-alpha.0":
+"@portkey/did-ui-react@^2.7.1-alpha.3":
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-2.12.0.tgz#daafc714efa6bb77f512dfa662f83a0aa9388ff2"
   integrity sha512-E/lsjzPfJlQzm5SfYYvnCmMrsKWK5mWqpPkwQraVdcUhTJ4sAIqY32xkiYyjMvEEuuUtGoxl2fOqRW/XipeK0A==
@@ -10840,9 +10840,9 @@ react-dom@18.2.0:
     scheduler "^0.23.0"
 
 react-error-boundary@^4.0.13:
-  version "4.0.13"
-  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-4.0.13.tgz#80386b7b27b1131c5fbb7368b8c0d983354c7947"
-  integrity sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-4.1.1.tgz#ee078a0dae8532bdff09c7e6839fc6cdfa182366"
+  integrity sha512-EOAEsbVm2EQD8zPS4m24SiaR/506RPC3CjMcjJ5JWKECsctyLsDTKxB26Hvl7jcz7KweSOkBYAcY/hmMpMn2jA==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
@@ -12622,10 +12622,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-vconsole@^3.14.6:
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/vconsole/-/vconsole-3.15.0.tgz#2383482b0a4106204090046ec128071284e04a90"
-  integrity sha512-8hq7wabPcRucSWQyN7/1tthMawP9JPvM95zgtMHpPknMMMCKj+abpoK7P7oKK4B0qw58C24Mdvo9+raUdpHyVQ==
+vconsole@^3.15.1:
+  version "3.15.1"
+  resolved "https://registry.yarnpkg.com/vconsole/-/vconsole-3.15.1.tgz#569a8ab15f353259527bbcf004f02946b4482cff"
+  integrity sha512-KH8XLdrq9T5YHJO/ixrjivHfmF2PC2CdVoK6RWZB4yftMykYIaXY1mxZYAic70vADM54kpMQF+dYmvl5NRNy1g==
   dependencies:
     "@babel/runtime" "^7.17.2"
     copy-text-to-clipboard "^3.0.1"
