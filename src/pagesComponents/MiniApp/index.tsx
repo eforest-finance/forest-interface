@@ -42,6 +42,8 @@ import OrangSm from 'assets/images/miniApp/home/orangeSm.svg';
 
 import UpIcon from 'assets/images/miniApp/home/upIcon.svg';
 
+import Bling from 'assets/images/miniApp/home/bling.png';
+
 const homeBg = {
   backgroundImage: `url(${Grass.src})`,
   backgroundRepeat: 'no-repeat',
@@ -52,18 +54,21 @@ const orangeBg = {
   backgroundImage: `url(${OrangeBg.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
+  filter: 'drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.20))',
 };
 
 const boxBg = {
   backgroundImage: `url(${BoxBg.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
+  filter: 'drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.20))',
 };
 
 const boxBg1 = {
   backgroundImage: `url(${BoxBg1.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
+  filter: 'drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.20))',
 };
 
 const text = {
@@ -77,6 +82,7 @@ const orangeBig = {
   backgroundImage: `url(${OrangeBig.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
+  filter: 'drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.20))',
 };
 
 const timeBg = {
@@ -99,6 +105,14 @@ const progressBg = {
 
 const btnBg = {
   backgroundImage: `url(${BtnBg.src})`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: '100% 100%',
+};
+
+const blingStyle = {
+  width: '48px',
+  height: '48px',
+  backgroundImage: `url(${Bling.src})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100% 100%',
 };
@@ -133,13 +147,18 @@ const Home = () => {
               351,286
             </span>
           </div>
-          <div className="w-[48px] h-[52px] flex items-center justify-center" style={boxBg}>
+          <div className="w-[48px] h-[52px] flex items-center justify-center relative" style={boxBg}>
+            <span
+              className="-tracking-[2px] text-[16px] text-white font-bold absolute bottom-[2px] right-[1px]"
+              style={text}>
+              60
+            </span>
             <Kettle />
           </div>
           <div className="w-[48px] h-[52px] flex items-center justify-center" style={boxBg} onClick={goToRules}>
             <Book />
           </div>
-          <div className="w-[48px] h-[52px] flex items-center justify-center mt-[4px]" style={boxBg1}>
+          <div className="w-[48px] h-[48px] flex items-center justify-center mt-[4px]" style={boxBg1}>
             <Wallet />
           </div>
         </div>
@@ -192,14 +211,18 @@ const Home = () => {
           <div className="absolute right-[20px] top-[30px]" onClick={() => setModel(true)}>
             <Up />
           </div>
-          <Image src={Tree} width={400} height={400} alt={'321321'} />
+          <Image src={Tree} width={400} height={400} alt={''} />
         </div>
         <div className="w-[80%] flex items-center justify-between absolute bottom-[200px] left-[10%]">
-          <Orange />
-          <div className="mt-[50px]">
+          <div className="flex items-center justify-center" style={blingStyle}>
+            <Orange />
+          </div>
+          <div className="mt-[50px] flex items-center justify-center" style={blingStyle}>
             <NFT />
           </div>
-          <ELF />
+          <div className="flex items-center justify-center" style={blingStyle}>
+            <ELF />
+          </div>
         </div>
       </div>
       {model && (
@@ -208,8 +231,8 @@ const Home = () => {
             className="w-4/5 min-h-[200px] p-[20px] text-[#5C489D] text-[14px] text-center flex items-center justify-center relative"
             style={modelBg}>
             <div className="absolute right-[16px] top-[16px]" onClick={() => setModel(false)}>
-              {/* <Close /> */}
-              <CloseActive />
+              <Close />
+              {/* <CloseActive /> */}
             </div>
             {/* <div>On-chain confirmation in progress…</div> */}
             <div>
