@@ -19,6 +19,7 @@ module.exports = {
       fontFamily: {
         slkscrb: 'slkscrb',
         pixels: 'ChillPixels-Mono',
+        smithesyzer: 'smithesyzer',
       },
       colors: {
         hover: 'var(--brand-base)',
