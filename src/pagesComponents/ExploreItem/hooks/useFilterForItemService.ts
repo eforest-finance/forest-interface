@@ -24,14 +24,16 @@ export function useFilterForItemService(nftCollectionId: string) {
   const defaultFilter = getDefaultFilter(aelfInfo.curChain);
   const filterList = getFilterList(nftType, aelfInfo.curChain);
 
-  const [filterSelect, setFilterSelect] = useState(defaultFilter);
+  const [filterSelect, setFilterSelect] = useState<IFilterSelect>(
+    Object.assign({}, defaultFilter, paramsFromUrlForFilter),
+  );
 
-  useEffect(() => {
-    setFilterSelect((prevData) => ({
-      ...prevData,
-      ...paramsFromUrlForFilter,
-    }));
-  }, []);
+  // useEffect(() => {
+  //   setFilterSelect((prevData) => ({
+  //     ...prevData,
+  //     ...paramsFromUrlForFilter,
+  //   }));
+  // }, []);
 
   // const getFilterBySearchQuery = (val: IFilterSelect) => {
   //   setFilterSelect((pre) => ({
