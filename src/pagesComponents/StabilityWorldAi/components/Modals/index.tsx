@@ -105,7 +105,7 @@ const SuccessModal = (props: any) => {
     navigator.push(`/explore-items/${collectionId}`);
   };
   const handleShare = () => {
-    const url = encodeURIComponent(`${location.origin}/explore-items/${collectionId}`);
+    const url = encodeURIComponent(`${location.href}`);
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Stability World')}&url=${url}`);
     // go to X
   };
