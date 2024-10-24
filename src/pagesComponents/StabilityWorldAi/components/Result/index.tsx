@@ -51,7 +51,7 @@ const Created = ({ collectionId }: { collectionId: string }) => {
         className="mt-[32px] w-[180px] h-[44px]"
         type="primary"
         onClick={() => {
-          navigator.push(`/collections`);
+          navigator.push(`/explore-items/${collectionId}`);
         }}>
         View Collection
       </Button>

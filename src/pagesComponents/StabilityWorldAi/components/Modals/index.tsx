@@ -106,11 +106,7 @@ const SuccessModal = (props: any) => {
   };
   const handleShare = () => {
     const url = encodeURIComponent(`${location.origin}/explore-items/${collectionId}`);
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        'Just took an awesome AI-generated photo at the #HelloAI first token party! Thank you to @aelfblockchain for the experience. Check out my NFT minted on #ForestNFT! 🌿📸🚀 #TOKEN2049 \n',
-      )}&url=${url}`,
-    );
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Stability World')}&url=${url}`);
     // go to X
   };
   return (
