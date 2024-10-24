@@ -38,9 +38,8 @@ export default function Detail() {
   const getCount = async () => {
     if (address) {
       try {
-        const { isDone, nftCount, collectionId } = await fetchCreatePlatformNFTInfo({ address });
-        setIsDone(nftCount * 1 > 0);
-        // setIsDone(isDone);
+        const { isDone, collectionId } = await fetchCreatePlatformNFTInfo({ address });
+        setIsDone(isDone);
         setCollectionId(collectionId);
       } catch (error) {
         console.log(error);
