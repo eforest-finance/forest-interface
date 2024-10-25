@@ -89,9 +89,9 @@ export function useDataService({
         return data._page * pageSize > data?.totalCount || data?.list?.length >= data?.totalCount;
       },
       reloadDeps: [params, loginAddress],
-      onFinally: () => {
-        !isSmallScreen && (document.body.scrollTop = 500);
-      },
+      // onFinally: () => {
+      //   !isSmallScreen && (document.body.scrollTop = 500);
+      // },
     },
   );
 

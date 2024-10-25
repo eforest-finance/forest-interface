@@ -112,6 +112,8 @@ export function useNFTItemsDataService({
         newParams['SymbolTypeList'] = params['SymbolTypeList'].join('|');
       }
 
+      updateURLParams(newParams);
+
       return fetchNFTItemsData(
         {
           ...params,
@@ -121,8 +123,6 @@ export function useNFTItemsDataService({
         userWalletAddress,
       )
         .then((res) => {
-          updateURLParams(newParams);
-
           return {
             list: res.items,
             totalCount: res.totalCount,
