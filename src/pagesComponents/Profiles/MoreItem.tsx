@@ -256,9 +256,9 @@ export function MoreCard(props: IMoreCard) {
 
       <Layout className="!bg-fillPageBg">
         <Layout className={clsx('!bg-fillPageBg')}>
-          <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
+          {/* <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
             Your NFT possessions with quantities less than 1 are hidden.
-          </div>
+          </div> */}
           <div className="flex justify-between">
             <h1 className="text-textPrimary font-medium text-[18px]">{getTitle()}</h1>
             {canShow && (

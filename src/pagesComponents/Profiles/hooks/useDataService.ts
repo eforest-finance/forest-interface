@@ -2,6 +2,7 @@ import { useInfiniteScroll } from 'ahooks';
 import { fetchActivitiesSearch, fetchCollectionsByMyCreated, fetchNFTMyHoldSearch } from 'api/fetch';
 import { IMyHoldSearch } from 'api/types';
 import { useRouter } from 'next/navigation';
+import useGetState from 'store/state/getState';
 
 export function useDataService({
   pageSize = 96,
@@ -31,6 +32,9 @@ export function useDataService({
     // history.replaceState(null, '', `${currentURL.pathname}?${queryParams.slice(0, -1)}`);
     nav.replace(`${currentURL.pathname}?${queryParams.slice(0, -1)}`);
   };
+
+  const { infoState } = useGetState();
+  const { isSmallScreen } = infoState;
 
   const fetchDataApi = fetchDataAPIMap[tabType];
 
@@ -85,6 +89,9 @@ export function useDataService({
         return data._page * pageSize > data?.totalCount || data?.list?.length >= data?.totalCount;
       },
       reloadDeps: [params, loginAddress],
+      // onFinally: () => {
+      //   !isSmallScreen && (document.body.scrollTop = 500);
+      // },
     },
   );
 

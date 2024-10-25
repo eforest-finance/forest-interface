@@ -75,10 +75,10 @@ export function ItemsCard({ dataSource, className, priceClassName, onClick, type
         <div className={styles.card__content}>
           <div className="flex items-center justify-between">
             <div className={styles.nft__symbol}>{dataSource?.nftSymbol}</div>
-            {balance && balance * 1 > 1 && (
+            {balance && Math.floor(balance * 1) > 1 && (
               <div className="text-textNumber px-[4px] font-[500] mb-[4px] truncate">
                 <Multiply />
-                <span className="pl-[6px]">{formatTokenPrice(balance)}</span>
+                <span className="pl-[6px]">{Math.floor(balance * 1)}</span>
               </div>
             )}
           </div>
