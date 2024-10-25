@@ -145,9 +145,9 @@ export function CreatedItem() {
               setSearchInputValue('');
             }}
           />
-          <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
+          {/* <div className="mb-4 font-medium text-base text-textPrimary rounded-lg px-6 py-4 bg-fillHoverBg">
             Your NFT possessions with quantities less than 1 are hidden.
-          </div>
+          </div> */}
           <NFTList
             dataSource={data?.list || []}
             loading={loading}
