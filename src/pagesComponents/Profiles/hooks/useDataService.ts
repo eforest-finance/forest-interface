@@ -30,7 +30,7 @@ export function useDataService({
     });
 
     // history.replaceState(null, '', `${currentURL.pathname}?${queryParams.slice(0, -1)}`);
-    nav.replace(`${currentURL.pathname}?${queryParams.slice(0, -1)}`);
+    nav.replace(`${currentURL.pathname}?${queryParams.slice(0, -1)}`, { scroll: false });
   };
 
   const { infoState } = useGetState();
