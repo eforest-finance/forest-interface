@@ -12,11 +12,9 @@ import { LoadingMore } from 'baseComponents/LoadingMore';
 import { useProfilePageService } from './hooks/useProfilePageService';
 import { getParamsFromFilter } from './helper';
 import { useDataService } from './hooks/useDataService';
-import { useWebLogin } from 'aelf-web-login';
 import { useHMService } from './hooks/useHMService';
 
 export function CollectedItem() {
-  const { wallet } = useWebLogin();
   const { walletAddress } = useProfilePageService();
 
   const { isLG, collapsedFilter, setCollapsedFilter } = useHMService();

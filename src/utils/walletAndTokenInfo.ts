@@ -10,16 +10,14 @@ export default class WalletAndTokenInfo {
   public static walletType: WalletType | null;
   public static walletInfo: WalletInfoType | null;
   public static getSignature: ((params: SignatureParams) => Promise<SignatureData>) | null;
-  public static version: string | null;
 
   public static setSignInfo(data: SignatureData) {
     this.signInfo = data;
   }
 
-  public static setWallet(walletType: WalletType, walletInfo: WalletInfoType, version: string) {
+  public static setWallet(walletType: WalletType, walletInfo: WalletInfoType) {
     this.walletInfo = walletInfo;
     this.walletType = walletType;
-    this.version = version;
   }
 
   public static setSignMethod(method: (params: SignatureParams) => Promise<SignatureData>) {
@@ -49,7 +47,7 @@ export default class WalletAndTokenInfo {
         return resolve(accountInfo.token);
       }
 
-      if (!(this.getSignature && this.walletInfo && this.walletType && this.version)) {
+      if (!(this.getSignature && this.walletInfo && this.walletType)) {
         return reject();
       }
 
@@ -57,7 +55,7 @@ export default class WalletAndTokenInfo {
         signMethod: this.getSignature,
         walletInfo: this.walletInfo,
         walletType: this.walletType,
-        version: this.version,
+        version: 'v2',
         onError: (error) => {
           const resError = error as unknown as IContractError;
           message.error(formatErrorMsg(resError).errorMessage?.message);
@@ -85,6 +83,5 @@ export default class WalletAndTokenInfo {
     this.walletInfo = null;
     this.walletType = null;
     this.getSignature = null;
-    this.version = null;
   }
 }

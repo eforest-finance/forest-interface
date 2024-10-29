@@ -5,9 +5,6 @@ import Arrow from 'assets/images/arrow.svg';
 import Wallet from 'assets/images/v2/wallet-02.svg';
 
 import ELF from 'assets/images/ELF.png';
-import USDT from 'assets/images/USDT.png';
-import { BigNumber } from 'bignumber.js';
-import useTokenData from 'hooks/useTokenData';
 import { useEffect, useRef, useState } from 'react';
 import { divDecimals } from 'utils/calculate';
 import { getUserInfo } from 'store/reducer/userInfo';
@@ -21,12 +18,15 @@ import { useSelector } from 'react-redux';
 import useGetState from 'store/state/getState';
 import { OmittedType, getOmittedStr } from 'utils';
 import React from 'react';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import Button from 'baseComponents/Button';
 import { useRouter } from 'next/navigation';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import { useCopyToClipboard } from 'react-use';
 import { store } from 'store/store';
+
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 function WalletActionSheet(props: any) {
   const { visible, onClose } = props;
@@ -38,7 +38,8 @@ function WalletActionSheet(props: any) {
   const { walletInfo, aelfInfo, infoState } = useGetState();
   const rate = infoState.elfRate;
 
-  const { walletType } = useWebLogin();
+  // const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
   const router = useRouter();
 
   const [sideTooltip, setSideTooltip] = useState('Copy');
@@ -143,7 +144,7 @@ function WalletActionSheet(props: any) {
             </div>
           </div>
           <div>
-            {walletType === WalletType.portkey && (
+            {walletType === WalletTypeEnum.aa && (
               <Button
                 isFull
                 size="ultra"
@@ -170,7 +171,9 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
   const userInfo = useSelector(getUserInfo);
   const { walletInfo, aelfInfo, infoState } = useGetState();
   const account = walletInfo?.address || '';
-  const { walletType } = useWebLogin();
+  // const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
+
   const router = useRouter();
 
   const rate = infoState.elfRate;
@@ -271,7 +274,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
               <div className="text-textSecondary">${formatTokenPrice(divDecimals(aelfBalance, 8).times(rate))} USD</div>
             </div>
           </div>
-          {walletType === WalletType.portkey && (
+          {walletType === WalletTypeEnum.aa && (
             <Button
               isFull
               size="ultra"

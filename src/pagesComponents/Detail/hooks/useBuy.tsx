@@ -12,14 +12,10 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import moment from 'moment';
 import { divDecimals, timesDecimals } from 'utils/calculate';
 import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
-import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
-import { BuyMessage } from 'constants/promptMessage';
-import { formatTokenPrice, formatUSDPrice } from 'utils/format';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
-import { handlePlurality } from 'utils/handlePlurality';
-import { isERC721 } from 'utils/isTokenIdReuse';
-import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { PriceTypeEnum } from '../component/BuyNowModal/components/PriceInfo';
@@ -44,8 +40,9 @@ function useBuy(options: {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [buyListings, setBuyListings] = useState<IFixPriceList[]>([]);
   const batchBuyNow = useBatchBuyNow(nftInfo?.chainId);
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  const { walletType } = useConnectWallet();
+
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
   // const saleInfo = useGetSalesInfo(nftInfo?.id || '');
   console.log('saleInfo:', saleInfo);
 
