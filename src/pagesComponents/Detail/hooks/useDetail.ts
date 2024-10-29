@@ -13,7 +13,9 @@ import getNftInfo from '../utils/getNftInfo';
 import { useMount } from 'react-use';
 import { useRequest } from 'ahooks';
 import useDetailGetState from 'store/state/detailGetState';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import { addPrefixSuffix } from 'utils';
 import { getParamsByTraitPairsDictionary } from 'utils/getTraitsForUI';
 
@@ -93,7 +95,7 @@ export const useGetNftTraitInfo = ({ id }: IProps) => {
 export const useGetTraitRankingInfo = () => {
   const { detailInfo } = useDetailGetState();
   const { nftTraitInfos } = detailInfo;
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   const { run, data } = useRequest(fetchNftRankingInfoApi, {
     manual: true,
   });

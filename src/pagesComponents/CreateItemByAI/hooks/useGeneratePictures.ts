@@ -1,4 +1,3 @@
-import { useWebLogin } from 'aelf-web-login';
 import { fetchGenerate, fetchCreateAIRetry } from 'api/fetch';
 import BigNumber from 'bignumber.js';
 import { SupportedELFChainId } from 'constants/chain';
@@ -12,6 +11,8 @@ import { getRawTransaction } from 'utils/getRawTransaction';
 import { getForestContractAddress } from 'contract/forest';
 import { getRpcUrls } from 'constants/url';
 import { approve, openBatchApprovalEntrance } from 'utils/aelfUtils';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 export interface ICreateArt {
   model?: string;
@@ -25,10 +26,10 @@ export interface ICreateArt {
 
 export default function useGeneratePictures() {
   const { walletInfo } = useGetState();
-  const { walletType } = useWebLogin();
+  // const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
   const info = store.getState().aelfInfo.aelfInfo;
   const contractAddress = getForestContractAddress().side;
-  const { version } = useWebLogin();
   const chainId = info.curChain as Chain;
 
   const CreateArt = async (params: ICreateArt, aiGuessFee: number) => {
@@ -64,7 +65,7 @@ export default function useGeneratePictures() {
     let rawTransaction;
 
     try {
-      const caContractAddress = version === 'v2' ? info.sideCaAddressV2 : info.sideCaAddress;
+      const caContractAddress = info.sideCaAddressV2;
       const rpcUrl = getRpcUrls()[chainId];
 
       rawTransaction = await getRawTransaction({

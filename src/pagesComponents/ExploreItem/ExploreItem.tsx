@@ -4,7 +4,8 @@ import useResponsive from 'hooks/useResponsive';
 import { thousandsNumber } from 'utils/unitConverter';
 import { dropDownCollectionsMenu } from 'components/ItemsLayout/assets';
 
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { Layout } from 'antd';
 import { NFTList } from './components/NFTList';
 import { LoadingMore } from 'baseComponents/LoadingMore';
@@ -28,7 +29,8 @@ interface IExploreItemsProps {
 export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsProps) {
   const nftType = nftCollectionId.endsWith('-SEED-0') ? 'seed' : 'nft';
 
-  const { wallet } = useWebLogin();
+  // const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
 
   const searchParams = useSearchParams();
 

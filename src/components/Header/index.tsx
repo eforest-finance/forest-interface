@@ -31,7 +31,8 @@ import { isPortkeyApp } from 'utils/isMobile';
 import DropMenu from 'baseComponents/DropMenu';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import { hideHeaderPage } from 'constants/common';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+// import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import useGetState from 'store/state/getState';
 import { useUpdateEffect } from 'ahooks';
 import { fetchMessageList } from 'api/fetch';
@@ -84,14 +85,14 @@ function Header() {
 
   const [headerTheme, setHeaderTheme] = useState(false);
 
-  console.log('sideBalance:', sideBalance);
+  console.log('sideBalance:111111', sideBalance);
 
   useEffect(() => {
     dispatch(setSideBalance(sideBalance));
     dispatch(setMainBalance(mainBalance));
   }, [sideBalance, mainBalance]);
 
-  const { walletType } = useWebLogin();
+  // const { walletType } = useWebLogin();
   const hidden = useMemo(() => {
     const path = pathname?.split('/')?.[1];
     if (hideHeaderPage.includes(path)) {

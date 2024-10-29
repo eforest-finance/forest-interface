@@ -43,25 +43,25 @@ const proxyContractRequest = async <T, R>(
     console.log('=====proxyContractRequest params: ', params);
 
     if (options?.type === ContractMethodType.VIEW) {
-      const res: R = await webLoginInstance.contractViewMethod(curChain, {
+      const res: { data: R } = await webLoginInstance.callViewMethod(curChain, {
         contractAddress: address,
         methodName: method,
         args: params,
       });
 
-      const result = res as IContractError;
+      const result = res.data as unknown as IContractError;
       if (result?.error || result?.code || result?.Error) {
         return Promise.reject(formatErrorMsg(result));
       }
 
-      return Promise.resolve(res);
+      return Promise.resolve(res.data);
     } else {
-      const res: R = await webLoginInstance.contractSendMethod(curChain, {
+      const res: R = await webLoginInstance.callSendMethod(curChain, {
         contractAddress: address,
         methodName: method,
         args: params,
       });
-      const result = res as IContractError;
+      const result = res as unknown as IContractError;
       console.log('=====proxyContractRequest result: ', result);
       if (result?.error || result?.code || result?.Error) {
         return Promise.reject(formatErrorMsg(result));

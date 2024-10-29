@@ -12,29 +12,17 @@ import Button from 'baseComponents/Button';
 import Modal from 'baseComponents/Modal';
 import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import PriceInfo, { PriceTypeEnum } from '../BuyNowModal/components/PriceInfo';
-import InputQuantity from '../BuyNowModal/components/InputQuantity';
-import Balance from '../BuyNowModal/components/Balance';
-import { SetPrice } from '../SaleModal/comps/SetPrice';
 import { Duration } from '../SaleModal/comps/Duration';
-import { IPrice } from '../SaleModal/hooks/useSetPrice';
 import { IDurationData } from '../SaleModal/hooks/useDuration';
 import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
-import PromptModal from 'components/PromptModal';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import ResultModal from 'components/ResultModal/ResultModal';
-import { OfferMessage } from 'constants/promptMessage';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
-import { WalletType, useWebLogin } from 'aelf-web-login';
 import { isERC721 } from 'utils/isTokenIdReuse';
-import { handlePlurality } from 'utils/handlePlurality';
-import { elementScrollToView } from 'utils/domUtils';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { Moment } from 'moment';
-import { store } from 'store/store';
-import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
 import ItemInfoCard from 'components/ItemInfoCard';
@@ -44,6 +32,9 @@ import { BalanceText, TotalPrice, Text } from '../BuyNowModal/components/Text';
 import InputNumberWithAddon from '../BuyNowModal/components/InputNumber';
 import ApproveModal from 'components/ApproveModal';
 import { SuccessFooter, Success } from '../BuyNowModal/components/Result';
+
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 import aelfInfo from 'store/reducer/aelfInfo';
 
@@ -81,8 +72,11 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
 
   const transferModal = useModal(CrossChainTransferModal);
 
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  // const { walletType } = useWebLogin();
+
+  const { walletType } = useConnectWallet();
+
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
   const approveModal = useModal(ApproveModal);
 
   const totalPrice = useMemo(() => {
