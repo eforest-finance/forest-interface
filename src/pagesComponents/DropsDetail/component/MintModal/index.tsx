@@ -15,7 +15,9 @@ import useTokenData from 'hooks/useTokenData';
 import { getBalance } from 'pagesComponents/Detail/utils/getNftNumber';
 import useGetState from 'store/state/getState';
 import { SupportedELFChainId } from 'constants/chain';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
 import PromptModal from 'components/PromptModal';
 import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
@@ -43,8 +45,9 @@ function MintModal(props?: IProps) {
   const nav = useRouter();
   const modal = useModal();
   const elfRate = useTokenData();
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  // const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
 
   const { infoState, walletInfo, aelfInfo } = useGetState();
 

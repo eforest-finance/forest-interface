@@ -131,15 +131,6 @@ function ApproveModal({ title, nftInfo, buttonConfig, initialization, showBalanc
     // setLoading(false);
   };
 
-  // useEffect(() => {
-  //   if (modal.visible && showBalance) {
-  //     getBalance();
-  //   }
-  //   return () => {
-  //     setShowRetryBtn(false);
-  //   };
-  // }, [modal.visible, title, nftInfo, buttonConfig, initialization, onClose]);
-
   const Modal = useMemo(() => {
     return isSmallScreen ? AntdModal : BaseModal;
   }, [isSmallScreen]);

@@ -18,7 +18,9 @@ import ResultModal from 'components/ResultModal';
 import { OfferMessage } from 'constants/promptMessage';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import { isERC721 } from 'utils/isTokenIdReuse';
 import { handlePlurality } from 'utils/handlePlurality';
 import { elementScrollToView } from 'utils/domUtils';
@@ -64,8 +66,9 @@ function useMakeOfferModal(options: { onClose?: () => void; rate: number }) {
 
   const transferModal = useModal(CrossChainTransferModal);
 
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  // const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
 
   const totalPrice = useMemo(() => {
     if (nftTotalSupply === '1') {

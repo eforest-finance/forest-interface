@@ -15,14 +15,12 @@ import { useModal } from '@ebay/nice-modal-react';
 import BigNumber from 'bignumber.js';
 import { externalLinkReg } from 'constants/common';
 import { message } from 'antd';
-import { useWebLogin } from 'aelf-web-login';
 
 export function useEditNftInfoService({ collections }: { collections: any[] }) {
   const { nftInfoFormList, currentSelIndex, currentCollection } = useSelector((store) => store.createItemAI);
   const { walletInfo } = useGetState();
 
   const { login } = useCheckLoginAndToken();
-  const { version } = useWebLogin();
 
   const batchCreateNFTModal = useModal(BatchCreateNFTModal);
 
@@ -56,11 +54,6 @@ export function useEditNftInfoService({ collections }: { collections: any[] }) {
   const onCreateNFTHandler = () => {
     login({
       callBack: async () => {
-        if (version !== 'v2') {
-          message.warning('AI NFT Generator only supports V2');
-          return;
-        }
-
         const collectionInfo = collections.find((itm) => itm.id === currentCollection?.id);
 
         const proxyIssuerAddress = collectionInfo?.proxyIssuerAddress || '';
