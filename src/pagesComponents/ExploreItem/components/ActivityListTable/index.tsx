@@ -209,7 +209,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       key: 'from',
       ellipsis: true,
       width: 264,
-      render: (_, record) => renderAddress(record.from, wallet.address),
+      render: (_, record) => renderAddress(record.from, wallet?.address),
     },
     {
       title: 'To',
@@ -217,7 +217,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       key: 'to',
       ellipsis: true,
       width: 264,
-      render: (_, record) => renderAddress(record.to, wallet.address),
+      render: (_, record) => renderAddress(record.to, wallet?.address),
     },
     {
       title: 'Date',
