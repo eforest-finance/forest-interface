@@ -130,7 +130,7 @@ export const useContractConnect = () => {
     }
 
     if (walletType === WalletTypeEnum.aa) {
-      walletInfo.portkeyInfo = Object.assign({}, walletInfo?.extraInfo?.portkeyInfo);
+      walletInfo.portkeyInfo = Object.assign({}, wallet?.extraInfo?.portkeyInfo);
     }
 
     getAelfChainAddress()
