@@ -41,7 +41,7 @@ export default function useGeneratePictures() {
         spender: contractAddress,
       });
 
-      console.log('allowance---', allowance);
+      console.log('walletInfo---', walletInfo);
 
       if (allowance.error) {
         throw new Error(`${allowance.error}`);

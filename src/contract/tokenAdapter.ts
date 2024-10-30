@@ -25,7 +25,9 @@ const tokenAdapterContractRequest = async <T, R>(
     console.log('=====tokenAdapterContractRequest params: ', params);
 
     if (options?.type === ContractMethodType.VIEW) {
-      const res: { data: R } = await webLoginInstance.callViewMethod(curChain, {
+      const res: { data: R } = await webLoginInstance.callViewMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,
@@ -39,7 +41,9 @@ const tokenAdapterContractRequest = async <T, R>(
 
       return Promise.resolve(res.data);
     } else {
-      const res: R = await webLoginInstance.callSendMethod(curChain, {
+      const res: R = await webLoginInstance.callSendMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,

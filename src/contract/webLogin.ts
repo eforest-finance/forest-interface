@@ -52,7 +52,7 @@ export default class WebLoginInstance {
   //   return this.context; // wallet, login, loginState
   // }
 
-  callSendMethod<T, R>(chain: Chain, params: ICallContractParams<T>): Promise<R> {
+  callSendMethod<T, R>(params: ICallContractParams<T>): Promise<R> {
     const contractMethod = this.sendMethod;
 
     if (!contractMethod) {
@@ -61,7 +61,7 @@ export default class WebLoginInstance {
     return contractMethod(params);
   }
 
-  callViewMethod<T, R>(chain: Chain, params: ICallContractParams<T>): Promise<R> {
+  callViewMethod<T, R>(params: ICallContractParams<T>): Promise<R> {
     const contractMethod = this.viewMethod;
 
     if (!contractMethod) {
