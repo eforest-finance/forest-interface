@@ -72,7 +72,7 @@ export function ActivityItem() {
       <ActivityListTable dataSource={data?.list || []} loading={loading} stickeyOffsetHeight={220} />
       {loadingMore ? <LoadingMore /> : null}
       {noMore && data?.list.length && !loading ? (
-        <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
+        <div className="text-center w-full text-textDisable font-medium text-base py-5">{/* No more data */}</div>
       ) : null}
     </>
   );

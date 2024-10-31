@@ -98,7 +98,7 @@ export function SeedSelect({ id, onChange }: Omit<ISeedSelectProps, 'options'>) 
               onClick={() => {
                 if (!disabled) return;
                 message.info(
-                  'You need to transfer your SEED from the sidechain to the mainchain before it can be used to create an NFT Collection.',
+                  'You need to transfer your SEED from the aelf dAppChain to the aelf MainChain before it can be used to create an NFT Collection.',
                 );
               }}>
               <span className={clsx(!disabled ? 'text-textPrimary' : 'text-textDisable', 'font-medium')}>
@@ -109,7 +109,7 @@ export function SeedSelect({ id, onChange }: Omit<ISeedSelectProps, 'options'>) 
                 <span className="w-[140px]"></span>
               ) : (
                 <span className="flex items-center text-textDisable">
-                  SideChain {option.chainId}
+                  aelf dAppChain
                   <ELFSVG width="24" height="24" className="ml-2 opacity-60" />
                 </span>
               )}

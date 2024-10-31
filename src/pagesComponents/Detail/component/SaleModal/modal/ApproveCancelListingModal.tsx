@@ -6,7 +6,9 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { NFTSaleInfoCard, NFTSaleInfoCardForDelListing } from '../comps/NFTSaleInfoCard';
 import { FormatListingType } from 'store/types/reducer';
 import useDetailGetState from 'store/state/detailGetState';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
 
 function ApproveCancelListingModalConstructor({
@@ -30,7 +32,7 @@ function ApproveCancelListingModalConstructor({
   const { isSmallScreen } = infoState;
   const [loading, setLoading] = useState<boolean>(false);
   const [showRetryBtn, setShowRetryBtn] = useState<boolean>(false);
-  const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
 
   const handleConfirm = async () => {
     try {
@@ -61,7 +63,7 @@ function ApproveCancelListingModalConstructor({
   }, [modal.visible]);
 
   const tipMessage =
-    walletType === WalletType.portkey
+    walletType === WalletTypeEnum.aa
       ? 'Please wait for auto confirmation.'
       : 'Please confirm the listing cancellation in the wallet.';
 

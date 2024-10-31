@@ -9,7 +9,8 @@ import Tooltip from 'baseComponents/Tooltip';
 import moment from 'moment';
 import Copy from 'components/Copy';
 import { IActivitiesItem, IFrom, ITo } from 'api/types';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { useRouter, useParams } from 'next/navigation';
 import ShareLink from 'assets/images/explore/sharelink.svg';
 import useGetState from 'store/state/getState';
@@ -45,7 +46,8 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
   const isSchrondinger = nftCollectionId.endsWith('-SGRTEST-0') || nftCollectionId.endsWith('-SGR-0');
 
   const { isLG: isSmallScreen } = useResponsive();
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
+
   const {
     infoState: { sideChain },
   } = useGetState();
@@ -207,7 +209,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       key: 'from',
       ellipsis: true,
       width: 264,
-      render: (_, record) => renderAddress(record.from, wallet.address),
+      render: (_, record) => renderAddress(record.from, wallet?.address),
     },
     {
       title: 'To',
@@ -215,7 +217,7 @@ export function ActivityListTable({ dataSource, loading, stickeyOffsetHeight }: 
       key: 'to',
       ellipsis: true,
       width: 264,
-      render: (_, record) => renderAddress(record.to, wallet.address),
+      render: (_, record) => renderAddress(record.to, wallet?.address),
     },
     {
       title: 'Date',

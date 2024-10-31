@@ -12,11 +12,9 @@ import { LoadingMore } from 'baseComponents/LoadingMore';
 import { useProfilePageService } from './hooks/useProfilePageService';
 import { getParamsFromFilter } from './helper';
 import { useDataService } from './hooks/useDataService';
-import { useWebLogin } from 'aelf-web-login';
 import { useHMService } from './hooks/useHMService';
 
 export function CollectedItem() {
-  const { wallet } = useWebLogin();
   const { walletAddress } = useProfilePageService();
 
   const { isLG, collapsedFilter, setCollapsedFilter } = useHMService();
@@ -79,7 +77,6 @@ export function CollectedItem() {
           onChange: setSort,
         }}
       />
-
       <Layout className="!bg-fillPageBg">
         <FilterContainer
           filterList={filterList}
@@ -129,7 +126,7 @@ export function CollectedItem() {
           />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list.length && !loading ? (
-            <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
+            <div className="text-center w-full text-textDisable font-medium text-base py-5">{/* No more data */}</div>
           ) : null}
         </Layout>
       </Layout>

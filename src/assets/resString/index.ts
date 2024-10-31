@@ -6,7 +6,7 @@ export const MESSAGE = {
 
   'createCollection.syncStep.title': 'Synchronise collection info',
   'createCollection.syncStep.subTitle':
-    'Info of the NFT collection will be synchronised to the SideChain. The NFT collection will be successfully created after the sync is done.\n Note: This process will take 3 to 5 minutes. Please wait patiently.',
+    'Info of the NFT collection will be synchronised to the aelf dAppChain. The NFT collection will be successfully created after the sync is done.\n Note: This process will take 3 to 5 minutes. Please wait patiently.',
   'createCollection.syncStep.progressTips': 'About 3-5 minutes',
 
   'createNFT.approveStep.title': 'Create the NFT item',
@@ -18,7 +18,7 @@ export const MESSAGE = {
 
   'createNFT.syncStep.title': 'Synchronise NFT info',
   'createNFT.syncStep.subTitle':
-    'Info of the NFT will be synchronised to the SideChain. The NFT can be issued after the sync is done.\n Note: This process will take 3 to 5 minutes. Please wait patiently.',
+    'Info of the NFT will be synchronised to the aelf dAppChain. The NFT can be issued after the sync is done.\n Note: This process will take 3 to 5 minutes. Please wait patiently.',
   'createNFT.syncStep.progressTips': 'About 3-5 minutes',
 
   'createNFT.issueStep.title': 'Issue the NFT',

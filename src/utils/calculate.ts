@@ -1,5 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { ZERO } from 'constants/misc';
+import BN, { isBN } from 'bn.js';
+
+export function zeroFill(str: string | BN) {
+  return isBN(str) ? str.toString(16, 64) : str.padStart(64, '0');
+}
 
 export function timesDecimals(a?: BigNumber.Value, decimals: string | number = 18) {
   if (!a) return ZERO;

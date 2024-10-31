@@ -170,7 +170,7 @@ export default function ModalSearchTable(modalProps: ISearchModalProps) {
             />
             {(!hasMore && dataSource.length && (
               <div className="text-center text-[var(--color-disable)] font-medium text-[16px] leading-normal pb-[20px]">
-                No more data
+                {/* No more data */}
               </div>
             )) ||
               ''}

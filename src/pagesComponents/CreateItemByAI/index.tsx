@@ -18,7 +18,6 @@ import { IAIImage, ICreateAIArtResult } from 'api/types';
 import CollectionTag from 'pagesComponents/CreateItemV2/components/CollectionTag';
 import { useMount } from 'react-use';
 import { clearNftInfoFormList } from 'store/reducer/create/itemsByAI';
-import { useWebLogin } from 'aelf-web-login';
 import FailedIcon from 'assets/images/nftAi/failed_Icon.svg';
 import Link from 'next/link';
 import { Badge } from 'antd';
@@ -30,7 +29,7 @@ export default function CreateNFTByAIPage() {
   const { CreateArt, TryAgain } = useGeneratePictures();
 
   const { nftInfoFormList } = store.getState().createItemAI;
-  const { version } = useWebLogin();
+  // const { version } = useWebLogin();
 
   const { walletInfo } = useGetState();
 
@@ -81,10 +80,6 @@ export default function CreateNFTByAIPage() {
   useEffect(() => {
     if (walletInfo.address) {
       fetchUnusedImages();
-    }
-
-    if (version !== 'v2') {
-      message.warning('AI NFT Generator only supports V2');
     }
 
     getGuessFee();
