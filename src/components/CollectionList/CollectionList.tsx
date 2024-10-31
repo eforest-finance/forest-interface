@@ -55,7 +55,7 @@ export default function CollectionList(options: {
         {loading && !noMoreData ? <LoadingMore className="!h-auto absolute bottom-[20px]" /> : null}
         {noMoreData && collectionList?.length ? (
           <div className="absolute bottom-0 text-center text-[var(--color-disable)] font-medium text-[16px] leading-normal pb-[20px]">
-            No more data
+            {/* No more data */}
           </div>
         ) : null}
       </div>

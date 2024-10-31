@@ -64,7 +64,10 @@ function WalletActionSheet(props: any) {
           <div className="text-[14px] font-medium !text-textPrimary">
             <div className="flex items-center">
               <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-brandNormal rounded-[50%]" />
-              <span className="!text-textPrimary">SideChain {aelfInfo?.curChain}</span>
+              <span className="!text-textPrimary">
+                {/* SideChain {aelfInfo?.curChain} */}
+                aelf dAppChain
+              </span>
             </div>
             <Tooltip
               overlayInnerStyle={{ borderRadius: '8px' }}
@@ -108,7 +111,7 @@ function WalletActionSheet(props: any) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="flex items-center">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-black rounded-[50%]" />
-                <span className="!text-textPrimary">MainChain AELF</span>
+                <span className="!text-textPrimary">aelf MainChain</span>
               </div>
 
               <Tooltip
@@ -204,7 +207,10 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-brandNormal rounded-[50%]" />
-                <span className="!text-textPrimary">SideChain {aelfInfo?.curChain}</span>
+                <span className="!text-textPrimary">
+                  {/* SideChain {aelfInfo?.curChain} */}
+                  aelf dAppChain
+                </span>
               </div>
               <Tooltip
                 overlayInnerStyle={{ borderRadius: '8px' }}
@@ -241,7 +247,7 @@ function WalletDropdown({ onclick }: { onclick?: MenuProps['onClick'] }) {
             <div className="text-[14px] font-medium text-textPrimary">
               <div className="">
                 <span className="mr-[8px] inline-block w-[8px] h-[8px] bg-black rounded-[50%]" />
-                <span className="!text-textPrimary">MainChain AELF</span>
+                <span className="!text-textPrimary">aelf MainChain</span>
               </div>
 
               <Tooltip

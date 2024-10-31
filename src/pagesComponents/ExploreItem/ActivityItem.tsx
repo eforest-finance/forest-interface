@@ -136,7 +136,7 @@ export function ActivityItem({ nftCollectionId }: IActivityItemsProps) {
           <ActivityListTable dataSource={data?.list || []} loading={loading} stickeyOffsetHeight={isLG ? 196 : 226} />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list.length && !loading ? (
-            <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
+            <div className="text-center w-full text-textDisable font-medium text-base py-5">{/* No more data */}</div>
           ) : null}
         </Layout>
       </Layout>

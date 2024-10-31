@@ -158,7 +158,7 @@ export function ExploreItem({ nftCollectionId, ELFToDollarRate }: IExploreItemsP
           />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list?.length && !loading ? (
-            <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
+            <div className="text-center w-full text-textDisable font-medium text-base py-5">{/* No more data */}</div>
           ) : null}
         </Layout>
       </Layout>

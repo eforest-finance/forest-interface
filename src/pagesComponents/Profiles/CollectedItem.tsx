@@ -77,7 +77,6 @@ export function CollectedItem() {
           onChange: setSort,
         }}
       />
-
       <Layout className="!bg-fillPageBg">
         <FilterContainer
           filterList={filterList}
@@ -127,7 +126,7 @@ export function CollectedItem() {
           />
           {loadingMore ? <LoadingMore /> : null}
           {noMore && data?.list.length && !loading ? (
-            <div className="text-center w-full text-textDisable font-medium text-base py-5">No more data</div>
+            <div className="text-center w-full text-textDisable font-medium text-base py-5">{/* No more data */}</div>
           ) : null}
         </Layout>
       </Layout>
