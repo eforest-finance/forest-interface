@@ -317,7 +317,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
         <BalanceText
           className="mt-0"
           title="Your balance"
-          value={formatTokenPrice(divDecimals(Number(tokenBalance), 8).toNumber())}
+          value={formatTokenPrice(balance)}
           totalPrice={nftInfo.listingPrice * quantity}
         />
       </div>
