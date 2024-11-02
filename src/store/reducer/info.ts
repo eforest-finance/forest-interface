@@ -11,7 +11,7 @@ const initialState: InfoStateType = {
   supportTokens: null,
   userInfo: null,
   theme: typeof localStorage !== 'undefined' && localStorage ? localStorage?.getItem(storages.theme) : 'light',
-  sideChain: 'tDVW',
+  sideChain: '',
   loading: {
     open: false,
   },
