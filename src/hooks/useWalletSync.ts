@@ -138,9 +138,9 @@ export const useCheckLoginAndToken = () => {
   }>(storages.accountInfo);
   const { hasToken } = useSelector(selectInfo);
 
-  const isLogin = isConnected && hasToken;
+  const isLogin = isConnected && hasToken && walletInfo;
 
-  console.log('isLogin:', isLogin, isConnected, hasToken);
+  console.log('isLogin:', isLogin, isConnected, hasToken, walletInfo);
 
   const login = async (props?: ICheckLoginProps) => {
     const cb = props?.callBack;
