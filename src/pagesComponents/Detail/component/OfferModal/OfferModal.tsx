@@ -431,8 +431,9 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
     modal.hide();
   };
 
-  const balanceValue = divDecimals(Number(tokenBalance), 8).toNumber();
-  const isNotEnoughBalance = Number(totalPrice) > balanceValue;
+  const isNotEnoughBalance = useMemo(() => {
+    return Number(totalPrice) > Number(balance);
+  }, [totalPrice, balance]);
   const etransferUrl = aelfInfo.etransferUrl;
 
   if (!nftInfo) {

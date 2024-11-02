@@ -226,10 +226,10 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
     const average = quantity ? totalPriceBig.div(quantity).toNumber() : 0;
     return average;
   }, [totalPrice, quantity]);
-
-  const balanceValue = divDecimals(Number(tokenBalance), 8).toNumber();
   // const totalPriceValue = nftInfo.listingPrice * quantity;
-  const isNotEnoughBalance = totalPrice > balanceValue;
+  const isNotEnoughBalance = useMemo(() => {
+    totalPrice > balance;
+  }, [totalPrice, balance]);
   const etransferUrl = aelfInfo.etransferUrl;
   const availableQuantity = buyItem ? buyItem?.quantity : saleInfo?.availableQuantity || 0;
 
