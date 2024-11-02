@@ -228,7 +228,7 @@ function BuyModal({ nftInfo, initialization, onClose, elfRate, amount, buyItem }
   }, [totalPrice, quantity]);
   // const totalPriceValue = nftInfo.listingPrice * quantity;
   const isNotEnoughBalance = useMemo(() => {
-    totalPrice > balance;
+    return totalPrice > balance;
   }, [totalPrice, balance]);
   const etransferUrl = aelfInfo.etransferUrl;
   const availableQuantity = buyItem ? buyItem?.quantity : saleInfo?.availableQuantity || 0;

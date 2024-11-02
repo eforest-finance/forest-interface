@@ -308,7 +308,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
     return !(
       BigNumber(quantity).gt(0) &&
       BigNumber(price).gt(0) &&
-      BigNumber(totalPrice).lte(BigNumber(divDecimals(Number(tokenBalance), 8))) &&
+      BigNumber(totalPrice).lte(BigNumber(balance)) &&
       !priceErrorTip &&
       !quantityTip
     );
