@@ -38,6 +38,8 @@ import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 import aelfInfo from 'store/reducer/aelfInfo';
 
+import { useBalance } from 'components/Header/hooks/useBalance';
+
 function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?: any }) {
   const modal = useModal();
   const resultModal = useModal(ResultModal);
@@ -45,6 +47,20 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
   const { onClose, rate, defaultValue } = options;
 
   const { infoState, walletInfo, aelfInfo } = useGetState();
+  const { onGetBalance } = useBalance({ symbol: 'ELF', chain: aelfInfo?.curChain });
+
+  const [balance, setBalance] = useState('0');
+  const getBalance = async () => {
+    const balanceBG = await onGetBalance();
+    const bc = divDecimals(balanceBG, 8).valueOf();
+    const newBalance = Number(bc);
+    setBalance(formatTokenPrice(newBalance));
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, []);
+
   const { isSmallScreen } = infoState;
   const [token] = useState<string>('ELF');
 
@@ -519,12 +535,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
         <Divider className="mdTW:my-[24px] my-[16px]" />
         <TotalPrice title="Total Offers" elf={`${formatTokenPrice(totalPrice)} ELF`} usd={`$${convertPrice}`} />
-        <BalanceText
-          title="Your balance"
-          className="pb-[40px] mdTW:pb-0"
-          value={formatTokenPrice(divDecimals(Number(tokenBalance), 8).toNumber())}
-          totalPrice={totalPrice}
-        />
+        <BalanceText title="Your balance" className="pb-[40px] mdTW:pb-0" value={balance} totalPrice={totalPrice} />
       </div>
     </Modal>
   );
