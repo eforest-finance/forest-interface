@@ -304,7 +304,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
     }
   };
 
-  const makeOfferDisabled = () => {
+  const makeOfferDisabled = useMemo(() => {
     return !(
       BigNumber(quantity).gt(0) &&
       BigNumber(price).gt(0) &&
@@ -312,7 +312,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
       !priceErrorTip &&
       !quantityTip
     );
-  };
+  }, [quantity, price, totalPrice, balance, priceErrorTip, quantityTip]);
 
   useEffect(() => {
     // setPrice(0);
@@ -455,7 +455,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             size="ultra"
             className="mdTW:mt-[24px] w-full mdTW:w-[256px]"
             type="primary"
-            disabled={!isNotEnoughBalance && makeOfferDisabled()}
+            disabled={!isNotEnoughBalance && makeOfferDisabled}
             onClick={() => {
               if (isNotEnoughBalance) {
                 window.open(etransferUrl);
