@@ -12,29 +12,17 @@ import Button from 'baseComponents/Button';
 import Modal from 'baseComponents/Modal';
 import { useCheckLoginAndToken, useWalletSyncCompleted } from 'hooks/useWalletSync';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import PriceInfo, { PriceTypeEnum } from '../BuyNowModal/components/PriceInfo';
-import InputQuantity from '../BuyNowModal/components/InputQuantity';
-import Balance from '../BuyNowModal/components/Balance';
-import { SetPrice } from '../SaleModal/comps/SetPrice';
 import { Duration } from '../SaleModal/comps/Duration';
-import { IPrice } from '../SaleModal/hooks/useSetPrice';
 import { IDurationData } from '../SaleModal/hooks/useDuration';
 import { useGetMainChainBalance } from 'pagesComponents/Detail/hooks/useGetMainChainToken';
-import PromptModal from 'components/PromptModal';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
 import ResultModal from 'components/ResultModal/ResultModal';
-import { OfferMessage } from 'constants/promptMessage';
 import { useGetSalesInfo } from 'pagesComponents/Detail/hooks/useGetSalesInfo';
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
-import { WalletType, useWebLogin } from 'aelf-web-login';
 import { isERC721 } from 'utils/isTokenIdReuse';
-import { handlePlurality } from 'utils/handlePlurality';
-import { elementScrollToView } from 'utils/domUtils';
 import { formatInputNumber } from 'pagesComponents/Detail/utils/inputNumberUtils';
 import { getExploreLink } from 'utils';
 import { Moment } from 'moment';
-import { store } from 'store/store';
-import { setCurrentTab } from 'store/reducer/detail/detailInfo';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
 import ItemInfoCard from 'components/ItemInfoCard';
@@ -45,7 +33,12 @@ import InputNumberWithAddon from '../BuyNowModal/components/InputNumber';
 import ApproveModal from 'components/ApproveModal';
 import { SuccessFooter, Success } from '../BuyNowModal/components/Result';
 
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import aelfInfo from 'store/reducer/aelfInfo';
+
+import { useBalance } from 'components/Header/hooks/useBalance';
 
 function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?: any }) {
   const modal = useModal();
@@ -54,6 +47,20 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
   const { onClose, rate, defaultValue } = options;
 
   const { infoState, walletInfo, aelfInfo } = useGetState();
+  const { onGetBalance } = useBalance({ symbol: 'ELF', chain: aelfInfo?.curChain });
+
+  const [balance, setBalance] = useState('0');
+  const getBalance = async () => {
+    const balanceBG = await onGetBalance();
+    const bc = divDecimals(balanceBG, 8).valueOf();
+    const newBalance = Number(bc);
+    setBalance(formatTokenPrice(newBalance));
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, []);
+
   const { isSmallScreen } = infoState;
   const [token] = useState<string>('ELF');
 
@@ -81,8 +88,11 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
 
   const transferModal = useModal(CrossChainTransferModal);
 
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  // const { walletType } = useWebLogin();
+
+  const { walletType } = useConnectWallet();
+
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
   const approveModal = useModal(ApproveModal);
 
   const totalPrice = useMemo(() => {
@@ -294,15 +304,15 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
     }
   };
 
-  const makeOfferDisabled = () => {
+  const makeOfferDisabled = useMemo(() => {
     return !(
       BigNumber(quantity).gt(0) &&
       BigNumber(price).gt(0) &&
-      BigNumber(totalPrice).lte(BigNumber(divDecimals(Number(tokenBalance), 8))) &&
+      BigNumber(totalPrice).lte(BigNumber(balance)) &&
       !priceErrorTip &&
       !quantityTip
     );
-  };
+  }, [quantity, price, totalPrice, balance, priceErrorTip, quantityTip]);
 
   useEffect(() => {
     // setPrice(0);
@@ -421,8 +431,9 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
     modal.hide();
   };
 
-  const balanceValue = divDecimals(Number(tokenBalance), 8).toNumber();
-  const isNotEnoughBalance = Number(totalPrice) > balanceValue;
+  const isNotEnoughBalance = useMemo(() => {
+    return Number(totalPrice) > Number(balance);
+  }, [totalPrice, balance]);
   const etransferUrl = aelfInfo.etransferUrl;
 
   if (!nftInfo) {
@@ -444,7 +455,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
             size="ultra"
             className="mdTW:mt-[24px] w-full mdTW:w-[256px]"
             type="primary"
-            disabled={!isNotEnoughBalance && makeOfferDisabled()}
+            disabled={!isNotEnoughBalance && makeOfferDisabled}
             onClick={() => {
               if (isNotEnoughBalance) {
                 window.open(etransferUrl);
@@ -525,12 +536,7 @@ function OfferModal(options: { onClose?: () => void; rate: number; defaultValue?
         <Duration onChange={handleDurationTime} checkDateValidate={checkDateValidate} />
         <Divider className="mdTW:my-[24px] my-[16px]" />
         <TotalPrice title="Total Offers" elf={`${formatTokenPrice(totalPrice)} ELF`} usd={`$${convertPrice}`} />
-        <BalanceText
-          title="Your balance"
-          className="pb-[40px] mdTW:pb-0"
-          value={formatTokenPrice(divDecimals(Number(tokenBalance), 8).toNumber())}
-          totalPrice={totalPrice}
-        />
+        <BalanceText title="Your balance" className="pb-[40px] mdTW:pb-0" value={balance} totalPrice={totalPrice} />
       </div>
     </Modal>
   );

@@ -11,7 +11,7 @@ import PageLoading from 'components/PageLoading';
 import isMobile from 'utils/isMobile';
 import { store, dispatch } from 'store/store';
 import { selectInfo, setHasToken, setIsMobile, setIsSmallScreen, setShowDisconnectTip } from 'store/reducer/info';
-import WebLoginInstance from 'contract/webLogin';
+import WebLoginInstance, { MethodType } from 'contract/webLogin';
 import { SupportedELFChainId } from 'constants/chain';
 import useUserInfo from 'hooks/useUserInfo';
 import AWS from 'aws-sdk';
@@ -29,14 +29,18 @@ import useResponsive from 'hooks/useResponsive';
 import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 // Import the functions you need from the SDKs you need
 
 const Layout = dynamic(async () => {
   const info = store.getState().aelfInfo.aelfInfo;
-  const { WebLoginState, useWebLogin, useCallContract, WebLoginEvents, useWebLoginEvent } = await import(
-    'aelf-web-login'
-  ).then((module) => module);
+  // const { WebLoginState, useWebLogin, useCallContract, WebLoginEvents, useWebLoginEvent } = await import(
+  //   'aelf-web-login'
+  // ).then((module) => module);
+
+  const { useConnectWallet } = await import('@aelf-web-login/wallet-adapter-react').then((module) => module);
 
   return (props: React.PropsWithChildren<{}>) => {
     const { children } = props;
@@ -45,23 +49,23 @@ const Layout = dynamic(async () => {
     const [theme, initialTheme] = useTheme();
     const [, , removeAccountInfo] = useLocalStorage(storages.accountInfo);
     const [, , removeWalletInfo] = useLocalStorage(storages.walletInfo);
-    const webLoginContext = useWebLogin();
+    // const webLoginContext = useWebLogin();
+    const { callSendMethod, callViewMethod, isLocking, isConnected, loginError, walletType } = useConnectWallet();
 
-    const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } = useCallContract({
-      chainId: SupportedELFChainId.MAIN_NET,
-      rpcUrl: info?.rpcUrlAELF,
-    });
-    const { callSendMethod: callTDVVSendMethod, callViewMethod: callTDVVViewMethod } = useCallContract({
-      chainId: SupportedELFChainId.TDVV_NET,
-      rpcUrl: info?.rpcUrlTDVV,
-    });
-    const { callSendMethod: callTDVWSendMethod, callViewMethod: callTDVWViewMethod } = useCallContract({
-      chainId: SupportedELFChainId.TDVW_NET,
-      rpcUrl: info?.rpcUrlTDVW,
-    });
+    // const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } = useCallContract({
+    //   chainId: SupportedELFChainId.MAIN_NET,
+    //   rpcUrl: info?.rpcUrlAELF,
+    // });
+    // const { callSendMethod: callTDVVSendMethod, callViewMethod: callTDVVViewMethod } = useCallContract({
+    //   chainId: SupportedELFChainId.TDVV_NET,
+    //   rpcUrl: info?.rpcUrlTDVV,
+    // });
+    // const { callSendMethod: callTDVWSendMethod, callViewMethod: callTDVWViewMethod } = useCallContract({
+    //   chainId: SupportedELFChainId.TDVW_NET,
+    //   rpcUrl: info?.rpcUrlTDVW,
+    // });
 
-    (window as any).logout = webLoginContext.logout;
-    WebLoginInstance.get().setWebLoginContext(webLoginContext);
+    const webLoginContext = useConnectWallet();
 
     const getUserInfo = useUserInfo();
 
@@ -84,7 +88,7 @@ const Layout = dynamic(async () => {
 
     const getSynchronizedResults = async () => {
       // await getToken();
-      await getUserInfo(webLoginContext.wallet.address);
+      await getUserInfo(webLoginContext.walletInfo.address);
 
       // TODO: get sync results
       // const results = (await fetchSyncResults({})) || [
@@ -108,28 +112,26 @@ const Layout = dynamic(async () => {
     };
 
     useEffect(() => {
-      console.log('webLoginContext.loginState', webLoginContext.loginState);
-      if (webLoginContext.loginState === WebLoginState.logined) {
-        WebLoginInstance.get().setContractMethod([
-          {
-            chain: SupportedELFChainId.MAIN_NET,
-            sendMethod: callAELFSendMethod,
-            viewMethod: callAELFViewMethod,
-          },
-          {
-            chain: SupportedELFChainId.TDVV_NET,
-            sendMethod: callTDVVSendMethod,
-            viewMethod: callTDVVViewMethod,
-          },
-          {
-            chain: SupportedELFChainId.TDVW_NET,
-            sendMethod: callTDVWSendMethod,
-            viewMethod: callTDVWViewMethod,
-          },
-        ]);
-        // getSynchronizedResults();
-      }
-    }, [webLoginContext.loginState]);
+      console.log('webLoginContext.loginState', webLoginContext.isConnected);
+
+      WebLoginInstance.get().setContractMethod([
+        {
+          chain: SupportedELFChainId.MAIN_NET,
+          sendMethod: callSendMethod as MethodType,
+          viewMethod: callViewMethod as MethodType,
+        },
+        {
+          chain: SupportedELFChainId.TDVV_NET,
+          sendMethod: callSendMethod as MethodType,
+          viewMethod: callViewMethod as MethodType,
+        },
+        {
+          chain: SupportedELFChainId.TDVW_NET,
+          sendMethod: callSendMethod as MethodType,
+          viewMethod: callViewMethod as MethodType,
+        },
+      ]);
+    }, [callSendMethod, callViewMethod, webLoginContext.isConnected]);
 
     useEffect(() => {
       store.dispatch(setIsSmallScreen(isMD));
@@ -142,24 +144,27 @@ const Layout = dynamic(async () => {
       dispatch(setWalletInfo({}));
     }, [removeAccountInfo, removeWalletInfo]);
 
-    useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
-      store.dispatch(setHasToken(false));
-      logout();
-      WalletAndTokenInfo.reset();
-    });
+    useEffect(() => {
+      if (!isConnected) {
+        if (walletType === WalletTypeEnum.aa) {
+          store.dispatch(setHasToken(false));
+          logout();
+          WalletAndTokenInfo.reset();
+        }
 
-    useWebLoginEvent(WebLoginEvents.DISCOVER_DISCONNECTED, () => {
-      logout();
-      store.dispatch(setShowDisconnectTip(true));
-    });
+        if (walletType === WalletTypeEnum.discover) {
+          logout();
+          store.dispatch(setShowDisconnectTip(true));
+        }
+      }
 
-    useWebLoginEvent(WebLoginEvents.LOGIN_ERROR, (error) => {
-      const resError = error as IContractError;
-      message.error(formatErrorMsg(resError).errorMessage.message);
-    });
+      if (loginError) {
+        message.error(loginError.message);
+      }
+    }, [isConnected, loginError, walletType]);
 
     useEffect(() => {
-      WalletAndTokenInfo.setWallet(webLoginContext.walletType, webLoginContext.wallet, webLoginContext.version);
+      WalletAndTokenInfo.setWallet(webLoginContext.walletType, webLoginContext.walletInfo);
       WalletAndTokenInfo.setSignMethod(webLoginContext.getSignature);
     }, [webLoginContext]);
 

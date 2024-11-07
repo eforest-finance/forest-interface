@@ -9,9 +9,15 @@ import { useSelector } from 'react-redux';
 import { selectInfo } from 'store/reducer/info';
 import { Tooltip } from 'antd';
 
+function sortRule(a: any, b: any) {
+  return a[3]?.split('%')[0] * 1 - b[3]?.split('%')[0] * 1;
+}
+
 const Traits = () => {
   const { isSmallScreen } = useSelector(selectInfo);
   const { traitsType, traitsData, noTraits } = useTraits();
+
+  const sortTraitsData = traitsType !== CollectionType.SEED ? traitsData.sort(sortRule) : traitsData;
 
   const { detailInfo } = useDetailGetState();
 
@@ -29,7 +35,7 @@ const Traits = () => {
     ({ data }) => {
       const [key, value] = data;
       return (
-        <div className="text-[14px] mb-[8px] border-lineBorder h-[48px] w-full lg:w-[537px] flex items-center  justify-between rounded-lg border border-solid py-[13px] px-[24px] ">
+        <div className="text-[14px] mb-[8px] border-lineBorder h-[48px] w-full lg:w-[535px] flex items-center  justify-between rounded-lg border border-solid py-[13px] px-[24px] ">
           <span>{key}</span>
           <span>{value}</span>
           {/* <span>
@@ -54,7 +60,7 @@ const Traits = () => {
 
     return (
       <div
-        className={`${styleColor} text-[14px] border border-solid  h-[48px] w-full lg:w-[537px] flex items-center  justify-between rounded-lg  py-[13px] px-[24px]  mb-[8px]`}>
+        className={`${styleColor} text-[14px] border border-solid  h-[48px] w-full lg:w-[535px] flex items-center  justify-between rounded-lg  py-[13px] px-[24px]  mb-[8px]`}>
         <span className={`text-rarity${name}`}>Rarity</span>
         <span className="flex items-center">
           <HonourLabel className="!border-0 !text-[14px]" text={text || ''} theme="white" />
@@ -68,7 +74,7 @@ const Traits = () => {
     const [key, price, value, percent, option] = data;
     return (
       <div
-        className={`bg-[${option[0]}] text-[14px]  h-[48px] w-full lg:w-[537px] flex items-center  rounded-lg  py-[13px] px-[24px] mb-[8px] cursor-pointer`}
+        className={`bg-[${option[0]}] text-[14px]  h-[48px] w-full lg:w-[535px] flex items-center  rounded-lg  py-[13px] px-[24px] mb-[8px] cursor-pointer`}
         style={{
           backgroundColor: option[0],
         }}>
@@ -111,7 +117,7 @@ const Traits = () => {
             <NormalTrait data={['Generation', nftTraitInfos?.generation]} />
 
             <div className="">
-              {traitsData.map((data, key) => {
+              {sortTraitsData.map((data, key) => {
                 return <ColorTrait key={key} data={data} />;
               })}
             </div>
@@ -121,7 +127,7 @@ const Traits = () => {
       case CollectionType.SEED:
         return (
           <>
-            {traitsData.map((data, key) => {
+            {sortTraitsData.map((data, key) => {
               return <NormalTrait key={key} data={data} />;
             })}
           </>
@@ -130,7 +136,7 @@ const Traits = () => {
       case CollectionType.NORMAL:
         return (
           <>
-            {traitsData.map((data, key) => {
+            {sortTraitsData.map((data, key) => {
               return <ColorTrait key={key} data={data} />;
             })}
           </>

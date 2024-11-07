@@ -15,6 +15,8 @@ import { GetTotalEffectiveListedNFTAmount, GetTotalOfferAmount } from 'contract/
 import { SupportedELFChainId } from 'constants/chain';
 import { IPortkeyProvider, MethodsBase } from '@portkey/provider-types';
 import { detectDiscoverProvider } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 const { transform, decodeAddressRep } = AElf.utils;
 
 const httpProviders: any = {};

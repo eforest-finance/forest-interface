@@ -52,7 +52,8 @@ export function DetailCard() {
         <p className="mdTW:h-[51px]">
           <span>Network</span>
           <span className="font-medium text-[14px] lg:text-[16px] text-textPrimary">
-            {nftInfo?.issueChainIdStr || '--'}
+            {/* {nftInfo?.issueChainIdStr || '--'} */}
+            {nftInfo?.issueChainIdStr ? 'aelf dAppChain' : '--'}
           </span>
         </p>
         <p className="mdTW:h-[51px]">

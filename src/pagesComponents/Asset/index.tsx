@@ -1,37 +1,52 @@
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
-import { WalletType, WebLoginState, useComponentFlex, useWebLogin } from 'aelf-web-login';
+// import { WalletType, WebLoginState, useComponentFlex, useWebLogin } from 'aelf-web-login';
 import useGetState from 'store/state/getState';
 import { useTimeoutFn } from 'react-use';
 
 const PORTKEY_LOGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { PortkeyAssetProvider, Asset, did } from '@portkey/did-ui-react';
 
 export default function MyAsset() {
   const router = useRouter();
-  const { loginState, walletType } = useWebLogin();
+  // const { loginState, walletType } = useWebLogin();
   const { walletInfo, aelfInfo } = useGetState();
   const { isShowRampBuy, isShowRampSell } = aelfInfo;
-  const isLogin = loginState === WebLoginState.logined;
-  const isPortkeyConnect = walletType === WalletType.portkey;
+  // const isLogin = loginState === WebLoginState.logined;
+  // const isPortkeyConnect = walletType === WalletType.portkey;
+
+  const {
+    walletInfo: wallet,
+    walletType,
+    disConnectWallet,
+    getSignature,
+    isConnected,
+    connectWallet,
+  } = useConnectWallet();
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
 
-  const { PortkeyAssetProvider, Asset } = useComponentFlex();
-
   useTimeoutFn(() => {
-    if (!isLogin || !isPortkeyConnect) {
+    if (!isConnected) {
       router.push('/');
     }
   }, 3000);
 
-  if (!isPortkeyConnect) {
+  // if (!isPortkeyConnect) {
+  //   return null;
+  // }
+
+  if (!wallet?.extraInfo?.portkeyInfo?.pin) {
     return null;
   }
+
   return (
     <div>
       <PortkeyAssetProvider
         originChainId={originChainId as Chain}
-        pin={walletInfo?.portkeyInfo?.pin}
+        pin={wallet?.extraInfo?.portkeyInfo?.pin}
         // caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         // didStorageKeyName={APP_NAME}
       >

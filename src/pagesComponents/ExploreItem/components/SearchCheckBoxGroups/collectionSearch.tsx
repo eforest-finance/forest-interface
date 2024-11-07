@@ -90,7 +90,7 @@ function CollectionSearchCheckBoxGroups({ dataSource = [], values = [], onChange
                     <span className=" font-semibold mb-1 text-textPrimary">{item.tokenName}</span>
                     <div className="flex justify-between text-textSecondary text-xs">
                       <span>Floor: {formatTokenPrice(item.floorPrice)} ELF</span>
-                      <span>Amount: {formatTokenPrice(item.itemTotal)}</span>
+                      {/* <span>Amount: {formatTokenPrice(item.itemTotal)}</span> */}
                     </div>
                   </div>
                 </div>

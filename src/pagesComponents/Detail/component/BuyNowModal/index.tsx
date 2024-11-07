@@ -24,7 +24,6 @@ import PromptModal from 'components/PromptModal';
 import ResultModal from 'components/ResultModal';
 import { BuyMessage } from 'constants/promptMessage';
 import { formatTokenPrice, formatUSDPrice } from 'utils/format';
-import { WalletType, useWebLogin } from 'aelf-web-login';
 import CrossChainTransferModal, { CrossChainTransferType } from 'components/CrossChainTransferModal';
 import { handlePlurality } from 'utils/handlePlurality';
 import { isERC721 } from 'utils/isTokenIdReuse';
@@ -33,6 +32,8 @@ import { getExploreLink } from 'utils';
 import styles from './index.module.css';
 import { getNFTNumber } from 'pagesComponents/Detail/utils/getNftNumber';
 import { CrossChainTransferMsg } from 'contract/formatErrorMsg';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?: FormatListingType }) {
   const modal = useModal();
@@ -53,8 +54,10 @@ function BuyNowModal(options: { elfRate: number; onClose?: () => void; buyItem?:
   const [buyListings, setBuyListings] = useState<IFixPriceList[]>([]);
   const batchBuyNow = useBatchBuyNow(nftInfo?.chainId);
   const { login, isLogin } = useCheckLoginAndToken();
-  const { walletType } = useWebLogin();
-  const isPortkeyConnected = walletType === WalletType.portkey;
+  const { walletType } = useConnectWallet();
+
+  // const { walletType } = useWebLogin();
+  const isPortkeyConnected = walletType === WalletTypeEnum.aa;
 
   const [quantityErrorTip, setQuantityErrorTip] = useState('');
 

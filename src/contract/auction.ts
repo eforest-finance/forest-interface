@@ -27,13 +27,15 @@ const auctionContractRequest = async <T, R>(
     console.log('finish--curChain', curChain);
 
     if (options?.type === ContractMethodType.VIEW) {
-      const res: R = await webLoginInstance.contractViewMethod(curChain, {
+      const res: { data: R } = await webLoginInstance.callViewMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,
       });
 
-      const result = res as IContractError;
+      const result = res.data as unknown as IContractError;
       if (result?.error || result?.code || result?.Error) {
         captureMessage({
           type: SentryMessageType.CONTRACT,
@@ -47,15 +49,17 @@ const auctionContractRequest = async <T, R>(
         return Promise.reject(formatErrorMsg(result, method));
       }
 
-      return Promise.resolve(res);
+      return Promise.resolve(res.data);
     } else {
-      const res: R = await webLoginInstance.contractSendMethod(curChain, {
+      const res: R = await webLoginInstance.callSendMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,
       });
 
-      const result = res as IContractError;
+      const result = res as unknown as IContractError;
 
       if (result?.error || result?.code || result?.Error) {
         captureMessage({

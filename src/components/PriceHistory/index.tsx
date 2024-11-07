@@ -236,18 +236,5 @@ export default function PriceHistory() {
     getNftPrices();
   }, [getNftPrices]);
 
-  // const items = [
-  //   {
-  //     key,
-  //     destroyInactivePanel: true,
-  //     header: (
-  //       <div className={`text-textPrimary text-[18px] font-medium leading-[26px] p-[16px] lg:p-[24px]`}>
-  //         Price History
-  //       </div>
-  //     ),
-  //     children: ,
-  //   },
-  // ];
-
   return <HistoryChart theme={theme} priceList={pricesList} isSmallScreen={isSmallScreen} nftInfo={nftInfo} />;
 }

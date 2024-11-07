@@ -1,4 +1,6 @@
-import { WalletType } from 'aelf-web-login';
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { WalletInfoType } from 'types';
 import { getRawTransactionPortkey } from './getRawTransactionPortkey';
 import { getRawTransactionDiscover } from './getRawTransactionDiscover';
@@ -6,7 +8,7 @@ import { getRawTransactionNightELF } from './getRawTransactionNightELF';
 
 export interface IRowTransactionPrams {
   walletInfo: WalletInfoType;
-  walletType: WalletType;
+  walletType: any;
   params: any;
   methodName: string;
   contractAddress: string;
@@ -32,7 +34,7 @@ export const getRawTransaction: (params: IRowTransactionPrams) => Promise<string
 
   try {
     switch (walletType) {
-      case WalletType.portkey:
+      case WalletTypeEnum.aa:
         if (!walletInfo.portkeyInfo) return Promise.reject('');
         res = await getRawTransactionPortkey({
           caHash: walletInfo.portkeyInfo.caInfo.caHash,
@@ -44,7 +46,7 @@ export const getRawTransaction: (params: IRowTransactionPrams) => Promise<string
           methodName,
         });
         break;
-      case WalletType.discover:
+      case WalletTypeEnum.discover:
         if (!walletInfo.discoverInfo) return Promise.reject('');
         res = await getRawTransactionDiscover({
           contractAddress,
@@ -55,7 +57,7 @@ export const getRawTransaction: (params: IRowTransactionPrams) => Promise<string
           methodName,
         });
         break;
-      case WalletType.elf:
+      case WalletTypeEnum.elf:
         res = await getRawTransactionNightELF({
           contractAddress,
           params,

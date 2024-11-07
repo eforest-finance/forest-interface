@@ -7,7 +7,10 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { NFTSaleInfoCard } from '../comps/NFTSaleInfoCard';
 import { INftSaleInfoItem } from 'api/types';
 import { useSelector } from 'store/store';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
+import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+
 import { useNiceModalCommonService } from 'hooks/useNiceModalCommonService';
 
 function ApproveListingModalConstructor({
@@ -35,7 +38,7 @@ function ApproveListingModalConstructor({
   const { showRetryBtn } = useSelector((store) => store.sellModalsInfos.approveListingModal);
   const { isSmallScreen } = infoState;
   const [loading, setLoading] = useState<boolean>(false);
-  const { walletType } = useWebLogin();
+  const { walletType } = useConnectWallet();
 
   const tryAgain = async () => {
     modal.resolve('retry');
@@ -51,7 +54,7 @@ function ApproveListingModalConstructor({
   };
 
   const tipMessage =
-    walletType === WalletType.portkey
+    walletType === WalletTypeEnum.aa
       ? 'Please wait for auto confirmation.'
       : 'Please confirm the listing in the wallet.';
 

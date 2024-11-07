@@ -154,6 +154,7 @@
       }
     }
     .view-asset-btn {
+      @apply bg-brandNormal;
       span {
         @apply !font-semibold  !text-[16px];
       }

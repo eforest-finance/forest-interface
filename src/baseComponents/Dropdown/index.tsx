@@ -3,7 +3,6 @@ import { Dropdown as AntdDropdown, DropdownProps as AntdDropdownProps } from 'an
 import styles from './index.module.css';
 import clsx from 'clsx';
 
-// interface ButtonProps extends Omit<AntdDropdownProps, 'size'> {
 interface DropdownProps extends AntdDropdownProps {
   ext?: any;
 }
