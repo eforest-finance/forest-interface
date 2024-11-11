@@ -16,6 +16,11 @@ module.exports = {
   },
   theme: {
     extend: {
+      fontFamily: {
+        slkscrb: 'slkscrb',
+        chillPixels: 'ChillPixels-Mono',
+        smithesyzer: 'smithesyzer',
+      },
       colors: {
         hover: 'var(--brand-base)',
         error: 'var(--error)',

@@ -54,7 +54,6 @@ const marketContractRequest = async <T, R>(
         methodName: method,
         args: params,
       });
-
       console.log('=====marketContractRequest res: ', method, res);
 
       const result = res.data as unknown as IContractError;

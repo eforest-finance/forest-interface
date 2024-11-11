@@ -1,9 +1,11 @@
 import { did } from '@portkey/did-ui-react';
 import { aelf } from '@portkey/utils';
 import { handleManagerForwardCall, getContractMethods } from '@portkey/contracts';
-import AElf from 'aelf-sdk';
+
 import deleteProvider from '@portkey/detect-provider';
 import { IPortkeyProvider, MethodsWallet } from '@portkey/provider-types';
+
+const AElf = require('aelf-sdk');
 
 type TCreateHandleManagerForwardCall = {
   caContractAddress: string;

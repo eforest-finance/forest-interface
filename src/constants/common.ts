@@ -29,5 +29,13 @@ export const urlReg = /(https?:\/\/)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(
 export const DANGEROUS_CHARACTERS_REG = /^(?!.*[<>\\"'%&+\\\\\\']).*$/;
 export const externalLinkReg = /((https?|ftp):\/\/)([a-z0-9-]+\.)+[a-z]{2,}(:\d{1,5})?(\/[^\s]*)?/;
 
-export const hideHeaderPage = ['asset'];
-export const hideFooterPage = ['asset', 'explore-items', 'account', 'collections', 'my-collections', 'explore-item'];
+export const hideHeaderPage = ['asset', 'mini-app'];
+export const hideFooterPage = [
+  'asset',
+  'explore-items',
+  'account',
+  'collections',
+  'my-collections',
+  'explore-item',
+  'mini-app',
+];
