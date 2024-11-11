@@ -47,22 +47,25 @@ const marketContractRequest = async <T, R>(
     console.log('=====marketContractRequest params: ', method, params);
 
     if (options?.type === ContractMethodType.VIEW) {
-      const res: R = await webLoginInstance.contractViewMethod(curChain, {
+      const res: { data: R } = await webLoginInstance.callViewMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,
       });
-
       console.log('=====marketContractRequest res: ', method, res);
 
-      const result = res as IContractError;
+      const result = res.data as unknown as IContractError;
       if (result?.error || result?.code || result?.Error) {
         return Promise.reject(formatErrorMsg(result, method));
       }
 
-      return Promise.resolve(res);
+      return Promise.resolve(res.data);
     } else {
-      const res: R = await webLoginInstance.contractSendMethod(curChain, {
+      const res: R = await webLoginInstance.callSendMethod({
+        chainId: curChain,
+
         contractAddress: address,
         methodName: method,
         args: params,
@@ -70,7 +73,7 @@ const marketContractRequest = async <T, R>(
 
       console.log('=====marketContractRequest res: ', method, res);
 
-      const result = res as IContractError;
+      const result = res as unknown as IContractError;
 
       console.log('=====marketContractRequest result: ', method, JSON.stringify(result), result?.Error);
 

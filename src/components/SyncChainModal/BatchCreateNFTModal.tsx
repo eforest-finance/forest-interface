@@ -100,8 +100,8 @@ const BatchCreateNFTModalContructor = (props: IBatchCreateModalProps) => {
                 NFT launching will require the creation and issuance steps.
               </span>
               <div className=" text-base text-textSecondary">
-                A signature approval is required when requesting the side chain token contract to create and issue NFTs.
-                Note: Please make sure you have enough ELF balance in your tDVV side chain address.
+                A signature approval is required when requesting the aelf dAppChain token contract to create and issue
+                NFTs. Note: Please make sure you have enough ELF balance in your aelf dAppChain address.
               </div>
             </div>
           </div>

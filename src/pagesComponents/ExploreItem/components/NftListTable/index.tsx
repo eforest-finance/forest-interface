@@ -13,7 +13,8 @@ import { NFTTraitInfoCard } from './NFTTraitInfoCard';
 import useResponsive from 'hooks/useResponsive';
 import OwnersList from 'pagesComponents/Detail/component/OwnersList';
 import useGetState from 'store/state/getState';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { OmittedType, addPrefixSuffix, getOmittedStr, getOriginalAddress } from 'utils';
 import { useParams, useRouter } from 'next/navigation';
 import BigNumber from 'bignumber.js';
@@ -36,7 +37,7 @@ export function NFTListTable({ dataSource, ELFToDollarRate, loading }: INFTListT
 
   const { isLG: isSmallScreen } = useResponsive();
   const { infoState } = useGetState();
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   const nav = useRouter();
   const [nftOwnerListModalParams, setNftOwnerListModalParams] = useState<{
     id: string;

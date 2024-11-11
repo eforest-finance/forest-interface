@@ -1,4 +1,5 @@
-import { SignatureData, SignatureParams, WalletType, DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
+import { SignatureData, SignatureParams, DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
+import { WalletTypeEnum, TWalletInfo } from '@aelf-web-login/wallet-adapter-base';
 
 export interface RoutesProps {
   path: string;
@@ -17,9 +18,8 @@ export interface IAccountInfo {
 
 export interface ICreateTokenParams {
   signMethod: (params: SignatureParams) => Promise<SignatureData>;
-  walletInfo: WalletInfoType;
-  walletType: WalletType;
-  version: string;
+  walletInfo: TWalletInfo;
+  walletType: WalletTypeEnum;
   onError?: <T>(error: T) => void;
   signInfo?: SignatureData;
 }

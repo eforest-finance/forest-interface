@@ -83,6 +83,8 @@ import {
   ITrendingCollectionsRes,
   ICreatePlatformRes,
   ICreatePlatformParams,
+  UserData,
+  Activity,
 } from './types';
 import { Collections } from '../pagesComponents/Collections/Hooks/useCollections';
 import { ItemsSource } from '../components/ItemsLayout/types';
@@ -94,6 +96,7 @@ import {
 import { IRecommendedCollections } from 'pagesComponents/Collections/Hooks/useRecommendedCollections';
 import { INftCollectionInfo } from 'hooks/useIsMinter';
 import { ITransitionFee } from 'pagesComponents/Detail/hooks/useGetTransitionFee';
+import { ClaimParams } from 'contract/type';
 
 export const fetchChainsList = async (): Promise<Chain[]> => {
   return request.get<Chain[]>('app/chains');
@@ -449,4 +452,46 @@ export const fetchCreatePlatformNFTInfo = async (params: { address: string }) =>
   return request.get<{ nftCount: number; isDone: boolean; collectionId: string }>('app/nft/create-platform-nft/info', {
     params,
   });
+};
+
+export const fetchMiniAppUserInfo = async (params: { address: string; tgname: string }): Promise<UserData> => {
+  return request.get<{ address: string; tgname: string }>('app/tree/user-info', {
+    params,
+  });
+};
+
+export const fetchMiniAppWatering = async (params: { count: number; address: string }): Promise<UserData> => {
+  return request.post('app/tree/watering', params);
+};
+
+export const fetchMiniAppClaim = async (params: {
+  address: string;
+  pointsDetailType: string;
+}): Promise<ClaimParams> => {
+  return request.post('app/tree/claim', params);
+};
+
+export const fetchMiniAppFriendList = async (params: { address: string }) => {
+  return request.get<{ address: string }>('app/tree/invite-friends', {
+    params,
+  });
+};
+
+export const fetchMiniAppActivityList = async (params: { address: string }): Promise<Activity[]> => {
+  return request.get('app/tree/activity-list', { params });
+};
+
+export const fetchMiniAppActivityDetail = async (params: { address: string; id: string }): Promise<Activity> => {
+  return request.get('app/tree/activity-detail', { params });
+};
+
+export const fetchMiniAppLevelUpdate = async (params: { address: string; nextLevel: number }): Promise<ClaimParams> => {
+  return request.post('app/tree/level-update', params);
+};
+
+export const fetchMiniAppPointsConvert = async (params: {
+  address: string;
+  activityId: number;
+}): Promise<ClaimParams> => {
+  return request.post('app/tree/points-convert', params);
 };

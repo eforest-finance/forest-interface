@@ -46,7 +46,7 @@ export const getFilterList = (
       key: FilterKeyEnum.Chain,
       title: FilterKeyEnum.Chain,
       type: FilterType.Checkbox,
-      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+      data: [{ value: ChainId, label: `aelf dAppChain`, disabled: true }],
     },
     {
       key: FilterKeyEnum.Price,
@@ -281,7 +281,7 @@ export const getDefaultFilter = (ChainId: string): IFilterSelect => {
     },
     [FilterKeyEnum.Chain]: {
       type: FilterType.Checkbox,
-      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+      data: [{ value: ChainId, label: `aelf dAppChain`, disabled: true }],
     },
     [FilterKeyEnum.Price]: {
       type: FilterType.Range,
@@ -438,7 +438,7 @@ export const getFilterListForActivity = (
       key: FilterKeyEnum.Chain,
       title: FilterKeyEnum.Chain,
       type: FilterType.Checkbox,
-      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+      data: [{ value: ChainId, label: `aelf dAppChain`, disabled: true }],
     },
     {
       key: FilterKeyEnum.Symbol,
@@ -487,7 +487,7 @@ export const getFilterListForMyItem = (
       key: FilterKeyEnum.Chain,
       title: FilterKeyEnum.Chain,
       type: FilterType.Checkbox,
-      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+      data: [{ value: ChainId, label: `aelf dAppChain`, disabled: true }],
     },
     {
       key: FilterKeyEnum.Price,
@@ -514,7 +514,7 @@ export const getDefaultFilterForMyItems = (ChainId: string): IFilterSelect => {
     },
     [FilterKeyEnum.Chain]: {
       type: FilterType.Checkbox,
-      data: [{ value: ChainId, label: `SideChain ${ChainId}`, disabled: true }],
+      data: [{ value: ChainId, label: `aelf dAppChain`, disabled: true }],
     },
     [FilterKeyEnum.Price]: {
       type: FilterType.Range,

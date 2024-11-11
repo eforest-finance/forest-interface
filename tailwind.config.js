@@ -18,6 +18,8 @@ module.exports = {
     extend: {
       fontFamily: {
         slkscrb: 'slkscrb',
+        chillPixels: 'ChillPixels-Mono',
+        smithesyzer: 'smithesyzer',
       },
       colors: {
         hover: 'var(--brand-base)',

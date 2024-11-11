@@ -474,3 +474,11 @@ export interface IBatchCancelListInfo {
 export interface IBatchCancelListParams {
   batchCancelListInfo: IBatchCancelListInfo;
 }
+
+export interface ClaimParams {
+  address: string;
+  pointsDetailType: string;
+  points: number;
+  opTime: number;
+  RequestHash: string;
+}

@@ -1,5 +1,5 @@
 .mini-app {
-  @apply font-slkscrb;
+  @apply font-slkscrb min-h-screen;
 }
 
 .mini-app span {
@@ -12,4 +12,131 @@
 
 .mini-app div {
   @apply font-slkscrb;
+}
+
+.boxBg {
+  background-image: url('../../assets/images/miniApp/home/boxBg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.2));
+}
+.boxBgHover {
+  background-image: url('../../assets/images/miniApp/home/box1Bg.png');
+  background-size: 100% 100%;
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.2));
+}
+
+.animateStyle {
+  animation: spin 0.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(30deg);
+  }
+}
+
+.inviteTitle {
+  color: var(--BGC-P0, #fff);
+  text-align: center;
+  padding: 0 10px;
+
+  /* Shadow/Card */
+  text-shadow: 0px 4px 0px #a09df7;
+  -webkit-text-stroke: 1px #5c489d;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 116.667% */
+  letter-spacing: -3.84px;
+}
+.animateBtn {
+  background-image: url('../../assets/images/miniApp/invite/refresh.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.animateBtnActive {
+  background-image: url('../../assets/images/miniApp/invite/refreshActive.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.animateRefresh {
+  animation: spinRefresh 1s linear infinite;
+}
+
+@keyframes spinRefresh {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.gradient {
+  background: linear-gradient(#ffc554, #ffb933, #e89900);
+}
+.beeAnimation {
+  opacity: 0;
+  animation: enter-x-left 1s cubic-bezier(0.8, 0, 1, 1);
+  animation-fill-mode: forwards;
+  transform: translateX(80px);
+}
+
+@keyframes enter-x-left {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.payBtn {
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.2));
+}
+
+.btnBg {
+  background-image: url('../../assets/images/miniApp/home/btnBg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.btnBgActive {
+  background-image: url('../../assets/images/miniApp/home/btnBgActive.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.rulesBtnBg {
+  background-image: url('../../assets/images/miniApp/rules/btnBg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.rulesBtnBgActive {
+  background-image: url('../../assets/images/miniApp/rules/btnBgActive.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.inviteBtnBg {
+  background-image: url('../../assets/images/miniApp/invite/inviteBtn.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.inviteBtnBgActive {
+  background-image: url('../../assets/images/miniApp/invite/inviteBtnActive.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.inviteBtnBgSm {
+  background-image: url('../../assets/images/miniApp/invite/InviteBtnSm.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.inviteBtnBgSmActive {
+  background-image: url('../../assets/images/miniApp/invite/InviteBtnSmActive.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
