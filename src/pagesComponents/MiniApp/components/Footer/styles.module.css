@@ -1,0 +1,4 @@
+.title {
+  -webkit-text-stroke: 1px rgb(107, 71, 0);
+  @apply text-white;
+}

@@ -9,6 +9,8 @@ export function Provider({ children }: { children: React.ReactNode }) {
   const bridgeAPI = useMemo(() => {
     return config ? init(config) : null;
   }, [config]);
+
+  console.log('bridgeAPIbridgeAPIbridgeAPI', bridgeAPI);
   return bridgeAPI ? <WebLoginProvider bridgeAPI={bridgeAPI}>{children}</WebLoginProvider> : <>{children}</>;
 }
 

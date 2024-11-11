@@ -17,7 +17,8 @@ import { useModal } from '@ebay/nice-modal-react';
 import LoginModal from 'components/LoginModal';
 import { usePathname } from 'next/navigation';
 import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { WalletTypeEnum, LoginStatusEnum } from '@aelf-web-login/wallet-adapter-base';
+import { TelegramPlatform } from '@portkey/did-ui-react';
 
 export const useWalletSyncCompleted = (contractChainId = 'AELF') => {
   // const info = store.getState().aelfInfo.aelfInfo;
@@ -124,13 +125,27 @@ export const useCheckLoginAndToken = () => {
   const loginModal = useModal(LoginModal);
   const pathName = usePathname();
 
-  const { connectWallet: loginMethod, disConnectWallet, isConnected, walletInfo, walletType } = useConnectWallet();
+  const {
+    connectWallet: loginMethod,
+    disConnectWallet,
+    isConnected,
+    walletInfo,
+    walletType,
+    loginOnChainStatus,
+  } = useConnectWallet();
   // const isWalletLogin = useMemo(() => isConnected, [isConnected]);
 
   // const { loginState, login: aelfLogin, loginEagerly, logout, walletType } = useWebLogin();
   // const isWalletLogin = loginState === WebLoginState.logined;
   // const isEagerly = loginState === WebLoginState.eagerly;
+
+  // if (loginOnChainStatus !== LoginStatusEnum.SUCCESS) {
+  //   return;
+  // }
+
+  console.log('loginOnChainStatus---loginOnChainStatus', loginOnChainStatus);
   const getToken = useGetToken();
+
   const [accountInfo] = useLocalStorage<{
     account?: string;
     token?: string;
@@ -172,20 +187,22 @@ export const useCheckLoginAndToken = () => {
       }
       return;
     }
-    loginModal.show({
-      onConfirm: async () => {
-        try {
-          await getToken();
-        } finally {
+    if (!TelegramPlatform.isTelegramPlatform()) {
+      loginModal.show({
+        onConfirm: async () => {
+          try {
+            await getToken();
+          } finally {
+            getTokenLoading = false;
+          }
+        },
+        onCancel: () => {
+          isConnected && disConnectWallet();
+          loginModal.hide();
           getTokenLoading = false;
-        }
-      },
-      onCancel: () => {
-        isConnected && disConnectWallet();
-        loginModal.hide();
-        getTokenLoading = false;
-      },
-    });
+        },
+      });
+    }
   };
 
   // useEffect(() => {}, [accountInfo]);
@@ -200,14 +217,20 @@ export const useCheckLoginAndToken = () => {
       return;
     } else {
       if (isConnected) {
-        if (!hasToken && !getTokenLoading) {
-          initToken();
+        if (TelegramPlatform.isTelegramPlatform()) {
+          if (!hasToken && !getTokenLoading && walletInfo?.extraInfo?.publicKey) {
+            initToken();
+          }
+        } else {
+          if (!hasToken && !getTokenLoading) {
+            initToken();
+          }
         }
       }
 
       // store.dispatch(setHasToken(false));
     }
-  }, [accountInfo, isConnected, pathName]);
+  }, [accountInfo, isConnected, pathName, walletInfo?.extraInfo?.publicKey]);
 
   return {
     isLogin,

@@ -6,6 +6,21 @@
   src: url('../assets/fonts/Poppins-Regular.otf');
 }
 
+@font-face {
+  font-family: slkscrb;
+  src: url('../assets/fonts/slkscrb.ttf');
+}
+
+@font-face {
+  font-family: smithesyzer;
+  src: url('../assets/fonts/Smithesyzer-yaDZ.ttf');
+}
+
+@font-face {
+  font-family: ChillPixels-Mono;
+  src: url('../assets/fonts/ChillPixels-Mono.otf');
+}
+
 html,
 body {
   overflow-x: hidden;
