@@ -179,7 +179,6 @@ export const useCheckLoginAndToken = () => {
 
   const initToken = async () => {
     getTokenLoading = true;
-
     if (walletType === WalletTypeEnum.aa) {
       try {
         await getToken();

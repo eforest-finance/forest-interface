@@ -99,6 +99,7 @@
     "@types/jest": "^26.0.15",
     "@types/node": "18.0.1",
     "@types/papaparse": "^5.3.2",
+    "@types/elliptic": "^6.4.18",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
@@ -137,6 +138,7 @@
     "terser-webpack-plugin": "^5.3.9",
     "typescript": "4.7.4",
     "vconsole": "^3.14.6",
+    "elliptic": "^6.5.4",
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "lint-staged": {
