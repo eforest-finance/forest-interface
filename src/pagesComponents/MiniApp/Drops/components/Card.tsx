@@ -17,6 +17,7 @@ import P_R from 'assets/images/v2/bgi_p_R_2x.png';
 import Y_L from 'assets/images/v2/bgi_y_L_2x.png';
 import Y_R from 'assets/images/v2/bgi_y_R_2x.png';
 import moment from 'moment';
+import { getType } from '../Detail';
 
 export const Tag = ({ type, title }: { type: string; title: string }) => {
   const source = {
@@ -57,7 +58,7 @@ export const Tag = ({ type, title }: { type: string; title: string }) => {
   );
 };
 
-export const getTagInfo = (status: number, showStartTime: any) => {
+export const getTagInfo = (status: number, showStartTime: any, noText?: Boolean) => {
   let type = '';
   let title = '';
 
@@ -68,7 +69,7 @@ export const getTagInfo = (status: number, showStartTime: any) => {
       break;
     case 1:
       type = 'Yellow';
-      title = `${showStartTime.days}D ${showStartTime.hours}H ${showStartTime.minutes}M To Start`;
+      title = `${showStartTime.days}D ${showStartTime.hours}H ${showStartTime.minutes}M ${noText ? '' : 'To Start'}`;
       break;
     case 2:
       type = 'Green';
@@ -131,7 +132,9 @@ const Card = (props: { item: any }) => {
 
           <span className="mt-[8px] flex justify-between">
             <p className={`${styles.reward} !font-chillPixels`}>Reward</p>
-            <span className={`${styles.content} !font-chillPixels`}>{item?.totalReward} ELF</span>
+            <span className={`${styles.content} !font-chillPixels`}>
+              {item?.totalReward} {getType(item?.rewardType)}
+            </span>
           </span>
           <span className="flex justify-between pt-[4px]">
             <p className={`${styles.reward} !font-chillPixels`}>Eligibility</p>

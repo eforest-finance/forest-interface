@@ -2,8 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import { PointsDetail } from 'api/types';
 
-const NumberAdd = (props: { item: PointsDetail }) => {
-  const { item } = props;
+const NumberAdd = (props: { item: PointsDetail; frequency?: any }) => {
+  const { item, frequency } = props;
+
+  // const [currentAmount, setCurrentAmount] = useState(0);
   // 当前时间
   const currentTime = moment();
   // 终止时间
@@ -31,7 +33,13 @@ const NumberAdd = (props: { item: PointsDetail }) => {
     return () => clearInterval(timer);
   }, [item.remainingTime]);
 
-  return <span>{Number(item.amount) - Math.floor(diffTime * (Number(item.amount) / (10 * 60)))}</span>;
+  if (item.remainingTime == 0) {
+    return <span>{item.amount}</span>;
+  }
+
+  const moveAmount = Number(item.amount) - Math.floor(diffTime * (Number(item.amount) / (frequency * 60)));
+
+  return <span>{moveAmount}</span>;
 };
 
 export default NumberAdd;

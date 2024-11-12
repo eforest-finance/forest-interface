@@ -39,6 +39,9 @@ import { TelegramPlatform } from '@portkey/did-ui-react';
 import useTelegram from 'hooks/useTelegram';
 import { useRouter } from 'next/navigation';
 
+import deepEqual from 'fast-deep-equal';
+import { diff } from 'deep-diff';
+
 const modelBg = {
   backgroundImage: `url(${ModelBg.src})`,
   backgroundRepeat: 'no-repeat',
@@ -52,6 +55,18 @@ const bottomBg = {
   boxShadow: ' 0px -2px 0px 0px #B1A7D0',
 };
 
+export const getType = (type: number | undefined) => {
+  switch (type) {
+    case 0:
+      return 'ELF';
+    case 1:
+      return 'USDT';
+
+    default:
+      return 'ELF';
+  }
+};
+
 const DropsDetail = (props: { params: { id: any } }) => {
   const { id } = props.params;
 
@@ -60,12 +75,25 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
   const { address, fullAddress } = useSelector(getUserInfo);
 
+  const diffFun = (data: Activity) => {
+    const differences = diff(info, data);
+
+    Array.isArray(differences) &&
+      differences.map((diffItem) => {
+        if (loading && deepEqual(diffItem.path, ['canClaim'])) {
+          setLoading(false);
+          setClaimModel(true);
+        }
+      });
+  };
+
   const getInfo = async () => {
     const res = await fetchMiniAppActivityDetail({
       address,
       id,
     });
     setInfo(res);
+    diffFun(res);
   };
 
   const [name, setName] = useState('');
@@ -111,7 +139,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
   }, [id]);
 
   const percent = useMemo(() => {
-    return `${(Number(info?.leftReward) * 100) / Number(info?.totalReward)}%`;
+    return `${((Number(info?.totalReward) - Number(info?.leftReward)) * 100) / Number(info?.totalReward)}%`;
   }, [info]);
 
   const [loading, setLoading] = useState(false);
@@ -133,20 +161,22 @@ const DropsDetail = (props: { params: { id: any } }) => {
     try {
       setLoading(true);
       await ClaimTreePoints(result);
-      setTimeout(
-        () => {
-          setLoading(false);
-          setClaimModel(true);
-          getInfo();
-        },
-        process.env.NEXT_PUBLIC_APP_ENV == 'production' ? 10000 : 20000,
-      );
     } catch (error) {
       setLoading(false);
-      setClaimFailModel(true);
+      // setClaimFailModel(true);
       console.log('error', error);
     }
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (address && id) {
+        getInfo();
+      }
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [address, id]);
 
   const [claimModel, setClaimModel] = useState(false);
   const [claimFailModel, setClaimFailModel] = useState(false);
@@ -185,11 +215,13 @@ const DropsDetail = (props: { params: { id: any } }) => {
               title={getTagInfo(activityStatus, showStartTime).title}
             />
           </div>
-          <div className="mt-[8px] text-[#5C489D] text-[14px] font-bold !font-chillPixels">{info?.activityDesc}</div>
+          <div className="mt-[8px] text-[#5C489D] text-[14px] font-bold !font-chillPixels leading-5">
+            {info?.activityDesc}
+          </div>
           <div className={`${styles.cardMask}`}>
             <div className={styles.cardTitle}>Reward</div>
             <div className="mt-[12px] text-[32px] text-[#5C489D] font-bold !font-chillPixels">
-              {info?.totalReward} ELF
+              {info?.redeemRewardOnce} {getType(info?.rewardType)}
             </div>
             <div className="text-[14px] text-[#8172B4] font-bold !font-chillPixels"></div>
             <div className="mt-[12px] text-[14px] text-[#5C489D] font-bold !font-chillPixels">Remaining Amount</div>
@@ -208,7 +240,8 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
               <div className={`${styles.percent} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}>
                 <span>
-                  {info?.leftReward?.toLocaleString('en-US')}/{info?.totalReward?.toLocaleString('en-US')}
+                  {(Number(info?.totalReward) - Number(info?.leftReward))?.toLocaleString('en-US')}/
+                  {info?.totalReward?.toLocaleString('en-US')}
                 </span>
               </div>
             </div>
@@ -258,7 +291,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
           className="w-full h-[95px] bg-[#F2F0F7] flex items-center justify-center fixed left-0 bottom-0"
           style={bottomBg}>
           <div className={styles.button}>
-            <span className={styles.buttonText}>{getTagInfo(activityStatus, showStartTime).title}</span>
+            <span className={styles.buttonText}>{getTagInfo(activityStatus, showStartTime, true).title}</span>
           </div>
         </div>
       )}
@@ -365,10 +398,10 @@ const DropsDetail = (props: { params: { id: any } }) => {
               <div className="!font-chillPixels pt-[20px] text-[#E0373E] text-[14px]">Claim failed!</div>
               <div className="pt-[16px] text-[12px] leading-5">
                 <p className="!font-chillPixels">
-                  {getOmittedStr(fullAddress, OmittedType.ADDRESS)} has insufficient ELF balance, not enough to cover
-                  the gas fee.
+                  {getOmittedStr(fullAddress, OmittedType.ADDRESS)} has insufficient {getType(info?.rewardType)}{' '}
+                  balance, not enough to cover the gas fee.
                 </p>
-                <p className="!font-chillPixels">Please use ETransfer to top up ELF.</p>
+                <p className="!font-chillPixels">Please use ETransfer to top up {getType(info?.rewardType)}.</p>
               </div>
             </div>
           </div>

@@ -131,6 +131,7 @@ export const useCheckLoginAndToken = () => {
     isConnected,
     walletInfo,
     walletType,
+    isLocking,
     loginOnChainStatus,
   } = useConnectWallet();
   // const isWalletLogin = useMemo(() => isConnected, [isConnected]);
@@ -154,8 +155,6 @@ export const useCheckLoginAndToken = () => {
   const { hasToken } = useSelector(selectInfo);
 
   const isLogin = isConnected && hasToken && walletInfo;
-
-  console.log('isLogin:', isLogin, isConnected, hasToken, walletInfo);
 
   const login = async (props?: ICheckLoginProps) => {
     const cb = props?.callBack;

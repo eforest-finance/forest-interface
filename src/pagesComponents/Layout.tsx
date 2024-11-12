@@ -83,7 +83,7 @@ const Layout = dynamic(async () => {
 
     useEffect(() => {
       if (process.env.NEXT_PUBLIC_APP_ENV !== 'production') {
-        new VConsole();
+        // new VConsole();
       }
     }, []);
 
