@@ -77,13 +77,12 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
   const diffFun = (data: Activity) => {
     const differences = diff(info, data);
+
     Array.isArray(differences) &&
       differences.map((diffItem) => {
-        for (const [key, value] of Object.entries(diffItem)) {
-          if (key == 'path' && loading && deepEqual(value, ['canClaim'])) {
-            setLoading(false);
-            setClaimModel(true);
-          }
+        if (loading && deepEqual(diffItem.path, ['canClaim'])) {
+          setLoading(false);
+          setClaimModel(true);
         }
       });
   };
