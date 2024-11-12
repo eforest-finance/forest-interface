@@ -39,9 +39,6 @@ import { TelegramPlatform } from '@portkey/did-ui-react';
 import useTelegram from 'hooks/useTelegram';
 import { useRouter } from 'next/navigation';
 
-import deepEqual from 'fast-deep-equal';
-import { diff } from 'deep-diff';
-
 const modelBg = {
   backgroundImage: `url(${ModelBg.src})`,
   backgroundRepeat: 'no-repeat',
@@ -75,25 +72,19 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
   const { address, fullAddress } = useSelector(getUserInfo);
 
-  const diffFun = (data: Activity) => {
-    const differences = diff(info, data);
-
-    Array.isArray(differences) &&
-      differences.map((diffItem) => {
-        if (loading && deepEqual(diffItem.path, ['canClaim'])) {
-          setLoading(false);
-          setClaimModel(true);
-        }
-      });
-  };
+  const [contractLoading, setContractLoading] = useState(false);
 
   const getInfo = async () => {
     const res = await fetchMiniAppActivityDetail({
       address,
       id,
     });
+
+    if (contractLoading && !res.canClaim) {
+      setContractLoading(false);
+      setClaimModel(true);
+    }
     setInfo(res);
-    diffFun(res);
   };
 
   const [name, setName] = useState('');
@@ -136,13 +127,11 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
   useEffect(() => {
     getInfo();
-  }, [id]);
+  }, [contractLoading, id, address]);
 
   const percent = useMemo(() => {
     return `${((Number(info?.totalReward) - Number(info?.leftReward)) * 100) / Number(info?.totalReward)}%`;
   }, [info]);
-
-  const [loading, setLoading] = useState(false);
 
   const claimTreePoints = async () => {
     const res: any = await fetchMiniAppPointsConvert({ address, activityId: id });
@@ -159,10 +148,10 @@ const DropsDetail = (props: { params: { id: any } }) => {
     };
 
     try {
-      setLoading(true);
+      setContractLoading(true);
       await ClaimTreePoints(result);
     } catch (error) {
-      setLoading(false);
+      setContractLoading(false);
       // setClaimFailModel(true);
       console.log('error', error);
     }
@@ -176,7 +165,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [address, id]);
+  }, [address, id, contractLoading]);
 
   const [claimModel, setClaimModel] = useState(false);
   const [claimFailModel, setClaimFailModel] = useState(false);
@@ -343,7 +332,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
         </div>
       )}
 
-      {loading && (
+      {contractLoading && (
         <div className="w-full h-full fixed top-0 left-0 bg-transparent flex items-center justify-center z-30">
           <div
             className="w-4/5 min-h-[200px] p-[20px] text-[#5C489D] text-[14px] text-center flex items-center justify-center relative"
