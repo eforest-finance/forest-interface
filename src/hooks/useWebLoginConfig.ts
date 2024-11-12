@@ -30,9 +30,16 @@ export default function useWebLoginConfig() {
         //   websiteName: APP_NAME,
         //   websiteIcon: WEBSITE_ICON,
         // },
+        Telegram: {
+          botId: info.TELEGRAM_BOT_ID,
+        },
+      },
+      referralInfo: {
+        referralCode: '',
+        projectCode: '13017',
       },
     };
-  }, [connectUrlV2, info.graphqlServerV2, networkTypeV2, info.portkeyServerV2]);
+  }, [info.graphqlServerV2, info.portkeyServerV2, info.TELEGRAM_BOT_ID, connectUrlV2, networkTypeV2]);
 
   const baseConfig: IBaseConfig = useMemo(() => {
     return {
@@ -43,6 +50,7 @@ export default function useWebLoginConfig() {
       noCommonBaseModal: false,
       design: SignInDesignEnum.CryptoDesign,
       titleForSocialDesign: 'Crypto wallet',
+      enableAcceleration: true,
       // iconSrcForSocialDesign: 'url or base64',
     };
   }, [curChain, networkTypeV2]);
@@ -54,6 +62,7 @@ export default function useWebLoginConfig() {
         chainId: curChain as TChainId,
         autoShowUnlock: true,
         noNeedForConfirm: true,
+        enableAcceleration: true,
       }),
       new PortkeyDiscoverWallet({
         networkType: networkTypeV2 as NetworkEnum,

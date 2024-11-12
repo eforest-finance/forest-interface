@@ -5,9 +5,10 @@ import useGetState from 'store/state/getState';
 import { useTimeoutFn } from 'react-use';
 
 const PORTKEY_LOGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';
-import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { LoginStatusEnum, TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { PortkeyAssetProvider, Asset, did } from '@portkey/did-ui-react';
+import { useEffect, useMemo } from 'react';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function MyAsset() {
     getSignature,
     isConnected,
     connectWallet,
+    loginOnChainStatus,
   } = useConnectWallet();
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
@@ -37,6 +39,8 @@ export default function MyAsset() {
   // if (!isPortkeyConnect) {
   //   return null;
   // }
+
+  const isLoginOnChain = did.didWallet.isLoginStatus === LoginStatusEnum.SUCCESS;
 
   if (!wallet?.extraInfo?.portkeyInfo?.pin) {
     return null;
@@ -54,6 +58,7 @@ export default function MyAsset() {
           isShowRamp={isShowRampBuy || isShowRampSell}
           isShowRampBuy={isShowRampBuy}
           isShowRampSell={isShowRampSell}
+          isLoginOnChain={isLoginOnChain}
           faucet={{
             faucetContractAddress: aelfInfo?.faucetContractAddress,
           }}
