@@ -196,7 +196,7 @@ const Rules = () => {
           </div>
         </div>
         <div className="pb-[48px] px-[16px]" style={gradient}>
-          <div className="w-full h-[696px] mt-[40px] p-[24px]" style={BoxStyle}>
+          <div className="w-full mt-[40px] p-[24px] pb-[40px]" style={BoxStyle}>
             <div className="flex items-center justify-center">
               <Title1 />
               <span className={styles.inviteTitle}>Magic tree</span>

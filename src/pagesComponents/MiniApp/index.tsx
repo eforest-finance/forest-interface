@@ -43,6 +43,9 @@ import Water from 'assets/images/miniApp/home/water.svg';
 
 import TopTree from 'assets/images/miniApp/home/topTree.svg';
 
+import deepEqual from 'fast-deep-equal';
+import { diff } from 'deep-diff';
+
 import {
   fetchMiniAppUserInfo,
   fetchMiniAppWatering,
@@ -153,17 +156,55 @@ const Home = () => {
 
   const [userInfo, setUserInfo] = useState<UserData>();
 
+  const [loading, setLoading] = useState(false);
+  const [claimModel, setClaimModel] = useState(false);
+
+  const [kettleModal, setKettleModal] = useState(false);
+
+  const [claimType, setClaimType] = useState(0);
+
+  const diffFun = (useInfoData: UserData) => {
+    const differences = diff(userInfo, useInfoData);
+    Array.isArray(differences) &&
+      differences.map((diffItem) => {
+        for (const [key, value] of Object.entries(diffItem)) {
+          if (
+            key == 'path' &&
+            loading &&
+            (deepEqual(value, ['pointsDetails', 0, 'remainingTime']) ||
+              deepEqual(value, ['pointsDetails', 1, 'remainingTime']) ||
+              deepEqual(value, ['pointsDetails', 1, 'remainingTime']))
+          ) {
+            setLoading(false);
+            setClaimModel(true);
+            setClaimType(0);
+          }
+          if (key == 'path' && loading && deepEqual(value, ['treeInfo', 'current', 'level'])) {
+            setLoading(false);
+            setLevelUpModel(true);
+          }
+        }
+      });
+  };
+
   const getInfo = async (address: string, tgname: string) => {
     if (address) {
-      const useInfo = await fetchMiniAppUserInfo({ address, tgname });
-      setUserInfo(useInfo);
+      const useInfoData = await fetchMiniAppUserInfo({ address, tgname });
+      if (!deepEqual(userInfo, useInfoData)) {
+        setUserInfo(useInfoData);
+        diffFun(useInfoData);
+      }
     }
   };
 
   const watering = async () => {
     if (address) {
-      const useInfo = await fetchMiniAppWatering({ count: 1, address });
-      setUserInfo(useInfo);
+      const useInfoData = await fetchMiniAppWatering({ count: 1, address });
+      if (!deepEqual(userInfo, useInfoData)) {
+        setUserInfo(useInfoData);
+        const differences = diff(userInfo, useInfoData);
+        console.log('differences', differences);
+      }
     }
   };
 
@@ -210,16 +251,7 @@ const Home = () => {
     try {
       setLoading(true);
       await AddTreePoints(params);
-      setTimeout(
-        () => {
-          setLoading(false);
-          setClaimModel(true);
-          setClaimType(0);
-          setClaimData(params);
-          getInfo(address, name);
-        },
-        process.env.NEXT_PUBLIC_APP_ENV == 'production' ? 10000 : 20000,
-      );
+      setClaimData(params);
     } catch (error) {
       setLoading(false);
       setClaimModel(true);
@@ -277,13 +309,6 @@ const Home = () => {
     return remainingTime > 0;
   };
 
-  const [loading, setLoading] = useState(false);
-  const [claimModel, setClaimModel] = useState(false);
-
-  const [kettleModal, setKettleModal] = useState(false);
-
-  const [claimType, setClaimType] = useState(0);
-
   const [percent, setPercent] = useState(100);
 
   useEffect(() => {
@@ -300,14 +325,6 @@ const Home = () => {
     setModel(false);
     try {
       await TreeLevelUpgrade(res);
-
-      setTimeout(
-        () => {
-          setLoading(false);
-          setLevelUpModel(true);
-        },
-        process.env.NEXT_PUBLIC_APP_ENV == 'production' ? 10000 : 20000,
-      );
     } catch (error) {
       setLoading(false);
       setLevelUpFailModel(true);
@@ -427,7 +444,11 @@ const Home = () => {
                     <div
                       className={`-tracking-[3.84px] text-[24px] text-white font-bold pt-[20px] absolute top-0 left-1/2 -translate-x-1/2`}
                       style={text}>
-                      {index !== 2 ? <NumberAdd item={list} /> : list.amount}
+                      {index !== 2 ? (
+                        <NumberAdd item={list} frequency={userInfo?.treeInfo?.current?.frequency} />
+                      ) : (
+                        list.amount
+                      )}
                     </div>
                     <div className="flex items-center absolute bottom-0 left-1/2 -translate-x-1/2">
                       {index !== 2 ? isLock(list.remainingTime) && <Lock /> : list.amount < 100 && <Lock />}
