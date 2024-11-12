@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import baseStyles from '../../style.module.css';
 import styles from './styles.module.css';
 import OrangeBig from 'assets/images/v2/orangeBig.svg';
@@ -38,7 +38,6 @@ import { useStatus, useShowStartTime } from '../hooks/useGetStatus';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 import useTelegram from 'hooks/useTelegram';
 import { useRouter } from 'next/navigation';
-import { add } from 'lodash-es';
 
 const modelBg = {
   backgroundImage: `url(${ModelBg.src})`,
