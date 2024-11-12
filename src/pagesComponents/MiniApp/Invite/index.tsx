@@ -192,7 +192,7 @@ const Invite = () => {
                   <div className="!font-chillPixels">Share your invitation link with your friends</div>
                   <div className="mt-[12px] !font-chillPixels">Your friend has joined and started playing Forest</div>
                   <div className="mt-[12px] !font-chillPixels">
-                    You will receive <span className="text-[#FFA800] !font-chillPixels">3%</span> of the golden fruits
+                    You will receive <span className="text-[#FFA800] !font-chillPixels">5%</span> of the golden fruits
                     your friend harvests. Your friend will immediately receive
                     <span className="text-[#FFA800] !font-chillPixels">100</span> golden fruits.
                   </div>

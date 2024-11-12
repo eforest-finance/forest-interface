@@ -130,7 +130,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
   }, [contractLoading, id, address]);
 
   const percent = useMemo(() => {
-    return `${((Number(info?.totalReward) - Number(info?.leftReward)) * 100) / Number(info?.totalReward)}%`;
+    return `${(Number(info?.leftReward) * 100) / Number(info?.totalReward)}%`;
   }, [info]);
 
   const claimTreePoints = async () => {
@@ -229,8 +229,7 @@ const DropsDetail = (props: { params: { id: any } }) => {
 
               <div className={`${styles.percent} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}>
                 <span>
-                  {(Number(info?.totalReward) - Number(info?.leftReward))?.toLocaleString('en-US')}/
-                  {info?.totalReward?.toLocaleString('en-US')}
+                  {Number(info?.leftReward)?.toLocaleString('en-US')}/{info?.totalReward?.toLocaleString('en-US')}
                 </span>
               </div>
             </div>
