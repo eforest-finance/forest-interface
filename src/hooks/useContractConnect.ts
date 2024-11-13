@@ -17,6 +17,9 @@ import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { TSignatureParams, WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 import useDiscoverProvider from './useDiscoverProvider';
 import { TipsMessage } from 'constants/message';
+import { LoginStatusEnum } from '@aelf-web-login/wallet-adapter-base';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+
 const AElf = require('aelf-sdk');
 
 export const useGetToken = () => {
@@ -30,6 +33,8 @@ export const useGetToken = () => {
 
   const isLogin = isConnected;
   const loginModal = useModal(LoginModal);
+
+  console.log('useGetTokenuseGetToken');
 
   const closeLoading = () => {
     store.dispatch(
@@ -96,10 +101,10 @@ export const useContractConnect = () => {
     disConnectWallet,
     getSignature,
     isConnected,
+    loginOnChainStatus,
     connectWallet,
+    getAccountByChainId,
   } = useConnectWallet();
-
-  const { getAccountByChainId } = useConnectWallet();
 
   const getAccountInAELF = getAccountByChainId('AELF');
 
@@ -130,7 +135,13 @@ export const useContractConnect = () => {
     }
 
     if (walletType === WalletTypeEnum.aa) {
-      walletInfo.portkeyInfo = Object.assign({}, wallet?.extraInfo?.portkeyInfo);
+      if (TelegramPlatform.isTelegramPlatform()) {
+        if (loginOnChainStatus == LoginStatusEnum.SUCCESS) {
+          walletInfo.portkeyInfo = Object.assign({}, wallet?.extraInfo?.portkeyInfo);
+        }
+      } else {
+        walletInfo.portkeyInfo = Object.assign({}, wallet?.extraInfo?.portkeyInfo);
+      }
     }
 
     getAelfChainAddress()

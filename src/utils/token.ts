@@ -10,7 +10,8 @@ import { fetchToken } from 'api/fetch';
 import { ITokenParams } from 'api/types';
 import { sleep } from '@portkey/utils';
 import deleteProvider from '@portkey/detect-provider';
-import { error } from 'console';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+import qs from 'qs';
 
 const AElf = require('aelf-sdk');
 
@@ -151,10 +152,35 @@ export const createToken = async (
     //   address: getOriginalAddress(walletType === WalletTypeEnum.aa ? address : (address as Array<any>)[0]),
     // }));
 
-    extraParam = {
-      source: 'portkey',
-      accountInfo: JSON.stringify(accountInfo),
-    };
+    if (TelegramPlatform.isTelegramPlatform()) {
+      const data: any = TelegramPlatform.getInitData();
+      const startParams = data?.start_param || '';
+
+      const paramsInfo = startParams.split('__').reduce((acc: Record<string, string>, item: string) => {
+        const key = item.split('--')?.[0] || '';
+        const value = item.split('--')?.[1];
+        if (key && value) {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+      const telegram: any = TelegramPlatform.getInitData();
+      const { username } = JSON.parse(telegram?.user);
+
+      extraParam = {
+        source: 'portkey',
+        accountInfo: JSON.stringify(accountInfo),
+        invite_from: paramsInfo.address,
+        invite_type: paramsInfo.type,
+        nick_name: username,
+      };
+    } else {
+      extraParam = {
+        source: 'portkey',
+        accountInfo: JSON.stringify(accountInfo),
+      };
+    }
   }
 
   try {

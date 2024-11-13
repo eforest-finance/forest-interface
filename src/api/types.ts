@@ -430,6 +430,9 @@ export interface ITokenParams {
   version?: string;
   accountInfo?: Array<{ chainId: string; address: string }>;
   source: string;
+  invite_from?: string;
+  invite_type?: string;
+  nick_name?: string;
 }
 export interface IOwnedSymbolsParams extends IListParams {
   address: string;
@@ -1164,4 +1167,74 @@ export interface ICreatePlatformRes {
   nftSymbol: string;
   nftId: string;
   collectionIcon: string;
+}
+
+export interface UserData {
+  id: string;
+  address: string;
+  nickName: string | null;
+  totalPoints: number;
+  waterInfo: WaterInfo;
+  treeInfo: TreeInfo;
+  pointsDetails: PointsDetail[];
+}
+
+export interface WaterInfo {
+  current: number;
+  updateTime: number;
+  max: number;
+  produce: number;
+  frequency: number;
+  wateringIncome: number;
+  timeUnit: number;
+}
+
+export interface TreeInfo {
+  current: LevelInfo;
+  next: LevelInfo;
+  nextLevelCost: number;
+}
+
+export interface LevelInfo {
+  level: number;
+  levelTitle: string;
+  produce: number;
+  frequency: number;
+  timeUnit: number;
+  minPoints: number;
+}
+
+export interface PointsDetail {
+  id: string;
+  address: string;
+  type: number;
+  amount: number;
+  updateTime: number;
+  remainingTime: number;
+  claimLimit: number;
+  timeUnit: number;
+}
+
+export interface Activity {
+  id: string;
+  originId: string;
+  imageUrl: string;
+  activityName: string;
+  activityDesc: string;
+  rewardName: string;
+  totalReward: number;
+  leftReward: number;
+  redeemRewardOnce: number;
+  redeemType: number;
+  minPoints: number;
+  costPoints: number;
+  rewardLogo: string;
+  rewardType: number;
+  treeActivityStatus: number;
+  hideFlag: boolean;
+  beginDateTime: string;
+  createTime: string;
+  lastModifyTime: string;
+  frequency: number;
+  canClaim: boolean;
 }

@@ -153,12 +153,12 @@ function Header() {
   }, [pathname]);
 
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin && !hidden) {
       if (walletInfo.address || (notifications && notifications.hasChanged)) {
         getMessageList();
       }
     }
-  }, [isLogin, walletInfo.address, notifications]);
+  }, [isLogin, walletInfo.address, notifications, hidden]);
 
   const ProjectLogo = !headerTheme && isHomePage ? <Logo /> : <LogoLight />;
 
@@ -465,6 +465,7 @@ function Header() {
           </>
         )}
       </div>
+
       <WalletActionSheet
         visible={actionVisible}
         onClose={() => {

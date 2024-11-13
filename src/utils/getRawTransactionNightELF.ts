@@ -1,7 +1,8 @@
 import { ChainId, IPortkeyProvider } from '@portkey/provider-types';
-import AElf from 'aelf-sdk';
+
 import { getContractMethods } from '@portkey/contracts';
 import { aelf } from '@portkey/utils';
+const AElf = require('aelf-sdk');
 
 export function getAElf(rpcUrl: string) {
   return new AElf(new AElf.providers.HttpProvider(rpcUrl));
