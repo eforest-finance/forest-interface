@@ -140,3 +140,31 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+
+.animateMyPulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.reduceTimeAnimation {
+  opacity: 0.3;
+  animation: enter-x-left 0.4s ease-in-out;
+  animation-fill-mode: forwards;
+  transform: translateY(0px);
+}
+
+@keyframes enter-x-left {
+  to {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
