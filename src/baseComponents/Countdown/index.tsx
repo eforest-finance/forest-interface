@@ -55,11 +55,14 @@ function Countdown({ className, endTime, status = CountdownStatus.Normal, onChan
 
   return (
     <div className={clsx(styles.countdown, className)}>
-      {countdownType.map((item) => {
+      {countdownType.map((item, index) => {
         return (
           <div key={item} className={styles['countdown-card']}>
-            <div className={clsx(styles['countdown-card-time'], timeColor[status])}>{countdownValue[item]}</div>
-            <div className={styles['countdown-card-title']}>{renderTimeType(countdownValue[item], item)}</div>
+            <div>
+              <div className={clsx(styles['countdown-card-time'], timeColor[status])}>{countdownValue[item]}</div>
+              <div className={styles['countdown-card-title']}>{renderTimeType(countdownValue[item], item)}</div>
+            </div>
+            <div className="text-[24px] text-textPrimary font-semibold">{index !== 2 && ':'}</div>
           </div>
         );
       })}

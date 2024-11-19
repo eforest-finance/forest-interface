@@ -21,12 +21,12 @@ import Creator from '../../component/Creator';
 import Title from '../../component/Title';
 import Owner from '../../component/Owner';
 import Activity from '../../component/Activity';
-import BidCardAndList from '../../component/BidCard';
+import BidCardAndList, { BidList } from '../../component/BidCard';
 import useDetailGetState from 'store/state/detailGetState';
 import { useInitializationDetail } from 'pagesComponents/Detail/hooks/useInitializationDetail';
 import ListingCard from 'pagesComponents/Detail/component/ListingCard';
 import BigNumber from 'bignumber.js';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { store } from 'store/store';
 import {
   initializationNftNumber,
@@ -40,6 +40,8 @@ import Menu from 'assets/images/v2/menu.svg';
 import Detail from 'assets/images/v2/detail.svg';
 import Chart from 'assets/images/v2/chart.svg';
 import EditIcon from 'assets/images/v2/edit_xs.svg';
+
+import Biddings from 'assets/images/v2/biddings.svg';
 
 import { Tabs, Skeleton } from 'antd';
 
@@ -79,7 +81,13 @@ function DetailPc() {
     return 'Details';
   };
 
-  const renderTable = () => {
+  const [key, setKey] = useState('0');
+
+  const onChange = (key: string) => {
+    setKey(key);
+  };
+
+  const items: any = useMemo(() => {
     let items = [
       {
         label: (
@@ -128,9 +136,33 @@ function DetailPc() {
         ...items,
       ];
     }
+    if (intervalDataForBid?.isBidding) {
+      items = [
+        {
+          label: (
+            <span className={styles.tableMenu}>
+              <Biddings />
+              <span>Biddings</span>
+            </span>
+          ),
+          key: 'Biddings',
+          children: <BidList bidInfos={intervalDataForBid.bidInfos} />,
+        },
+        {
+          label: (
+            <span className={styles.tableMenu}>
+              <Detail />
+              <span>Details</span>
+            </span>
+          ),
+          key: 'Details',
+          children: <InfoCard />,
+        },
+      ];
+    }
 
-    return <Tabs className={`${styles.table} ${styles.detailTabs}`} defaultActiveKey={getDefaultTab()} items={items} />;
-  };
+    return items;
+  }, [key, isERC721, intervalDataForBid]);
 
   return (
     <div className={`${styles.detail}`}>
@@ -163,7 +195,7 @@ function DetailPc() {
                   {!isFetching && nftInfo && (
                     <>
                       {intervalDataForBid?.isBidding ? (
-                        <div className="mt-[48px]">
+                        <div className="mt-[96px]">
                           <BidCardAndList
                             intervalDataForBid={intervalDataForBid}
                             tokenBalance={new BigNumber(tokenBalance)}
@@ -182,7 +214,7 @@ function DetailPc() {
             {!isFetching && nftInfo && (
               <>
                 <div className="mt-[40px]" />
-                {renderTable()}
+                <Tabs items={items} onChange={onChange} />
               </>
             )}
           </div>

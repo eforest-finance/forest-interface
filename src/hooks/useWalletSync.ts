@@ -144,7 +144,8 @@ export const useCheckLoginAndToken = () => {
   //   return;
   // }
 
-  console.log('loginOnChainStatus---loginOnChainStatus', loginOnChainStatus);
+  console.log('isConnected', isConnected);
+
   const getToken = useGetToken();
 
   const [accountInfo] = useLocalStorage<{
@@ -154,7 +155,7 @@ export const useCheckLoginAndToken = () => {
   }>(storages.accountInfo);
   const { hasToken } = useSelector(selectInfo);
 
-  const isLogin = isConnected && hasToken && walletInfo;
+  const isLogin = isConnected && hasToken && walletInfo?.address;
 
   const login = async (props?: ICheckLoginProps) => {
     const cb = props?.callBack;
@@ -221,7 +222,7 @@ export const useCheckLoginAndToken = () => {
             initToken();
           }
         } else {
-          if (!hasToken && !getTokenLoading) {
+          if (!hasToken && !getTokenLoading && walletInfo?.address) {
             initToken();
           }
         }
@@ -229,7 +230,16 @@ export const useCheckLoginAndToken = () => {
 
       // store.dispatch(setHasToken(false));
     }
-  }, [accountInfo, isConnected, pathName, walletInfo?.extraInfo?.publicKey]);
+  }, [
+    accountInfo,
+    isConnected,
+    pathName,
+    walletInfo,
+    walletType,
+    hasToken,
+    getTokenLoading,
+    walletInfo?.extraInfo?.publicKey,
+  ]);
 
   return {
     isLogin,

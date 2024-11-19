@@ -38,6 +38,7 @@ import Menu from 'assets/images/v2/menu.svg';
 import Detail from 'assets/images/v2/detail.svg';
 import Chart from 'assets/images/v2/chart.svg';
 import EditIcon from 'assets/images/v2/edit_xs.svg';
+import Biddings from 'assets/images/v2/biddings.svg';
 
 export default function DetailMobile() {
   const { isFetching, elfRate, isERC721, tokenBalance, intervalDataForBid } = useInitializationDetail();
@@ -100,9 +101,33 @@ export default function DetailMobile() {
         ...items,
       ];
     }
+    if (intervalDataForBid?.isBidding) {
+      items = [
+        {
+          label: (
+            <span className={`${styles.tableMenu} ${key == 'Biddings' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+              <Biddings />
+              <span>Biddings</span>
+            </span>
+          ),
+          key: 'Biddings',
+          children: <BidList bidInfos={intervalDataForBid.bidInfos} />,
+        },
+        {
+          label: (
+            <span className={`${styles.tableMenu} ${key == 'Details' ? 'text-textPrimary' : 'text-textSecondary'}`}>
+              <Detail />
+              <span>Details</span>
+            </span>
+          ),
+          key: 'Details',
+          children: <InfoCard />,
+        },
+      ];
+    }
 
     return items;
-  }, [key, isERC721]);
+  }, [key, isERC721, intervalDataForBid]);
 
   return (
     <div className={`${styles.detail} ${styles['mobile-detail']}`}>
@@ -134,66 +159,6 @@ export default function DetailMobile() {
             <Tabs items={items} onChange={onChange} />
           </>
         )}
-
-        {/* <RenderTable /> */}
-
-        {/* <div ref={tabsRef} className="mt-10"> */}
-        {/* <Tabs
-            defaultActiveKey={Number(nftTraitInfos?.generation || '') > 0 ? 'rarityInfos' : 'detail'}
-            onChange={(activeKey) => {
-              store.dispatch(setCurrentTab(activeKey));
-              resetScrollTopOnTabChange();
-            }}
-            className={clsx(styles['fixedTabs'], (intersection?.isIntersecting || showSticky) && styles['has-sticky'])}
-            animated={false}> */}
-        {/* {Number(nftTraitInfos?.generation || '') > 0 ? (
-              <Tabs.TabPane tab="Rarity Information" key="rarityInfos">
-                <GenerationInfoCard />
-                <RarityInfoCard />
-              </Tabs.TabPane>
-            ) : null} */}
-        {/* <Tabs.TabPane
-              tab={intervalDataForBid?.isBidding ? 'Offers' : 'Listings & offers'}
-              key="listingOffers"
-              forceRender={true}>
-              {!isFetching && (
-                <>
-                  {intervalDataForBid?.isBidding ? (
-                    <div>
-                      <BidList bidInfos={intervalDataForBid?.bidInfos} />
-                    </div>
-                  ) : (
-                    <>
-                      <Listings rate={elfRate} />
-                      <Offers rate={elfRate} />
-                    </>
-                  )}
-                </>
-              )}
-            </Tabs.TabPane>
-
-            {!intervalDataForBid?.isBidding && (
-              <Tabs.TabPane tab="Price History" key="priceHistory">
-                <PriceHistory />
-              </Tabs.TabPane>
-            )}
-
-            <Tabs.TabPane tab="Details" key="detail">
-              <DetailCard />
-              <GenerationInfoCard />
-              <RarityInfoCard />
-            </Tabs.TabPane> */}
-        {/* {nftTraitInfos?.traitInfos?.length ? (
-              <Tabs.TabPane tab="Traits" key="traits">
-                <TraitsInfoCard />
-              </Tabs.TabPane>
-            ) : null} */}
-
-        {/* <Tabs.TabPane tab="Activity" key="activity">
-              <Activity />
-            </Tabs.TabPane> */}
-        {/* </Tabs> */}
-        {/* </div> */}
         <div className="mt-[40px]">
           <Activity rate={elfRate} />
         </div>

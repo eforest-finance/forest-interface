@@ -19,6 +19,9 @@ import { useGetListItemsForSale } from '../SaleModal/hooks/useSaleService';
 import { Divider } from 'antd';
 import BigNumber from 'bignumber.js';
 
+import { selectInfo } from 'store/reducer/info';
+import { useSelector } from 'react-redux';
+
 export enum ListingCardType {
   LISTING = 'listing',
   BID = 'bid',
@@ -48,6 +51,8 @@ function ListingCardTitle(props: IProps) {
     type = ListingCardType.LISTING,
     isERC721,
   } = props;
+
+  const { isSmallScreen } = useSelector(selectInfo);
 
   const { detailInfo } = useDetailGetState();
 
@@ -106,22 +111,26 @@ function ListingCardTitle(props: IProps) {
 
   return (
     <div className={styles['listing-card-title']}>
-      <div className="flex flex-col justify-center">
-        {isShowTimeCard ? (
-          <div className="flex items-center">
-            <Alarm className="mr-[8px]" />
-            <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime as string)}`}</span>
-            {isCountdown && (
-              <Countdown
-                endTime={String(endTime)}
-                className="mt-[16px]"
-                status={countdownStatus}
-                onChange={ontimeupdate}
-              />
-            )}
+      {/* <div className="w-full flex flex-col justify-center">
+       
+      </div> */}
+      {isShowTimeCard ? (
+        <div className="w-full py-[13px] px-[24px] bg-[#F8F8F8] rounded-2xl">
+          {/* <Alarm className="mr-[8px]" /> */}
+          <div className={`flex  ${isSmallScreen ? 'justify-between items-start' : 'items-center'}`}>
+            <span className={styles['time-panel-value']}>{`${timePrefix} ${timeFormat(endTime as string)}`} (UTC)</span>
+            <span>{suffix}</span>
           </div>
-        ) : null}
-      </div>
+          {isCountdown && (
+            <Countdown
+              endTime={String(endTime)}
+              className="mt-[16px]"
+              status={countdownStatus}
+              onChange={ontimeupdate}
+            />
+          )}
+        </div>
+      ) : null}
       {hasChange && (
         <div className="flex items-center flex-wrap w-full lg:w-auto gap-[16px] lg:mt-0 mt-[24px]">
           {!hasOwnedAll && (
@@ -144,7 +153,6 @@ function ListingCardTitle(props: IProps) {
           </span>
         </div>
       )}
-      {suffix}
     </div>
   );
 }

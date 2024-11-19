@@ -1,5 +1,5 @@
 .bid-card {
-  @apply flex flex-col rounded-[12px] border-lineBorder border border-solid bg-transparent;
+  @apply flex flex-col bg-transparent;
   .time-panel {
     @apply flex border-0 border-b !border-solid border-lineBorder h-[72px] px-[16px] lg:px-[24px] leading-[72px] justify-between flex-row items-center;
   }
@@ -69,4 +69,54 @@
 
 .mobile-button {
   @apply fixed w-full bottom-0 left-0 bg-fillPageBg p-[16px] flex z-[998] border-0 border-t border-solid border-lineBorder;
+}
+
+.table-custom {
+  :global(.ant-table-thead) {
+    tr {
+      th {
+        @apply border-0;
+      }
+      :global(.ant-table-cell) {
+        @apply bg-fillHoverBg px-[8px];
+
+        &:first-of-type {
+          @apply !rounded-l-lg;
+        }
+        &:last-of-type {
+          @apply !rounded-r-lg;
+        }
+        /* &:nth-last-child(2) {
+          @apply !rounded-r-lg;
+        } */
+      }
+    }
+  }
+
+  :global(.ant-table-body) {
+    @apply min-h-[320px];
+
+    :global(.ant-table-tbody) {
+      :global(.ant-table-row) {
+        > :global(.ant-table-cell) {
+          &:first-of-type {
+            @apply !rounded-none;
+          }
+          &:last-of-type {
+            @apply !rounded-none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.btnIcon {
+  background: rgba(255, 255, 255, 0.1);
+}
+.money {
+  background-image: url('../../../../assets/images/money.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }

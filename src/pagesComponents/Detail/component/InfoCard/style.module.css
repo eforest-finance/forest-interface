@@ -1,5 +1,5 @@
 .detail-card {
-  @apply w-full mt-[24px] mdTW:mt-0 lg:w-[783px];
+  @apply w-full mt-[24px] mdTW:mt-0;
 }
 .detail-card .title {
   @apply leading-[26px] break-words w-[92%] p-[16px] lg:p-[24px] text-textPrimary text-[18px] font-medium;
