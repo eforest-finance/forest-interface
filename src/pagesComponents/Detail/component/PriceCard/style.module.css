@@ -1,6 +1,6 @@
 .price-card {
   .price-panel-title {
-    @apply text-textSecondary text-base font-medium;
+    @apply text-textSecondary text-base font-medium flex items-center;
   }
   .price-number {
     @apply text-textPrimary items-baseline mt-[8px] lg:mt-[12px] flex flex-wrap text-4xl font-semibold;

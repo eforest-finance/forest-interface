@@ -450,8 +450,7 @@ const Home = () => {
                     style={orangeBig}
                     onClick={() => claim(index)}>
                     <div
-                      className={`w-full -tracking-[3.84px] text-[24px] text-white font-bold pt-[20px] absolute top-0 left-1/2 -translate-x-1/2`}
-                      style={text}>
+                      className={`w-full -tracking-[3.84px] text-[24px] text-white font-bold pt-[20px] absolute top-0 left-1/2 -translate-x-1/2`}>
                       {index !== 2 ? (
                         <>
                           {showReduceTime && (
@@ -459,7 +458,7 @@ const Home = () => {
                               {index == 0 && list.remainingTime !== 0 && (
                                 <div
                                   className={`w-[60px] text-[#4A310B] tracking-normal text-[14px] absolute -top-[20px] left-0 !font-chillPixels ${styles.reduceTimeAnimation}`}>
-                                  -24m
+                                  -{userInfo?.waterInfo?.wateringIncome}m
                                 </div>
                               )}
                               {index == 1 &&
@@ -467,7 +466,7 @@ const Home = () => {
                                 list.remainingTime !== 0 && (
                                   <div
                                     className={`w-[60px] text-[#4A310B] tracking-normal text-[14px] absolute -top-[20px] left-0 !font-chillPixels ${styles.reduceTimeAnimation}`}>
-                                    -24m
+                                    -{userInfo?.waterInfo?.wateringIncome}m
                                   </div>
                                 )}
                             </>
@@ -477,11 +476,13 @@ const Home = () => {
                               className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${styles.animateMyPulse}`}
                             />
                           )}
-                          <NumberAdd item={list} frequency={userInfo?.treeInfo?.current?.frequency} />
+                          <div style={text}>
+                            <NumberAdd item={list} frequency={userInfo?.treeInfo?.current?.frequency} />
+                          </div>
                         </>
                       ) : (
                         <>
-                          <span>{list.amount}</span>
+                          <span style={text}>{list.amount}</span>
                         </>
                       )}
                     </div>

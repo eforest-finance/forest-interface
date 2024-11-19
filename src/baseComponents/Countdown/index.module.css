@@ -1,17 +1,17 @@
 .countdown {
-  @apply flex w-full justify-between lgTW:justify-start lgTW:w-full;
+  @apply flex justify-start;
 
   .countdown-card {
-    @apply mr-0 lgTW:mr-[80px];
+    @apply mr-[20px] flex items-start gap-[20px];
     &:last-child {
       @apply mr-0;
     }
 
     .countdown-card-time {
-      @apply text-2xl font-semibold;
+      @apply text-2xl font-semibold text-center;
     }
     .countdown-card-title {
-      @apply text-base font-normal text-textSecondary mt-[8px];
+      @apply font-normal text-textPrimary text-[12px];
     }
   }
 }
