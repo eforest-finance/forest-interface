@@ -32,9 +32,8 @@ export const useGetToken = () => {
   const { walletInfo, walletType, disConnectWallet, getSignature, isConnected } = useConnectWallet();
 
   const isLogin = isConnected;
-  const loginModal = useModal(LoginModal);
 
-  console.log('useGetTokenuseGetToken');
+  const loginModal = useModal(LoginModal);
 
   const closeLoading = () => {
     store.dispatch(
@@ -51,7 +50,7 @@ export const useGetToken = () => {
 
     const accountInfo = getAccountInfoFromStorage();
 
-    if (walletInfo && !checkAccountExpired(accountInfo, walletInfo.address)) {
+    if (walletInfo && !checkAccountExpired(accountInfo, walletInfo?.address)) {
       store.dispatch(setHasToken(true));
       loginModal.hide();
 
@@ -72,9 +71,13 @@ export const useGetToken = () => {
         console.log('=====signResError', resError);
         closeLoading();
         isLogin && disConnectWallet();
+
         return Promise.reject(resError);
       },
     });
+
+    console.log('res-----res', res);
+
     if (res) {
       localStorage.setItem(storages.accountInfo, JSON.stringify(res));
       setAccountInfo(res);
@@ -173,6 +176,7 @@ export const useContractConnect = () => {
 };
 
 export const useBroadcastChannel = () => {
+  const { isConnected, disConnectWallet } = useConnectWallet();
   useEffect(() => {
     const onStorageChange = (e: StorageEvent) => {
       if (e.key === storages.accountInfo) {
@@ -180,6 +184,9 @@ export const useBroadcastChannel = () => {
         const newValue = JSON.parse(e.newValue || '{}');
         if (!newValue.account && !!oldValue.account) {
           // old has value and new has no value, logout
+          localStorage.removeItem('wallet-info');
+          localStorage.removeItem('connectedWallet');
+          isConnected && disConnectWallet();
           window.location.reload();
           return;
         }

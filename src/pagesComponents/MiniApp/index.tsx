@@ -43,6 +43,8 @@ import Water from 'assets/images/miniApp/home/water.svg';
 
 import TopTree from 'assets/images/miniApp/home/topTree.svg';
 
+import BlingBig from 'assets/images/miniApp/home/blingBig.svg';
+
 import deepEqual from 'fast-deep-equal';
 import { diff } from 'deep-diff';
 
@@ -362,11 +364,17 @@ const Home = () => {
       } else {
         waterAnimate();
         watering();
+        setShowReduceTime(true);
+        setTimeout(() => {
+          setShowReduceTime(false);
+        }, 500);
       }
     } else {
       message.error("You don't have enough water");
     }
   };
+
+  const [showReduceTime, setShowReduceTime] = useState(false);
 
   return (
     <>
@@ -442,12 +450,40 @@ const Home = () => {
                     style={orangeBig}
                     onClick={() => claim(index)}>
                     <div
-                      className={`-tracking-[3.84px] text-[24px] text-white font-bold pt-[20px] absolute top-0 left-1/2 -translate-x-1/2`}
-                      style={text}>
+                      className={`w-full -tracking-[3.84px] text-[24px] text-white font-bold pt-[20px] absolute top-0 left-1/2 -translate-x-1/2`}>
                       {index !== 2 ? (
-                        <NumberAdd item={list} frequency={userInfo?.treeInfo?.current?.frequency} />
+                        <>
+                          {showReduceTime && (
+                            <>
+                              {index == 0 && list.remainingTime !== 0 && (
+                                <div
+                                  className={`w-[60px] text-[#4A310B] tracking-normal text-[14px] absolute -top-[20px] left-0 !font-chillPixels ${styles.reduceTimeAnimation}`}>
+                                  -{userInfo?.waterInfo?.wateringIncome}m
+                                </div>
+                              )}
+                              {index == 1 &&
+                                userInfo?.pointsDetails[0].remainingTime == 0 &&
+                                list.remainingTime !== 0 && (
+                                  <div
+                                    className={`w-[60px] text-[#4A310B] tracking-normal text-[14px] absolute -top-[20px] left-0 !font-chillPixels ${styles.reduceTimeAnimation}`}>
+                                    -{userInfo?.waterInfo?.wateringIncome}m
+                                  </div>
+                                )}
+                            </>
+                          )}
+                          {list.remainingTime * 1 == 0 && (
+                            <BlingBig
+                              className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${styles.animateMyPulse}`}
+                            />
+                          )}
+                          <div style={text}>
+                            <NumberAdd item={list} frequency={userInfo?.treeInfo?.current?.frequency} />
+                          </div>
+                        </>
                       ) : (
-                        list.amount
+                        <>
+                          <span style={text}>{list.amount}</span>
+                        </>
                       )}
                     </div>
                     <div className="flex items-center absolute bottom-0 left-1/2 -translate-x-1/2">

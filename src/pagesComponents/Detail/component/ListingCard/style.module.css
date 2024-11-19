@@ -3,7 +3,7 @@
 }
 
 .listing-card-title {
-  @apply lg:mt-[28px] border-0 flex;
+  @apply mt-[24px] lg:mt-[54px] border-0 flex;
 
   :global {
     .ant-segmented-item-selected {
@@ -17,7 +17,7 @@
 }
 
 .time-panel-value {
-  @apply text-[14px] font-normal text-textSecondary;
+  @apply text-[14px] font-normal text-textSecondary leading-5;
 }
 
 .mobile-button {
