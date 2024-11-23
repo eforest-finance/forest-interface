@@ -38,7 +38,7 @@
     "@portkey-v1/types": "1.5.4-alpha.20",
     "@portkey-v1/utils": "1.5.4-alpha.20",
     "@portkey/contracts": "2.2.0",
-    "@portkey/did-ui-react": "^2.15.9",
+    "@portkey/did-ui-react": "^2.15.10-alpha.0",
     "@portkey/request": "2.2.0",
     "@portkey/services": "2.2.0",
     "@portkey/types": "2.15.2-alpha.0",
