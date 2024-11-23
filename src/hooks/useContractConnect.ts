@@ -50,7 +50,11 @@ export const useGetToken = () => {
 
     const accountInfo = getAccountInfoFromStorage();
 
-    if (walletInfo && !checkAccountExpired(accountInfo, walletInfo?.address)) {
+    if (
+      walletInfo &&
+      !checkAccountExpired(accountInfo, walletInfo?.address) &&
+      accountInfo?.account == walletInfo.address
+    ) {
       store.dispatch(setHasToken(true));
       loginModal.hide();
 
@@ -75,8 +79,6 @@ export const useGetToken = () => {
         return Promise.reject(resError);
       },
     });
-
-    console.log('res-----res', res);
 
     if (res) {
       localStorage.setItem(storages.accountInfo, JSON.stringify(res));
@@ -171,27 +173,31 @@ export const useContractConnect = () => {
 
   return {
     login: connectWallet,
-    logout: disConnectWallet,
+    logout: async () => {
+      await disConnectWallet();
+      dispatch(setHasToken(false));
+      localStorage.removeItem('account-info');
+    },
   };
 };
 
-export const useBroadcastChannel = () => {
-  const { isConnected, disConnectWallet } = useConnectWallet();
-  useEffect(() => {
-    const onStorageChange = (e: StorageEvent) => {
-      if (e.key === storages.accountInfo) {
-        const oldValue = JSON.parse(e.oldValue || '{}');
-        const newValue = JSON.parse(e.newValue || '{}');
-        if (!newValue.account && !!oldValue.account) {
-          // old has value and new has no value, logout
-          localStorage.removeItem('wallet-info');
-          localStorage.removeItem('connectedWallet');
-          isConnected && disConnectWallet();
-          window.location.reload();
-          return;
-        }
-      }
-    };
-    window.addEventListener('storage', onStorageChange);
-  }, []);
-};
+// export const useBroadcastChannel = () => {
+//   const { isConnected, disConnectWallet } = useConnectWallet();
+//   useEffect(() => {
+//     const onStorageChange = (e: StorageEvent) => {
+//       if (e.key === storages.accountInfo) {
+//         const oldValue = JSON.parse(e.oldValue || '{}');
+//         const newValue = JSON.parse(e.newValue || '{}');
+//         if (!newValue.account && !!oldValue.account) {
+//           // old has value and new has no value, logout
+//           // localStorage.removeItem('wallet-info');
+//           // localStorage.removeItem('connectedWallet');
+//           // isConnected && disConnectWallet();
+//           // window.location.reload();
+//           return;
+//         }
+//       }
+//     };
+//     window.addEventListener('storage', onStorageChange);
+//   }, []);
+// };

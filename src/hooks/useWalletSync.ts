@@ -212,7 +212,7 @@ export const useCheckLoginAndToken = () => {
       return;
     }
 
-    if (accountInfo?.token) {
+    if (accountInfo?.token && accountInfo?.account == walletInfo?.address) {
       store.dispatch(setHasToken(true));
       return;
     } else {
@@ -231,7 +231,8 @@ export const useCheckLoginAndToken = () => {
       // store.dispatch(setHasToken(false));
     }
   }, [
-    accountInfo,
+    accountInfo?.account,
+    accountInfo?.token,
     isConnected,
     pathName,
     walletInfo,
