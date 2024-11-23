@@ -24,7 +24,7 @@ class Request {
       async (config: AxiosRequestConfig) => {
         // add token
         const baseURL = config.baseURL || '';
-        if (!['/connect', '/cms'].includes(baseURL) && ['/api'].includes(baseURL)) {
+        if (!['/cms'].includes(baseURL) && ['/api'].includes(baseURL)) {
           const token = await WalletAndTokenInfo.getToken(config.url || '');
           if (token) {
             config.headers = { ...config.headers, Authorization: `Bearer ${token}` };

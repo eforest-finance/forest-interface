@@ -22,17 +22,17 @@ import { useTheme } from 'hooks/useTheme';
 import { logOutUserInfo, setUserInfo, setWalletInfo } from 'store/reducer/userInfo';
 import 'utils/analytics';
 import AWSManagerInstance from 'utils/S3';
-import { formatErrorMsg } from 'contract/formatErrorMsg';
-import { IContractError } from 'contract/type';
+// import { formatErrorMsg } from 'contract/formatErrorMsg';
+// import { IContractError } from 'contract/type';
 import { usePathname } from 'next/navigation';
 import useResponsive from 'hooks/useResponsive';
-import { useBroadcastChannel } from 'hooks/useContractConnect';
+// import { useBroadcastChannel } from 'hooks/useContractConnect';
 import { useCheckLoginAndToken } from 'hooks/useWalletSync';
 import WalletAndTokenInfo from 'utils/walletAndTokenInfo';
 import VConsole from 'vconsole';
 
 import 'utils/telegram-web-app';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+// import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 // Import the functions you need from the SDKs you need
@@ -83,7 +83,7 @@ const Layout = dynamic(async () => {
 
     useEffect(() => {
       if (process.env.NEXT_PUBLIC_APP_ENV !== 'production') {
-        // new VConsole();
+        new VConsole();
       }
     }, []);
 
@@ -177,7 +177,7 @@ const Layout = dynamic(async () => {
       WalletAndTokenInfo.setSignMethod(webLoginContext.getSignature);
     }, [webLoginContext]);
 
-    useBroadcastChannel();
+    // useBroadcastChannel();
 
     useEffectOnce(() => {
       initAwsConfig();

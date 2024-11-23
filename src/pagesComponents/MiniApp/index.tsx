@@ -6,7 +6,7 @@ import styles from './style.module.css';
 import Image from 'next/image';
 
 import { useSelector } from 'react-redux';
-import { getUserInfo, walletInfo } from 'store/reducer/userInfo';
+import { getUserInfo } from 'store/reducer/userInfo';
 import useTelegram from 'hooks/useTelegram';
 import Grass from 'assets/images/miniApp/home/grass.png';
 import OrangeBg from 'assets/images/miniApp/home/orangeBg.png';
@@ -68,6 +68,9 @@ import ActivityCard from './components/ActivityCard';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 import { message } from 'antd';
 import NumberAdd from './components/NumberAdd';
+
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { store } from 'store/store';
 
 const homeBg = {
   backgroundImage: `url(${Grass.src})`,
@@ -147,6 +150,8 @@ const btnBg = {
 const Home = () => {
   const { isInTelegram } = useTelegram();
   const { address, fullAddress } = useSelector(getUserInfo);
+  const { clearManagerReadonlyStatus, walletInfo } = useConnectWallet();
+  const info = store.getState().aelfInfo.aelfInfo;
 
   const TG = TelegramPlatform.getTelegram();
 
@@ -376,6 +381,15 @@ const Home = () => {
 
   const [showReduceTime, setShowReduceTime] = useState(false);
 
+  const goToAssets = async () => {
+    await clearManagerReadonlyStatus({
+      chainIdList: ['AELF', info?.curChain],
+      caHash: walletInfo?.extraInfo?.portkeyInfo.caInfo.caHash,
+    });
+
+    router.push('asset');
+  };
+
   return (
     <>
       {!address ? (
@@ -409,7 +423,7 @@ const Home = () => {
                   <Book />
                 </div>
               </div>
-              <div className="relative group" onClick={() => setTimeout(() => router.push('asset'), 300)}>
+              <div className="relative group" onClick={goToAssets}>
                 <div className={`w-[48px] h-[52px] block group-active:hidden ${styles.boxBg}`}></div>
                 <div className={`w-[48px] h-[48px] mt-[4px] hidden group-active:block ${styles.boxBgHover}`}></div>
                 <div className="absolute top-[8px] left-1/2 -translate-x-1/2  group-active:top-[12px]">
