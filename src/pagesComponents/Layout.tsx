@@ -168,7 +168,7 @@ const Layout = dynamic(async () => {
       }
 
       if (loginError) {
-        message.error(loginError.message);
+        message.error(loginError.nativeError.message);
       }
     }, [isConnected, loginError, walletType]);
 
