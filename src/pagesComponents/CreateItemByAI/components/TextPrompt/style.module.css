@@ -1,0 +1,9 @@
+.text-prompt {
+  @apply border border-solid border-lineBorder !rounded-lg !text-base font-normal !resize-none !p-3;
+
+  :global {
+    textarea {
+      @apply !p-0;
+    }
+  }
+}

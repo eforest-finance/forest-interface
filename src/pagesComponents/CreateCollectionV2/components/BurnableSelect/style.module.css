@@ -1,0 +1,9 @@
+.custom-radio {
+  @apply !items-center;
+
+  :global {
+    span.ant-radio + * {
+      @apply !px-4;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.retryWrap {
+  :global {
+    .ant-modal-content {
+      @apply rounded-[12px];
+    }
+  }
+}

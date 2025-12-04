@@ -1,0 +1,29 @@
+.modal {
+  :global {
+    .ant-modal-header {
+      @apply text-[20px] mdl:text-[24px] font-semibold rounded-lg !px-[24px] !py-[32px]  text-textPrimary border-0;
+    }
+
+    .ant-modal-content {
+      @apply !rounded-lg;
+    }
+
+    .ant-modal-body {
+      @apply !px-[24px] !py-0;
+    }
+
+    .ant-modal-footer {
+      @apply border-0;
+    }
+  }
+}
+
+.modalTitle {
+  @apply text-[20px] mdl:text-[24px] font-semibold;
+
+  :global {
+    .ant-badge-count {
+      @apply text-[14px] ml-[8px] bg-functionalLinkBg text-brandNormal font-semibold;
+    }
+  }
+}

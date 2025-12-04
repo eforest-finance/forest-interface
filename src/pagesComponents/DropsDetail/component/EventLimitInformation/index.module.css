@@ -1,0 +1,3 @@
+.tips-icon svg path {
+  @apply fill-textSecondary;
+}

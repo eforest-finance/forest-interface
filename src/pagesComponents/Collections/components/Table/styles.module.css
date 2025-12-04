@@ -1,0 +1,71 @@
+/* stylelint-disable no-descending-specificity */
+.TSMTable {
+  :global(.ant-table) {
+    @apply bg-[var(--bg-table)] text-[14px] leading-[20px];
+  }
+  :global(.ant-table-tbody > tr > td) {
+    @apply py-[12px] pr-[24px] border-none pl-0 text-[var(--table-tbody-text)] bg-[var(--bg-table)] border-[var(--table-header-border)];
+  }
+  :global(.ant-table-tbody > tr > td:first-child) {
+    @apply py-[12px] pl-[8px];
+  }
+  :global(.ant-table-tbody > tr) {
+    @apply cursor-pointer;
+  }
+  :global(.ant-table-tbody > tr > td:last-child) {
+    @apply py-[12px] pr-[8px];
+  }
+  :global(.ant-table-thead > tr > th) {
+    @apply py-[12px] pr-[24px] pl-0 bg-[var(--bg-table)] border-[var(--table-header-border)] text-[var(--table-header-text)] text-[14px] leading-[22px] font-medium;
+  }
+  :global(.ant-table-thead > tr > th:first-child) {
+    @apply py-[12px] pl-[8px];
+  }
+  :global(.ant-table-thead > tr > th:last-child) {
+    @apply pr-[8px];
+  }
+
+  /* :global(.ant-table-tbody > tr.ant-table-placeholder:hover > td) {
+    @apply bg-[var(--table-row-hover)];
+  } */
+  :global(.ant-table-tbody > tr > td.ant-table-cell-row-hover) {
+    @apply bg-[var(--table-row-hover)];
+  }
+  :global(.ant-table-tbody > tr.ant-table-row:hover) {
+    @apply bg-[var(--table-row-hover)];
+    td:first-child {
+      @apply rounded-l-[12px];
+    }
+    td:last-child {
+      @apply rounded-r-[12px];
+    }
+  }
+  :global(
+      .ant-table-thead
+        > tr
+        > th:not(:last-child, .ant-table-selection-column, .ant-table-row-expand-icon-cell, [colspan])::before
+    ) {
+    @apply !bg-none !w-0;
+  }
+}
+
+.mobile-TSMTable {
+  :global(.ant-table-tbody > tr > td) {
+    @apply py-[15px] pr-[8px] pl-0;
+  }
+  :global(.ant-table-tbody > tr > td:first-child) {
+    @apply pl-0;
+  }
+  :global(.ant-table-thead > tr > th) {
+    @apply py-[15px] pr-[8px] pl-0;
+  }
+  :global(.ant-table-thead > tr > th:first-child) {
+    @apply pl-0;
+  }
+  :global(.ant-table-tbody > tr > td:last-child) {
+    @apply pr-0;
+  }
+  :global(.ant-table-thead > tr > th:last-child) {
+    @apply pr-0;
+  }
+}

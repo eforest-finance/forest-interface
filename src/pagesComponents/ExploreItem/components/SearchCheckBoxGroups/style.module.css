@@ -1,0 +1,35 @@
+.checkbox {
+  @apply w-full;
+  :global(.elf-checkbox + span) {
+    @apply text-white text-sm leading-[20px] pr-0 pl-[8px];
+  }
+
+  :global(.ant-checkbox + span) {
+    @apply pl-[12px] pr-0 text-[var(--color-primary)] text-[14px] font-medium leading-[22px];
+  }
+}
+
+.clear-all {
+  .range-select-apply {
+    @apply w-full flex items-center justify-center text-sm leading-[20px] font-medium;
+  }
+}
+
+.search-list {
+  :global(.ant-list-header) {
+    @apply border-none pr-1;
+  }
+  :global(.ant-list-item) {
+    @apply py-4 px-2 pr-3;
+  }
+  :global(.ant-list-item-extra) {
+    @apply text-textSecondary text-sm font-medium;
+  }
+  :global(.ant-list-empty-text) {
+    @apply text-textPrimary font-medium text-sm p-4 text-center;
+  }
+
+  :global(.ant-checkbox + span) {
+    @apply pl-3 pr-0 text-textSecondary text-sm font-medium;
+  }
+}

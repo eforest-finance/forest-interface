@@ -1,0 +1,18 @@
+.base-tag-wrapper {
+  @apply box-border border border-solid border-[var(--brand-base)];
+  @apply rounded-[12px] text-[16px] leading-normal text-[var(--text-item)];
+  @apply mt-0 font-medium p-[15px] bg-[var(--bg-menu)];
+}
+.base-tag-wrapper :global(.ant-tag-close-icon) {
+  @apply ml-[18px] inline-flex justify-center items-center;
+}
+.base-tag-wrapper :global(.ant-tag-close-icon) svg {
+  @apply w-[16px] h-[16px];
+}
+
+.marketplace-mobile .base-tag-wrapper {
+  @apply rounded-[8.571px] text-[11.429px] leading-normal p-[11.429px];
+}
+.marketplace-mobile .base-tag-wrapper :global(.ant-tag-close-icon) {
+  @apply ml-[12.857px];
+}

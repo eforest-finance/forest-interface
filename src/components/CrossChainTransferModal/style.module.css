@@ -1,0 +1,10 @@
+.form {
+  :global {
+    .ant-form-item-label {
+      @apply p-0 pb-[16px];
+      > label {
+        @apply w-full;
+      }
+    }
+  }
+}

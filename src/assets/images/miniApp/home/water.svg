@@ -1,0 +1,66 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="73.7578" y="175.5" width="12" height="12" transform="rotate(15 73.7578 175.5)" fill="url(#pattern0_711_4284)"/>
+<rect x="29.0908" y="124.348" width="12" height="12" transform="rotate(75 29.0908 124.348)" fill="url(#pattern1_711_4284)"/>
+<rect x="22.1377" y="37.5" width="12" height="12" transform="rotate(135 22.1377 37.5)" fill="url(#pattern2_711_4284)"/>
+<rect x="135.439" y="19.6969" width="12" height="12" transform="rotate(-165 135.439 19.6969)" fill="url(#pattern3_711_4284)"/>
+<rect x="161.849" y="165" width="12" height="12" transform="rotate(-30 161.849 165)" fill="url(#pattern4_711_4284)"/>
+<rect x="177.605" y="88.3485" width="12" height="12" transform="rotate(-105 177.605 88.3485)" fill="url(#pattern5_711_4284)"/>
+<rect x="15.1523" y="157" width="6" height="6" fill="url(#pattern6_711_4284)"/>
+<rect x="138.349" y="173" width="6" height="6" fill="url(#pattern7_711_4284)"/>
+<rect x="81.6523" y="14" width="4" height="4" fill="url(#pattern8_711_4284)"/>
+<rect x="51.8486" y="161.5" width="4" height="4" fill="url(#pattern9_711_4284)"/>
+<rect x="177.849" y="124" width="4" height="4" fill="url(#pattern10_711_4284)"/>
+<rect x="159.652" y="52.5" width="6" height="6" fill="url(#pattern11_711_4284)"/>
+<rect x="14.3486" y="79" width="6" height="6" fill="url(#pattern12_711_4284)"/>
+<rect x="37.6523" y="33" width="6" height="6" fill="url(#pattern13_711_4284)"/>
+<rect x="169.849" y="20.5" width="4" height="4" fill="url(#pattern14_711_4284)"/>
+<defs>
+<pattern id="pattern0_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern1_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern2_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern3_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern4_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern5_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern6_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern7_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern8_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern9_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern10_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern11_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern12_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern13_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<pattern id="pattern14_711_4284" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_711_4284" transform="scale(0.015625)"/>
+</pattern>
+<image id="image0_711_4284" width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAWJJREFUeJztm7ENwjAQRQkCCSRaRoCSgkEoGIM5mIFBGIKSgpYRKKFAooCWXBHLOjsv0v3XWbGSr6+7sx3bzQjidH19/9uH7aIhdIyJjw4JGUALoOk972zuW/quBeEjQAbQAmiq55vN+fP93dl/t5q12rVrQvgIkAG0ABoZQAugkQG0AJriY2zuuJ+i9rwgfATIAFoAzYQWYHO8b8JHgAygBdC4a0DpcX+/nnd3KLyfED4CZAAtgKb6POD2+LTam+W09iezCB8BMoAWQJM9htpx/3h5tp57czy1NrDzDO//gvARIANoATT4/wCLdy2RS/gIkAG0ABp3DbDjfmruP7S1QfgIkAG0ABp3DSid87nv8+4rhI8AGUALoCm+FrA5mvvc2z+X8BEgA2gBNO7zNqm9QW8O23lA6TND4SNABtACaNzzAJuDqTtBllSN0DnBysgAWgBN73eGctGdocrIAFoAzQ+wDGDQD1bUtgAAAABJRU5ErkJggg=="/>
+<image id="image1_711_4284" width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAYFJREFUeJztmzGqAkEQRGfFDwqmHkFDAw9i4DH+OTyDxzDwEIYGht8jGCooGPhTtxe2bbqHQrpetrqMRdFds+PONCWY7fH2ih7znd/lpIkcbxA52DdCA9AC0Lj7Sfb85nDtvX8x/XH93mo2al17MyF9BdAAtAA05v7Ret7a46fLs/d7bTxvJqSvABqAFoBG7Zfonpd4M0BizYT0FUAD0ALQdPrD2/OyByX78+NjcaV0MyI6E9JXAA1AC0DTRPf8ej7uvX/3d29da5lQ+zkhfQXQALQANEP5gffZPhqpR2aCNyPSVwANQAtA08kAidZjVrxrgWjSVwANQAtAo2aAFWuPS7T1f3QmpK8AGoAWgEbNgNprg9rzvEb6CqABaAFo3GsBbZ62zuPeed+aWekrgAagBaBR3w16/7evjXcPUfoKoAFoAWjMe4TQmRC9bzB9BdAAtAA07r3CtTOBe4UrQwPQAtCEnxnyvhfQ4JmhYGgAWgCa0HO4pfDs8NdBA9AC0PwDq2GKUeLvSKsAAAAASUVORK5CYII="/>
+</defs>
+</svg>

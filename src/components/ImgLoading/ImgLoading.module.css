@@ -1,0 +1,29 @@
+.img-loading-wrapper {
+  @apply overflow-hidden relative rounded-t-[12px];
+}
+.img-loading-wrapper :global .show-image {
+  @apply float-left w-[100%] h-[100%] aspect-square;
+}
+.img-loading-wrapper :global .broken {
+  @apply !object-none w-[100%] h-auto aspect-square flex items-center justify-center;
+}
+.img-loading-wrapper .loading-image-default-wrapper {
+  @apply bg-[var(--bg-dark)] absolute z-[100] w-[100%] h-[100%];
+}
+
+.img-loading-wrapper.marketplace-mobile .loading-image-default-wrapper {
+  @apply h-[117.143px];
+}
+.img-loading-wrapper.marketplace-mobile .loading-image-default-wrapper :global .error-image {
+  @apply w-[28.571px] h-[28.571px];
+}
+.img-enhance-wrapper {
+  @apply relative;
+}
+.img-enhance-wrapper :global(.ant-image-placeholder) {
+  @apply bg-fillPageBg;
+
+  :global(.ant-skeleton-image .ant-skeleton-image-svg) {
+    @apply !mx-2;
+  }
+}

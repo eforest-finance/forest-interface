@@ -1,0 +1,44 @@
+/* stylelint-disable no-descending-specificity */
+.time-picker-popup {
+  :global(.adm-popup-body) {
+    @apply rounded-tl-[12px] rounded-tr-[12px] bg-transparent;
+  }
+}
+
+.date-picker-mobile {
+  --item-height: 52px;
+
+  @apply rounded-tl-[12px] rounded-tr-[12px] h-[332px];
+  :global {
+    .adm-picker-header {
+      @apply bg-[var(--bg-page)] border-[var(--line-box)] p-4 border-b-0;
+      .adm-picker-header-button {
+        @apply font-medium text-base text-brandNormal py-2 px-5;
+      }
+    }
+
+    .adm-picker-body {
+      @apply bg-[var(--bg-page)] px-4 pb-4;
+      .adm-picker-view {
+        @apply bg-[var(--bg-page)];
+        .adm-picker-view-column {
+          .adm-picker-view-column-item {
+            @apply text-[var(--color-primary)];
+          }
+          .adm-picker-view-column-item[aria-label='active'] {
+            @apply text-textPrimary font-medium;
+          }
+        }
+        .adm-picker-view-mask {
+          .adm-picker-view-mask-top,
+          .adm-picker-view-mask-bottom {
+            @apply bg-[var(--bg-page)];
+          }
+          .adm-picker-view-mask-middle {
+            @apply bg-transparent border-[var(--line-box)] border-none;
+          }
+        }
+      }
+    }
+  }
+}

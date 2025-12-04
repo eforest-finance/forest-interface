@@ -1,0 +1,12 @@
+/* stylelint-disable no-descending-specificity  */
+.custom__tabs {
+  :global(.ant-tabs-ink-bar) {
+    @apply !h-[3px] !bg-[var(--brand-normal)];
+  }
+  :global(.ant-tabs-nav::before) {
+    @apply border-[var(--line-box)];
+  }
+  :global(.ant-tabs-nav) {
+    @apply !mb-0 sticky top-[62px] mdb:top-20 z-50 !bg-fillPageBg;
+  }
+}

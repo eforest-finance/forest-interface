@@ -1,0 +1,194 @@
+/* stylelint-disable no-descending-specificity */
+.button:global(.ant-btn) {
+  @apply rounded-lg h-[40px] text-[14px] leading-[22px] px-[20px] transition-none font-medium;
+  svg {
+    @apply flex-shrink-0;
+  }
+}
+
+.button:global([ant-click-animating-without-extra-node='true']::after) {
+  @apply !shadow-none;
+}
+
+.button:global(.ant-btn-primary) {
+  @apply border-none bg-brandNormal text-textWhite;
+  &:hover {
+    @apply bg-brandHover;
+  }
+  &:active {
+    @apply bg-brandClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply disabled:bg-brandDisable text-textWhite;
+    }
+  }
+}
+
+.button:global(.ant-btn-icon-only) {
+  @apply flex justify-center items-center;
+}
+
+.button:global(.ant-btn-primary.ant-btn-dangerous) {
+  @apply border-none bg-functionalDanger text-textWhite;
+  &:hover {
+    @apply bg-functionalDangerHover;
+  }
+  &:active {
+    @apply bg-functionalDangerClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply disabled:bg-functionalDangerDisable text-textWhite;
+    }
+  }
+}
+
+.button:global(.ant-btn-default) {
+  @apply border-lineBorder bg-fillPageBg text-textPrimary;
+  &:hover {
+    @apply border-lineDash bg-fillHoverBg text-textPrimary;
+  }
+  &:active {
+    @apply border-lineDash bg-fillClickBg text-textPrimary;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-textDisable bg-fillPageBg border border-textDisable;
+    }
+  }
+  &:global(.ant-btn-icon-only) {
+    svg {
+      @apply fill-textPrimary;
+      path {
+        @apply fill-textPrimary;
+      }
+    }
+  }
+}
+
+.button:global(.ant-btn-default.ant-btn-dangerous) {
+  @apply border-functionalDanger bg-fillPageBg text-functionalDanger;
+  &:hover {
+    @apply border-functionalDangerHover bg-fillHoverBg text-functionalDangerHover;
+  }
+  &:active {
+    @apply border-functionalDangerClick bg-fillClickBg text-functionalDangerClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-functionalDangerDisable bg-fillPageBg border border-functionalDangerDisable;
+    }
+  }
+}
+
+.button:global(.ant-btn-dashed) {
+  @apply border-lineDash bg-fillPageBg text-textPrimary;
+  &:hover {
+    @apply border-brandHover bg-fillPageBg text-brandHover;
+  }
+  &:active {
+    @apply border-brandClick bg-fillPageBg text-brandClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-textDisable bg-fillPageBg border-textDisable;
+    }
+  }
+}
+
+.button:global(.ant-btn-link) {
+  @apply border-0 bg-fillPageBg text-brandNormal;
+  &:hover {
+    @apply border-0 bg-fillHoverBg text-brandHover;
+  }
+  &:active {
+    @apply border-0 bg-fillClickBg text-brandClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-brandDisable bg-fillPageBg border-0;
+    }
+  }
+}
+
+.button:global(.ant-btn-link.ant-btn-dangerous) {
+  @apply border-0 bg-fillPageBg text-functionalDanger;
+  &:hover {
+    @apply border-0 bg-functionalDangerBg text-functionalDangerHover text-xs;
+  }
+  &:active {
+    @apply border-0 bg-functionalDangerBg text-functionalDangerClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-functionalDangerDisable bg-fillPageBg border-0;
+    }
+  }
+}
+
+.button:global(.ant-btn-text) {
+  @apply border-0 bg-fillPageBg text-brandNormal;
+  &:hover {
+    @apply border-0 bg-fillHoverBg text-brandHover;
+  }
+  &:active {
+    @apply border-0 bg-fillClickBg text-brandClick;
+  }
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      @apply text-brandDisable bg-fillPageBg border-0;
+    }
+  }
+}
+
+.button:global(.ant-btn-sm) {
+  @apply h-[32px] rounded-lg text-[12px] leading-[20px] px-[16px];
+}
+
+.button:global(.ant-btn-lg) {
+  @apply h-[48px] text-[16px] rounded-xl leading-[24px] px-[28px];
+}
+
+.button.forest-btn-ultra {
+  @apply h-[56px] text-[16px] rounded-xl leading-[24px] px-[32px] font-semibold;
+
+  &:global(.ant-btn-icon-only) {
+    @apply px-[16px];
+    svg {
+      @apply w-[24px] h-[24px];
+    }
+  }
+}
+
+.button.forest-btn-mini {
+  @apply h-[28px] rounded-md text-[12px] leading-[20px] px-[12px];
+}
+
+.button.button-full {
+  @apply w-full;
+}

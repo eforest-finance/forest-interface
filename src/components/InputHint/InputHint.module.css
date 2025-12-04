@@ -1,0 +1,10 @@
+.input-hint-wrapper {
+  @apply w-full px-[16px] relative box-border text-textPrimary;
+}
+.input-hint-wrapper .max-count-wrapper {
+  @apply text-textDisable text-base h-[48px] flex items-center;
+}
+
+.input-hint-wrapper .input-wrapper {
+  @apply bg-transparent w-full absolute top-0 left-0 h-[48px];
+}
