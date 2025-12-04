@@ -1,0 +1,10 @@
+.owner {
+  @apply mt-[8px] flex items-center;
+  .title {
+    @apply text-textSecondary text-[12px] font-medium ml-[4px] mr-[8px];
+  }
+
+  .value {
+    @apply text-brandNormal  text-[12px] font-medium cursor-pointer;
+  }
+}

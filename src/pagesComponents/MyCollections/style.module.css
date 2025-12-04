@@ -1,0 +1,68 @@
+.my-protocols {
+  @apply overflow-y-auto;
+
+  height: calc(100vh - 80px);
+}
+
+.my-protocols .protocol-list .protocol-panel {
+  @apply py-[20px] px-0;
+}
+
+.my-protocols .top-panel {
+  @apply max-w-[1920px] pl-[24Px] lg:pl-[40Px] pt-[80px] pb-[60px] mt-0 mx-auto;
+}
+
+.my-protocols .top-panel h1.main-title {
+  @apply font-semibold text-[40px] leading-[48px] text-[var(--color-primary)];
+}
+
+.my-protocols .top-panel .description {
+  @apply flex items-center font-medium leading-[21px] mt-[17px] text-[var(--color-secondary)] text-[14px];
+}
+
+.my-protocols .top-panel .description svg {
+  @apply ml-[9px];
+}
+
+.my-protocols .top-panel .create-btn {
+  @apply !w-[312px] mt-[40px];
+}
+
+.mobile-my-protocols {
+  @apply overflow-y-scroll;
+
+  height: calc(100vh - 60px);
+}
+
+.mobile-my-protocols .top-panel {
+  @apply px-[24px] pt-[40px] pb-[20px] pl-[16Px];
+}
+.my-protocols.mobile-my-protocols .top-panel h1.main-title {
+  @apply text-[30px];
+}
+
+.mobile-my-protocols .top-panel .description {
+  @apply block;
+}
+
+.mobile-my-protocols .top-panel .description svg {
+  @apply mb-[-4.2px] ml-[12.6px];
+}
+
+.mobile-my-protocols .btn-panel {
+  @apply z-[100] fixed left-0 right-0 bottom-0 py-[16px] bg-[var(--bg-menu)] text-center;
+
+  box-shadow: inset 0 1px 1px var(--line-box);
+}
+
+.mobile-my-protocols .btn-panel .create-btn {
+  @apply w-full m-0;
+}
+
+.mobile-my-protocols .protocol-list {
+  height: calc(100vh - 60px);
+}
+
+.mobile-my-protocols .protocol-list .protocol-panel {
+  @apply pt-[20px] pb-[108px];
+}

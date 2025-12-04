@@ -1,0 +1,75 @@
+/* stylelint-disable no-descending-specificity */
+.input {
+  @apply text-base py-2 px-3 bg-fillPageBg rounded-lg border-lineBorder text-textPrimary box-border resize-none;
+
+  &.forest-input-medium {
+    @apply h-[40px];
+  }
+
+  &.forest-input-default {
+    @apply h-[48px];
+  }
+
+  &.forest-input-large {
+    @apply h-[56px];
+  }
+
+  &.forest-area-medium {
+    @apply h-[120px];
+  }
+
+  &.forest-area-default {
+    @apply h-[128px];
+  }
+  
+  &:global(.ant-input-affix-wrapper>input) {
+    @apply h-full;
+  }
+
+  &:global(.ant-input), &:global(.ant-input-number-focused) {
+    @apply !shadow-none;
+  }
+
+  &:global(.ant-input-status-error:not(.ant-input-disabled, .ant-input-borderless).ant-input),
+  &:global(.ant-input-status-error:not(.ant-input-disabled, .ant-input-borderless).ant-input:hover) {
+    @apply bg-fillPageBg;
+  }
+  
+  &:disabled {
+    @apply text-base bg-fillPageBg text-textDisable border-lineBorder hover:border-lineBorder;
+  }
+  &::placeholder {
+    @apply text-textDisable;
+  }
+  &[type='number'] {
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      @apply appearance-none m-0;
+    }
+  }
+
+  input {
+    @apply bg-fillPageBg text-textPrimary !shadow-none;;
+  }
+
+  :global(.ant-input-number-input) {
+    @apply h-full p-0;
+  }
+
+  :global {
+    .ant-input-suffix {
+      .ant-input-clear-icon {
+        @apply flex items-center justify-center;
+      }
+    }
+  }
+
+  &:global(.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disable)) {
+    @apply hover:border-brandHover;
+  }
+  &:global(.ant-input-affix-wrapper.ant-input-affix-wrapper-focused) {
+    @apply shadow-none border-brandNormal;
+  }
+}

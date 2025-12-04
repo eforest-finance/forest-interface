@@ -1,0 +1,51 @@
+.bronze {
+  @apply border-rarityBronze text-rarityBronze;
+}
+
+.silver {
+  @apply border-raritySilver text-raritySilver;
+}
+
+.gold {
+  @apply border-rarityGold text-rarityGold;
+}
+
+.platinum {
+  @apply border-rarityPlatinum text-rarityPlatinum;
+}
+
+.halcyon {
+  @apply border-rarityHalcyon text-rarityHalcyon;
+}
+
+.diamond {
+  @apply border-rarityDiamond text-rarityDiamond;
+}
+
+.white {
+  @apply bg-white;
+
+  .bronze {
+    @apply border-rarityBronzeWhite text-rarityBronzeWhite;
+  }
+
+  .silver {
+    @apply border-raritySilverWhite text-raritySilverWhite;
+  }
+
+  .gold {
+    @apply border-rarityGoldWhite text-rarityGoldWhite;
+  }
+
+  .platinum {
+    @apply border-rarityPlatinumWhite text-rarityPlatinumWhite;
+  }
+
+  .halcyon {
+    @apply border-rarityHalcyonWhite text-rarityHalcyonWhite;
+  }
+
+  .diamond {
+    @apply border-rarityDiamondWhite text-rarityDiamondWhite;
+  }
+}

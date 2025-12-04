@@ -1,0 +1,48 @@
+.sync-chain-modal {
+  @apply w-[1200Px];
+
+  .progress-bar-container {
+    @apply flex items-center;
+
+    .progress-bar {
+      @apply w-[480px] flex items-center relative h-[8px];
+    }
+  }
+  .notice-container {
+    @apply border p-[24px_32px] bg-[var(--bg-card)] mb-[13px];
+  }
+  :global .ant-modal-footer {
+    @apply pb-[32px];
+  }
+}
+
+.custom-loading {
+  :global(.ant-spin-text) {
+    text-shadow: none !important;
+  }
+  :global(.ant-spin-container::after) {
+    @apply bg-transparent;
+  }
+  :global(.ant-spin-container.ant-spin-blur) {
+    @apply opacity-100;
+  }
+  :global .ant-modal-footer {
+    @apply pb-[32px];
+  }
+}
+
+.sync-chain-modal-mobile {
+  @apply overflow-hidden;
+
+  .progress-bar-container {
+    @apply w-full flex items-center overflow-hidden;
+
+    .progress-bar {
+      @apply flex-1 overflow-hidden;
+    }
+  }
+
+  .notice-container {
+    @apply border p-0 bg-[var(--bg-card)] mb-0;
+  }
+}

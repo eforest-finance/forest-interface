@@ -1,0 +1,14 @@
+.seed-select-popup {
+  @apply !shadow-none;
+  :global {
+    .ant-select-item-option-disabled {
+      @apply !cursor-pointer;
+    }
+    .ant-select-item-option {
+      @apply !py-0 !border-0 !border-b !border-solid !border-lineDividers hover:bg-fillHoverBg;
+    }
+    .ant-select-item-option:last-child {
+      @apply !border-b-0;
+    }
+  }
+}

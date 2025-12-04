@@ -1,0 +1,29 @@
+.arrow {
+  @apply w-[40px] h-[40px] rounded-[50%] flex items-center justify-center cursor-pointer border-[1px] border-solid border-[var(--line-border)] bg-[var(--swiper-bg)];
+  svg {
+    * {
+      @apply stroke-[var(--text-item)];
+    }
+  }
+}
+
+.leftArrow {
+  @apply absolute top-[50%]  translate-y-[-50%] left-[-20px] z-20;
+
+  backdrop-filter: blur(5px);
+}
+
+.rightArrow {
+  @apply absolute top-[50%] translate-y-[-50%] right-[-20px] z-20;
+
+  backdrop-filter: blur(5px);
+}
+
+.seed-item-card {
+  @apply rounded-[12px] border border-solid border-[var(--line-box)] p-[32px] bg-[var(--bg-home)] cursor-pointer hover:bg-[var(--bg-home-hover)];
+  @apply w-[444px] h-[202px] m-[8px] inline-block flex-shrink-0;
+
+  &:hover {
+    box-shadow: 0px 4px 20px 0px rgba(64, 64, 64, 0.1);
+  }
+}

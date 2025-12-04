@@ -1,0 +1,10 @@
+.sale-modal-custom {
+  :global{
+    .ant-modal-body{
+      @apply mdTW:!pb-0;
+    }
+    .ant-modal-footer{
+      @apply mdTW:!py-[32px];
+    }
+  }
+}

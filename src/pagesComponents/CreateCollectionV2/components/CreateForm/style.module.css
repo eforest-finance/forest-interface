@@ -1,0 +1,32 @@
+.custom-form {
+  :global {
+    .ant-form-item {
+      @apply !mb-10;
+
+      .ant-form-item-label {
+        @apply !pb-4;
+      }
+    }
+    .ant-form-item-label > label {
+      @apply !h-auto !text-textPrimary font-medium text-lg w-full;
+    }
+
+    .ant-collapse-header {
+      @apply !px-0 flex flex-row-reverse w-fit !items-center;
+      .ant-collapse-header-text {
+        @apply !text-textPrimary font-medium text-lg mr-2;
+      }
+    }
+    .ant-collapse-content-box {
+      @apply !px-0;
+    }
+  }
+
+  .arrow-icon-custom {
+    svg {
+      path {
+        @apply stroke-textPrimary;
+      }
+    }
+  }
+}

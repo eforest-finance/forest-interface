@@ -1,0 +1,5 @@
+.base-tooltip-wrapper {
+  path {
+    @apply fill-[var(--text-secondary)];
+  }
+}

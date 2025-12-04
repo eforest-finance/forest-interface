@@ -1,0 +1,31 @@
+/* stylelint-disable no-descending-specificity */
+.dropdown-menu {
+  :global {
+    .ant-dropdown-menu {
+      @apply cursor-default rounded-lg bg-[var(--bg-menu)] overflow-hidden p-0;
+      @apply border border-solid border-[var(--border-menu)];
+    
+    }
+    .ant-dropdown-menu-item {
+      @apply flex m-0 py-0 px-[19px] min-w-[137px] min-h-[56px] h-auto text-[16px] bg-transparent border-0 border-t border-solid border-[var(--border-menu)];
+
+      &:first-child {
+        @apply border-0;
+      }
+
+      &:hover {
+        @apply bg-transparent;
+
+        >span, >span>a {
+          @apply text-brandHover;
+        }
+      }
+
+      >span, >span>a {
+        @apply flex flex-1 items-center font-medium text-[var(--color-menu)];
+
+        transition: all 0.3s;
+      }
+    }    
+  }
+}

@@ -1,0 +1,22 @@
+.imagePreview-wrapper {
+  @apply w-full mdl:w-[343px] mdl:w-[480px] mdl:h-[524px] border-[1px] border-dashed	border-[var(--line-border)] rounded-[15.6px];
+
+  .upload-preview-wrapper {
+    @apply p-[30px]  relative;
+  }
+}
+
+.imagePreview-wrapper-batch {
+  @apply w-[343px] mdl:w-[480px] mdl:h-[480px] mt-[32px];
+  :global {
+    .ant-upload-drag {
+      @apply rounded-[15.6px];
+    }
+  }
+
+  .list-wrapper {
+    &::-webkit-scrollbar {
+      @apply hidden;
+    }
+  }
+}

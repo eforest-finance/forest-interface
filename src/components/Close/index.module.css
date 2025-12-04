@@ -1,0 +1,6 @@
+.close {
+  @apply w-6 h-6 ml-4 cursor-pointer;
+  path {
+    @apply !fill-textPrimary !stroke-textPrimary;
+  }
+}

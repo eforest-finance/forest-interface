@@ -1,0 +1,22 @@
+.segmented {
+  @apply bg-fillHoverBg rounded-lg p-1 w-full max-w-[343px];
+
+  :global {
+    .ant-segmented-item {
+      @apply flex-1;
+      .ant-segmented-item-label {
+        @apply px-3 text-base font-semibold text-textSecondary;
+      }
+
+      &.ant-segmented-item-selected {
+        @apply bg-fillPageBg rounded-lg;
+        .ant-segmented-item-label {
+          @apply text-textPrimary;
+        }
+      }
+    }
+    .ant-segmented-thumb {
+      @apply bg-fillPageBg rounded-lg;
+    }
+  }
+}

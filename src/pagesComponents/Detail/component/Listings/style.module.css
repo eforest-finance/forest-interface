@@ -1,0 +1,58 @@
+.listings .from {
+  @apply whitespace-nowrap overflow-x-auto;
+}
+.listings .from-details {
+  @apply flex items-center justify-center font-medium text-brandNormal cursor-pointer rounded-[8px];
+}
+
+.listings-table-custom {
+  :global(.ant-table-tbody) {
+    :global(.ant-table-row) {
+      > :global(.ant-table-cell) {
+        &:first-of-type {
+          @apply !rounded-none;
+        }
+        &:last-of-type {
+          @apply !rounded-none;
+        }
+      }
+    }
+  }
+}
+
+.listings {
+  :global(.ant-table-thead) {
+    tr {
+      th {
+        @apply border-0;
+      }
+      :global(.ant-table-cell) {
+        @apply bg-fillHoverBg;
+
+        &:first-of-type {
+          @apply !rounded-l-lg;
+        }
+        &:nth-last-child(2) {
+          @apply !rounded-r-lg;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table-body) {
+    @apply min-h-[320px];
+
+    :global(.ant-table-tbody) {
+      :global(.ant-table-row) {
+        > :global(.ant-table-cell) {
+          &:first-of-type {
+            @apply !rounded-none;
+          }
+          &:last-of-type {
+            @apply !rounded-none;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+/* stylelint-disable no-duplicate-selectors */
+@tailwind components;
+@tailwind utilities;
+
+.portkey-ui-base-modal .portkey-ui-custom-svg svg path#qrcode-line,
+.portkey-ui-base-modal .portkey-ui-custom-svg svg path#pc-line {
+  @apply fill-[var(--brand-base)];
+}
+
+.portkey-ui-asset-wrapper {
+  background-color: white;
+}
+
+.aelf-web-logout-dialog {
+  background-color: #fff;
+}
+
+.ant-drawer-content {
+  @apply !bg-[var(--bg-menu)];
+}
+
+.adm-popup-body {
+  @apply rounded-tl-[12px] rounded-tr-[12px] bg-transparent !important;
+}
+
+.ant-checkbox-checked {
+  @apply rounded-[2px];
+  &:not(.ant-checkbox-disabled) {
+    .ant-checkbox-inner {
+      @apply bg-[var(--brand-base)] border-brand;
+    }
+  }
+}
+
+@layer components {
+  .forest-rounded-xl {
+    @apply rounded-xl mdTW:rounded-xl;
+  }
+  .hover-color {
+    @apply hover:border-brandHover focus:border-brandNormal;
+  }
+  .border--err {
+    @apply border-functionalDanger border-solid border hover:border-functionalDangerHover focus:border-functionalDangerClick;
+  }
+
+  .forest-marketplace {
+    .ant-drawer-content {
+      @apply !bg-[--bg-menu];
+    }
+  }
+  .marketplace-content {
+    @apply bg-[var(--bg-page)];
+  }
+
+  .marketplace-content-mobile {
+    min-height: calc(100% - 62.4px);
+  }
+  .marketplace-content-pc {
+    min-height: calc(100% - 80px);
+  }
+  .not__found__mobile {
+    min-height: calc(100vh - 62.4px);
+  }
+  .not__found__pc {
+    min-height: calc(100vh - 80px);
+  }
+
+  .text-primary {
+    @apply text-[20px] leading-[28px] font-semibold text-[var(--text-primary)];
+  }
+  .text-secondary {
+    @apply text-[16px] leading-[24px] font-normal text-[var(--text-secondary)];
+  }
+}
+
+.ant-row.aelf-web-logout-dialog-content {
+  @apply flex flex-col w-full;
+}
+.ant-btn.aelf-web-logout-dialog-btn {
+  @apply h-[48Px];
+}

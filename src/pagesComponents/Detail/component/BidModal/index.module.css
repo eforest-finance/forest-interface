@@ -1,0 +1,14 @@
+.bid-modal {
+  :global {
+    .ant-modal-body {
+      @apply mdTW:!pb-0;
+    }
+    .ant-modal-footer{
+      @apply mdTW:!py-[32px];
+    }
+  }
+}
+
+.bid-modal-custom :global(.ant-modal-footer) {
+  @apply mdTW:!px-[32px];
+}

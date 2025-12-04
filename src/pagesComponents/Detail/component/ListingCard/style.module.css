@@ -1,0 +1,29 @@
+.listing-card {
+  @apply flex flex-col rounded-[12px] bg-transparent;
+}
+
+.listing-card-title {
+  @apply mt-[24px] lg:mt-[54px] border-0 flex;
+
+  :global {
+    .ant-segmented-item-selected {
+      @apply rounded-[8px];
+
+      .ant-segmented-item-label {
+        @apply !text-textPrimary;
+      }
+    }
+  }
+}
+
+.time-panel-value {
+  @apply text-[14px] font-normal text-textSecondary leading-5;
+}
+
+.mobile-button {
+  @apply w-full bottom-0 left-0 bg-fillPageBg flex z-[998];
+}
+
+.mobile-listing-card {
+  @apply mt-[24px];
+}

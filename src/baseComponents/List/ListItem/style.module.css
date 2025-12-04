@@ -1,0 +1,23 @@
+.forest-list-item {
+  @apply py-[24px] border-0 border-b border-solid !border-lineDividers;
+}
+
+.forest-list-meta {
+  :global {
+    .ant-list-item-meta-avatar {
+      .ant-avatar {
+        @apply w-[64px] h-[64px] rounded-sm;
+      }
+    }
+    .ant-list-item-meta-content {
+      @apply h-[64px] flex flex-col justify-center;
+
+      .ant-list-item-meta-title {
+        @apply text-base text-textSecondary font-medium mb-[4px];
+      }
+      .ant-list-item-meta-description {
+        @apply text-xl text-textPrimary font-semibold;
+      }
+    }
+  }
+}

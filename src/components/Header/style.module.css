@@ -1,0 +1,182 @@
+/* stylelint-disable no-descending-specificity */
+.marketplace-header {
+  @apply text-[--color-header] w-[100%] h-[80px] pt-0 pr-[46.6px] pb-0 pl-[40px] bg-white;
+  @apply flex items-center justify-between;
+}
+
+.mobile-forest-logo svg {
+  @apply w-[80px] h-[16px];
+}
+
+.marketplace-header .forest-logo svg {
+  @apply w-[138px] h-[28px];
+}
+
+.marketplace-header .nav-text {
+  @apply text-textPrimary hover:!text-brandHover not-italic font-semibold text-[18px] leading-[27px] cursor-pointer;
+}
+
+.marketplace-header .nav-text.text-select {
+  @apply text-[var(--brand-normal)];
+}
+
+.marketplace-header .icon-btn-wrap {
+  @apply !gap-[24px] flex items-center border-0;
+}
+
+/* .marketplace-header .icon-btn-wrap :global .ant-space-item {
+  @apply w-[40px] h-[40px];
+} */
+
+.marketplace-header.mobile-header-wrapper .frame svg {
+  @apply w-[32px] h-[32px];
+}
+.marketplace-header.mobile-header-wrapper .forest-logo svg {
+  @apply scale-[0.58];
+  transform-origin: 0 50%;
+}
+
+.marketplace-header .icon-btn-wrap :global .ant-space-item {
+  background: rgb(255 255 255 / 10%);
+  @apply rounded-lg;
+}
+
+.marketplace-header .header-account-btn,
+.marketplace-header .header-wallet-btn,
+.marketplace-header .header-theme-btn {
+  /* @apply fill-[var(--color-header)]; */
+
+  transition: all 0.3s;
+}
+
+.marketplace-header .header-account-btn *,
+.marketplace-header .header-wallet-btn *,
+.marketplace-header .header-theme-btn * {
+  /* @apply fill-[var(--color-header)]; */
+}
+.marketplace-header .header-account-btn:hover,
+.marketplace-header .header-wallet-btn:hover,
+.marketplace-header .header-theme-btn:hover {
+  /* @apply fill-[var(--brand-base)]; */
+}
+.marketplace-header .header-account-btn:hover *,
+.marketplace-header .header-wallet-btn:hover *,
+.marketplace-header .header-theme-btn:hover * {
+  @apply fill-[var(--brand-base)];
+}
+
+.marketplace-header .header-theme-btn:hover {
+  @apply cursor-pointer;
+}
+
+.marketplace-header :global .ant-dropdown {
+  box-shadow: 0px 4px 20px 0px rgba(64, 64, 64, 0.1);
+}
+
+.mobile-header-wrapper {
+  @apply py-[10px] px-[16px];
+}
+
+.marketplace-header.mobile-header-wrapper {
+  @apply h-[62.4px];
+}
+
+.marketplace-header .menu {
+  :global .ant-dropdown-menu {
+    @apply !p-[8px];
+  }
+
+  :global .ant-dropdown-menu-item {
+    @apply w-[188px] !h-[52px] !px-[0px]  !border-0;
+
+    .ant-dropdown-menu-title-content {
+      @apply font-medium text-[16px] !px-[8px] w-full h-full hover:bg-fillHoverBg rounded-[8px];
+
+      span,
+      a {
+        @apply hover:!text-textPrimary;
+      }
+    }
+  }
+}
+
+.header-wallet-custom {
+  :global(.ant-collapse-arrow) {
+    @apply !w-auto !h-auto;
+    path {
+      @apply !fill-[var(--color-header)];
+    }
+  }
+}
+
+.bell {
+  @apply cursor-pointer justify-center items-center flex w-[48px] h-[48px] rounded-lg;
+}
+
+.balance {
+  @apply bg-[rgba(255,255,255,0.10)] cursor-pointer  flex items-center py-[4px] px-[12px] rounded-lg h-[48px];
+}
+
+.homeHeader {
+  @apply fixed;
+
+  .marketplace-header {
+    @apply bg-transparent;
+
+    backdrop-filter: blur(6px);
+  }
+}
+
+.white-header {
+  .marketplace-header {
+    @apply bg-white border border-solid border-lineBorder;
+  }
+
+  .nav-text {
+    @apply text-textPrimary hover:!text-brandHover;
+  }
+
+  span {
+    @apply text-textPrimary;
+  }
+
+  button {
+    span {
+      @apply !text-white;
+    }
+  }
+
+  .bell,
+  .balance {
+    @apply border border-solid border-lineBorder;
+  }
+}
+
+.black-header {
+  .marketplace-header {
+    @apply !bg-[rgba(0,0,0,0.4)];
+    backdrop-filter: blur(20px);
+  }
+
+  .nav-text {
+    @apply text-white hover:!text-[#E0E0E0];
+  }
+
+  span {
+    @apply text-white;
+  }
+
+  .bell,
+  .walletIcon,
+  .frame {
+    path {
+      @apply stroke-white;
+    }
+  }
+
+  .frame {
+    path {
+      @apply fill-white;
+    }
+  }
+}
